@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logger
+from functions import clock, led_strip
 
 log = logger.get_logger('Cancel')
 threads = []
@@ -10,18 +11,16 @@ threads = []
 def stop_threads():
     for thread in threads:
         thread.pause()
-        print(thread.getName() + ' is stopped ' + str(thread.stopped()))
         if not thread.stopped() and thread.isAlive():
             log.debug('stopping ' + thread.getName())
             thread.stop()
-            print(thread.getName() + ' has stopped ' + str(thread.stopped()))
-    for thread in threads:
-        print(thread.name + ' is alive ' + str(thread.isAlive()))
+    clock.clear(led_strip.strip)
     return
 
 
 def pause_threads():
     any(thread.pause() for thread in threads)
+    clock.clear(led_strip.strip)
     log.debug("threads paused")
 
 

@@ -10,3 +10,4 @@ from .clock import *
 from .animation import *
 from .xmas import *
 from .cancel import *
+from .led_strip import *
