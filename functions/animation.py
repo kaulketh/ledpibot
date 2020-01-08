@@ -3,25 +3,23 @@
 
 import logger
 from threads.raspi import RaspberryThread
-
+from functions import cancel
 
 def __run():
     print('Animation is running!')
 
 
 def run_thread():
-    from functions import cancel
+
     any(thread.pause() for thread in cancel.threads)
     if not animation_thread.isAlive():
         animation_thread.start()
-        log.info('started')
-        cancel.threads.append(animation_thread)
-    else:
-        animation_thread.resume()
-        log.info('resumed')
+    animation_thread.resume()
+    return
 
 
 animation_thread = RaspberryThread(function=__run)
+cancel.threads.append(animation_thread)
 log = logger.get_logger('Animation')
 
 if __name__ == '__main__':

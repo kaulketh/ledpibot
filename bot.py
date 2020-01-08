@@ -26,6 +26,7 @@ kb_markup = ReplyKeyboardMarkup(keyboard=[
             [KeyboardButton(text=Commands.advent.name.upper()), KeyboardButton(text=Commands.animation.name.upper())],
             [KeyboardButton(text=Commands.clock.name.upper()), KeyboardButton(text=Commands.xmas.name.upper())],
             [KeyboardButton(text=Commands.cancel.name.upper())],
+            [KeyboardButton(text=Commands.stop.name.upper())],
         ])
 
 remove_kb = ReplyKeyboardRemove()
@@ -38,25 +39,21 @@ def on_chat_message(msg):
 
     command = msg['text'].lower()
 
-    if command == Commands.start.name:
-        log.debug('Started...')
+    if (command == Commands.start.name) or (command == ('/' + Commands.start.name)):
         bot.sendMessage(
             chat_id, '_Select a choice_', reply_markup=kb_markup, parse_mode='Markdown')
 
-    elif command == Commands.stop.name:
-        log.debug('Stopped!')
+    elif (command == Commands.stop.name) or (command == ('/' + Commands.stop.name)):
+        cancel.stop_threads()
         bot.sendMessage(
             chat_id, '*Stopped!*', reply_markup=remove_kb, parse_mode='Markdown')
 
     elif command == Commands.cancel.name:
-        log.debug(command + ' called')
-        cancel.stop()
-        # getattr(functions, command).stop(cancel.all_processes)
+        cancel.pause_threads()
         bot.sendMessage(
             chat_id, '*Function canceled!*\n*Try another choice.*', reply_markup=kb_markup, parse_mode='Markdown')
 
     elif any(c for c in Commands if command == c.name):
-        log.debug(command + ' called')
         getattr(functions, command).run_thread()
         bot.sendMessage(chat_id, '_' + command.upper() + '_ called', reply_markup=kb_markup, parse_mode='Markdown')
 
@@ -64,6 +61,8 @@ def on_chat_message(msg):
         log.warning('Got wrong input: ' + command)
         bot.sendMessage(
             chat_id, '*' + command.upper() + '* is not allowed!', reply_markup=remove_kb, parse_mode='Markdown')
+
+    log.info('Got command: ' + command.upper())
 
 
 MessageLoop(bot, {'chat': on_chat_message}).run_as_thread()

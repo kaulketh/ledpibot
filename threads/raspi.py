@@ -3,6 +3,10 @@
 
 import threading
 
+from logger import logger
+
+log = logger.get_logger(__name__)
+
 
 class RaspberryThread(threading.Thread):
     def __init__(self, function):
@@ -10,12 +14,16 @@ class RaspberryThread(threading.Thread):
         self.state = threading.Condition()
         self.function = function
         super(RaspberryThread, self).__init__()
+        self._stop = threading.Event()
+        log.debug('{0} initialized for {1}'.format(self.name, self.function))
 
     def start(self):
         super(RaspberryThread, self).start()
+        log.debug('{0} start'.format(self.name))
 
     def run(self):
         # self.resume() #unpause self
+        log.debug('{0} run'.format(self.name))
         while True:
             with self.state:
                 if self.paused:
@@ -25,10 +33,19 @@ class RaspberryThread(threading.Thread):
                 self.function()
 
     def resume(self):
+        log.debug('{0} resume'.format(self.name))
         with self.state:
             self.paused = False
             self.state.notify()
 
     def pause(self):
+        log.debug('{0} pause'.format(self.name))
         with self.state:
             self.paused = True
+
+    def stop(self):
+        log.debug('{0} stopped'.format(self.name))
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()

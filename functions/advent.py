@@ -3,6 +3,7 @@
 
 import logger
 from threads.raspi import RaspberryThread
+from functions import cancel
 
 
 def __run():
@@ -10,19 +11,17 @@ def __run():
 
 
 def run_thread():
-    from functions import cancel
     any(thread.pause() for thread in cancel.threads)
     if not advent_thread.isAlive():
         advent_thread.start()
-        log.info('started')
-        cancel.threads.append(advent_thread)
-    else:
-        advent_thread.resume()
-        log.info('resumed')
+    advent_thread.resume()
+    return
 
 
-advent_thread = RaspberryThread(function=__run)
 log = logger.get_logger('Advent')
+advent_thread = RaspberryThread(function=__run)
+cancel.threads.append(advent_thread)
+
 
 if __name__ == '__main__':
     __run()

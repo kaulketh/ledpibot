@@ -14,10 +14,8 @@ class Commands(IntEnum):
     xmas = 6
     cancel = 7
 
-    @property
     def __int__(self):
         return self.value
 
-    @property
     def __str__(self):
         return self.name
