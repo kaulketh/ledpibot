@@ -1,21 +1,16 @@
-#!/usr/bin/python
+#!/usr/bi/npython
 # -*- coding: utf-8 -*-
 
-from enum import unique, IntEnum
+commands = ["start",    # 0
+            "advent",   # 1
+            "theater",  # 2
+            "clock 1",  # 3
+            "clock 2",  # 4
+            "circus",   # 5
+            "candles",  # 6
+            "cancel",   # 7
+            "stop"      # 8
+            ]
 
-
-@unique
-class Commands(IntEnum):
-    start = 1
-    stop = 2
-    advent = 3
-    animation = 4
-    clock = 5
-    xmas = 6
-    cancel = 7
-
-    def __int__(self):
-        return self.value
-
-    def __str__(self):
-        return self.name
+if __name__ == '__main__':
+    pass

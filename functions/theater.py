@@ -5,28 +5,26 @@ import logger
 from threads.raspi import RaspberryThread
 from functions import cancel
 
-name = "Advent"
+name = "Theater"
 
 
 def __run():
     pass
 
 
-
 def run_thread():
     any(thread.pause() for thread in cancel.threads)
-    if not advent_thread.isAlive():
-        advent_thread.start()
+    if not theater_thread.isAlive():
+        theater_thread.start()
         print(name + ' thread started')
-    advent_thread.resume()
+    theater_thread.resume()
     print(name + ' is running!')
     return
 
 
+theater_thread = RaspberryThread(function=__run, name=name)
+cancel.threads.append(theater_thread)
 log = logger.get_logger(name)
-advent_thread = RaspberryThread(function=__run, name=name)
-cancel.threads.append(advent_thread)
-
 
 if __name__ == '__main__':
     __run()

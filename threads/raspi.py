@@ -5,17 +5,18 @@ import threading
 
 from logger import logger
 
-log = logger.get_logger(__name__)
+log = logger.get_logger("RaspberryThread")
 
 
 class RaspberryThread(threading.Thread):
-    def __init__(self, function):
+    def __init__(self, function, name):
         self.paused = True
         self.state = threading.Condition()
         self.function = function
         super(RaspberryThread, self).__init__()
         self._stop = threading.Event()
-        log.debug('{0} initialized for {1}'.format(self.name, self.function))
+        log.debug('{0} initialized for {1} as {2}'.format(name, self.function, self.name))
+        self.name = name
 
     def start(self):
         super(RaspberryThread, self).start()
