@@ -13,3 +13,4 @@ from .theater import *
 from .circus import *
 from .cancel import *
 from .led_strip import *
+from .effects import *

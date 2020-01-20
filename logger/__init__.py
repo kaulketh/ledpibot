@@ -1,19 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# logger/__init__py
 """
-author: Thomas Kaulke, kaulketh@gmail.com
+logger/__init__py
 """
 
 from .logger import get_logger
 from .logger import logging
 
-import os, errno
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
 
-try:
-    os.makedirs('log')
-except OSError as e:
-    if e.errno != errno.EEXIST:
-        raise
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
