@@ -1,9 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
 config and init 24-LEDs-strip
 """
-
 from neopixel import *
 
 import logger
@@ -24,16 +23,20 @@ LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False
 
 log = logger.get_logger("LED strip")
-g_strip = None
 
 
 def get_strip():
-    # Create NeoPixel object with appropriate configuration.
-    log.debug("Create NeoPixel object with appropriate configuration.")
-    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    # Initialize the library (must be called once before other functions).
-    log.debug("Initialize the library.")
-    strip.begin()
-    global g_strip
-    g_strip = strip
-    return strip
+    """
+    Create NeoPixel object with appropriate configuration and initialize the library.
+
+    :return: NeoPixel/WS281x LED display/strip as s
+    """
+    log.debug("Create NeoPixel object with appropriate configuration (LED Strip).")
+    s = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
+    log.debug("Initialize: " + str(s))
+    s.begin()
+    # out.put(s)
+    return s
+
+
+strip = get_strip()

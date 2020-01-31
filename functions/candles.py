@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import time
@@ -7,32 +7,40 @@ from random import randint
 from neopixel import Color
 
 import logger
-from threads.raspi import RaspberryThread
-from functions import cancel, color_wipe_full
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 name = "Candles"
+log = logger.get_logger(name)
+
 # any warm white / no bright yellow
 red = 195
-green = 150
-blue = 50
+green = 125
+blue = 30
+
+
+def percent():
+    scope = randint(3, 10)
+    return float(scope) / float(100)
 
 
 # candle lights from 0 to leds
-def candle(strip, leds):
-    for i in range(leds):
-        div = randint(randint(6, 8), randint(30, 40))
-        strip.setPixelColor(i, Color(green / div, red / div, blue / div))
-    strip.show()
-    time.sleep(0.15)
+def candle(stripe, leds):
+    for turns in range(leds):
+        for i in range(leds):
+            p = percent()
+            stripe.setPixelColor(i, Color(int(green * p), int(red * p), int(blue * p)))
+        stripe.show()
+    time.sleep(randint(13, 15) / 100.0)
 
 
-def run_candles():
-    from led_strip import get_strip
-    strip = get_strip()
-    log.info('candles started')
+def run_candles(strip):
     try:
-        while True:
-            candle(strip, strip.numPixels())
+        candle(strip, strip.numPixels())
 
     except KeyboardInterrupt:
         log.warn("KeyboardInterrupt")
@@ -41,26 +49,6 @@ def run_candles():
     except Exception as e:
         log.error("Any error occurs: " + str(e))
         exit()
-
-    log.info('candles run stopped')
-    color_wipe_full(strip, Color(0, 0, 0), 10)
-    log.debug('LED stripe cleared')
-    return
-
-
-def run_thread():
-    any(thread.pause() for thread in cancel.threads)
-    if not candles_thread.isAlive():
-        candles_thread.start()
-        print(name + ' thread started')
-    candles_thread.resume()
-    print(name + ' is running!')
-    return
-
-
-log = logger.get_logger(name)
-candles_thread = RaspberryThread(function=run_candles, name=name)
-cancel.threads.append(candles_thread)
 
 
 if __name__ == '__main__':

@@ -1,101 +1,128 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import datetime
+import time
+
+from neopixel import *
+
 import logger
-#import datetime
-#import time
-# noinspection PyUnresolvedReferences
-# from neopixel import *
-from threads.raspi import RaspberryThread
-from functions import cancel, led_strip
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
 
-# def color_wipe(strip, color, wait_ms=50):
-#     """Wipe color across display a pixel at a time."""
-#     for i in range(strip.numPixels()):
-#         strip.setPixelColor(i, color)
-#         strip.show()
-#         time.sleep(wait_ms/1000.0)
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
+# color hours
+hR = 100
+hG = 20
+hB = 0
 
-# def clear_clock(strip):
-#     color_wipe(strip, Color(0, 0, 0), 10)
-#     log.info('clock cleared')
+# color minutes
+mR = 20
+mG = 0
+mB = 100
 
+# color seconds
+sR = 6
+sG = 30
+sB = 10
 
-# def __run_clock():
-#     for i in range(0, strip.numPixels(), 1):
-#         strip.setPixelColor(i, Color(0, 0, 0))
-#
-#     # noinspection PyBroadException
-#     try:
-#         now = datetime.datetime.now()
-#         hour = int(int(now.hour) % 12 * 2)
-#         minute = (int(int(now.minute) / 5 % 12 * 2)) + 1
-#         second = int(int(now.second) / 2.5)
-#
-#         # Low light during given period
-#         if 8 < int(now.hour) < 18:
-#             led_strip.strip.setBrightness(200)
-#         else:
-#             led_strip.strip.setBrightness(25)
-#
-#         for i in range(0, led_strip.strip.numPixels(), 1):
-#
-#             # hour
-#             led_strip.strip.setPixelColorRGB(hour, hG, hR, hB)
-#
-#             # minute
-#             if minute == hour:
-#                 # TODO doesnt work
-#                 led_strip.strip.setPixelColorRGB(minute + 1, mG, mR, mB)
-#             else:
-#                 led_strip.strip.setPixelColorRGB(minute, mG, mR, mB)
-#
-#             if minute > 30:
-#                 if hour <= 22:
-#                     led_strip.strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-#                 else:
-#                     led_strip.strip.setPixelColorRGB(0, hG, hR, hB)
-#
-#             # second
-#             if i == second:
-#                 led_strip.strip.setPixelColorRGB(i, sG, sR, sB)
-#             else:
-#                 led_strip.strip.setPixelColorRGB(i, 0, 0, 0)
-#
-#         led_strip.strip.show()
-#         time.sleep(0.1)
-#
-#     except KeyboardInterrupt:
-#         log.warn("Program interrupted")
-#         color_wipe(led_strip.strip, Color(0, 0, 0), 10)
-#         exit()
-#
-#     except Exception:
-#         log.error("Any error occurs")
 name = "Clock 1"
-
-
-def __run():
-    pass
-
-
-
-def run_thread():
-    any(thread.pause() for thread in cancel.threads)
-    if not clock1_thread.isAlive():
-        clock1_thread.start()
-        print(name + ' thread started')
-    clock1_thread.resume()
-    print(name + ' is running!')
-    return
-
-
-clock1_thread = RaspberryThread(function=__run, name=name)
-cancel.threads.append(clock1_thread)
 log = logger.get_logger(name)
 
 
+def run_clock1(stripe):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        try:
+            now = datetime.datetime.now()
+            led_for_hour = int(int(now.hour) % 12 * 2)
+            led_for_minute = int(round(now.minute / 2.5))
+            leds_per_2500ms = int(round(now.second / 2.5))
+
+            # Low light during given period
+            if 8 < int(now.hour) < 18:
+                stripe.setBrightness(127)
+            else:
+                stripe.setBrightness(50)
+
+            _seconds(leds_per_2500ms, stripe)
+
+            _minute(led_for_minute, led_for_hour, stripe)
+
+            _hour(led_for_hour, led_for_minute, stripe)
+
+            stripe.show()
+            if leds_per_2500ms == stripe.numPixels():
+                time.sleep(1.5)
+                _clear(stripe)
+
+        except KeyboardInterrupt:
+            log.warn("KeyboardInterrupt.")
+            exit()
+
+        except Exception as e:
+            log.error("Any error occurs: " + str(e))
+            exit()
+
+
+def _wipe(stripe, wait_ms=50, color=Color(0, 0, 0)):
+    for i in range(stripe.numPixels()):
+        stripe.setPixelColor(i, color)
+        stripe.show()
+        time.sleep(wait_ms / 1000.0)
+
+
+def _clear(stripe):
+    for i in range(0, stripe.numPixels()):
+        stripe.setPixelColor(i, Color(0, 0, 0))
+
+
+def _seconds(leds_per_2500ms, stripe):
+    for led in range(0, leds_per_2500ms, 1):
+        if 0 < (led + 1) < stripe.numPixels():
+            stripe.setPixelColorRGB(led + 1, sG, sR, sB)
+        if (led + 1) == stripe.numPixels():
+            stripe.setPixelColorRGB(0, sG, sR, sB)
+
+
+def _minute(led, led_hour, stripe):
+    if led < stripe.numPixels():
+        if led == led_hour:
+            _set_minute_led_before_and_after(stripe, led)
+        else:
+            stripe.setPixelColorRGB(led, mG, mR, mB)
+    if led >= stripe.numPixels():
+        if led == led_hour:
+            _set_minute_led_before_and_after(stripe, led_hour)
+            stripe.setPixelColorRGB(0, mG, mR, mB)
+        else:
+            stripe.setPixelColorRGB(0, mG, mR, mB)
+
+
+def _set_minute_led_before_and_after(stripe, led):
+    stripe.setPixelColorRGB(led - 1, int(mG / 5), int(mR / 5), int(mB / 5))
+    stripe.setPixelColorRGB(led + 1, int(mG / 5), int(mR / 5), int(mB / 5))
+
+
+def _hour(led, led_minute, stripe):
+    if 0 < led < stripe.numPixels():
+        # past half
+        if led_minute > 12:
+            stripe.setPixelColorRGB(led, hG, hR, hB)
+            stripe.setPixelColorRGB(led + 1, int(hG / 5), int(hR / 5), int(hB / 5))
+        # past quarter to next hour
+        if led_minute > 18:
+            stripe.setPixelColorRGB(led, int(hG / 5), int(hR / 5), int(hB / 5))
+            stripe.setPixelColorRGB(led + 1, hG, hR, hB)
+            stripe.setPixelColorRGB(led + 2, int(hG / 5), int(hR / 5), int(hB / 5))
+        else:
+            stripe.setPixelColorRGB(led, hG, hR, hB)
+    if led >= stripe.numPixels():
+        stripe.setPixelColorRGB(0, hG, hR, hB)
+
+
 if __name__ == '__main__':
-    __run()
+    pass

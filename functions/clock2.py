@@ -1,100 +1,85 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import datetime
+
 import logger
-#import datetime
-#import time
-# noinspection PyUnresolvedReferences
-# from neopixel import *
-from threads.raspi import RaspberryThread
-from functions import cancel, led_strip
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
 
-# def color_wipe(strip, color, wait_ms=50):
-#     """Wipe color across display a pixel at a time."""
-#     for i in range(strip.numPixels()):
-#         strip.setPixelColor(i, color)
-#         strip.show()
-#         time.sleep(wait_ms/1000.0)
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
+hR = 200
+hG = 0
+hB = 0
 
-# def clear_clock(strip):
-#     color_wipe(strip, Color(0, 0, 0), 10)
-#     log.info('clock cleared')
+mR = 0
+mG = 0
+mB = 200
 
+sR = 92
+sG = 67
+sB = 6
 
-# def __run_clock():
-#     for i in range(0, strip.numPixels(), 1):
-#         strip.setPixelColor(i, Color(0, 0, 0))
-#
-#     # noinspection PyBroadException
-#     try:
-#         now = datetime.datetime.now()
-#         hour = int(int(now.hour) % 12 * 2)
-#         minute = (int(int(now.minute) / 5 % 12 * 2)) + 1
-#         second = int(int(now.second) / 2.5)
-#
-#         # Low light during given period
-#         if 8 < int(now.hour) < 18:
-#             led_strip.strip.setBrightness(200)
-#         else:
-#             led_strip.strip.setBrightness(25)
-#
-#         for i in range(0, led_strip.strip.numPixels(), 1):
-#
-#             # hour
-#             led_strip.strip.setPixelColorRGB(hour, hG, hR, hB)
-#
-#             # minute
-#             if minute == hour:
-#                 # TODO doesnt work
-#                 led_strip.strip.setPixelColorRGB(minute + 1, mG, mR, mB)
-#             else:
-#                 led_strip.strip.setPixelColorRGB(minute, mG, mR, mB)
-#
-#             if minute > 30:
-#                 if hour <= 22:
-#                     led_strip.strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-#                 else:
-#                     led_strip.strip.setPixelColorRGB(0, hG, hR, hB)
-#
-#             # second
-#             if i == second:
-#                 led_strip.strip.setPixelColorRGB(i, sG, sR, sB)
-#             else:
-#                 led_strip.strip.setPixelColorRGB(i, 0, 0, 0)
-#
-#         led_strip.strip.show()
-#         time.sleep(0.1)
-#
-#     except KeyboardInterrupt:
-#         log.warn("Program interrupted")
-#         color_wipe(led_strip.strip, Color(0, 0, 0), 10)
-#         exit()
-#
-#     except Exception:
-#         log.error("Any error occurs")
 name = "Clock 2"
-
-
-def __run():
-    pass
-
-
-
-def run_thread():
-    any(thread.pause() for thread in cancel.threads)
-    if not clock2_thread.isAlive():
-        clock2_thread.start()
-        print(name + ' thread started')
-    clock2_thread.resume()
-    print(name + ' is running!')
-    return
-
-
-clock2_thread = RaspberryThread(function=__run, name=name)
-cancel.threads.append(clock2_thread)
 log = logger.get_logger(name)
 
+
+def run_clock2(strip):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        # noinspection PyBroadException
+        try:
+            now = datetime.datetime.now()
+            hour = int(int(now.hour) % 12 * 2)
+            minute = (int(int(now.minute) / 5 % 12 * 2)) + 1
+            second = int(int(now.second) / 2.5)
+
+            # Low light during given period
+            if 8 < int(now.hour) < 18:
+                strip.setBrightness(127)
+            else:
+                strip.setBrightness(25)
+
+            for i in range(0, strip.numPixels(), 1):
+                # minute
+                if hour == minute:
+                    strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                    strip.setPixelColorRGB(hour, hG, hR, hB)
+
+                if 12 < minute <= 23:
+                    if hour <= 22:
+                        strip.setPixelColorRGB(hour + 1, hG, hR, hB)
+                        strip.setPixelColorRGB(minute, mG, mR, mB)
+                    else:
+                        strip.setPixelColorRGB(0, hG, hR, hB)
+                        strip.setPixelColorRGB(minute - 1 , mG, mR, mB)
+                else:
+                    strip.setPixelColorRGB(minute, mG, mR, mB)
+                    # hour
+                    strip.setPixelColorRGB(hour, hG, hR, hB)
+
+
+                # second
+                if i == second:
+                    strip.setPixelColorRGB(i, sG, sR, sB)
+                else:
+                    strip.setPixelColorRGB(i, 0, 0, 0)
+
+            strip.show()
+            # time.sleep(0.1)
+
+        except KeyboardInterrupt:
+            print()
+            log.warn("KeyboardInterrupt.")
+            exit()
+
+        except Exception as e:
+            log.error("Any error occurs: " + str(e))
+            exit()
+
+
 if __name__ == '__main__':
-    __run()
+    pass

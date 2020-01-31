@@ -1,30 +1,44 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
+from neopixel import Color
 
 import logger
-from threads.raspi import RaspberryThread
-from functions import cancel
+from functions.effects import color_wipe_full, theater_chase
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 name = "Theater"
-
-
-def __run():
-    pass
-
-
-def run_thread():
-    any(thread.pause() for thread in cancel.threads)
-    if not theater_thread.isAlive():
-        theater_thread.start()
-        print(name + ' thread started')
-    theater_thread.resume()
-    print(name + ' is running!')
-    return
-
-
-theater_thread = RaspberryThread(function=__run, name=name)
-cancel.threads.append(theater_thread)
 log = logger.get_logger(name)
 
+
+def run_theater(strip):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        try:
+            color_wipe_full(strip, Color(127, 0, 0))  # Green wipe
+            if not get_stop_flag():
+                color_wipe_full(strip, Color(0, 127, 0))  # Red wipe
+            if not get_stop_flag():
+                color_wipe_full(strip, Color(0, 0, 127))  # Blue wipe
+            if not get_stop_flag():
+                theater_chase(strip, Color(127, 127, 127))  # White theater chase
+            if not get_stop_flag():
+                theater_chase(strip, Color(0, 0, 127))  # Blue theater chase
+            if not get_stop_flag():
+                theater_chase(strip, Color(80, 0, 0))  # Green theater chase
+
+        except KeyboardInterrupt:
+            log.warn("KeyboardInterrupt")
+            exit()
+
+        except Exception as e:
+            log.error("Any error occurs: " + str(e))
+            exit()
+
+
 if __name__ == '__main__':
-    __run()
+    pass

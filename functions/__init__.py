@@ -1,16 +1,14 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # functions/__init__py
 """
 author: Thomas Kaulke, kaulketh@gmail.com
 """
 
-from .advent import *
-from .candles import *
-from .clock1 import *
-from .clock2 import *
-from .theater import *
-from .circus import *
-from .cancel import *
-from .led_strip import *
-from .effects import *
+from functions.advent import run_advent
+from functions.candles import run_candles
+from functions.clock1 import run_clock1
+from functions.clock2 import run_clock2
+from functions.effects import clear
+from functions.theater import run_theater
+from functions.rainbow import run_rainbow
