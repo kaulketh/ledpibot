@@ -47,12 +47,15 @@ def run_clock2(strip):
                 # minute
                 if hour == minute:
                     strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                    strip.setPixelColorRGB(hour, hG, hR, hB)
 
                 if 12 < minute <= 23:
                     if hour <= 22:
                         strip.setPixelColorRGB(hour + 1, hG, hR, hB)
+                        strip.setPixelColorRGB(minute, mG, mR, mB)
                     else:
                         strip.setPixelColorRGB(0, hG, hR, hB)
+                        strip.setPixelColorRGB(minute - 1 , mG, mR, mB)
                 else:
                     strip.setPixelColorRGB(minute, mG, mR, mB)
                     # hour
