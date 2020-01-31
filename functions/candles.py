@@ -8,6 +8,12 @@ from neopixel import Color
 
 import logger
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 name = "Candles"
 log = logger.get_logger(name)
 

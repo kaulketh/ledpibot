@@ -3,7 +3,13 @@
 import time
 
 import logger
-from functions.effects import clear, wheel
+from functions.effects import wheel
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 name = "Rainbow"
 log = logger.get_logger(name)
@@ -14,14 +20,14 @@ def run_rainbow(strip):
     while not get_stop_flag():
         try:
             strip.setBrightness(40)
-            for j in range(256*2):
+            for j in range(256*5):
                 if not get_stop_flag():
                     for i in range(strip.numPixels()):
                         if not get_stop_flag():
                             strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
                     if not get_stop_flag():
                         strip.show()
-                        time.sleep(.025)
+                        time.sleep(.02)
 
         except KeyboardInterrupt:
             log.warn("KeyboardInterrupt")

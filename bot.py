@@ -16,12 +16,17 @@ import logger
 from config.commands import commands
 from control import run_thread, stop_threads
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 log = logger.get_logger('LedPiBot')
 
 assert isinstance(config.token, str)
 bot = telepot.Bot(config.token)
 answerer = telepot.helper.Answerer(bot)
-command = None
 
 functions_kb_markup = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text=commands[1].title()), KeyboardButton(text=commands[2].title()),
@@ -39,7 +44,18 @@ def _stop_kb(func):
     ])
 
 
-def __on_chat_message(msg):
+def _reply_wrong_command(chat_id, content):
+    global got
+    try:
+        got = str(codecs.encode(content, 'utf-8')).replace('b', '').title()
+        raise Exception('Not allowed input: ' + got)
+    except Exception as ex:
+        bot.sendMessage(chat_id, '* Not allowed for this bot\\! *', parse_mode='MarkdownV2')
+        log.error(str(ex))
+    return
+
+
+def _on_chat_message(msg):
     global command
     content_type, chat_type, chat_id = telepot.glance(msg)
 
@@ -53,7 +69,7 @@ def __on_chat_message(msg):
             bot.sendMessage(
                 chat_id, 'Please make a suitable selection!', reply_markup=functions_kb_markup, parse_mode='Markdown')
         # stop if command starts with 'stop' or '/stop'
-        elif (command.title().startswith(commands[7].title())) or (command.title().startswith('/' + commands[7])):
+        elif (command.title().startswith(commands[7].title())) or (command.startswith('/' + commands[7])):
             stop_threads()
             bot.sendMessage(
                 chat_id, 'Please make a suitable selection!', reply_markup=functions_kb_markup, parse_mode='Markdown')
@@ -63,26 +79,14 @@ def __on_chat_message(msg):
                 chat_id, '*' + command.title() + '* called.', reply_markup=_stop_kb(command), parse_mode='Markdown')
             run_thread(command)
         else:
-            __reply_wrong_command(chat_id, command)
+            _reply_wrong_command(chat_id, command)
     else:
-        __reply_wrong_command(chat_id, content_type)
+        _reply_wrong_command(chat_id, content_type)
 
 
-def __reply_wrong_command(chat_id, content):
-    global got
-    try:
-        got = str(codecs.encode(content, 'utf-8')).replace('b', '').title()
-        raise Exception('Not allowed input: ' + got)
-    except Exception as ex:
-        bot.sendMessage(chat_id, '* Not allowed for this bot\\! *', parse_mode='MarkdownV2')
-        log.error(str(ex))
-    return
-
-
-MessageLoop(bot, {'chat': __on_chat_message}).run_as_thread()
+MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
 log.debug('Bot is listening ...')
 while 1:
-
     try:
         time.sleep(5)
 

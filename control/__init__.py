@@ -11,6 +11,12 @@ from config.commands import commands
 from control.led_strip import strip
 from control.function_thread import LightFunctionsThread
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 log = logger.get_logger('Control')
 clear(strip)
 stop_flag = None

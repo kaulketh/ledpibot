@@ -25,9 +25,10 @@ LED_INVERT = False
 log = logger.get_logger("LED strip")
 
 
-def get_strip(out=None):
+def get_strip():
     """
-    Create NeoPixel object with appropriate configuration and initialize the library..
+    Create NeoPixel object with appropriate configuration and initialize the library.
+
     :return: NeoPixel/WS281x LED display/strip as s
     """
     log.debug("Create NeoPixel object with appropriate configuration (LED Strip).")

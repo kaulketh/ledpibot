@@ -7,6 +7,12 @@ import logger
 from control.led_strip import LED_BRIGHTNESS
 from functions import clear
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 log = logger.get_logger("LightFunctionsThread")
 
 

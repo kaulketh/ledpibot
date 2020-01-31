@@ -10,6 +10,12 @@ import logger
 from functions.candles import candle
 from functions.effects import theater_chase
 
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 name = "Advent"
 log = logger.get_logger(name)
 
