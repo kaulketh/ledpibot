@@ -12,3 +12,4 @@ from functions.clock2 import run_clock2
 from functions.effects import clear
 from functions.theater import run_theater
 from functions.rainbow import run_rainbow
+from functions.colors import run_red, run_blue, run_green, run_orange, run_yellow, run_white

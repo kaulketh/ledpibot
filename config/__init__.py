@@ -7,5 +7,4 @@ author: Thomas Kaulke, kaulketh@gmail.com
 
 from .secret import *
 from .access import *
-from .lang_de import *
-from .lang_en import *
+from .dictionary import *
