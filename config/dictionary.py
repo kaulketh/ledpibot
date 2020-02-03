@@ -27,6 +27,7 @@ dic = {
            "yellow": "yellow",  # 11
            "orange": "orange",  # 12
            "white": "white",  # 13
+           "pink": "pink"  # 14
 
            },
     "de": {
@@ -48,6 +49,7 @@ dic = {
         "yellow": "gelb",  # 11
         "orange": "orange",  # 12
         "white": "weiß",  # 13
+        "pink": "pink"  # 14
 
         }
 
@@ -67,6 +69,7 @@ commands = [dic[language].get("stop"),  # 0
             dic[language].get("yellow"),  # 11
             dic[language].get("orange"),  # 12
             dic[language].get("white"),  # 13
+            dic[language].get("pink")  # 14
             ]
 
 wrong_id = dic[language].get("wrong_id")

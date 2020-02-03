@@ -6,10 +6,9 @@ author: Thomas Kaulke, kaulketh@gmail.com
 """
 
 import logger
-from config import commands
 from control.function_thread import LightFunctionsThread
 from control.led_strip import strip
-from functions import *
+from functions import clear, dictionary_functions
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -20,41 +19,11 @@ __status__ = "Development"
 log = logger.get_logger('Control')
 clear(strip)
 stop_flag = None
-
-dictionary_functions = {
-    commands[2]: run_advent,
-    commands[3]: run_candles,
-    commands[4]: run_clock1,
-    commands[5]: run_clock2,
-    commands[6]: run_rainbow,
-    commands[7]: run_theater,
-    commands[8]: run_red,
-    commands[9]: run_blue,
-    commands[10]: run_green,
-    commands[11]: run_yellow,
-    commands[12]: run_orange,
-    commands[13]: run_white
-}
-
-dictionary_threads = {
-    commands[2].title(): None,
-    commands[3].title(): None,
-    commands[4].title(): None,
-    commands[5].title(): None,
-    commands[6].title(): None,
-    commands[7].title(): None,
-    commands[8].title(): None,
-    commands[9].title(): None,
-    commands[10].title(): None,
-    commands[11].title(): None,
-    commands[12].title(): None,
-    commands[13].title(): None
-
-}
+dictionary_threads = {'None' : None }
 
 
-def _thread_function(key):
-    return dictionary_functions[key]
+def _thread_function(dictionary, key):
+    return dictionary[key]
 
 
 def get_stop_flag():
@@ -66,7 +35,7 @@ def run_thread(func_name):
     stop_threads()
     log.debug('Call thread for ' + func_name)
     thread = dictionary_threads.get(func_name)
-    if thread is None:  # Init and start new thread
+    if thread is None:
         log.debug('Thread not found in dictionary for ' + func_name)
         _init_thread(func_name)
     elif not thread.is_alive():
@@ -105,7 +74,10 @@ def set_stop_flag(flag):
 # noinspection PyTypeChecker
 def _init_thread(func_name):
     log.debug("Init function \'{0}\' as thread \'{1}\'".format(func_name.lower(), func_name))
-    new_thread = LightFunctionsThread(function=_thread_function(func_name.lower()), name=func_name, strip=strip)
+    new_thread = LightFunctionsThread(
+        function=_thread_function(dictionary_functions,func_name.lower()),
+        name=func_name,
+        strip=strip)
     new_thread.start()
     dictionary_threads[func_name] = new_thread
     log.debug("Added to dictionary: " + str(new_thread))

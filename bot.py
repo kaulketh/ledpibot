@@ -37,10 +37,10 @@ def _btn(text):
 
 
 kb_markup = ReplyKeyboardMarkup(keyboard=[
-    [_btn(commands[2]), _btn(commands[3]), _btn(commands[4])],
-    [_btn(commands[5]), _btn(commands[6]), _btn(commands[7])],
-    [_btn(commands[8]), _btn(commands[9]), _btn(commands[10])],
-    [_btn(commands[11]), _btn(commands[12]), _btn(commands[13])]
+    [_btn(commands[2]), _btn(commands[3]), _btn(commands[6]), _btn(commands[7])],
+    [_btn(commands[8]), _btn(commands[9]), _btn(commands[10]),
+     _btn(commands[11]), _btn(commands[12]), _btn(commands[13]), _btn(commands[14])],
+    [_btn(commands[4]), _btn(commands[5])]
 ])
 
 rm_kb = ReplyKeyboardRemove()
