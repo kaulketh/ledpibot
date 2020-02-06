@@ -40,8 +40,12 @@ class LightFunctionsThread(threading.Thread):
                     clear(self._strip)
                     self._state.wait()  # block until notified
             while not self._paused:
-                # Call function
-                self._function(self._strip)
+                try:
+                    # Call function
+                    self._function(self._strip)
+                except Exception as e:
+                    log.error('An error occurs: ' + str(e))
+                    exit()
 
     def resume(self):
         with self._state:

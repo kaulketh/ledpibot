@@ -23,7 +23,10 @@ dictionary_threads = {'None': None}
 
 
 def _thread_function(dictionary, key):
-    return dictionary[key]
+    try:
+        return dictionary[key]
+    except Exception as e:
+        log.error('An error occurs: ' + str(e))
 
 
 def get_stop_flag():
@@ -33,37 +36,43 @@ def get_stop_flag():
 
 def run_thread(func_name):
     stop_threads()
-    log.debug('Call thread for ' + func_name)
-    thread = dictionary_threads.get(func_name)
-    if thread is None:
-        log.debug('Thread not found in dictionary for ' + func_name)
-        _init_thread(func_name)
-    elif not thread.is_alive():
-        thread.start()
-    elif thread.is_alive():
-        thread.resume()
-    set_stop_flag(False)
-    return
+    try:
+        log.debug('Call thread for ' + func_name)
+        thread = dictionary_threads.get(func_name)
+        if thread is None:
+            log.debug('Thread not found in dictionary for ' + func_name)
+            _init_thread(func_name)
+        elif not thread.is_alive():
+            thread.start()
+        elif thread.is_alive():
+            thread.resume()
+        set_stop_flag(False)
+        return
+    except Exception as e:
+        log.error('An error occurs: ' + str(e))
 
 
 def stop_threads():
     set_stop_flag(True)
-    for key in dictionary_threads.keys():
-        thread = (dictionary_threads.get(key))
-        if thread is not None and thread.is_alive():
-            thread.pause()
-        if thread is not None:
-            log.debug('Stop thread ' + thread.getName())
-            thread.stop()
-            dictionary_threads[key] = None
-            log.debug('Removed from dictionary: ' + thread.getName())
-    log.debug("Threads stopped.")
-    return
+    try:
+        for key in dictionary_threads.keys():
+            thread = (dictionary_threads.get(key))
+            if thread is not None and thread.is_alive():
+                thread.pause()
+            if thread is not None:
+                log.debug('Stop thread ' + thread.getName())
+                thread.stop()
+                dictionary_threads[key] = None
+                log.debug('Removed from dictionary: ' + thread.getName())
+        log.debug("Threads stopped.")
+        return
+    except Exception as e:
+        log.error('An error occurs: ' + str(e))
 
 
 def set_stop_flag(flag):
     """
-    Set a global stop_flag. It is required for stopping while loops.
+    Set a global stop_flag. It is necessary for stopping while loops.
 
     :type flag: bool
     """

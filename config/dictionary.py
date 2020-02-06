@@ -61,7 +61,7 @@ trnslt = {
         c_ks.get(12): "orange",
         c_ks.get(13): "white",
         c_ks.get(14): "pink",
-        c_ks.get(15): "demo",
+        c_ks.get(15): "colors",
         c_ks.get(16): "stroboscope",
         c_ks.get(17): "clock 3"
     },
@@ -87,7 +87,7 @@ trnslt = {
         c_ks.get(12): "orange",
         c_ks.get(13): "weiß",
         c_ks.get(14): "pink",
-        c_ks.get(15): "demo",
+        c_ks.get(15): "farben",
         c_ks.get(16): "stroboskope",
         c_ks.get(17): "uhr 3"
     }

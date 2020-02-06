@@ -7,6 +7,7 @@ import datetime
 import time
 
 from neopixel import *
+
 from config import DAYBRIGHTNESS, NIGHTBRIGHTNESS, MORNINGCUTOFF, NIGHTCUTOFF
 import logger
 

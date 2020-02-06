@@ -7,6 +7,7 @@ author: Thomas Kaulke, kaulketh@gmail.com
 
 import datetime
 import time
+from random import uniform
 
 from neopixel import Color, Adafruit_NeoPixel
 
@@ -141,9 +142,11 @@ def run_stroboscope(stripe):
     stripe.setBrightness(255)
     while not get_stop_flag():
         Colorizer(stripe, 1).start()
-        time.sleep(0.0075)
+        t = uniform(0.005,0.05)
+        time.sleep(t)
         Colorizer(stripe, 0).start()
-        time.sleep(1)
+        t = uniform(0.5,3)
+        time.sleep(t)
     Colorizer.clear(stripe)
 
 
@@ -155,9 +158,10 @@ def run_demo(stripe):
             if isinstance(color, str) and not get_stop_flag():
                 new_strip.set_color(color)
                 new_strip.start()
-            time.sleep(1.5)
-            if get_stop_flag():
-                break
+                t = uniform(0.25,1)
+                time.sleep(t)
+                if get_stop_flag():
+                    break
     new_strip.clear(stripe)
 
 
