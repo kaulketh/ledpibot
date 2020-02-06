@@ -3,3 +3,7 @@
 
 With this bot it is possible to control 24 artificial candles.
 In this case a a wooden wreath is used and animated.
+
+![wooden wreath](./impressions/wreath.jpg)
+
+Also refer first [impressions](./impressions).
