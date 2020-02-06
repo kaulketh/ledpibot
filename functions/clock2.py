@@ -4,6 +4,7 @@
 import datetime
 
 import logger
+from config import DAYBRIGHTNESS, NIGHTBRIGHTNESS, MORNINGCUTOFF, NIGHTCUTOFF
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -34,14 +35,14 @@ def run_clock2(strip):
         try:
             now = datetime.datetime.now()
             hour = int(int(now.hour) % 12 * 2)
-            minute = (int(int(now.minute) / 5 % 12 * 2)) + 1
-            second = int(int(now.second) / 2.5)
+            minute = int(now.minute // 2.5)
+            second = int(now.second // 2.5)
 
             # Low light during given period
-            if 8 < int(now.hour) < 18:
-                strip.setBrightness(127)
+            if MORNINGCUTOFF < int(now.hour) < NIGHTCUTOFF:
+                strip.setBrightness(DAYBRIGHTNESS)
             else:
-                strip.setBrightness(25)
+                strip.setBrightness(NIGHTBRIGHTNESS)
 
             for i in range(0, strip.numPixels(), 1):
                 # minute
@@ -55,12 +56,11 @@ def run_clock2(strip):
                         strip.setPixelColorRGB(minute, mG, mR, mB)
                     else:
                         strip.setPixelColorRGB(0, hG, hR, hB)
-                        strip.setPixelColorRGB(minute - 1 , mG, mR, mB)
+                        strip.setPixelColorRGB(minute - 1, mG, mR, mB)
                 else:
                     strip.setPixelColorRGB(minute, mG, mR, mB)
                     # hour
                     strip.setPixelColorRGB(hour, hG, hR, hB)
-
 
                 # second
                 if i == second:
