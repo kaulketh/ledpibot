@@ -11,8 +11,8 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-from config import token, access, commands, wrong_id, pls_select, not_allowed, called
 import logger
+from config import token, access, commands, wrong_id, pls_select, not_allowed, called
 from control import run_thread, stop_threads
 
 __author___ = "Thomas Kaulke"
@@ -48,9 +48,7 @@ rm_kb = ReplyKeyboardRemove()
 
 
 def _kb_stop(func):
-    return ReplyKeyboardMarkup(keyboard=[
-        [_btn(stop.title() + ' \"' + func.title() + '\"')]
-    ])
+    return ReplyKeyboardMarkup(keyboard=[[_btn(stop.title() + ' \"' + func.title() + '\"')]])
 
 
 # endregion
