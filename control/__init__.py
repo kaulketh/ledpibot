@@ -19,7 +19,7 @@ __status__ = "Development"
 log = logger.get_logger('Control')
 clear(strip)
 stop_flag = None
-dictionary_threads = {'None' : None }
+dictionary_threads = {'None': None}
 
 
 def _thread_function(dictionary, key):
@@ -75,7 +75,7 @@ def set_stop_flag(flag):
 def _init_thread(func_name):
     log.debug("Init function \'{0}\' as thread \'{1}\'".format(func_name.lower(), func_name))
     new_thread = LightFunctionsThread(
-        function=_thread_function(dictionary_functions,func_name.lower()),
+        function=_thread_function(dictionary_functions, func_name.lower()),
         name=func_name,
         strip=strip)
     new_thread.start()

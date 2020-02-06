@@ -6,8 +6,9 @@ author: Thomas Kaulke, kaulketh@gmail.com
 """
 
 import datetime
+import time
 
-from neopixel import Color
+from neopixel import Color, Adafruit_NeoPixel
 
 import logger
 
@@ -17,70 +18,147 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-name = "Colors"
-log = logger.get_logger(name)
 
-div = 3
-# colors defined as G(reen) R(ed) B(lue)
-colors = {
-    'red': Color(10 // div, 165 // div, 10 // div),
-    'blue': Color(50 // div, 0 // div, 135 // div),
-    'green': Color(135 // div, 0 // div, 50 // div),
-    'yellow': Color(165 // div, 255 // div, 0 // div),
-    'orange': Color(70 // div, 210 // div, 0 // div),
-    'white': Color(255 // div, 255 // div, 255 // div),
-    'pink': Color(25 // div, 135 // div, 25 // div),
-}
+class Colorizer(object):
+    def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
+        self.color = None
+        self.name = Colorizer.__name__
+        self.log = logger.get_logger(self.name)
+        self.strip = strip
+        self.div = 3  # to reduce brightness
 
+        if color_key is not None:
+            # self.log.debug('Init strip with color key \'' + str(color_key) + '\'')
+            self.set_color(color_key)
+        # else:
+        # self.log.debug('Init strip without color key.')
 
-def _run_color(color, stripe):
-    # Low light during given period
-    now = datetime.datetime.now()
-    if 8 < int(now.hour) < 18:
-        stripe.setBrightness(127)
-    else:
-        stripe.setBrightness(50)
+        # colors here defined in order G(reen) R(ed) B(lue)
+        self.colors = {
+            0: Color(0, 0, 0),
+            1: Color(255, 255, 255),
+            'red': Color(10 // self.div, 165 // self.div, 10 // self.div),
+            'blue': Color(50 // self.div, 0 // self.div, 135 // self.div),
+            'green': Color(135 // self.div, 0 // self.div, 50 // self.div),
+            'yellow': Color(165 // self.div, 255 // self.div, 0 // self.div),
+            'orange': Color(70 // self.div, 210 // self.div, 0 // self.div),
+            'white': Color(255 // (self.div * 2), 255 // (self.div * 2), 255 // (self.div * 2)),
+            'pink': Color(25 // self.div, 135 // self.div, 25 // self.div),
+        }
 
-    try:
-        for i in range(stripe.numPixels()):
-            stripe.setPixelColor(i, colors.get(color))
-        stripe.show()
+    def colors(self):
+        """ Returns defined colors """
+        return self.colors.keys()
 
-    except KeyboardInterrupt:
-        log.warn("KeyboardInterrupt")
-        exit()
+    def set_color(self, color_key):
+        # self.log.debug('Setup color for key \'' + str(color_key) + '\'')
+        if isinstance(color_key, int):
+            self.color = color_key
+        else:
+            self.color = color_key.lower()
 
-    except Exception as e:
-        log.error("Any error occurs: " + str(e))
-        exit()
+    def _get_color(self, key):
+        if key in self.colors.keys():
+            return self.colors.get(key)
+        else:
+            raise Exception('Key \'' + str(self.color) + '\' not defined in ' + self.name + '.colors')
+
+    @classmethod
+    def clear(cls, strip):
+        for i in range(strip.numPixels()):
+            strip.setPixelColor(i, Color(0, 0, 0))
+        strip.show()
+
+    def start(self):
+        try:
+            if self.color is None:
+                raise Exception('Start without set color!')
+            else:
+                # Low light during given period
+                now = datetime.datetime.now()
+                if 8 < int(now.hour) < 18:
+                    self.strip.setBrightness(127)
+                else:
+                    self.strip.setBrightness(50)
+
+                for i in range(self.strip.numPixels()):
+                    self.strip.setPixelColor(i, self._get_color(self.color))
+                self.strip.show()
+
+        except KeyboardInterrupt:
+            self.log.warn("KeyboardInterrupt")
+            exit()
+
+        except Exception as e:
+            self.log.error("An error occurs: " + str(e))
+            # exit()
 
 
 def run_red(stripe):
-    _run_color('red', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'red').start()
 
 
 def run_blue(stripe):
-    _run_color('blue', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'blue').start()
 
 
 def run_green(stripe):
-    _run_color('green', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'green').start()
 
 
 def run_yellow(stripe):
-    _run_color('yellow', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'yellow').start()
 
 
 def run_orange(stripe):
-    _run_color('orange', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'orange').start()
 
 
 def run_white(stripe):
-    _run_color('white', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'white').start()
 
 
 def run_pink(stripe):
-    _run_color('pink', stripe)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, 'pink').start()
+
+
+def run_stroboscope(stripe):
+    from control import get_stop_flag
+    stripe.setBrightness(255)
+    while not get_stop_flag():
+        Colorizer(stripe, 1).start()
+        time.sleep(0.0075)
+        Colorizer(stripe, 0).start()
+        time.sleep(1)
+    Colorizer.clear(stripe)
+
+
+def run_demo(stripe):
+    from control import get_stop_flag
+    new_strip = Colorizer(stripe)
+    while not get_stop_flag():
+        for color in new_strip.colors:
+            if isinstance(color, str) and not get_stop_flag():
+                new_strip.set_color(color)
+                new_strip.start()
+            time.sleep(1.5)
+            if get_stop_flag():
+                break
+    new_strip.clear(stripe)
 
 
 if __name__ == '__main__':
