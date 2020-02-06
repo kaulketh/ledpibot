@@ -52,7 +52,7 @@ trnslt = {
         c_ks.get(3): "candles",
         c_ks.get(4): "clock 1",
         c_ks.get(5): "clock 2",
-        c_ks.get(6): "rainbow",
+        c_ks.get(6): "multi",
         c_ks.get(7): "theater",
         c_ks.get(8): "red",
         c_ks.get(9): "blue",
@@ -62,7 +62,7 @@ trnslt = {
         c_ks.get(13): "white",
         c_ks.get(14): "pink",
         c_ks.get(15): "colors",
-        c_ks.get(16): "stroboscope",
+        c_ks.get(16): "strobe",
         c_ks.get(17): "clock 3"
     },
 
@@ -78,7 +78,7 @@ trnslt = {
         c_ks.get(3): "kerzen",
         c_ks.get(4): "uhr 1",
         c_ks.get(5): "uhr 2",
-        c_ks.get(6): "regenbogen",
+        c_ks.get(6): "multi",
         c_ks.get(7): "theater",
         c_ks.get(8): "rot",
         c_ks.get(9): "blau",
@@ -88,7 +88,7 @@ trnslt = {
         c_ks.get(13): "weiß",
         c_ks.get(14): "pink",
         c_ks.get(15): "farben",
-        c_ks.get(16): "stroboskope",
+        c_ks.get(16): "strobe",
         c_ks.get(17): "uhr 3"
     }
 
