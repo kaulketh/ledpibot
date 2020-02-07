@@ -33,7 +33,7 @@ start = commands[1]
 
 
 def _btn(text):
-    return KeyboardButton(text=text.title())
+    return KeyboardButton(text=text)
 
 
 kb_markup = ReplyKeyboardMarkup(keyboard=[
@@ -48,7 +48,7 @@ rm_kb = ReplyKeyboardRemove()
 
 
 def _kb_stop(func):
-    return ReplyKeyboardMarkup(keyboard=[[_btn(stop.title() + ' \"' + func.title() + '\"')]])
+    return ReplyKeyboardMarkup(keyboard=[[_btn(stop + ' \"' + func + '\"')]])
 
 
 # endregion
@@ -92,17 +92,18 @@ def _on_chat_message(msg):
 
     if content_type == 'text':
         command = msg['text']
-        log.info('Command = ' + command)
+        log.info('Requested: ' + command)
         # start
-        if (command.title() == start.title()) or (command == ('/' + start)):
+        if (command == start) or (command == start.lower()) or (command == ('/' + start.lower())):
             _send(chat_id, pls_select.format(msg['from']['first_name']))
-        # stop if command starts with 'stop' or '/stop'
-        elif (command.title().startswith(stop.title())) or (command.startswith('/' + stop)):
+        # stop
+        elif (command.startswith(stop)) \
+                or (command.startswith(stop.lower())) or (command.startswith('/' + stop.lower())):
             stop_threads()
             _send(chat_id, pls_select.format(msg['from']['first_name']))
-        # all others
-        elif any(c for c in commands if (command.title()) == (c.title())):
-            _send(chat_id, '*' + command.title() + called, reply_markup=_kb_stop(command))
+        # all other commands
+        elif any(c for c in commands if (command == c)):
+            _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
             run_thread(command)
         else:
             _reply_wrong_command(chat_id, command)

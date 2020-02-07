@@ -37,7 +37,7 @@ def get_stop_flag():
 def run_thread(func_name):
     stop_threads()
     try:
-        log.debug('Call thread for ' + func_name)
+        log.info('Start thread: ' + func_name)
         thread = dictionary_threads.get(func_name)
         if thread is None:
             log.debug('Thread not found in dictionary for ' + func_name)
@@ -60,7 +60,7 @@ def stop_threads():
             if thread is not None and thread.is_alive():
                 thread.pause()
             if thread is not None:
-                log.debug('Stop thread ' + thread.getName())
+                log.info('Stop thread: ' + thread.getName())
                 thread.stop()
                 dictionary_threads[key] = None
                 log.debug('Removed from dictionary: ' + thread.getName())
@@ -82,9 +82,9 @@ def set_stop_flag(flag):
 
 # noinspection PyTypeChecker
 def _init_thread(func_name):
-    log.debug("Init function \'{0}\' as thread \'{1}\'".format(func_name.lower(), func_name))
+    log.debug("Init function \'{0}\' as thread \'{0}\'".format(func_name))
     new_thread = LightFunctionsThread(
-        function=_thread_function(dictionary_functions, func_name.lower()),
+        function=_thread_function(dictionary_functions, func_name),
         name=func_name,
         strip=strip)
     new_thread.start()
