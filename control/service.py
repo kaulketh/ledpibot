@@ -7,6 +7,8 @@ Service functions
 
 import os
 
+from telepot import Bot
+
 import logger
 
 __author___ = "Thomas Kaulke"
@@ -19,16 +21,16 @@ name = "service"
 log = logger.get_logger(name.title())
 
 markdown = "-d parse_mode='Markdown'"
-c_rotate = "/servicerotate"
-c_reboot = "/servicereboot"
-c_clear = "/serviceclear"
+c_rotate = "/serviceRotate"
+c_reboot = "/serviceReboot"
+c_clear = "/serviceClear"
 menu = "Service functions:\n- {0}\n- {1}\n- {2}".format(c_rotate, c_reboot, c_clear)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'
 
 
-def reboot_device(log_msg):
+def reboot_device(log_msg: str):
     try:
         log.info(log_msg)
         os.system(reboot)
@@ -36,7 +38,7 @@ def reboot_device(log_msg):
         log.error(str(e))
 
 
-def log_rotate_bot(log_msg):
+def log_rotate_bot(log_msg: str):
     try:
         log.info(log_msg)
         os.system(log_rotate)
@@ -44,12 +46,19 @@ def log_rotate_bot(log_msg):
         log.error(str(e))
 
 
-def clear_history(bot, chat_id, messages, log_msg):
+def clear_history(bot: Bot, chat_id: int, messages: list, log_msg: str):
+    """
+    :param bot: Bot
+    :param chat_id: Chat ID
+    :param messages: List of stored message IDs
+    :param log_msg: Message to use in logger
+    :return: Empty list
+    """
     for msg in messages:
         try:
             bot.deleteMessage((chat_id, msg,))
         except Exception as e:
-            log.error(str(e))
+            log.error('Message ID {0} : {1}'.format(str(msg), str(e)))
     messages.clear()
     log.info(log_msg)
     return messages

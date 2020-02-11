@@ -18,8 +18,8 @@ from functions.rainbow import run_rainbow
 from functions.theater import run_theater
 
 dictionary_functions = {
-    commands[0]: None,
-    commands[1]: None,
+    commands[0]: None,  # direct bot command, no function call required
+    commands[1]: None,  # direct bot command, no function call required
     commands[2]: run_advent,
     commands[3]: run_candles,
     commands[4]: run_clock1,

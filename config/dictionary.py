@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # config/dictionary.py
 """
-Translations dictonary for command/button and message texts.
+Translations dictionary for command/button and message texts.
 """
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -26,7 +26,8 @@ keys = {
         4: "started",
         5: "cleared",
         6: "rebooted",
-        7: "rotated"
+        7: "rotated",
+        8: "stopped"
     },
 
     # commands/buttons
@@ -65,6 +66,7 @@ translation = {
         keys[0].get(5): "Chat history cleared.",
         keys[0].get(6): "Device rebooted.",
         keys[0].get(7): "Logrotate executed manually.",
+        keys[0].get(8): "Bot stopped.",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -87,7 +89,7 @@ translation = {
     },
 
     "de": {
-        "name": "Deustch",
+        "name": "Deutsch",
         keys[0].get(0): "`Hallo {1}, dies ist ein privater Bot!"
                         "\nID {0}, {2} {3} wurde geblockt."
                         "\nDanke für den Besuch!`",
@@ -98,6 +100,7 @@ translation = {
         keys[0].get(5): "Chatverlauf gelöscht.",
         keys[0].get(6): "Gerät neu gestartet.",
         keys[0].get(7): "Logrotate manuell ausgeführt.",
+        keys[0].get(8): "Bot angehalten.",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -122,25 +125,23 @@ translation = {
 }
 
 
-def _set(lng: str):
+def _set_language(lng='en'):
     """
-    Set chat language.
+    Set chat language, default = English.
 
     :param lng: language key (i.e. 'de')
-    :return: None
+    :return: None (set global chat language)
     """
     global language
     if lng not in translation:
-        log.warning("Language \'{0}\' not found, set default language!".format(lng))
-        language = "en"
+        log.warning("Language key \'{0}\' not found, set default chat language!".format(lng))
+        language = 'en'
     else:
         language = lng
-    log.debug("Language set: {0}".format((translation[language].get('name')).upper()))
-
-    return texts
+    log.debug("Chat language set to {0}".format((translation[language].get('name')).upper()))
 
 
-def _load(key_index: int):
+def _get_texts(key_index: int):
     """
     Load translations from dictionary.
 
@@ -149,21 +150,31 @@ def _load(key_index: int):
     """
     global language, texts
     texts = []
+
+    def msgs():
+        for key in keys[0].keys():
+            m = translation[language].get(keys[0].get(key))
+            log.debug("Load message: {0:^12} = {1:<40}".format(str(keys[0].get(key)), m[0:34]))
+            yield m
+
+    def cmds():
+        for key in keys[1].keys():
+            c = (translation[language].get(keys[1].get(key))).title()
+            log.debug('Load command: {0:^12} = {1:<40}'.format(str(keys[1].get(key)), c))
+            yield c
+
     if key_index == 0:
-        for key in keys[key_index].keys():
-            m = translation[language].get(keys[key_index].get(key))
-            log.debug("Load message: {0:^12} = {1:<40}".format(str(keys[key_index].get(key)), m[0:38]))
-            texts.append(m)
+        for msg in msgs():
+            texts.append(msg)
+
     elif key_index == 1:
-        for key in keys[key_index].keys():
-            c = (translation[language].get(keys[key_index].get(key))).title()
-            log.debug('Load command: {0:^12} = {1:<40}'.format(str(keys[key_index].get(key)), c))
-            texts.append(c)
+        for cmd in cmds():
+            texts.append(cmd)
     else:
-        raise Exception('Error while import from dictionary!')
+        raise Exception('Error while import from translations!')
     return texts
 
 
-_set("de")
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated = _load(0)
-commands = _load(1)
+_set_language('de')
+wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped = _get_texts(0)
+commands = _get_texts(1)
