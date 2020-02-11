@@ -2,15 +2,19 @@
 # -*- coding: utf-8 -*-
 # config/dictionary.py
 """
-author: Thomas Kaulke, kaulketh@gmail.com
+Translations dictonary for command/button and message texts.
 """
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 import logger
 
 log = logger.get_logger('Dictionary')
-commands = []
-txts = []
 language = None
+texts = []
 
 keys = {
     # messages
@@ -118,7 +122,13 @@ translation = {
 }
 
 
-def _set_lng(lng: str):
+def _set(lng: str):
+    """
+    Set chat language.
+
+    :param lng: language key (i.e. 'de')
+    :return: None
+    """
     global language
     if lng not in translation:
         log.warning("Language \'{0}\' not found, set default language!".format(lng))
@@ -127,32 +137,33 @@ def _set_lng(lng: str):
         language = lng
     log.debug("Language set: {0}".format((translation[language].get('name')).upper()))
 
-
-def _load_cmdtxts():
-    global language
-    for key in keys[1].keys():
-        c = (translation[language].get(keys[1].get(key))).title()
-        log.debug('Load command: ' + c)
-        commands.append(c)
+    return texts
 
 
-# def _load_msgtxts(index: int):
-#     global language
-#     m = translation[language].get(keys[0].get(index))
-#     log.debug("Load message text fragment: {0}...".format(m[0:15]))
-#     return m
+def _load(key_index: int):
+    """
+    Load translations from dictionary.
+
+    :param key_index: 0 = messages, 1 = commands
+    :return: list of texts
+    """
+    global language, texts
+    texts = []
+    if key_index == 0:
+        for key in keys[key_index].keys():
+            m = translation[language].get(keys[key_index].get(key))
+            log.debug("Load message: {0:^12} = {1:<40}".format(str(keys[key_index].get(key)), m[0:38]))
+            texts.append(m)
+    elif key_index == 1:
+        for key in keys[key_index].keys():
+            c = (translation[language].get(keys[key_index].get(key))).title()
+            log.debug('Load command: {0:^12} = {1:<40}'.format(str(keys[key_index].get(key)), c))
+            texts.append(c)
+    else:
+        raise Exception('Error while import from dictionary!')
+    return texts
 
 
-def _load_msgtxts():
-    global language
-    for key in keys[0].keys():
-        m = translation[language].get(keys[0].get(key))
-        log.debug("Load message text fragment: {0}...".format(m[0:15]))
-        txts.append(m)
-    return txts
-
-
-_set_lng("de")
-_load_cmdtxts()
-_load_msgtxts()
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated = txts
+_set("de")
+wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated = _load(0)
+commands = _load(1)
