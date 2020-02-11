@@ -7,7 +7,7 @@ import time
 from neopixel import *
 
 import logger
-from config import DAYBRIGHTNESS, NIGHTBRIGHTNESS, MORNINGCUTOFF, NIGHTCUTOFF
+from config import DAY_BRIGHTNESS, NIGHT_BRIGHTNESS, MORNING_CUT_OFF, NIGHT_CUT_OFF
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -44,16 +44,16 @@ def run_clock1(stripe):
             leds_per_2500ms = int(round(now.second / 2.5))
 
             # Low light during given period
-            if MORNINGCUTOFF < int(now.hour) < NIGHTCUTOFF:
-                stripe.setBrightness(DAYBRIGHTNESS)
+            if MORNING_CUT_OFF < int(now.hour) < NIGHT_CUT_OFF:
+                stripe.setBrightness(DAY_BRIGHTNESS)
             else:
-                stripe.setBrightness(NIGHTBRIGHTNESS)
+                stripe.setBrightness(NIGHT_BRIGHTNESS)
 
             _seconds(leds_per_2500ms, stripe)
 
             _minute(led_for_minute, led_for_hour, stripe)
 
-            _hour(led_for_hour, led_for_minute, stripe)
+            _hour(led_for_hour, stripe)
 
             stripe.show()
             if leds_per_2500ms == stripe.numPixels():
@@ -101,6 +101,8 @@ def _minute(led, led_hour, stripe):
             stripe.setPixelColorRGB(0, mG, mR, mB)
         else:
             stripe.setPixelColorRGB(0, mG, mR, mB)
+    else:
+        stripe.setPixelColorRGB(led, mG, mR, mB)
 
 
 def _set_minute_led_before_and_after(stripe, led):
@@ -108,21 +110,8 @@ def _set_minute_led_before_and_after(stripe, led):
     stripe.setPixelColorRGB(led + 1, (mG // 5), (mR // 5), (mB // 5))
 
 
-def _hour(led, led_minute, stripe):
-    if 0 < led < stripe.numPixels():
-        # past half
-        if led_minute > 12:
-            stripe.setPixelColorRGB(led, hG, hR, hB)
-            stripe.setPixelColorRGB(led + 1, (hG // 5), (hR // 5), (hB // 5))
-        # past quarter to next hour
-        if led_minute > 18:
-            stripe.setPixelColorRGB(led, (hG // 5), (hR // 5), (hB // 5))
-            stripe.setPixelColorRGB(led + 1, hG, hR, hB)
-            stripe.setPixelColorRGB(led + 2, (hG // 5), (hR // 5), (hB // 5))
-        else:
-            stripe.setPixelColorRGB(led, hG, hR, hB)
-    else:
-        stripe.setPixelColorRGB(led, hG, hR, hB)
+def _hour(led, stripe):
+    stripe.setPixelColorRGB(led, hG, hR, hB)
 
 
 if __name__ == '__main__':

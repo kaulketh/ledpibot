@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # control/__init__py
 """
-author: Thomas Kaulke, kaulketh@gmail.com
+Control light functions and effects
 """
 
 import logger
@@ -17,9 +17,10 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 log = logger.get_logger('Control')
-clear(strip)
 stop_flag = None
 dictionary_threads = {'None': None}
+
+clear(strip)
 
 
 def _thread_function(dictionary, key):
@@ -40,7 +41,7 @@ def run_thread(func_name):
         log.info('Start thread: ' + func_name)
         thread = dictionary_threads.get(func_name)
         if thread is None:
-            log.debug('Thread not found in dictionary for ' + func_name)
+            log.debug('Not found in dictionary: ' + func_name)
             _init_thread(func_name)
         elif not thread.is_alive():
             thread.start()

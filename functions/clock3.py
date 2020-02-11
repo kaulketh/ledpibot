@@ -8,7 +8,7 @@ import time
 
 from neopixel import *
 
-from config import DAYBRIGHTNESS, NIGHTBRIGHTNESS, MORNINGCUTOFF, NIGHTCUTOFF
+from config import DAY_BRIGHTNESS, NIGHT_BRIGHTNESS, MORNING_CUT_OFF, NIGHT_CUT_OFF
 import logger
 
 __author___ = "Thomas Kaulke"
@@ -17,24 +17,24 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-INTENSE = 120
-STARTPIXEL = 0  # where do we start? shift the arcs if the wiring does not start at the 12
+intense = 150
+start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
 name = "Clock 3"
 log = logger.get_logger(name)
 
 
 def _wipe(color, strip):
     for i in range(strip.numPixels()):
-        strip.setPixelColor((i + STARTPIXEL) % 24, color)
+        strip.setPixelColor((i + start_px) % 24, color)
         strip.show()
         time.sleep(0.05)
 
 
 def _check_daytime(hour, strip):
-    if MORNINGCUTOFF < hour < NIGHTCUTOFF:
-        strip.setBrightness(DAYBRIGHTNESS)
+    if MORNING_CUT_OFF < hour < NIGHT_CUT_OFF:
+        strip.setBrightness(DAY_BRIGHTNESS)
     else:
-        strip.setBrightness(NIGHTBRIGHTNESS)
+        strip.setBrightness(NIGHT_BRIGHTNESS)
 
 
 def run_clock3(strip):
@@ -53,20 +53,20 @@ def run_clock3(strip):
             for i in range(strip.numPixels()):
                 if i <= second_value:
                     # calculates a faded arc from low to maximum brightness
-                    blue = (i + 1) * (INTENSE / (second_value + 1))
+                    blue = (i + 1) * (intense / (second_value + 1))
                 else:
                     blue = 0
 
                 if i <= minute_value:
-                    green = (i + 1) * (INTENSE / (minute_value + 1))
+                    green = (i + 1) * (intense / (minute_value + 1))
                 else:
                     green = 0
 
                 if i <= hour_value:
-                    red = (i + 1) * (INTENSE / (hour_value + 1))
+                    red = (i + 1) * (intense / (hour_value + 1))
                 else:
                     red = 0
-                strip.setPixelColor((i + STARTPIXEL) % 24, Color(int(green), int(red), int(blue)))
+                strip.setPixelColor((i + start_px) % 24, Color(int(green), int(red), int(blue)))
 
             strip.show()
             time.sleep(0.1)

@@ -4,7 +4,7 @@
 import threading
 
 import logger
-from control.led_strip import LED_BRIGHTNESS
+from config import BRIGHTNESS
 from functions import clear
 
 __author___ = "Thomas Kaulke"
@@ -61,7 +61,7 @@ class LightFunctionsThread(threading.Thread):
 
     def stop(self):
         self._stop.set()
-        self._strip.setBrightness(LED_BRIGHTNESS)
+        self._strip.setBrightness(BRIGHTNESS)
         clear(self._strip)
         log.debug('Thread \'{0}\' stop: {1}'.format(self._name, str(self.stopped())))
 

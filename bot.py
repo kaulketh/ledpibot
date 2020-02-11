@@ -12,8 +12,9 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 import logger
-from config import token, access, commands, wrong_id, pls_select, not_allowed, called
-from control import run_thread, stop_threads
+from config import \
+    token, access, commands, wrong_id, pls_select, not_allowed, called, started, cleared, rebooted, rotated
+from control import run_thread, stop_threads, service
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -26,6 +27,7 @@ assert isinstance(token, str)
 bot = telepot.Bot(token)
 answerer = telepot.helper.Answerer(bot)
 admins = [access.thk, access.annib]
+messages = []
 
 # region Keyboards
 stop = commands[0]
@@ -38,10 +40,10 @@ def _btn(text):
 
 kb_markup = ReplyKeyboardMarkup(keyboard=[
     [_btn(commands[2]), _btn(commands[3]), _btn(commands[6]), _btn(commands[7]), _btn(commands[16])],
+    [_btn(commands[4]), _btn(commands[5]), _btn(commands[17])],
     [_btn(commands[15])],
     [_btn(commands[8]), _btn(commands[9]), _btn(commands[10]),
-     _btn(commands[11]), _btn(commands[12]), _btn(commands[13]), _btn(commands[14])],
-    [_btn(commands[4]), _btn(commands[5]), _btn(commands[17])]
+     _btn(commands[11]), _btn(commands[12]), _btn(commands[13]), _btn(commands[14])]
 ])
 
 rm_kb = ReplyKeyboardRemove()
@@ -53,10 +55,20 @@ def _kb_stop(func):
 
 # endregion
 # region Methods
+def _welcome():
+    log.debug('Bot is listening ...')
+    # for admin in admins:
+    #     _send(admin, started)
+    _send(admins[0], started)
 
 
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    bot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+    global messages
+    log.debug("Message send: {0} {1} {2} {3}".format(str(chat_id), text, str(reply_markup), str(parse_mode)))
+    # send and store msg id
+    mid = (bot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode))['message_id']
+    messages.append(mid)
+    log.debug('Message ID stored: ' + str(mid))
 
 
 def _reply_wrong_id(chat_id, msg):
@@ -80,11 +92,20 @@ def _reply_wrong_command(chat_id, content):
     return
 
 
+def _clear_history(chat_id):
+    global messages
+    messages = service.clear_history(bot, chat_id, messages, cleared)
+    _send(chat_id, cleared, reply_markup=rm_kb)
+
+
 # noinspection PyGlobalUndefined
 def _on_chat_message(msg):
-    global command
+    global command, messages
     content_type, chat_type, chat_id = telepot.glance(msg)
     log.debug(msg)
+    # store message id
+    messages.append(msg['message_id'])
+    log.debug('Message ID stored: ' + str(msg['message_id']))
 
     if chat_id not in admins:
         _reply_wrong_id(chat_id, msg)
@@ -101,6 +122,19 @@ def _on_chat_message(msg):
                 or (command.startswith(stop.lower())) or (command.startswith('/' + stop.lower())):
             stop_threads()
             _send(chat_id, pls_select.format(msg['from']['first_name']))
+        # service
+        elif (command.startswith(service.name)) \
+                or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
+            stop_threads()
+            _send(chat_id, service.menu, reply_markup=rm_kb)
+            if command == service.c_rotate:
+                service.log_rotate_bot(rotated)
+                _send(chat_id, rotated, reply_markup=rm_kb)
+            elif command == service.c_reboot:
+                service.reboot_device(rebooted)
+                _send(chat_id, rebooted, reply_markup=rm_kb)
+            elif command == service.c_clear:
+                _clear_history(chat_id)
         # all other commands
         elif any(c for c in commands if (command == c)):
             _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
@@ -115,7 +149,7 @@ def _on_chat_message(msg):
 
 
 MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
-log.debug('Bot is listening ...')
+_welcome()
 while True:
     try:
         time.sleep(5)

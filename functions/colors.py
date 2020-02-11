@@ -95,46 +95,38 @@ class Colorizer(object):
             # exit()
 
 
-def run_red(stripe):
+def _run(stripe, color_key: str):
     from control import get_stop_flag
     while not get_stop_flag():
-        Colorizer(stripe, 'red').start()
+        Colorizer(stripe, color_key).start()
+
+
+def run_red(stripe):
+    _run(stripe, 'red')
 
 
 def run_blue(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'blue').start()
+    _run(stripe, 'blue')
 
 
 def run_green(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'green').start()
+    _run(stripe, 'green')
 
 
 def run_yellow(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'yellow').start()
+    _run(stripe, 'yellow')
 
 
 def run_orange(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'orange').start()
+    _run(stripe, 'orange')
 
 
 def run_white(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'white').start()
+    _run(stripe, 'white')
 
 
 def run_pink(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'pink').start()
+    _run(stripe, 'pink')
 
 
 def run_stroboscope(stripe):
@@ -142,10 +134,14 @@ def run_stroboscope(stripe):
     stripe.setBrightness(255)
     while not get_stop_flag():
         Colorizer(stripe, 1).start()
-        t = uniform(0.005,0.05)
+        t = uniform(0.005, 0.05)
+        if get_stop_flag():
+            break
         time.sleep(t)
         Colorizer(stripe, 0).start()
-        t = uniform(0.5,3)
+        t = uniform(0.5, 3)
+        if get_stop_flag():
+            break
         time.sleep(t)
     Colorizer.clear(stripe)
 
@@ -158,7 +154,7 @@ def run_demo(stripe):
             if isinstance(color, str) and not get_stop_flag():
                 new_strip.set_color(color)
                 new_strip.start()
-                t = uniform(0.25,1)
+                t = uniform(0.25, 1)
                 time.sleep(t)
                 if get_stop_flag():
                     break
