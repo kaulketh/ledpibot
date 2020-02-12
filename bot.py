@@ -63,7 +63,9 @@ def _welcome():
 
 
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    log.debug("Message posted: {0}|{1}|{2}|{3}".format(str(chat_id), text, str(reply_markup), str(parse_mode)))
+    log.debug(
+        "Message posted: {0}|{1}|{2}|{3}".format(
+            str(chat_id), text, str(reply_markup), str(parse_mode)).replace("\n", " "))
     mid = (bot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode))['message_id']
     _store_msg_id(mid)
 
@@ -89,10 +91,11 @@ def _reply_wrong_command(chat_id, content):
     return
 
 
-def _clear_history(chat_id, add_msg='', reply_markup=rm_kb):
+def _clear_history(chat_id, add_msg='', reply_markup=rm_kb, send=True):
     global messages
     messages = service.clear_history(bot, chat_id, messages, cleared)
-    _send(chat_id, cleared + ' ' + add_msg, reply_markup=reply_markup)
+    if send:
+        _send(chat_id, cleared + ' ' + add_msg, reply_markup=reply_markup)
 
 
 def _store_msg_id(msg_id: int):
@@ -141,6 +144,8 @@ def _on_chat_message(msg):
                     service.reboot_device(rebooted)
                 elif command == service.c_clear:
                     _clear_history(chat_id, '\n' + pls_select.format(msg['from']['first_name']), kb_markup)
+                elif command == service.c_system:
+                    _send(chat_id, service.system_usage(), reply_markup=rm_kb)
         # all other commands
         elif any(c for c in commands if (command == c)):
             _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
