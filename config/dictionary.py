@@ -27,7 +27,8 @@ keys = {
         5: "cleared",
         6: "rebooted",
         7: "rotated",
-        8: "stopped"
+        8: "stopped",
+        9: "standby"
     },
 
     # commands/buttons
@@ -67,6 +68,7 @@ translation = {
         keys[0].get(6): "Device rebooted.",
         keys[0].get(7): "Logrotate executed manually.",
         keys[0].get(8): "Bot stopped.",
+        keys[0].get(9): "Stopped, automatic standby.\nPlease restart!",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -101,6 +103,7 @@ translation = {
         keys[0].get(6): "Gerät neu gestartet.",
         keys[0].get(7): "Logrotate manuell ausgeführt.",
         keys[0].get(8): "Bot angehalten.",
+        keys[0].get(9): "Getoppt, automatischer Standby.\nBitte Neustart!",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -176,5 +179,5 @@ def _get_translations(key_index: int):
 
 
 _set_language('de')
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped = _get_translations(0)
+wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped, standby = _get_translations(0)
 commands = _get_translations(1)

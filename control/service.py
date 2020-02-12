@@ -18,7 +18,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-name = "service"
+name = "Service"
 log = logger.get_logger(name.title())
 
 markdown = "-d parse_mode='Markdown'"

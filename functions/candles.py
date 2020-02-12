@@ -14,7 +14,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-from config.led import DAY_BRIGHTNESS, NIGHT_BRIGHTNESS
+from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 
 name = "Candles"
 log = logger.get_logger(name)
@@ -31,7 +31,7 @@ def percent():
 
 
 def _rand_brightness(stripe, factor=1.0):
-    stripe.setBrightness(int(randint(NIGHT_BRIGHTNESS, DAY_BRIGHTNESS) * factor))
+    stripe.setBrightness(int(randint(LED_NIGHT_BRIGHTNESS, LED_DAY_BRIGHTNESS) * factor))
 
 
 # candle lights from 0 to leds

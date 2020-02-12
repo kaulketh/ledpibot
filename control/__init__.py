@@ -8,6 +8,7 @@ Control light functions and effects
 import logger
 from control.function_thread import LightFunctionsThread
 from control.led_strip import strip
+from control.timer import start_timer, stop_timer
 from functions import clear, dictionary_functions
 
 __author___ = "Thomas Kaulke"
@@ -48,6 +49,7 @@ def run_thread(func_name):
         elif thread.is_alive():
             thread.resume()
         set_stop_flag(False)
+        start_timer()
         return
     except Exception as e:
         log.error('An error occurs: ' + str(e))
@@ -55,6 +57,7 @@ def run_thread(func_name):
 
 def stop_threads():
     set_stop_flag(True)
+    stop_timer()
     try:
         for key in dictionary_threads.keys():
             thread = (dictionary_threads.get(key))

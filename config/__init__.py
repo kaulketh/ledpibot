@@ -7,5 +7,5 @@ author: Thomas Kaulke, kaulketh@gmail.com
 
 from .access import *
 from .dictionary import *
-from .led import *
+from .settings import *
 from .secret import *

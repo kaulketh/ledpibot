@@ -5,7 +5,7 @@ author: Thomas Kaulke, kaulketh@gmail.com
 """
 
 import codecs
-import time
+import signal
 
 import telepot
 from telepot.loop import MessageLoop
@@ -57,11 +57,12 @@ def _kb_stop(func):
 # region Methods
 def _welcome():
     log.debug('Bot is listening ...')
-    # for admin in admins:
+    # for admin in _admins:
     #     _send(admin, started)
     _send(admins[0], started)
 
 
+# noinspection PyShadowingNames
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
     log.debug(
         "Message posted: {0}|{1}|{2}|{3}".format(
@@ -70,6 +71,7 @@ def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
     _store_msg_id(mid)
 
 
+# noinspection PyShadowingNames
 def _reply_wrong_id(chat_id, msg):
     user_id = msg['from']['id']
     first_name = msg['from']['first_name']
@@ -79,7 +81,7 @@ def _reply_wrong_id(chat_id, msg):
     log.warning('Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name))
 
 
-# noinspection PyGlobalUndefined
+# noinspection PyGlobalUndefined, PyShadowingNames
 def _reply_wrong_command(chat_id, content):
     global got
     try:
@@ -91,6 +93,7 @@ def _reply_wrong_command(chat_id, content):
     return
 
 
+# noinspection PyShadowingNames
 def _clear_history(chat_id, add_msg='', reply_markup=rm_kb, send=True):
     global messages
     messages = service.clear_history(bot, chat_id, messages, cleared)
@@ -106,7 +109,7 @@ def _store_msg_id(msg_id: int):
 
 # noinspection PyGlobalUndefined
 def _on_chat_message(msg):
-    global command
+    global command, chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
 
     log.debug(msg)
@@ -156,18 +159,29 @@ def _on_chat_message(msg):
         _reply_wrong_command(chat_id, content_type)
 
 
+# noinspection PyGlobalUndefined
+def external_request(msg):
+    # for admin in admins:
+    #     _send(admin, text=msg)
+    _send(admins[0], text=msg)
+
+
+def main():
+    MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
+    _welcome()
+    while True:
+        try:
+            signal.pause()
+            # time.sleep(5)
+
+        except KeyboardInterrupt:
+            log.warning('Program interrupted')
+            exit()
+
+        except Exception as e:
+            log.error('An error occurs: ' + str(e))
+
+
 # endregion
-
-
-MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
-_welcome()
-while True:
-    try:
-        time.sleep(5)
-
-    except KeyboardInterrupt:
-        log.warning('Program interrupted')
-        exit()
-
-    except Exception as e:
-        log.error('An error occurs: ' + str(e))
+if __name__ == '__main__':
+    main()
