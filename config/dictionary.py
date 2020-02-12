@@ -11,6 +11,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 import logger
+from .settings import STANDBY_MINUTES
 
 log = logger.get_logger('Dictionary')
 language = None
@@ -62,7 +63,7 @@ translation = {
                         "\nThanks for visit!`",
         keys[0].get(1): "* Not allowed for this bot\\! *",
         keys[0].get(2): " {0}, please make a suitable selection!",
-        keys[0].get(3): "*{0}* called.",
+        keys[0].get(3): "*\'{0}\'* was started for a maximum of " + str(STANDBY_MINUTES) + " minutes ",
         keys[0].get(4): "Bot ready for use.",
         keys[0].get(5): "Chat history cleared.",
         keys[0].get(6): "Device rebooted.",
@@ -97,7 +98,7 @@ translation = {
                         "\nDanke für den Besuch!`",
         keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
         keys[0].get(2): "{0}, bitte geeignete Auswahl treffen!",
-        keys[0].get(3): "*{0}* aufgerufen.",
+        keys[0].get(3): "*\'{0}\'* aufgerufen für maximal " + str(STANDBY_MINUTES) + " Minuten.",
         keys[0].get(4): "Bot einsatzbereit.",
         keys[0].get(5): "Chatverlauf gelöscht.",
         keys[0].get(6): "Gerät neu gestartet.",
@@ -178,6 +179,6 @@ def _get_translations(key_index: int):
     return translations
 
 
-_set_language('de')
+_set_language("de")
 wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped, standby = _get_translations(0)
 commands = _get_translations(1)

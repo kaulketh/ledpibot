@@ -42,7 +42,7 @@ def _countdown(waiting_time_minutes):
         return
     else:
         timer_thread.stop()
-        log.debug("Timer has expired.")
+        log.info("Automatic timer has expired.")
         _any_function()
 
 
