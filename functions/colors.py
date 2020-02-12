@@ -90,38 +90,51 @@ class Colorizer(object):
             # exit()
 
 
-def _run(stripe, color_key: str):
+def _run_color(stripe, color_key: str):
     from control import get_stop_flag
     while not get_stop_flag():
         Colorizer(stripe, color_key).start()
 
 
+def _all_colors(stripe):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        new_strip = Colorizer(stripe)
+        for color in new_strip.colors:
+            if isinstance(color, str) and not get_stop_flag():
+                new_strip.set_color(color)
+                yield new_strip
+            if get_stop_flag():
+                break
+    Colorizer.clear(stripe)
+
+
 def run_red(stripe):
-    _run(stripe, 'red')
+    _run_color(stripe, 'red')
 
 
 def run_blue(stripe):
-    _run(stripe, 'blue')
+    _run_color(stripe, 'blue')
 
 
 def run_green(stripe):
-    _run(stripe, 'green')
+    _run_color(stripe, 'green')
 
 
 def run_yellow(stripe):
-    _run(stripe, 'yellow')
+    _run_color(stripe, 'yellow')
 
 
 def run_orange(stripe):
-    _run(stripe, 'orange')
+    _run_color(stripe, 'orange')
 
 
 def run_white(stripe):
-    _run(stripe, 'white')
+    _run_color(stripe, 'white')
 
 
 def run_pink(stripe):
-    _run(stripe, 'pink')
+    _run_color(stripe, 'pink')
 
 
 def run_stroboscope(stripe):
@@ -142,18 +155,9 @@ def run_stroboscope(stripe):
 
 
 def run_demo(stripe):
-    from control import get_stop_flag
-    new_strip = Colorizer(stripe)
-    while not get_stop_flag():
-        for color in new_strip.colors:
-            if isinstance(color, str) and not get_stop_flag():
-                new_strip.set_color(color)
-                new_strip.start()
-                t = uniform(0.25, 1)
-                time.sleep(t)
-                if get_stop_flag():
-                    break
-    new_strip.clear(stripe)
+    for c in _all_colors(stripe):
+        c.start()
+        time.sleep(uniform(0.25, 1))
 
 
 if __name__ == '__main__':

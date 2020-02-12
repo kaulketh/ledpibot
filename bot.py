@@ -122,25 +122,25 @@ def _on_chat_message(msg):
             _send(chat_id, pls_select.format(msg['from']['first_name']))
         # stop(function)
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
-            stop_threads()
-            _send(chat_id, pls_select.format(msg['from']['first_name']))
+            if stop_threads():
+                _send(chat_id, pls_select.format(msg['from']['first_name']))
         # /stop
         elif command.startswith('/' + stop.lower()):
-            stop_threads()
-            _clear_history(chat_id, stopped)
+            if stop_threads():
+                _clear_history(chat_id, stopped)
         # service or /service
         elif (command.startswith(service.name)) \
                 or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
-            stop_threads()
-            _send(chat_id, service.menu, reply_markup=rm_kb)
-            if command == service.c_rotate:
-                service.log_rotate_bot(rotated)
-                _send(chat_id, rotated, reply_markup=rm_kb)
-            elif command == service.c_reboot:
-                _clear_history(chat_id, rebooted)
-                service.reboot_device(rebooted)
-            elif command == service.c_clear:
-                _clear_history(chat_id, '\n' + pls_select.format(msg['from']['first_name']), kb_markup)
+            if stop_threads():
+                _send(chat_id, service.menu, reply_markup=rm_kb)
+                if command == service.c_rotate:
+                    service.log_rotate_bot(rotated)
+                    _send(chat_id, rotated, reply_markup=rm_kb)
+                elif command == service.c_reboot:
+                    _clear_history(chat_id, rebooted)
+                    service.reboot_device(rebooted)
+                elif command == service.c_clear:
+                    _clear_history(chat_id, '\n' + pls_select.format(msg['from']['first_name']), kb_markup)
         # all other commands
         elif any(c for c in commands if (command == c)):
             _send(chat_id, called.format(command), reply_markup=_kb_stop(command))

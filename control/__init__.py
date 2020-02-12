@@ -66,9 +66,10 @@ def stop_threads():
                 dictionary_threads[key] = None
                 log.debug('Removed from dictionary: ' + thread.getName())
         log.debug("Threads stopped.")
-        return
+        return True
     except Exception as e:
         log.error('An error occurs: ' + str(e))
+    return False
 
 
 def set_stop_flag(flag):

@@ -14,7 +14,7 @@ import logger
 
 log = logger.get_logger('Dictionary')
 language = None
-texts = []
+translations = None
 
 keys = {
     # messages
@@ -141,15 +141,15 @@ def _set_language(lng='en'):
     log.debug("Chat language set to {0}".format((translation[language].get('name')).upper()))
 
 
-def _get_texts(key_index: int):
+def _get_translations(key_index: int):
     """
     Load translations from dictionary.
 
     :param key_index: 0 = messages, 1 = commands
     :return: list of texts
     """
-    global language, texts
-    texts = []
+    global language, translations
+    translations = []
 
     def msgs():
         for key in keys[0].keys():
@@ -165,16 +165,16 @@ def _get_texts(key_index: int):
 
     if key_index == 0:
         for msg in msgs():
-            texts.append(msg)
+            translations.append(msg)
 
     elif key_index == 1:
         for cmd in cmds():
-            texts.append(cmd)
+            translations.append(cmd)
     else:
         raise Exception('Error while import from translations!')
-    return texts
+    return translations
 
 
-_set_language()
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped = _get_texts(0)
-commands = _get_texts(1)
+_set_language('de')
+wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped = _get_translations(0)
+commands = _get_translations(1)

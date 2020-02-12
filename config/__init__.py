@@ -5,7 +5,7 @@
 author: Thomas Kaulke, kaulketh@gmail.com
 """
 
-from .secret import *
 from .access import *
 from .dictionary import *
 from .led import *
+from .secret import *
