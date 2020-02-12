@@ -57,8 +57,9 @@ def clear_history(bot: Bot, chat_id: int, messages: list, log_msg: str):
     for msg in messages:
         try:
             bot.deleteMessage((chat_id, msg,))
+            log.debug('Delete message: ID {0}'.format(str(msg)))
         except Exception as e:
-            log.error('Message ID {0} : {1}'.format(str(msg), str(e)))
+            log.error('Error while deleting message: ID {0} - {1:.<40}'.format(str(msg), str(e)[0:30]))
     messages.clear()
     log.info(log_msg)
     return messages

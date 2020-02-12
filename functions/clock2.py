@@ -52,7 +52,7 @@ def run_clock2(strip):
                             strip.setPixelColorRGB(0, hG, hR, hB)
                             strip.setPixelColorRGB(minute - 1, mG, mR, mB)
                     else:
-                        strip.setPixelColorRGB(minute +1 , mG, mR, mB)
+                        strip.setPixelColorRGB(minute + 1, mG, mR, mB)
                 else:
                     strip.setPixelColorRGB(minute, mG, mR, mB)
 

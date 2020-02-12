@@ -43,9 +43,11 @@ def get_strip():
 
     :return: NeoPixel/WS281x LED display/strip as s
     """
-    log.debug("Create NeoPixel object with appropriate configuration (LED Strip).")
+    log.debug("Create LED Strip: "
+              "COUNT:{0}, PIN:{1}, FREQ:{2}, DMA:{3}, INVERT:{4}, BRIGHTN.:{5}"
+              .format(str(COUNT), str(PIN), str(FREQ_HZ), str(DMA), str(INVERT), str(BRIGHTNESS)))
     s = Adafruit_NeoPixel(COUNT, PIN, FREQ_HZ, DMA, INVERT, BRIGHTNESS)
-    log.debug("Initialize: " + str(s))
+    log.debug("Initialize " + str(s))
     s.begin()
     return s
 

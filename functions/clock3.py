@@ -3,7 +3,6 @@
 # based on NeoPixel-60-Ring-Clock of Andy Doro
 # https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
 
-import datetime
 import time
 
 from neopixel import *
