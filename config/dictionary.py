@@ -74,7 +74,7 @@ translation = {
         keys[1].get(3): "candles",
         keys[1].get(4): "clock 1",
         keys[1].get(5): "clock 2",
-        keys[1].get(6): "multi",
+        keys[1].get(6): "rainbow",
         keys[1].get(7): "theater",
         keys[1].get(8): "red",
         keys[1].get(9): "blue",
@@ -108,7 +108,7 @@ translation = {
         keys[1].get(3): "kerzen",
         keys[1].get(4): "uhr 1",
         keys[1].get(5): "uhr 2",
-        keys[1].get(6): "multi",
+        keys[1].get(6): "regenbogen",
         keys[1].get(7): "theater",
         keys[1].get(8): "rot",
         keys[1].get(9): "blau",
@@ -175,6 +175,6 @@ def _get_texts(key_index: int):
     return texts
 
 
-_set_language('de')
+_set_language()
 wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped = _get_texts(0)
 commands = _get_texts(1)
