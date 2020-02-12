@@ -7,7 +7,7 @@ import time
 from neopixel import *
 
 import logger
-from config import DAY_BRIGHTNESS, NIGHT_BRIGHTNESS, MORNING_CUT_OFF, NIGHT_CUT_OFF
+from control.led_strip import set_brightness_depending_on_daytime
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -38,16 +38,10 @@ def run_clock1(stripe):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            now = datetime.datetime.now()
+            now = set_brightness_depending_on_daytime(stripe)[0]
             led_for_hour = int(int(now.hour) % 12 * 2)
             led_for_minute = int(now.minute // 2.5)
             leds_per_2500ms = int(round(now.second / 2.5))
-
-            # Low light during given period
-            if MORNING_CUT_OFF < int(now.hour) < NIGHT_CUT_OFF:
-                stripe.setBrightness(DAY_BRIGHTNESS)
-            else:
-                stripe.setBrightness(NIGHT_BRIGHTNESS)
 
             _seconds(leds_per_2500ms, stripe)
 

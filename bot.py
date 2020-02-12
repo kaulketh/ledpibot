@@ -137,8 +137,8 @@ def _on_chat_message(msg):
                 service.log_rotate_bot(rotated)
                 _send(chat_id, rotated, reply_markup=rm_kb)
             elif command == service.c_reboot:
+                _clear_history(chat_id, rebooted)
                 service.reboot_device(rebooted)
-                _send(chat_id, rebooted, reply_markup=rm_kb)
             elif command == service.c_clear:
                 _clear_history(chat_id)
         # all other commands

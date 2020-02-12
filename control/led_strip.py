@@ -3,10 +3,13 @@
 """
 LED-strip
 """
+import datetime
+
 from neopixel import *
 
 import logger
-from config import COUNT, PIN, FREQ_HZ, DMA, BRIGHTNESS, INVERT
+from config import COUNT, PIN, FREQ_HZ, DMA, BRIGHTNESS, INVERT, NIGHT_CUT_OFF, MORNING_CUT_OFF, DAY_BRIGHTNESS, \
+    NIGHT_BRIGHTNESS
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -15,6 +18,23 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 log = logger.get_logger("LED strip")
+
+
+def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
+    """
+    Low light during given period.
+
+    :param s: Adafruit_NeoPixel
+    :return: Datetime, Brightness
+    """
+    now = datetime.datetime.now()
+    if MORNING_CUT_OFF < int(now.hour) < NIGHT_CUT_OFF:
+        s.setBrightness(DAY_BRIGHTNESS)
+    else:
+        s.setBrightness(NIGHT_BRIGHTNESS)
+    b = s.getBrightness()
+    # log.debug('Set brightness to {0}'.format(str(b)))
+    return now, b
 
 
 def get_strip():

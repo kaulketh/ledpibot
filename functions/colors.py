@@ -5,13 +5,13 @@
 author: Thomas Kaulke, kaulketh@gmail.com
 """
 
-import datetime
 import time
 from random import uniform
 
 from neopixel import Color, Adafruit_NeoPixel
 
 import logger
+from control.led_strip import set_brightness_depending_on_daytime
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -75,12 +75,7 @@ class Colorizer(object):
             if self.color is None:
                 raise Exception('Start without set color!')
             else:
-                # Low light during given period
-                now = datetime.datetime.now()
-                if 8 < int(now.hour) < 18:
-                    self.strip.setBrightness(127)
-                else:
-                    self.strip.setBrightness(50)
+                set_brightness_depending_on_daytime(self.strip)
 
                 for i in range(self.strip.numPixels()):
                     self.strip.setPixelColor(i, self._get_color(self.color))
