@@ -57,9 +57,9 @@ def _kb_stop(func):
 # region Methods
 def _welcome():
     log.debug('Bot is listening ...')
-    # for admin in _admins:
-    #     _send(admin, started)
-    _send(admins[0], started)
+    for admin in admins:
+        _send(admin, started)
+    # _send(admins[0], started)
 
 
 # noinspection PyShadowingNames
@@ -161,9 +161,9 @@ def _on_chat_message(msg):
 
 # noinspection PyGlobalUndefined
 def external_request(msg):
-    # for admin in admins:
-    #     _send(admin, text=msg)
-    _send(admins[0], text=msg)
+    for admin in admins:
+        _send(admin, text=msg)
+    # _send(admins[0], text=msg)
 
 
 def main():
