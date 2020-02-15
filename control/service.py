@@ -63,21 +63,20 @@ def log_rotate_bot(log_msg: str):
         log.error(str(e))
 
 
-def clear_history(bot: Bot, chat_id: int, messages: list, log_msg: str):
+def clear_history(bot: Bot, chat_id: int, messages: dict, log_msg: str):
     """
     :param bot: Bot
     :param chat_id: Chat ID
-    :param messages: List of stored message IDs
+    :param messages: dictionary of stored message IDs
     :param log_msg: Message to use in logger
-    :return: Empty list
+    :return: Empty list for related chat ID
     """
-    for msg in messages:
+    for msg in messages.get(chat_id):
         try:
             bot.deleteMessage((chat_id, msg,))
-            log.debug('Delete message: ID {0}'.format(str(msg)))
+            log.debug('Delete message for {1}: ID {0}'.format(str(msg), str(chat_id)))
         except Exception as e:
-            log.warning('Error while deleting message: ID {0}'.format(str(msg)))
-            log.error("{0:.<55}".format(str(e)[0:50]))
-    messages.clear()
+            log.error("Message {0} ID:{1} {2:.<55}".format(str(chat_id), str(msg), str(e)[0:50]))
+    messages[chat_id] = []
     log.info(log_msg)
     return messages

@@ -24,7 +24,7 @@ class _CountdownThread(threading.Thread):
         self.do_run = True
 
     def run(self):
-        log.debug("Countdown started for {0} seconds.".format(str(self._seconds)))
+        log.info("Countdown started for {0} seconds.".format(str(self._seconds)))
         while self.__getattribute__('do_run') and self._seconds > 0:
             time.sleep(1)
             self._seconds -= 1

@@ -44,7 +44,7 @@ class Colorizer(object):
             'yellow': Color(165 // self.div, 255 // self.div, 0 // self.div),
             'orange': Color(70 // self.div, 210 // self.div, 0 // self.div),
             'white': Color(255 // (self.div * 2), 255 // (self.div * 2), 255 // (self.div * 2)),
-            'pink': Color(25 // self.div, 135 // self.div, 25 // self.div),
+            'pink': Color(18 // self.div, 238 // self.div, 137 // self.div)
         }
 
     def colors(self):

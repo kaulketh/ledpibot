@@ -13,7 +13,9 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboar
 
 import logger
 from config import \
-    token, access, commands, wrong_id, pls_select, not_allowed, called, started, cleared, rebooted, rotated, stopped
+    token, access, \
+    commands, \
+    wrong_id, pls_select, not_allowed, called, started, cleared, rebooted, rotated, stopped, stop_msg
 from control import run_thread, stop_threads, service
 
 __author___ = "Thomas Kaulke"
@@ -27,7 +29,7 @@ assert isinstance(token, str)
 bot = telepot.Bot(token)
 answerer = telepot.helper.Answerer(bot)
 admins = [access.thk, access.annib]
-messages = []
+messages = {}
 
 # region Keyboards
 stop = commands[0]
@@ -56,7 +58,7 @@ def _kb_stop(func):
 # endregion
 # region Methods
 def _welcome():
-    log.debug('Bot is listening ...')
+    log.info('Bot is running...')
     for admin in admins:
         _send(admin, started)
     # _send(admins[0], started)
@@ -68,7 +70,7 @@ def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
         "Message posted: {0}|{1}|{2}|{3}".format(
             str(chat_id), text, str(reply_markup), str(parse_mode)).replace("\n", " "))
     mid = (bot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode))['message_id']
-    _store_msg_id(mid)
+    _store_msg_id(chat_id, mid)
 
 
 # noinspection PyShadowingNames
@@ -101,10 +103,28 @@ def _clear_history(chat_id, add_msg='', reply_markup=rm_kb, send=True):
         _send(chat_id, cleared + ' ' + add_msg, reply_markup=reply_markup)
 
 
-def _store_msg_id(msg_id: int):
+# noinspection PyShadowingNames
+def _store_msg_id(chat_id: int, msg_id: int):
     global messages
-    messages.append(msg_id)
-    log.debug('Message ID stored: ' + str(msg_id))
+    if chat_id in messages:
+        ids = messages.get(chat_id)
+        ids.append(msg_id)
+    else:
+        ids = [msg_id]
+    messages[chat_id] = ids
+    log.debug('Message stored for {0}: ID {1}'.format(str(chat_id), str(msg_id)))
+    log.debug(messages)
+
+
+# noinspection PyShadowingNames
+def _stop(chat_id, msg=stop_msg):
+    if msg is not None:
+        _send(chat_id, msg, reply_markup=rm_kb)
+    if stop_threads():
+        return_bool = True
+    else:
+        return_bool = False
+    return return_bool
 
 
 # noinspection PyGlobalUndefined
@@ -113,7 +133,7 @@ def _on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
     log.debug(msg)
-    _store_msg_id(msg['message_id'])
+    _store_msg_id(chat_id, msg['message_id'])
 
     # check user
     if chat_id not in admins:
@@ -125,19 +145,20 @@ def _on_chat_message(msg):
         log.info('Requested: ' + command)
         # start or /start
         if (command == start) or (command == start.lower()) or (command == ('/' + start.lower())):
-            _send(chat_id, pls_select.format(msg['from']['first_name']))
+            if _stop(chat_id, msg=None):
+                _send(chat_id, pls_select.format(msg['from']['first_name']))
         # stop(function)
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
-            if stop_threads():
+            if _stop(chat_id, msg=command):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
         # /stop
         elif command.startswith('/' + stop.lower()):
-            if stop_threads():
+            if _stop(chat_id, msg=None):
                 _clear_history(chat_id, stopped)
         # service or /service
         elif (command.startswith(service.name)) \
                 or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
-            if stop_threads():
+            if _stop(chat_id):
                 _send(chat_id, service.menu, reply_markup=rm_kb)
                 if command == service.c_rotate:
                     service.log_rotate_bot(rotated)
@@ -149,10 +170,12 @@ def _on_chat_message(msg):
                     _clear_history(chat_id, '\n' + pls_select.format(msg['from']['first_name']), kb_markup)
                 elif command == service.c_system:
                     _send(chat_id, service.system_usage(), reply_markup=rm_kb)
+                    log.info(service.system_usage().replace("\n", " "))
         # all other commands
         elif any(c for c in commands if (command == c)):
-            _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
-            run_thread(command)
+            if _stop(chat_id, msg=None):
+                _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
+                run_thread(command)
         else:
             _reply_wrong_command(chat_id, command)
     else:
