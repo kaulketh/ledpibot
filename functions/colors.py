@@ -5,13 +5,14 @@
 author: Thomas Kaulke, kaulketh@gmail.com
 """
 
-import datetime
 import time
 from random import uniform
 
 from neopixel import Color, Adafruit_NeoPixel
 
 import logger
+from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -44,7 +45,7 @@ class Colorizer(object):
             'yellow': Color(165 // self.div, 255 // self.div, 0 // self.div),
             'orange': Color(70 // self.div, 210 // self.div, 0 // self.div),
             'white': Color(255 // (self.div * 2), 255 // (self.div * 2), 255 // (self.div * 2)),
-            'pink': Color(25 // self.div, 135 // self.div, 25 // self.div),
+            'pink': Color(18 // self.div, 238 // self.div, 137 // self.div)
         }
 
     def colors(self):
@@ -64,23 +65,12 @@ class Colorizer(object):
         else:
             raise Exception('Key \'' + str(self.color) + '\' not defined in ' + self.name + '.colors')
 
-    @classmethod
-    def clear(cls, strip):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, Color(0, 0, 0))
-        strip.show()
-
     def start(self):
         try:
             if self.color is None:
                 raise Exception('Start without set color!')
             else:
-                # Low light during given period
-                now = datetime.datetime.now()
-                if 8 < int(now.hour) < 18:
-                    self.strip.setBrightness(127)
-                else:
-                    self.strip.setBrightness(50)
+                set_brightness_depending_on_daytime(self.strip)
 
                 for i in range(self.strip.numPixels()):
                     self.strip.setPixelColor(i, self._get_color(self.color))
@@ -92,49 +82,55 @@ class Colorizer(object):
 
         except Exception as e:
             self.log.error("An error occurs: " + str(e))
-            # exit()
+            exit()
+
+
+def _run_color(stripe, color_key: str):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        Colorizer(stripe, color_key).start()
+    clear(stripe)
+
+
+def _all_colors(stripe):
+    from control import get_stop_flag
+    while not get_stop_flag():
+        new_strip = Colorizer(stripe)
+        for color in new_strip.colors:
+            if isinstance(color, str) and not get_stop_flag():
+                new_strip.set_color(color)
+                yield new_strip
+            if get_stop_flag():
+                break
+    clear(stripe)
 
 
 def run_red(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'red').start()
+    _run_color(stripe, 'red')
 
 
 def run_blue(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'blue').start()
+    _run_color(stripe, 'blue')
 
 
 def run_green(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'green').start()
+    _run_color(stripe, 'green')
 
 
 def run_yellow(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'yellow').start()
+    _run_color(stripe, 'yellow')
 
 
 def run_orange(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'orange').start()
+    _run_color(stripe, 'orange')
 
 
 def run_white(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'white').start()
+    _run_color(stripe, 'white')
 
 
 def run_pink(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        Colorizer(stripe, 'pink').start()
+    _run_color(stripe, 'pink')
 
 
 def run_stroboscope(stripe):
@@ -142,27 +138,22 @@ def run_stroboscope(stripe):
     stripe.setBrightness(255)
     while not get_stop_flag():
         Colorizer(stripe, 1).start()
-        t = uniform(0.005,0.05)
+        t = uniform(0.005, 0.05)
+        if get_stop_flag():
+            break
         time.sleep(t)
         Colorizer(stripe, 0).start()
-        t = uniform(0.5,3)
+        t = uniform(0.5, 3)
+        if get_stop_flag():
+            break
         time.sleep(t)
-    Colorizer.clear(stripe)
+    clear(stripe)
 
 
 def run_demo(stripe):
-    from control import get_stop_flag
-    new_strip = Colorizer(stripe)
-    while not get_stop_flag():
-        for color in new_strip.colors:
-            if isinstance(color, str) and not get_stop_flag():
-                new_strip.set_color(color)
-                new_strip.start()
-                t = uniform(0.25,1)
-                time.sleep(t)
-                if get_stop_flag():
-                    break
-    new_strip.clear(stripe)
+    for c in _all_colors(stripe):
+        c.start()
+        time.sleep(uniform(0.25, 1))
 
 
 if __name__ == '__main__':

@@ -4,9 +4,9 @@
 logger.py
 logging tool
 """
-import os
 import errno
 import logging
+import os
 from logging.config import fileConfig
 
 __author___ = "Thomas Kaulke"

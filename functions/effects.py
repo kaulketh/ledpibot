@@ -5,7 +5,6 @@
 #
 
 import time
-# import argparse
 
 from neopixel import *
 

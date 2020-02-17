@@ -8,7 +8,7 @@ from neopixel import Color
 
 import logger
 from functions.candles import candle
-from functions.effects import theater_chase
+from functions.effects import theater_chase, clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -81,15 +81,17 @@ def _december_cycle(stripe, month):
 
 # noinspection PyShadowingNames
 def run_advent(strip):
-    month = datetime.now().month
-    # month = 12  # uncomment to test
-    # log.info('advent started')
-    if month == 12:
-        _december_cycle(strip, month)
-    else:
-        # log.warn('Wrong month for xmas/advent animation, it\'s {0}!'.format(time.strftime("%B")))
-        theater_chase(strip, Color(0, 15, 0))
-    return
+    from control import get_stop_flag
+    while not get_stop_flag():
+        month = datetime.now().month
+        # month = 12  # uncomment to test
+        # log.info('advent started')
+        if month == 12:
+            _december_cycle(strip, month)
+        else:
+            # log.warn('Wrong month for xmas/advent animation, it\'s {0}!'.format(time.strftime("%B")))
+            theater_chase(strip, Color(0, 15, 0))
+    clear(strip)
 
 
 if __name__ == '__main__':

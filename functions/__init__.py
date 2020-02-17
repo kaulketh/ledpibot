@@ -6,20 +6,20 @@ author: Thomas Kaulke, kaulketh@gmail.com
 """
 
 from config import commands
-from functions.advent import run_advent
-from functions.candles import run_candles
-from functions.clock1 import run_clock1
-from functions.clock2 import run_clock2
-from functions.clock3 import run_clock3
-from functions.colors import \
+from .advent import run_advent
+from .candles import run_candles
+from .clock1 import run_clock1
+from .clock2 import run_clock2
+from .clock3 import run_clock3
+from .colors import \
     run_red, run_blue, run_green, run_orange, run_yellow, run_white, run_pink, run_demo, run_stroboscope
-from functions.effects import clear
-from functions.rainbow import run_rainbow
-from functions.theater import run_theater
+from .effects import clear
+from .rainbow import run_rainbow
+from .theater import run_theater
 
 dictionary_functions = {
-    commands[0]: None,
-    commands[1]: None,
+    commands[0]: None,  # direct bot command, no function call needed
+    commands[1]: None,  # direct bot command, no function call needed
     commands[2]: run_advent,
     commands[3]: run_candles,
     commands[4]: run_clock1,

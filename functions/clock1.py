@@ -1,13 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import datetime
 import time
 
-from neopixel import *
-
 import logger
-from config import DAYBRIGHTNESS, NIGHTBRIGHTNESS, MORNINGCUTOFF, NIGHTCUTOFF
+from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -38,27 +36,21 @@ def run_clock1(stripe):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            now = datetime.datetime.now()
+            now = set_brightness_depending_on_daytime(stripe)[0]
             led_for_hour = int(int(now.hour) % 12 * 2)
             led_for_minute = int(now.minute // 2.5)
             leds_per_2500ms = int(round(now.second / 2.5))
-
-            # Low light during given period
-            if MORNINGCUTOFF < int(now.hour) < NIGHTCUTOFF:
-                stripe.setBrightness(DAYBRIGHTNESS)
-            else:
-                stripe.setBrightness(NIGHTBRIGHTNESS)
 
             _seconds(leds_per_2500ms, stripe)
 
             _minute(led_for_minute, led_for_hour, stripe)
 
-            _hour(led_for_hour, led_for_minute, stripe)
+            _hour(led_for_hour, stripe)
 
             stripe.show()
             if leds_per_2500ms == stripe.numPixels():
                 time.sleep(1.5)
-                _clear(stripe)
+                clear(stripe)
 
         except KeyboardInterrupt:
             log.warn("KeyboardInterrupt.")
@@ -67,18 +59,7 @@ def run_clock1(stripe):
         except Exception as e:
             log.error("Any error occurs: " + str(e))
             exit()
-
-
-def _wipe(stripe, wait_ms=50, color=Color(0, 0, 0)):
-    for i in range(stripe.numPixels()):
-        stripe.setPixelColor(i, color)
-        stripe.show()
-        time.sleep(wait_ms / 1000.0)
-
-
-def _clear(stripe):
-    for i in range(0, stripe.numPixels()):
-        stripe.setPixelColor(i, Color(0, 0, 0))
+    clear(stripe)
 
 
 def _seconds(leds_per_2500ms, stripe):
@@ -101,6 +82,8 @@ def _minute(led, led_hour, stripe):
             stripe.setPixelColorRGB(0, mG, mR, mB)
         else:
             stripe.setPixelColorRGB(0, mG, mR, mB)
+    else:
+        stripe.setPixelColorRGB(led, mG, mR, mB)
 
 
 def _set_minute_led_before_and_after(stripe, led):
@@ -108,21 +91,8 @@ def _set_minute_led_before_and_after(stripe, led):
     stripe.setPixelColorRGB(led + 1, (mG // 5), (mR // 5), (mB // 5))
 
 
-def _hour(led, led_minute, stripe):
-    if 0 < led < stripe.numPixels():
-        # past half
-        if led_minute > 12:
-            stripe.setPixelColorRGB(led, hG, hR, hB)
-            stripe.setPixelColorRGB(led + 1, (hG // 5), (hR // 5), (hB // 5))
-        # past quarter to next hour
-        if led_minute > 18:
-            stripe.setPixelColorRGB(led, (hG // 5), (hR // 5), (hB // 5))
-            stripe.setPixelColorRGB(led + 1, hG, hR, hB)
-            stripe.setPixelColorRGB(led + 2, (hG // 5), (hR // 5), (hB // 5))
-        else:
-            stripe.setPixelColorRGB(led, hG, hR, hB)
-    else:
-        stripe.setPixelColorRGB(led, hG, hR, hB)
+def _hour(led, stripe):
+    stripe.setPixelColorRGB(led, hG, hR, hB)
 
 
 if __name__ == '__main__':
