@@ -16,7 +16,7 @@ LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 LED_DAY_BRIGHTNESS = 130
-LED_NIGHT_BRIGHTNESS = 30
+LED_NIGHT_BRIGHTNESS = 50
 LED_MORNING_CUT_OFF = 8
 LED_NIGHT_CUT_OFF = 18
 
