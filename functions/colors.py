@@ -12,6 +12,7 @@ from neopixel import Color, Adafruit_NeoPixel
 
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -64,12 +65,6 @@ class Colorizer(object):
         else:
             raise Exception('Key \'' + str(self.color) + '\' not defined in ' + self.name + '.colors')
 
-    @classmethod
-    def clear(cls, strip):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, Color(0, 0, 0))
-        strip.show()
-
     def start(self):
         try:
             if self.color is None:
@@ -87,13 +82,14 @@ class Colorizer(object):
 
         except Exception as e:
             self.log.error("An error occurs: " + str(e))
-            # exit()
+            exit()
 
 
 def _run_color(stripe, color_key: str):
     from control import get_stop_flag
     while not get_stop_flag():
         Colorizer(stripe, color_key).start()
+    clear(stripe)
 
 
 def _all_colors(stripe):
@@ -106,7 +102,7 @@ def _all_colors(stripe):
                 yield new_strip
             if get_stop_flag():
                 break
-    Colorizer.clear(stripe)
+    clear(stripe)
 
 
 def run_red(stripe):
@@ -151,7 +147,7 @@ def run_stroboscope(stripe):
         if get_stop_flag():
             break
         time.sleep(t)
-    Colorizer.clear(stripe)
+    clear(stripe)
 
 
 def run_demo(stripe):

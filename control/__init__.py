@@ -4,12 +4,14 @@
 """
 Control light functions and effects
 """
+import time
+from multiprocessing import Queue
+from threading import Thread
 
 import logger
+from config import STANDBY_MINUTES as COUNTDOWN
 from functions import clear, dictionary_functions
-from .function_thread import LightFunctionsThread
 from .led_strip import strip
-from .timer import start_timer, stop_timer
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -17,11 +19,57 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-log = logger.get_logger('Control')
+NAME = "Thread Control"
+LOG = logger.get_logger(NAME)
+EXPIRED = "Runtime expired"
+STOPPED = "Stop requested, stopped"
+THREADS = []
 stop_flag = None
-dictionary_threads = {}
 
 clear(strip)
+
+
+class CountdownThread(Thread):
+    def __init__(self, function, stripe, name=None, n=COUNTDOWN):
+        super(CountdownThread, self).__init__()
+        self.n = n * 60
+        self.do_run = True
+        self._function = function
+        self._strip = stripe
+        self._queue = Queue()
+        if name is None:
+            self._name = function
+        else:
+            self._name = name
+
+    def _thread(self):
+        LOG.debug("Start function thread for {1} seconds: {0}".format(str(self._name), str(self.n)))
+        func_thread = Thread(target=self._function, name=self._name, args=(self._strip,))
+        func_thread.start()
+        return func_thread
+
+    def run(self):
+        t = self._thread()
+        THREADS.append(self)
+        while self.__getattribute__('do_run') and self.n > 0 and self._queue.empty():
+            self.n -= 1
+            time.sleep(1)
+        if self.n <= 0:
+            LOG.inf("{0}: {1}".format(EXPIRED, str(self._name)))
+            self._queue.put(EXPIRED)
+        clear(self._strip)
+        t.join()
+        THREADS.remove(self)
+
+    def stop(self):
+        self._queue.put(STOPPED)
+        self.do_run = False
+        LOG.info("{0}: {1}".format(STOPPED, str(self._name)))
+
+    @staticmethod
+    def all_threads():
+        for t in THREADS:
+            yield t
 
 
 def get_stop_flag():
@@ -40,42 +88,24 @@ def set_stop_flag(flag):
 
 
 def run_thread(func_name):
-    stop_threads()
-    try:
-        log.info('Start thread: ' + func_name)
-        thread = dictionary_threads.get(func_name)
-        if thread is None:
-            log.debug('Not found in dictionary: ' + func_name)
-            _init_and_start_thread(func_name)
-        elif not thread.is_alive():
-            thread.start()
-        elif thread.is_alive():
-            thread.resume()
+    if stop_threads():
+        LOG.debug("Init function \'{0}\' as thread \'{0}\'".format(func_name))
+        t = CountdownThread(function=_thread_function(dictionary_functions, func_name), stripe=strip, name=func_name)
+        t.start()
         set_stop_flag(False)
-        start_timer()
-        return
-    except Exception as e:
-        log.error('An error occurs: ' + str(e))
+        return t
 
 
 def stop_threads():
     set_stop_flag(True)
-    stop_timer()
+    clear(strip)
     try:
-        for key in dictionary_threads.keys():
-            thread = (dictionary_threads.get(key))
-            if thread is not None and thread.is_alive():
-                thread.pause()
-            if thread is not None:
-                log.info('Stop thread: ' + thread.getName())
-                thread.stop()
-                if thread.stopped():
-                    dictionary_threads[key] = None
-                    log.debug('Removed from dictionary: ' + thread.getName())
-        log.debug("Threads stopped.")
+        for t in CountdownThread.all_threads():
+            if t is not None and t.is_alive():
+                t.stop()
         return True
     except Exception as e:
-        log.error('An error occurs: ' + str(e))
+        LOG.error('An error occurs: ' + str(e))
     return False
 
 
@@ -83,17 +113,4 @@ def _thread_function(dictionary, key):
     try:
         return dictionary[key]
     except Exception as e:
-        log.error('An error occurs: ' + str(e))
-
-
-# noinspection PyTypeChecker
-def _init_and_start_thread(func_name):
-    log.debug("Init function \'{0}\' as thread \'{0}\'".format(func_name))
-    new_thread = LightFunctionsThread(
-        function=_thread_function(dictionary_functions, func_name),
-        name=func_name,
-        strip=strip)
-    new_thread.start()
-    dictionary_threads[func_name] = new_thread
-    log.debug("Added to dictionary: " + str(new_thread))
-    return new_thread
+        LOG.error('An error occurs: ' + str(e))

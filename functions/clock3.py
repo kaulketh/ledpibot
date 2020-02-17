@@ -5,10 +5,11 @@
 
 import time
 
-from neopixel import *
+from neopixel import Color
 
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -70,6 +71,8 @@ def run_clock3(strip):
         except Exception as e:
             log.error("Any error occurs: " + str(e))
             exit()
+
+    clear(strip)
 
 
 if __name__ == '__main__':

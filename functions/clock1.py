@@ -3,10 +3,9 @@
 
 import time
 
-from neopixel import *
-
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -51,7 +50,7 @@ def run_clock1(stripe):
             stripe.show()
             if leds_per_2500ms == stripe.numPixels():
                 time.sleep(1.5)
-                _clear(stripe)
+                clear(stripe)
 
         except KeyboardInterrupt:
             log.warn("KeyboardInterrupt.")
@@ -60,18 +59,7 @@ def run_clock1(stripe):
         except Exception as e:
             log.error("Any error occurs: " + str(e))
             exit()
-
-
-def _wipe(stripe, wait_ms=50, color=Color(0, 0, 0)):
-    for i in range(stripe.numPixels()):
-        stripe.setPixelColor(i, color)
-        stripe.show()
-        time.sleep(wait_ms / 1000.0)
-
-
-def _clear(stripe):
-    for i in range(0, stripe.numPixels()):
-        stripe.setPixelColor(i, Color(0, 0, 0))
+    clear(stripe)
 
 
 def _seconds(leds_per_2500ms, stripe):

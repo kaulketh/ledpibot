@@ -8,7 +8,8 @@ import datetime
 from neopixel import *
 
 import logger
-from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
+from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, \
+    LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
 
 __author___ = "Thomas Kaulke"
@@ -45,7 +46,8 @@ def get_strip():
     """
     log.debug("Create LED Strip: "
               "COUNT:{0}, PIN:{1}, FREQ:{2}, DMA:{3}, INVERT:{4}, BRIGHTN.:{5}"
-              .format(str(LED_COUNT), str(LED_PIN), str(LED_FREQ_HZ), str(LED_DMA), str(LED_INVERT), str(LED_BRIGHTNESS)))
+              .format(str(LED_COUNT), str(LED_PIN), str(LED_FREQ_HZ), str(LED_DMA), str(LED_INVERT),
+                      str(LED_BRIGHTNESS)))
     s = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     log.debug("Initialize " + str(s))
     s.begin()

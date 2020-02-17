@@ -30,7 +30,7 @@ keys = {
         7: "rotated",
         8: "stopped",
         9: "standby",
-        10:"stop_msg"
+        10: "stop_msg"
     },
     1: {
         "name": "command/button text",
@@ -178,6 +178,6 @@ def _get_translations(key_index):
 
 
 _set_language("de")
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped, standby, stop_msg\
+wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped, standby, stop_msg \
     = _get_translations(0)
 commands = _get_translations(1)

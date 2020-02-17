@@ -7,14 +7,14 @@ from random import randint
 from neopixel import Color
 
 import logger
+from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
-
-from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 
 name = "Candles"
 log = logger.get_logger(name)
@@ -47,17 +47,20 @@ def candle(stripe, leds):
 
 
 def run_candles(strip):
-    try:
-        candle(strip, strip.numPixels())
-        # candle(strip, 12)
+    from control import get_stop_flag
+    while not get_stop_flag():
+        try:
+            candle(strip, strip.numPixels())
+            # candle(strip, 12)
 
-    except KeyboardInterrupt:
-        log.warn("KeyboardInterrupt")
-        exit()
+        except KeyboardInterrupt:
+            log.warn("KeyboardInterrupt")
+            exit()
 
-    except Exception as e:
-        log.error("Any error occurs: " + str(e))
-        exit()
+        except Exception as e:
+            log.error("Any error occurs: " + str(e))
+            exit()
+    clear(strip)
 
 
 if __name__ == '__main__':
