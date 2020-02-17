@@ -3,7 +3,8 @@
 import time
 
 import logger
-from functions.effects import wheel
+from control.led_strip import set_brightness_depending_on_daytime
+from functions.effects import wheel, clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -19,8 +20,8 @@ def run_rainbow(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            strip.setBrightness(40)
-            for j in range(256*5):
+            set_brightness_depending_on_daytime(strip)
+            for j in range(256 * 5):
                 if not get_stop_flag():
                     for i in range(strip.numPixels()):
                         if not get_stop_flag():
@@ -35,6 +36,8 @@ def run_rainbow(strip):
         except Exception as e:
             log.error("Any error occurs: " + str(e))
             exit()
+
+    clear(strip)
 
 
 if __name__ == '__main__':

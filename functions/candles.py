@@ -7,6 +7,8 @@ from random import randint
 from neopixel import Color
 
 import logger
+from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
+from functions.effects import clear
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -24,31 +26,41 @@ blue = 30
 
 
 def percent():
-    scope = randint(3, 10)
-    return float(scope) / float(100)
+    scope = randint(2, 10)
+    return scope / 100
+
+
+def _rand_brightness(stripe, factor=1.0):
+    stripe.setBrightness(int(randint(LED_NIGHT_BRIGHTNESS, LED_DAY_BRIGHTNESS) * factor))
 
 
 # candle lights from 0 to leds
 def candle(stripe, leds):
     for turns in range(leds):
+        # _rand_brightness(stripe,2)
         for i in range(leds):
             p = percent()
-            stripe.setPixelColor(i, Color(int(green * p), int(red * p), int(blue * p)))
+            c = Color(int(green * p), int(red * p), int(blue * p))
+            stripe.setPixelColor(i, c)
         stripe.show()
-    time.sleep(randint(13, 15) / 100.0)
+    time.sleep(randint(13, 15) / 100)
 
 
 def run_candles(strip):
-    try:
-        candle(strip, strip.numPixels())
+    from control import get_stop_flag
+    while not get_stop_flag():
+        try:
+            candle(strip, strip.numPixels())
+            # candle(strip, 12)
 
-    except KeyboardInterrupt:
-        log.warn("KeyboardInterrupt")
-        exit()
+        except KeyboardInterrupt:
+            log.warn("KeyboardInterrupt")
+            exit()
 
-    except Exception as e:
-        log.error("Any error occurs: " + str(e))
-        exit()
+        except Exception as e:
+            log.error("Any error occurs: " + str(e))
+            exit()
+    clear(strip)
 
 
 if __name__ == '__main__':

@@ -1,13 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 """
 logger.py
 logging tool
 """
-import os
 import errno
-
 import logging
+import os
 from logging.config import fileConfig
 
 __author___ = "Thomas Kaulke"
@@ -16,19 +15,30 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
-try:
-    os.makedirs('../log')
-except OSError as e:
-    if e.errno != errno.EEXIST:
-        raise
-
 this_folder = os.path.dirname(os.path.abspath(__file__))
-config_file = os.path.join(this_folder, 'logger.ini')
+
+log_folder = os.path.join(this_folder, '../logs')
+ini_file = 'logger.ini'
+info_log_file = log_folder + '/info.log'
+error_log_file = log_folder + '/error.log'
+
+# check if exists or create log folder
+try:
+    os.makedirs(log_folder, exist_ok=True)  # Python>3.2
+except TypeError:
+    try:
+        os.makedirs(log_folder)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(log_folder):
+            pass
+        else: raise
+
+config_file = os.path.join(this_folder, ini_file)
 fileConfig(config_file, disable_existing_loggers=True)
 
 # Create handlers
-handler_info = logging.FileHandler(os.path.join(this_folder, '../log/info.log'))
-handler_error = logging.FileHandler(os.path.join(this_folder, '../log/error.log'))
+handler_info = logging.FileHandler(os.path.join(this_folder, info_log_file))
+handler_error = logging.FileHandler(os.path.join(this_folder, error_log_file))
 handler_info.setLevel(logging.INFO)
 handler_error.setLevel(logging.ERROR)
 
@@ -48,7 +58,7 @@ handler_error.setFormatter(format_error)
 def get_logger(name=None):
     if name is None:
         name = __name__
-    logger = logging.getLogger(name[0:15])
+    logger = logging.getLogger(name)
     # Add handlers to the logger
     logger.addHandler(handler_info)
     logger.addHandler(handler_error)
