@@ -3,6 +3,7 @@
 # config/dictionary.py
 """
 Translations dictionary for command/button and message texts.
+for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
 """
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -53,6 +54,7 @@ keys = {
         16: "strobe",
         17: "clock 3"
     }
+
 }
 
 translation = {
@@ -63,7 +65,7 @@ translation = {
                         "\nThanks for visit!`",
         keys[0].get(1): "* Not allowed for this bot\\! *",
         keys[0].get(2): " Please make a suitable selection, {0}!",
-        keys[0].get(3): "\"{0}\" was started for a maximum of " + str(STANDBY_MINUTES) + " minutes ",
+        keys[0].get(3): "*{0}* was started for a maximum of " + str(STANDBY_MINUTES) + " minutes\\.",
         keys[0].get(4): "Bot ready for use.",
         keys[0].get(5): "Chat history cleared.",
         keys[0].get(6): "Device rebooted.",
@@ -98,34 +100,34 @@ translation = {
                         "\nID {0}, {2} {3} wurde geblockt."
                         "\nDanke für den Besuch!`",
         keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
-        keys[0].get(2): "Bitte passende Auswahl treffen, {0}!",
-        keys[0].get(3): "\"{0}\" aufgerufen für maximal " + str(STANDBY_MINUTES) + " Minuten.",
-        keys[0].get(4): "Bot einsatzbereit.",
-        keys[0].get(5): "Chatverlauf gelöscht.",
-        keys[0].get(6): "Gerät neu gestartet.",
+        keys[0].get(2): "Bitte triff eine Auswahl, {0}.",
+        keys[0].get(3): "*{0}*  Animation läuft für maximal " + str(STANDBY_MINUTES) + " Minuten\\.",
+        keys[0].get(4): "Bot ist einsatzbereit.",
+        keys[0].get(5): "Chatverlauf wurde gelöscht.",
+        keys[0].get(6): "Gerät wird neu gestartet.",
         keys[0].get(7): "Logrotate manuell ausgeführt.",
-        keys[0].get(8): "Bot angehalten.",
+        keys[0].get(8): "Bot angehalten!",
         keys[0].get(9): "Gestoppt, automatischer Standby nach " + str(STANDBY_MINUTES) + " Minuten.\nBitte Neustart!",
         keys[0].get(10): "Alles gestoppt.",
 
-        keys[1].get(0): "stop",
-        keys[1].get(1): "start",
-        keys[1].get(2): "advent",
-        keys[1].get(3): "kerzen",
-        keys[1].get(4): "uhr 1",
-        keys[1].get(5): "uhr 2",
-        keys[1].get(6): "regenbogen",
-        keys[1].get(7): "theater",
-        keys[1].get(8): "rot",
-        keys[1].get(9): "blau",
-        keys[1].get(10): "grün",
-        keys[1].get(11): "gelb",
-        keys[1].get(12): "orange",
-        keys[1].get(13): "weiß",
-        keys[1].get(14): "pink",
-        keys[1].get(15): "farben",
-        keys[1].get(16): "strobe",
-        keys[1].get(17): "uhr 3"
+        keys[1].get(0): u'\U000023F9',
+        keys[1].get(1): u'\U000025B6',
+        keys[1].get(2): u'\U0001F384',
+        keys[1].get(3): u'\U0001F56F',
+        keys[1].get(4): u'\U000023F0',
+        keys[1].get(5): u'\U0001F55C',
+        keys[1].get(6): u'\U0001F308',
+        keys[1].get(7): u'\U0001F3AA',
+        keys[1].get(8): u'\U0001F7E5',
+        keys[1].get(9): u'\U0001F7E6',
+        keys[1].get(10): u'\U0001F7E9',
+        keys[1].get(11): u'\U0001F7E8',
+        keys[1].get(12): u'\U0001F7E7',
+        keys[1].get(13): u'\U00002B1C',
+        keys[1].get(14): u'\U0001F7EA',
+        keys[1].get(15): u'\U0001F500',
+        keys[1].get(16): u'\U000026A1',
+        keys[1].get(17): u'\U000023F1'
     }
 
 }

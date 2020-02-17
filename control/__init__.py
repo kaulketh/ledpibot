@@ -9,9 +9,9 @@ from multiprocessing import Queue
 from threading import Thread
 
 import logger
-from config import STANDBY_MINUTES as COUNTDOWN
+from config import STANDBY_MINUTES as COUNTDOWN, LED_BRIGHTNESS
 from functions import clear, dictionary_functions
-from .led_strip import strip
+from .led_strip import strip, set_brightness_depending_on_daytime
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -103,6 +103,7 @@ def stop_threads():
         for t in CountdownThread.all_threads():
             if t is not None and t.is_alive():
                 t.stop()
+        strip.setBrightness(LED_BRIGHTNESS)
         return True
     except Exception as e:
         LOG.error('An error occurs: ' + str(e))

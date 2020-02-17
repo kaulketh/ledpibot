@@ -45,14 +45,17 @@ kb_markup = ReplyKeyboardMarkup(keyboard=[
     [_btn(commands[4]), _btn(commands[5]), _btn(commands[17])],
     [_btn(commands[15])],
     [_btn(commands[8]), _btn(commands[9]), _btn(commands[10]),
-     _btn(commands[11]), _btn(commands[12]), _btn(commands[13]), _btn(commands[14])]
+     _btn(commands[13]), _btn(commands[11]), _btn(commands[12]), _btn(commands[14])]
 ])
 
 rm_kb = ReplyKeyboardRemove()
 
 
-def _kb_stop(func):
-    return ReplyKeyboardMarkup(keyboard=[[_btn(stop + ' \"' + func + '\"')]])
+def _kb_stop(func=None):
+    if func is None:
+        return ReplyKeyboardMarkup(keyboard=[[_btn(stop)]])
+    else:
+        return ReplyKeyboardMarkup(keyboard=[[_btn(stop + ' \"' + func + '\"')]])
 
 
 # endregion
@@ -143,16 +146,20 @@ def _on_chat_message(msg):
     if content_type == 'text':
         command = msg['text']
         log.info('Requested: ' + command)
-        # start or /start
-        if (command == start) or (command == start.lower()) or (command == ('/' + start.lower())):
+        # start
+        if (command == start) or (command == start.lower()):
             if _stop(chat_id, msg=None):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
-        # stop(function)
+        # /start
+        elif command == "/start":
+            if _stop(chat_id, msg=None):
+                _send(chat_id, pls_select.format(msg['from']['first_name']))
+        # stop
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
             if _stop(chat_id, msg=command):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
         # /stop
-        elif command.startswith('/' + stop.lower()):
+        elif command == "/stop":
             if _stop(chat_id, msg=None):
                 _clear_history(chat_id, stopped)
         # service or /service
@@ -174,7 +181,8 @@ def _on_chat_message(msg):
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
-                _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
+                # _send(chat_id, called.format(command), reply_markup=_kb_stop(command))
+                _send(chat_id, called.format(command), reply_markup=_kb_stop(), parse_mode='MarkdownV2')
                 run_thread(command)
         else:
             _reply_wrong_command(chat_id, command)
