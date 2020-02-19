@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # colors.py
-"""
-author: Thomas Kaulke, kaulketh@gmail.com
-"""
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 import time
 from random import uniform
@@ -13,12 +14,6 @@ from neopixel import Color, Adafruit_NeoPixel
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 
 class Colorizer(object):

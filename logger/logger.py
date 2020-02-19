@@ -4,16 +4,15 @@
 logger.py
 logging tool
 """
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 import errno
 import logging
 import os
 from logging.config import fileConfig
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 this_folder = os.path.dirname(os.path.abspath(__file__))
 
@@ -28,10 +27,11 @@ try:
 except TypeError:
     try:
         os.makedirs(log_folder)
-    except OSError as exc: # Python >2.5
+    except OSError as exc:  # Python >2.5
         if exc.errno == errno.EEXIST and os.path.isdir(log_folder):
             pass
-        else: raise
+        else:
+            raise
 
 config_file = os.path.join(this_folder, ini_file)
 fileConfig(config_file, disable_existing_loggers=True)

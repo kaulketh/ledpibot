@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # config/access.py
-"""
-author: Thomas Kaulke, kaulketh@gmail.com
-"""
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 from . import secret
 

@@ -1,16 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 from neopixel import Color
 
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import color_wipe_full, theater_chase, clear
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 name = "Theater"
 log = logger.get_logger(name)

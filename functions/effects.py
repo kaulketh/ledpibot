@@ -1,18 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # took over from NeoPixel library strandtest example
-# Author: Tony DiCola (tony@tonydicola.com)
-#
+
+__author___ = "Tony DiCola"
+__email__ = "tony@tonydicola.com"
+__maintainer___ = "Thomas Kaulke, kaulketh@gmail.com"
+__status__ = "Development"
 
 import time
 
 from neopixel import *
-
-__author___ = "Tony DiCola"
-__email__ = "tony@tonydicola.com"
-
-__maintainer___ = "Thomas Kaulke, kaulketh@gmail.com"
-__status__ = "Development"
 
 
 def clear(strip):

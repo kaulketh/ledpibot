@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 import time
 from datetime import date, timedelta, datetime
 from random import randint
@@ -9,12 +15,6 @@ from neopixel import Color
 import logger
 from functions.candles import candle
 from functions.effects import theater_chase, clear
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 name = "Advent"
 log = logger.get_logger(name)

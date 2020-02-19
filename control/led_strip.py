@@ -3,6 +3,11 @@
 """
 LED-strip
 """
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 import datetime
 
 from neopixel import *
@@ -11,12 +16,6 @@ import logger
 from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, \
     LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 log = logger.get_logger("LED strip")
 
