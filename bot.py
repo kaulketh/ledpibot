@@ -56,9 +56,9 @@ def _kb_stop(func=None):
 
 # region Methods
 def _ready_to_use():
-    log.info('Bot is running...')
+    log.info("Bot is running...")
     for admin in admins:
-        _send(admin, started)
+        _send(admin, started, reply_markup=rm_kb)
 
 
 # noinspection PyShadowingNames
@@ -117,13 +117,12 @@ def _on_chat_message(msg):
         log.info('Requested: ' + command)
         # (/)start
         if (command == start) or (command == start.lower()) or (command == "/start"):
-            if _stop(chat_id, msg=None):
-                _send(chat_id, pls_select.format(msg['from']['first_name']))
+            _send(chat_id, pls_select.format(msg['from']['first_name']))
         # /stop
         elif command == "/stop":
             if _stop(chat_id, msg=None):
                 _send(chat_id, stopped, reply_markup=rm_kb)
-        # stop
+        # stop function
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
             if _stop(chat_id, msg=command):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
@@ -131,15 +130,16 @@ def _on_chat_message(msg):
         elif (command.startswith(service.name)) \
                 or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
             if _stop(chat_id):
-                _send(chat_id, service.menu, reply_markup=rm_kb)
                 if command == service.c_rotate:
                     service.log_rotate_bot(rotated)
                     _send(chat_id, rotated, reply_markup=rm_kb)
                 elif command == service.c_reboot:
+                    _send(chat_id, rebooted, reply_markup=rm_kb)
                     service.reboot_device(rebooted)
                 elif command == service.c_system:
                     _send(chat_id, service.system_usage(), reply_markup=rm_kb)
                     log.info(service.system_usage().replace("\n", " "))
+                _send(chat_id, service.menu, reply_markup=rm_kb)
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
@@ -151,14 +151,16 @@ def _on_chat_message(msg):
         _reply_wrong_command(chat_id, content_type)
 
 
+# noinspection PyShadowingNames
 def external_request(msg):
     for chat_id in admins:
         _send(chat_id, msg)
 
 
-def main():
-    MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
+def start_bot():
     _ready_to_use()
+
+    MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
     while True:
         try:
             signal.pause()
@@ -170,6 +172,10 @@ def main():
             exit()
 
 
+def stop_bot():
+    pass
+
+
 # endregion
 if __name__ == '__main__':
-    main()
+    start_bot()

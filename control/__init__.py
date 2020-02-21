@@ -41,7 +41,7 @@ class CountdownThread(Thread):
             self._name = name
 
     def _process(self):
-        LOG.debug("Init and start process {0} for {1} seconds".format(str(self._name), str(self.n)))
+        LOG.info("Init and start process {0} for {1} seconds".format(str(self._function), str(self.n)))
         func_p = Process(target=self._function, name=self._name, args=(self._strip,))
         func_p.start()
         return func_p
@@ -54,7 +54,7 @@ class CountdownThread(Thread):
             time.sleep(1)
         if self.n <= 0:
             from bot import external_request
-            LOG.info("{0}: {1}".format(EXPIRED, str(self._name)))
+            LOG.info("{0}: {1}".format(EXPIRED, str(self._function)))
             external_request(standby)
         p.terminate()
         clear(self._strip)
@@ -63,7 +63,7 @@ class CountdownThread(Thread):
 
     def stop(self):
         self.do_run = False
-        LOG.info("{0}: {1}".format(STOPPED, str(self._name)))
+        LOG.info("{0}: {1}".format(STOPPED, str(self._function)))
 
     @property
     def is_running(self) -> bool:
@@ -88,9 +88,10 @@ def set_stop_flag(flag):
 def run_thread(func_name):
     try:
         if stop_threads():
-            LOG.debug("Init function as thread: {0}".format(func_name))
+            f = _thread_function(dictionary_functions, func_name)
+            LOG.debug("Init function as thread: {0}".format(str(f)))
             t = CountdownThread(
-                function=_thread_function(dictionary_functions, func_name),
+                function=f,
                 stripe=strip,
                 name=func_name)
             t.start()

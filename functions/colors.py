@@ -25,10 +25,7 @@ class Colorizer(object):
         self.div = 3  # to reduce brightness
 
         if color_key is not None:
-            # self.log.debug('Init strip with color key \'' + str(color_key) + '\'')
             self.set_color(color_key)
-        # else:
-        # self.log.debug('Init strip without color key.')
 
         # colors here defined in order G(reen) R(ed) B(lue)
         self.colors = {
@@ -40,7 +37,7 @@ class Colorizer(object):
             'yellow': Color(165 // self.div, 255 // self.div, 0 // self.div),
             'orange': Color(70 // self.div, 210 // self.div, 0 // self.div),
             'white': Color(255 // (self.div * 2), 255 // (self.div * 2), 255 // (self.div * 2)),
-            'pink': Color(18 // self.div, 238 // self.div, 137 // self.div)
+            'violet': Color(18 // self.div, 238 // self.div, 137 // self.div)
         }
 
     def colors(self):
@@ -48,7 +45,6 @@ class Colorizer(object):
         return self.colors.keys()
 
     def set_color(self, color_key):
-        # self.log.debug('Setup color for key \'' + str(color_key) + '\'')
         if isinstance(color_key, int):
             self.color = color_key
         else:
@@ -83,7 +79,8 @@ class Colorizer(object):
 def _run_color(stripe, color_key: str):
     from control import get_stop_flag
     while not get_stop_flag():
-        Colorizer(stripe, color_key).start()
+        c = Colorizer(stripe, color_key)
+        c.start()
     clear(stripe)
 
 
@@ -124,8 +121,8 @@ def run_white(stripe):
     _run_color(stripe, 'white')
 
 
-def run_pink(stripe):
-    _run_color(stripe, 'pink')
+def run_violet(stripe):
+    _run_color(stripe, 'violet')
 
 
 def run_stroboscope(stripe):
