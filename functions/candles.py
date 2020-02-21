@@ -36,7 +36,6 @@ def _rand_brightness(stripe, factor=1.0):
 # candle lights from 0 to leds
 def candle(stripe, leds):
     for turns in range(leds):
-        # _rand_brightness(stripe,2)
         for i in range(leds):
             p = percent()
             c = Color(int(green * p), int(red * p), int(blue * p))
@@ -50,7 +49,6 @@ def run_candles(strip):
     while not get_stop_flag():
         try:
             candle(strip, strip.numPixels())
-            # candle(strip, 12)
 
         except KeyboardInterrupt:
             log.warn("KeyboardInterrupt")

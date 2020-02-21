@@ -34,15 +34,15 @@ def run_clock1(stripe):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
+
             now = set_brightness_depending_on_daytime(stripe)[0]
             led_for_hour = int(int(now.hour) % 12 * 2)
             led_for_minute = int(now.minute // 2.5)
             leds_per_2500ms = int(round(now.second / 2.5))
 
+            _dial(stripe)
             _seconds(leds_per_2500ms, stripe)
-
             _minute(led_for_minute, led_for_hour, stripe)
-
             _hour(led_for_hour, stripe)
 
             stripe.show()
@@ -91,6 +91,14 @@ def _set_minute_led_before_and_after(stripe, led):
 
 def _hour(led, stripe):
     stripe.setPixelColorRGB(led, hG, hR, hB)
+
+
+def _dial(stripe):
+    dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
+    # dial = [0, 6, 12, 18]  # quarter only
+    for led in dial:
+        stripe.setPixelColorRGB(led, 125 // 10, 195 // 10, 30 // 10)  # warm yellow
+        # stripe.setPixelColorRGB(led, 15, 15, 15)  # white
 
 
 if __name__ == '__main__':
