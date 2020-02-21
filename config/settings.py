@@ -5,7 +5,6 @@ Configurations and settings
 """
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 

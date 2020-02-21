@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 # based on NeoPixel-60-Ring-Clock of Andy Doro
 # https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
 import time
 
@@ -10,12 +14,6 @@ from neopixel import Color
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 intense = 150
 start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12

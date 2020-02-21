@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
+
 import time
 from datetime import date, timedelta, datetime
 from random import randint
@@ -9,12 +15,6 @@ from neopixel import Color
 import logger
 from functions.candles import candle
 from functions.effects import theater_chase, clear
-
-__author___ = "Thomas Kaulke"
-__email__ = "kaulketh@gmail.com"
-
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
 
 name = "Advent"
 log = logger.get_logger(name)
@@ -82,14 +82,16 @@ def _december_cycle(stripe, month):
 # noinspection PyShadowingNames
 def run_advent(strip):
     from control import get_stop_flag
+    i = 1
     while not get_stop_flag():
         month = datetime.now().month
         # month = 12  # uncomment to test
-        # log.info('advent started')
         if month == 12:
             _december_cycle(strip, month)
         else:
-            # log.warn('Wrong month for xmas/advent animation, it\'s {0}!'.format(time.strftime("%B")))
+            while i > 0:
+                log.warn('Wrong month for xmas/advent animation, it\'s {0}!'.format(time.strftime("%B")))
+                i -= 1
             theater_chase(strip, Color(0, 15, 0))
     clear(strip)
 

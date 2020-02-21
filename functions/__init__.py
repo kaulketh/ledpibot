@@ -4,7 +4,12 @@
 """
 author: Thomas Kaulke, kaulketh@gmail.com
 """
+__author___ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
+__maintainer___ = "Thomas Kaulke"
+__status__ = "Development"
 
+import logger
 from config import commands
 from .advent import run_advent
 from .candles import run_candles
@@ -12,31 +17,28 @@ from .clock1 import run_clock1
 from .clock2 import run_clock2
 from .clock3 import run_clock3
 from .colors import \
-    run_red, run_blue, run_green, run_orange, run_yellow, run_white, run_pink, run_demo, run_stroboscope
+    run_red, run_blue, run_green, run_orange, run_yellow, run_white, run_violet, run_demo, run_stroboscope
 from .effects import clear
 from .rainbow import run_rainbow
 from .theater import run_theater
 
-dictionary_functions = {
-    commands[0]: None,  # direct bot command, no function call needed
-    commands[1]: None,  # direct bot command, no function call needed
-    commands[2]: run_advent,
-    commands[3]: run_candles,
-    commands[4]: run_clock1,
-    commands[5]: run_clock2,
-    commands[6]: run_rainbow,
-    commands[7]: run_theater,
-    commands[8]: run_red,
-    commands[9]: run_blue,
-    commands[10]: run_green,
-    commands[11]: run_yellow,
-    commands[12]: run_orange,
-    commands[13]: run_white,
-    commands[14]: run_pink,
-    commands[15]: run_demo,
-    commands[16]: run_stroboscope,
-    commands[17]: run_clock3
-}
-""" 
-Content of this dictionary depends on the possible commands, refer ~.config.dictionary.py
-"""
+LOG = logger.get_logger('Functions')
+
+
+def _build_dictionary():
+    dictionary = {}
+    """Ensure right order of functions, depends on the command order in ~.config.dictionary.py"""
+    functions = [None, None,  # index 0 and 1 not needed, direct bot commands
+                 run_advent, run_candles, run_clock1, run_clock2,
+                 run_rainbow, run_theater, run_red, run_blue, run_green,
+                 run_yellow, run_orange, run_white, run_violet, run_demo,
+                 run_stroboscope, run_clock3]
+    LOG.debug('Build dictionary of required functions')
+    for i in range(len(commands)):
+        f = functions[i]
+        dictionary[commands[i]] = f
+        LOG.debug('Added ' + str(i) + ':' + str(f))
+    return dictionary
+
+
+dictionary_functions = _build_dictionary()

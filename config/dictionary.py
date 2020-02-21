@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 # config/dictionary.py
 """
-Translations dictionary for command/button and message texts.
+Translations dictionary for command/button label and message texts.
 for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
 """
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
@@ -17,6 +16,7 @@ from .settings import STANDBY_MINUTES
 log = logger.get_logger('Dictionary')
 language = None
 translations = None
+text = None
 
 keys = {
     0: {
@@ -26,15 +26,14 @@ keys = {
         2: "pls_select",
         3: "called",
         4: "started",
-        5: "cleared",
-        6: "rebooted",
-        7: "rotated",
-        8: "stopped",
-        9: "standby",
-        10: "stop_msg"
+        5: "rebooted",
+        6: "rotated",
+        7: "stopped",
+        8: "standby",
+        9: "stop_msg"
     },
     1: {
-        "name": "command/button text",
+        "name": "button label",
         0: "stop",
         1: "start",
         2: "advent",
@@ -49,7 +48,7 @@ keys = {
         11: "yellow",
         12: "orange",
         13: "white",
-        14: "pink",
+        14: "violet",
         15: "demo",
         16: "strobe",
         17: "clock 3"
@@ -64,15 +63,15 @@ translation = {
                         "\nID {0}, {2} {3} has been blocked."
                         "\nThanks for visit!`",
         keys[0].get(1): "* Not allowed for this bot\\! *",
-        keys[0].get(2): " Please make a suitable selection, {0}!",
-        keys[0].get(3): "*{0}* was started for a maximum of " + str(STANDBY_MINUTES) + " minutes\\.",
+        keys[0].get(2): "Please make a suitable selection, {0}!",
+        keys[0].get(3): "*{0}* was started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
         keys[0].get(4): "Bot ready for use.",
-        keys[0].get(5): "Chat history cleared.",
-        keys[0].get(6): "Device rebooted.",
-        keys[0].get(7): "Logrotate executed manually.",
-        keys[0].get(8): "Bot stopped.",
-        keys[0].get(9): "Stopped, automatic standby after " + str(STANDBY_MINUTES) + " minutes.\nPlease restart!",
-        keys[0].get(10): "Everything stopped.",
+        keys[0].get(5): "Device rebooted.",
+        keys[0].get(6): "Logrotate executed manually.",
+        keys[0].get(7): "Bot stopped.",
+        keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
+                                                                                          "\nPlease restart!",
+        keys[0].get(9): "Everything stopped.",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -88,7 +87,7 @@ translation = {
         keys[1].get(11): "yellow",
         keys[1].get(12): "orange",
         keys[1].get(13): "white",
-        keys[1].get(14): "pink",
+        keys[1].get(14): "violet",
         keys[1].get(15): "colors",
         keys[1].get(16): "strobe",
         keys[1].get(17): "clock 3"
@@ -101,14 +100,86 @@ translation = {
                         "\nDanke für den Besuch!`",
         keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
         keys[0].get(2): "Bitte triff eine Auswahl, {0}.",
-        keys[0].get(3): "*{0}*  Animation läuft für maximal " + str(STANDBY_MINUTES) + " Minuten\\.",
+        keys[0].get(3): "*{0}* läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
         keys[0].get(4): "Bot ist einsatzbereit.",
-        keys[0].get(5): "Chatverlauf wurde gelöscht.",
-        keys[0].get(6): "Gerät wird neu gestartet.",
-        keys[0].get(7): "Logrotate manuell ausgeführt.",
-        keys[0].get(8): "Bot angehalten!",
-        keys[0].get(9): "Gestoppt, automatischer Standby nach " + str(STANDBY_MINUTES) + " Minuten.\nBitte Neustart!",
-        keys[0].get(10): "Alles gestoppt.",
+        keys[0].get(5): "Gerät wird neu gestartet.",
+        keys[0].get(6): "Logrotate manuell ausgeführt.",
+        keys[0].get(7): "Bot angehalten!",
+        keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
+                                                                                              "\nBitte Neustart!",
+        keys[0].get(9): "Alles gestoppt.",
+
+        keys[1].get(0): "stop",
+        keys[1].get(1): "start",
+        keys[1].get(2): "advent",
+        keys[1].get(3): "kerzen",
+        keys[1].get(4): "uhr 1",
+        keys[1].get(5): "uhr 2",
+        keys[1].get(6): "regenbogen",
+        keys[1].get(7): "theater",
+        keys[1].get(8): "rot",
+        keys[1].get(9): "blau",
+        keys[1].get(10): "grün",
+        keys[1].get(11): "gelb",
+        keys[1].get(12): "orange",
+        keys[1].get(13): "weiß",
+        keys[1].get(14): "violett",
+        keys[1].get(15): "farben",
+        keys[1].get(16): "strobe",
+        keys[1].get(17): "uhr 3"
+    },
+
+    "de_emoji": {
+        "name": "Deutsch Emoji",
+        keys[0].get(0): "`Hallo {1}, dies ist ein privater Bot!"
+                        "\nID {0}, {2} {3} wurde geblockt."
+                        "\nDanke für den Besuch!`",
+        keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
+        keys[0].get(2): "Bitte triff eine Auswahl, {0}.",
+        keys[0].get(3): "{0}  Animation läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
+        keys[0].get(4): "Bot ist einsatzbereit.",
+        keys[0].get(5): "Gerät wird neu gestartet.",
+        keys[0].get(6): "Logrotate manuell ausgeführt.",
+        keys[0].get(7): "Bot angehalten!",
+        keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
+                                                                                              "\nBitte Neustart!",
+        keys[0].get(9): "Alles gestoppt.",
+
+        keys[1].get(0): u'\U000023F9',
+        keys[1].get(1): u'\U000025B6',
+        keys[1].get(2): u'\U0001F384',
+        keys[1].get(3): u'\U0001F56F',
+        keys[1].get(4): u'\U000023F0',
+        keys[1].get(5): u'\U0001F55C',
+        keys[1].get(6): u'\U0001F308',
+        keys[1].get(7): u'\U0001F3AA',
+        keys[1].get(8): u'\U0001F7E5',
+        keys[1].get(9): u'\U0001F7E6',
+        keys[1].get(10): u'\U0001F7E9',
+        keys[1].get(11): u'\U0001F7E8',
+        keys[1].get(12): u'\U0001F7E7',
+        keys[1].get(13): u'\U00002B1C',
+        keys[1].get(14): u'\U0001F7EA',
+        keys[1].get(15): u'\U0001F500',
+        keys[1].get(16): u'\U000026A1',
+        keys[1].get(17): u'\U000023F1'
+    },
+
+    "en_emoji": {
+        "name": "English emoji",
+        keys[0].get(0): "`Hello {1}, this is a private bot!"
+                        "\nID {0}, {2} {3} has been blocked."
+                        "\nThanks for visit!`",
+        keys[0].get(1): "* Not allowed for this bot\\! *",
+        keys[0].get(2): "Please make a suitable selection, {0}!",
+        keys[0].get(3): "{0}  Animation started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
+        keys[0].get(4): "Bot ready for use.",
+        keys[0].get(5): "Device rebooted.",
+        keys[0].get(6): "Logrotate executed manually.",
+        keys[0].get(7): "Bot stopped.",
+        keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
+                                                                                          "\nPlease restart!",
+        keys[0].get(9): "Everything stopped.",
 
         keys[1].get(0): u'\U000023F9',
         keys[1].get(1): u'\U000025B6',
@@ -156,12 +227,11 @@ def _get_translations(key_index):
     :param key_index: 0 = messages, 1 = commands
     :return: list of texts
     """
-    global language, translations
+    global language, translations, text
     translations = []
+    text = ""
 
-    # noinspection PyGlobalUndefined
     def generated_texts(i: int):
-        global text
         for k in keys[i].keys():
             if isinstance(k, int):
                 text = translation[language].get(keys[i].get(k))
@@ -179,7 +249,7 @@ def _get_translations(key_index):
         log.error('Error while import from translations! ' + str(e))
 
 
-_set_language("de")
-wrong_id, not_allowed, pls_select, called, started, cleared, rebooted, rotated, stopped, standby, stop_msg \
+_set_language("de_emoji")
+wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg \
     = _get_translations(0)
 commands = _get_translations(1)
