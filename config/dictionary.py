@@ -30,7 +30,8 @@ keys = {
         6: "rotated",
         7: "stopped",
         8: "standby",
-        9: "stop_msg"
+        9: "stop_msg",
+        10: "killed"
     },
     1: {
         "name": "button label",
@@ -72,6 +73,7 @@ translation = {
         keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
                                                                                           "\nPlease restart!",
         keys[0].get(9): "Everything stopped.",
+        keys[0].get(10): "Bot process killed!",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -108,6 +110,7 @@ translation = {
         keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
                                                                                               "\nBitte Neustart!",
         keys[0].get(9): "Alles gestoppt.",
+        keys[0].get(10): "Kompletten Bot-Prozess abgebrochen!",
 
         keys[1].get(0): "stop",
         keys[1].get(1): "start",
@@ -144,6 +147,7 @@ translation = {
         keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
                                                                                               "\nBitte Neustart!",
         keys[0].get(9): "Alles gestoppt.",
+        keys[0].get(10): "Kompletten Bot-Prozess abgebrochen!",
 
         keys[1].get(0): u'\U000023F9',
         keys[1].get(1): u'\U000025B6',
@@ -180,6 +184,7 @@ translation = {
         keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
                                                                                           "\nPlease restart!",
         keys[0].get(9): "Everything stopped.",
+        keys[0].get(10): "Bot process killed!",
 
         keys[1].get(0): u'\U000023F9',
         keys[1].get(1): u'\U000025B6',
@@ -231,6 +236,7 @@ def _get_translations(key_index):
     translations = []
     text = ""
 
+    # noinspection PyShadowingNames
     def generated_texts(i: int):
         for k in keys[i].keys():
             if isinstance(k, int):
@@ -250,6 +256,6 @@ def _get_translations(key_index):
 
 
 _set_language("de_emoji")
-wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg \
+wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed \
     = _get_translations(0)
 commands = _get_translations(1)

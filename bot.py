@@ -17,12 +17,11 @@ import logger
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg
+    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed
 from control import run_thread, stop_threads, service
 
 log = logger.get_logger('LedPiBot')
 bot = telepot.Bot(token)
-answerer = telepot.helper.Answerer(bot)
 admins = [access.thk, access.annib]
 
 # region Keyboards
@@ -139,6 +138,9 @@ def _on_chat_message(msg):
                 elif command == service.c_system:
                     _send(chat_id, service.system_usage(), reply_markup=rm_kb)
                     log.info(service.system_usage().replace("\n", " "))
+                elif command == service.c_kill:
+                    _send(chat_id, killed, reply_markup=rm_kb)
+                    service.kill_bot()
                 _send(chat_id, service.menu, reply_markup=rm_kb)
         # all other commands
         elif any(c for c in commands if (command == c)):
@@ -170,10 +172,6 @@ def start_bot():
         except Exception as e:
             log.error('An error occurs: ' + str(e))
             exit()
-
-
-def stop_bot():
-    pass
 
 
 # endregion

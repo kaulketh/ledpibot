@@ -41,7 +41,9 @@ class CountdownThread(Thread):
             self._name = name
 
     def _process(self):
-        LOG.info("Init and start process {0} for {1} seconds".format(str(self._function), str(self.n)))
+        LOG.info(
+            "Thread '{0}' initialized, start process '{1}' for {2} seconds".format(
+                str(self._name), (self._function), str(self.n)))
         func_p = Process(target=self._function, name=self._name, args=(self._strip,))
         func_p.start()
         return func_p
@@ -89,7 +91,7 @@ def run_thread(func_name):
     try:
         if stop_threads():
             f = _thread_function(dictionary_functions, func_name)
-            LOG.debug("Init function as thread: {0}".format(str(f)))
+            LOG.debug("Init thread for function: {0}".format(str(f)))
             t = CountdownThread(
                 function=f,
                 stripe=strip,
