@@ -75,7 +75,9 @@ def _reply_wrong_id(chat_id, msg):
     last_name = msg['from']['last_name']
     username = msg['from']['username']
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    log.warning('Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name))
+    log_msg = 'Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name)
+    _send("Attention! " + access.thk, log_msg)
+    log.warning(log_msg)
 
 
 # noinspection PyShadowingNames
@@ -141,6 +143,8 @@ def _on_chat_message(msg):
                 elif command == service.c_kill:
                     _send(chat_id, killed, reply_markup=rm_kb)
                     service.kill_bot()
+                elif command == service.c_test:
+                    _test(chat_id, bot)
                 _send(chat_id, service.menu, reply_markup=rm_kb)
         # all other commands
         elif any(c for c in commands if (command == c)):
@@ -154,8 +158,11 @@ def _on_chat_message(msg):
 
 
 # noinspection PyShadowingNames
-def external_request(msg):
-    for chat_id in admins:
+def external_request(msg, chat_id=None):
+    if chat_id is None:
+        for chat_id in admins:
+            _send(chat_id, msg)
+    else:
         _send(chat_id, msg)
 
 
@@ -172,6 +179,12 @@ def start_bot():
         except Exception as e:
             log.error('An error occurs: ' + str(e))
             exit()
+
+
+# noinspection PyShadowingNames
+def _test(chat_id, bot):
+    from test import test_audio
+    test_audio(chat_id, bot)
 
 
 # endregion

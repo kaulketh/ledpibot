@@ -19,11 +19,12 @@ name = "Service"
 log = logger.get_logger(name.title())
 
 markdown = "-d parse_mode='Markdown'"
+c_test = "/serviceTest"
 c_system = "/serviceUsage"
 c_rotate = "/serviceRotate"
 c_reboot = "/serviceReboot"
 c_kill = "/serviceKill"
-menu = "Service functions:\n- {0}\n- {1}\n- {2}\n- {3}".format(c_rotate, c_reboot, c_system, c_kill)
+menu = "Service functions:\n- {0}\n- {1}\n- {2}\n- {3}\n- {4}".format(c_rotate, c_reboot, c_system, c_kill, c_test)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'

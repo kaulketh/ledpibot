@@ -255,7 +255,7 @@ def _get_translations(key_index):
         log.error('Error while import from translations! ' + str(e))
 
 
-_set_language("de_emoji")
+_set_language("de")
 wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed \
     = _get_translations(0)
 commands = _get_translations(1)
