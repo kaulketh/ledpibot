@@ -117,11 +117,11 @@ def _on_chat_message(msg):
         command = msg['text']
         log.info('Requested: ' + command)
         # /start
-        if command == '/' + start.lower():
+        if command == "/start":
             _send(chat_id, pls_select.format(msg['from']['first_name']))
 
         # /stop
-        elif command == '/' + stop.lower():
+        elif command == "/stop":
             if _stop(chat_id, msg=None):
                 _send(chat_id, stopped, reply_markup=rm_kb)
 

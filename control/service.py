@@ -18,17 +18,36 @@ import logger
 name = "Service"
 log = logger.get_logger(name.title())
 
-markdown = "-d parse_mode='Markdown'"
+log_rotate = 'logrotate -f /etc/logrotate.conf &'
+reboot = 'shutdown -r now'
+pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
+
+line_break = "\n"
+menu_header = name + " functions:"
+c_prefix = "- "
 c_test = "/serviceTest"
 c_system = "/serviceUsage"
 c_rotate = "/serviceRotate"
 c_reboot = "/serviceReboot"
 c_kill = "/serviceKill"
-menu = "Service functions:\n- {0}\n- {1}\n- {2}\n- {3}\n- {4}".format(c_rotate, c_reboot, c_system, c_kill, c_test)
 
-log_rotate = 'logrotate -f /etc/logrotate.conf &'
-reboot = 'shutdown -r now'
-pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
+menu_dictionary = {
+    0: c_kill,
+    1: c_reboot,
+    2: c_system,
+    3: c_rotate,
+    4: c_test
+}
+
+
+def build_menu():
+    menu = "{0}{1}".format(menu_header, line_break)
+    log.debug('Build service menu: ' + menu.replace(line_break,""))
+    for key in menu_dictionary.keys():
+        line = "{0}{1}{2}".format(c_prefix, menu_dictionary.get(key), line_break)
+        menu += line
+        log.debug('Add line to menu: ' + line.replace(line_break,""))
+    return menu
 
 
 def system_usage():
@@ -41,8 +60,7 @@ def system_usage():
     c = subprocess.check_output(
         "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
         "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-    br = "\n"
-    return "{5}{0}{4}{0}{1}{0}{2}{0}{3}".format(br, m, d, c, ip, host) \
+    return "{5}{0}{4}{0}{1}{0}{2}{0}{3}".format(line_break, m, d, c, ip, host) \
         .replace("b'", "").replace("'", "").replace("\\n", "")
 
 
@@ -73,6 +91,9 @@ def kill_bot(sig=signal.SIGTERM):
         log.error('Command "kill {0}" raised exception {1}\n'.format(pid, e))
         result = e
     return result == 0
+
+
+menu = build_menu()
 
 
 if __name__ == '__main__':
