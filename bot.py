@@ -83,7 +83,7 @@ def _reply_wrong_id(chat_id, msg):
 # noinspection PyShadowingNames
 def _reply_wrong_command(chat_id, content):
     try:
-        got = str(codecs.encode(content, 'utf-8')).replace('b', '').title()
+        got = str(codecs.encode(content, 'utf-8')).replace('b', '')
         raise Exception('Not allowed input: ' + got)
     except Exception as ex:
         _send(chat_id, not_allowed, parse_mode='MarkdownV2')
@@ -116,36 +116,39 @@ def _on_chat_message(msg):
     if content_type == 'text':
         command = msg['text']
         log.info('Requested: ' + command)
-        # (/)start
-        if (command == start) or (command == start.lower()) or (command == "/start"):
+        # /start
+        if command == '/' + start.lower():
             _send(chat_id, pls_select.format(msg['from']['first_name']))
+
         # /stop
-        elif command == "/stop":
+        elif command == '/' + stop.lower():
             if _stop(chat_id, msg=None):
                 _send(chat_id, stopped, reply_markup=rm_kb)
+
         # stop function
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
             if _stop(chat_id, msg=command):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
-        # (/)service
-        elif (command.startswith(service.name)) \
-                or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
+
+        # /service
+        elif command == ('/' + service.name.lower()):
             if _stop(chat_id):
-                if command == service.c_rotate:
-                    service.log_rotate_bot(rotated)
-                    _send(chat_id, rotated, reply_markup=rm_kb)
-                elif command == service.c_reboot:
-                    _send(chat_id, rebooted, reply_markup=rm_kb)
-                    service.reboot_device(rebooted)
-                elif command == service.c_system:
-                    _send(chat_id, service.system_usage(), reply_markup=rm_kb)
-                    log.info(service.system_usage().replace("\n", " "))
-                elif command == service.c_kill:
-                    _send(chat_id, killed, reply_markup=rm_kb)
-                    service.kill_bot()
-                elif command == service.c_test:
-                    _test(chat_id, bot)
                 _send(chat_id, service.menu, reply_markup=rm_kb)
+        elif command == service.c_rotate:
+            service.log_rotate_bot(rotated)
+            _send(chat_id, rotated, reply_markup=rm_kb)
+        elif command == service.c_reboot:
+            _send(chat_id, rebooted, reply_markup=rm_kb)
+            service.reboot_device(rebooted)
+        elif command == service.c_system:
+            _send(chat_id, service.system_usage(), reply_markup=rm_kb)
+            log.info(service.system_usage().replace("\n", " "))
+        elif command == service.c_kill:
+            _send(chat_id, killed, reply_markup=rm_kb)
+            service.kill_bot()
+        elif command == service.c_test:
+            _test(chat_id, bot)
+
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
@@ -168,7 +171,6 @@ def external_request(msg, chat_id=None):
 
 def start_bot():
     _ready_to_use()
-
     MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
     while True:
         try:
@@ -181,8 +183,8 @@ def start_bot():
             exit()
 
 
-# noinspection PyShadowingNames
-def _test(chat_id, bot):
+# noinspection PyShadowingNames,PyUnusedLocal
+def _test(chat_id=None, bot=None):
     from test import test_audio
     test_audio(chat_id, bot)
 

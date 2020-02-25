@@ -43,7 +43,7 @@ class CountdownThread(Thread):
     def _process(self):
         LOG.info(
             "Thread '{0}' initialized, start process '{1}' for {2} seconds".format(
-                str(self._name), (self._function), str(self.n)))
+                str(self._name), self._function, str(self.n)))
         func_p = Process(target=self._function, name=self._name, args=(self._strip,))
         func_p.start()
         return func_p
