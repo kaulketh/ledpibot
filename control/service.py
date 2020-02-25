@@ -10,6 +10,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 import os
+import signal
 import subprocess
 
 import logger
@@ -18,13 +19,16 @@ name = "Service"
 log = logger.get_logger(name.title())
 
 markdown = "-d parse_mode='Markdown'"
+c_test = "/serviceTest"
 c_system = "/serviceUsage"
 c_rotate = "/serviceRotate"
 c_reboot = "/serviceReboot"
-menu = "Service functions:\n- {0}\n- {1}\n- {2}".format(c_rotate, c_reboot, c_system)
+c_kill = "/serviceKill"
+menu = "Service functions:\n- {0}\n- {1}\n- {2}\n- {3}\n- {4}".format(c_rotate, c_reboot, c_system, c_kill, c_test)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'
+pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
 
 
 def system_usage():
@@ -56,3 +60,20 @@ def log_rotate_bot(log_msg: str):
         os.system(log_rotate)
     except Exception as e:
         log.error(str(e))
+
+
+# noinspection PyShadowingNames
+def kill_bot(sig=signal.SIGTERM):
+    pid = os.getpid()
+
+    try:
+        result = 0
+        log.debug('Command "kill {0}" returned {1}\n'.format(pid, os.kill(pid, sig)))
+    except Exception as e:
+        log.error('Command "kill {0}" raised exception {1}\n'.format(pid, e))
+        result = e
+    return result == 0
+
+
+if __name__ == '__main__':
+    pass

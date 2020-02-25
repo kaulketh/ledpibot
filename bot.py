@@ -17,12 +17,11 @@ import logger
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg
+    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed
 from control import run_thread, stop_threads, service
 
 log = logger.get_logger('LedPiBot')
 bot = telepot.Bot(token)
-answerer = telepot.helper.Answerer(bot)
 admins = [access.thk, access.annib]
 
 # region Keyboards
@@ -76,13 +75,15 @@ def _reply_wrong_id(chat_id, msg):
     last_name = msg['from']['last_name']
     username = msg['from']['username']
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    log.warning('Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name))
+    log_msg = 'Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name)
+    _send("Attention! " + access.thk, log_msg)
+    log.warning(log_msg)
 
 
 # noinspection PyShadowingNames
 def _reply_wrong_command(chat_id, content):
     try:
-        got = str(codecs.encode(content, 'utf-8')).replace('b', '').title()
+        got = str(codecs.encode(content, 'utf-8')).replace('b', '')
         raise Exception('Not allowed input: ' + got)
     except Exception as ex:
         _send(chat_id, not_allowed, parse_mode='MarkdownV2')
@@ -115,31 +116,39 @@ def _on_chat_message(msg):
     if content_type == 'text':
         command = msg['text']
         log.info('Requested: ' + command)
-        # (/)start
-        if (command == start) or (command == start.lower()) or (command == "/start"):
+        # /start
+        if command == '/' + start.lower():
             _send(chat_id, pls_select.format(msg['from']['first_name']))
+
         # /stop
-        elif command == "/stop":
+        elif command == '/' + stop.lower():
             if _stop(chat_id, msg=None):
                 _send(chat_id, stopped, reply_markup=rm_kb)
+
         # stop function
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
             if _stop(chat_id, msg=command):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
-        # (/)service
-        elif (command.startswith(service.name)) \
-                or (command.startswith(service.name.lower())) or (command.startswith('/' + service.name.lower())):
+
+        # /service
+        elif command == ('/' + service.name.lower()):
             if _stop(chat_id):
-                if command == service.c_rotate:
-                    service.log_rotate_bot(rotated)
-                    _send(chat_id, rotated, reply_markup=rm_kb)
-                elif command == service.c_reboot:
-                    _send(chat_id, rebooted, reply_markup=rm_kb)
-                    service.reboot_device(rebooted)
-                elif command == service.c_system:
-                    _send(chat_id, service.system_usage(), reply_markup=rm_kb)
-                    log.info(service.system_usage().replace("\n", " "))
                 _send(chat_id, service.menu, reply_markup=rm_kb)
+        elif command == service.c_rotate:
+            service.log_rotate_bot(rotated)
+            _send(chat_id, rotated, reply_markup=rm_kb)
+        elif command == service.c_reboot:
+            _send(chat_id, rebooted, reply_markup=rm_kb)
+            service.reboot_device(rebooted)
+        elif command == service.c_system:
+            _send(chat_id, service.system_usage(), reply_markup=rm_kb)
+            log.info(service.system_usage().replace("\n", " "))
+        elif command == service.c_kill:
+            _send(chat_id, killed, reply_markup=rm_kb)
+            service.kill_bot()
+        elif command == service.c_test:
+            _test(chat_id, bot)
+
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
@@ -152,14 +161,16 @@ def _on_chat_message(msg):
 
 
 # noinspection PyShadowingNames
-def external_request(msg):
-    for chat_id in admins:
+def external_request(msg, chat_id=None):
+    if chat_id is None:
+        for chat_id in admins:
+            _send(chat_id, msg)
+    else:
         _send(chat_id, msg)
 
 
 def start_bot():
     _ready_to_use()
-
     MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
     while True:
         try:
@@ -172,8 +183,10 @@ def start_bot():
             exit()
 
 
-def stop_bot():
-    pass
+# noinspection PyShadowingNames,PyUnusedLocal
+def _test(chat_id=None, bot=None):
+    from test import test_audio
+    test_audio(chat_id, bot)
 
 
 # endregion
