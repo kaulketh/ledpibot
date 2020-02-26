@@ -7,3 +7,4 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 from .test import *
+from .test_clock import *
