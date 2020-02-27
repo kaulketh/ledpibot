@@ -70,23 +70,23 @@ def run_clock4(strip):
 
 def _wipe_second(stripe, color, begin=0, backward=False):
     if backward:
-        wait_ms = (1000.0 // stripe.numPixels()) // 2
+        wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0
     else:
-        wait_ms = (1000.0 // stripe.numPixels())
+        wait_ms = (1000.0 // stripe.numPixels()) / 1000.0
 
     for i in range(begin + 1, stripe.numPixels() + begin):
         if i >= stripe.numPixels():
             i -= stripe.numPixels()
         stripe.setPixelColor(i, Color(color[0], color[1], color[2]))
         stripe.show()
-        time.sleep(wait_ms / 1000.0)
+        time.sleep(wait_ms)
     if backward:
         for i in range(stripe.numPixels() + begin - 1, begin, -1):
             if i >= stripe.numPixels():
                 i -= stripe.numPixels()
             stripe.setPixelColor(i, Color(0, 0, 0))
             stripe.show()
-            time.sleep(wait_ms / 1000.0)
+            time.sleep(wait_ms)
 
 
 if __name__ == '__main__':
