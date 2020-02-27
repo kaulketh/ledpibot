@@ -15,7 +15,7 @@ import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
-intense = 150
+intense = 120
 start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
 name = "Clock 3"
 log = logger.get_logger(name)

@@ -35,7 +35,7 @@ def _btn(text):
 
 kb_markup = ReplyKeyboardMarkup(keyboard=[
     [_btn(commands[2]), _btn(commands[3]), _btn(commands[6]), _btn(commands[7]), _btn(commands[16])],
-    [_btn(commands[4]), _btn(commands[5]), _btn(commands[17])],
+    [_btn(commands[4]), _btn(commands[5]), _btn(commands[17]), _btn(commands[18])],
     [_btn(commands[15])],
     [_btn(commands[8]), _btn(commands[9]), _btn(commands[10]),
      _btn(commands[13]), _btn(commands[11]), _btn(commands[12]), _btn(commands[14])]
@@ -117,11 +117,11 @@ def _on_chat_message(msg):
         command = msg['text']
         log.info('Requested: ' + command)
         # /start
-        if command == '/' + start.lower():
+        if command == "/start":
             _send(chat_id, pls_select.format(msg['from']['first_name']))
 
         # /stop
-        elif command == '/' + stop.lower():
+        elif command == "/stop":
             if _stop(chat_id, msg=None):
                 _send(chat_id, stopped, reply_markup=rm_kb)
 
@@ -185,8 +185,7 @@ def start_bot():
 
 # noinspection PyShadowingNames,PyUnusedLocal
 def _test(chat_id=None, bot=None):
-    from test import test_audio
-    test_audio(chat_id, bot)
+    pass
 
 
 # endregion

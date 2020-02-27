@@ -52,7 +52,8 @@ keys = {
         14: "violet",
         15: "demo",
         16: "strobe",
-        17: "clock 3"
+        17: "clock 3",
+        18: "clock 4"
     }
 
 }
@@ -92,7 +93,8 @@ translation = {
         keys[1].get(14): "violet",
         keys[1].get(15): "colors",
         keys[1].get(16): "strobe",
-        keys[1].get(17): "clock 3"
+        keys[1].get(17): "clock 3",
+        keys[1].get(18): "clock 4"
     },
 
     "de": {
@@ -129,7 +131,8 @@ translation = {
         keys[1].get(14): "violett",
         keys[1].get(15): "farben",
         keys[1].get(16): "strobe",
-        keys[1].get(17): "uhr 3"
+        keys[1].get(17): "uhr 3",
+        keys[1].get(18): "uhr 4"
     },
 
     "de_emoji": {
@@ -166,7 +169,8 @@ translation = {
         keys[1].get(14): u'\U0001F7EA',
         keys[1].get(15): u'\U0001F500',
         keys[1].get(16): u'\U000026A1',
-        keys[1].get(17): u'\U000023F1'
+        keys[1].get(17): u'\U000023F1',
+        keys[1].get(18): u'\U000023F2'
     },
 
     "en_emoji": {
@@ -203,7 +207,8 @@ translation = {
         keys[1].get(14): u'\U0001F7EA',
         keys[1].get(15): u'\U0001F500',
         keys[1].get(16): u'\U000026A1',
-        keys[1].get(17): u'\U000023F1'
+        keys[1].get(17): u'\U000023F1',
+        keys[1].get(18): u'\U000023F2'
     }
 
 }
@@ -255,7 +260,7 @@ def _get_translations(key_index):
         log.error('Error while import from translations! ' + str(e))
 
 
-_set_language("de")
+_set_language("de_emoji")
 wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed \
     = _get_translations(0)
 commands = _get_translations(1)
