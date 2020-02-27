@@ -185,8 +185,7 @@ def start_bot():
 
 # noinspection PyShadowingNames,PyUnusedLocal
 def _test(chat_id=None, bot=None):
-    from test import main
-    main()
+    pass
 
 
 # endregion

@@ -12,7 +12,7 @@ from neopixel import Color
 
 import logger
 from control.led_strip import set_brightness_depending_on_daytime
-from functions.effects import clear, color_wipe_full
+from functions.effects import clear
 
 hR = 200
 hG = 0
@@ -26,7 +26,6 @@ name = "Clock 4"
 log = logger.get_logger(name)
 
 
-# noinspection DuplicatedCode
 def run_clock4(strip):
     from control import get_stop_flag
     while not get_stop_flag():
@@ -55,21 +54,39 @@ def run_clock4(strip):
                         strip.setPixelColorRGB(minute + 1, mG, mR, mB)
                 else:
                     strip.setPixelColorRGB(minute, mG, mR, mB)
-
             strip.show()
-            time.sleep(2)
-            color_wipe_full(strip, Color(mG // 4, mR // 4, mB // 4), 20.8)
+            time.sleep(150)
+            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute, backward=True)
             clear(strip)
-
         except KeyboardInterrupt:
             print()
             log.warn("KeyboardInterrupt.")
             exit()
-
         except Exception as e:
             log.error("Any error occurs: " + str(e))
             exit()
     clear(strip)
+
+
+def _wipe_second(stripe, color, begin=0, backward=False):
+    if backward:
+        wait_ms = (1000.0 // stripe.numPixels()) // 2
+    else:
+        wait_ms = (1000.0 // stripe.numPixels())
+
+    for i in range(begin + 1, stripe.numPixels() + begin):
+        if i >= stripe.numPixels():
+            i -= stripe.numPixels()
+        stripe.setPixelColor(i, Color(color[0], color[1], color[2]))
+        stripe.show()
+        time.sleep(wait_ms / 1000.0)
+    if backward:
+        for i in range(stripe.numPixels() + begin - 1, begin, -1):
+            if i >= stripe.numPixels():
+                i -= stripe.numPixels()
+            stripe.setPixelColor(i, Color(0, 0, 0))
+            stripe.show()
+            time.sleep(wait_ms / 1000.0)
 
 
 if __name__ == '__main__':
