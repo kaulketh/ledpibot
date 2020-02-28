@@ -40,13 +40,14 @@ menu_dictionary = {
 }
 
 
+# noinspection PyShadowingNames
 def build_menu():
     menu = "{0}{1}".format(menu_header, line_break)
-    log.debug('Build service menu: ' + menu.replace(line_break,""))
+    log.debug('Build service menu: ' + menu.replace(line_break, ""))
     for key in menu_dictionary.keys():
         line = "{0}{1}{2}".format(c_prefix, menu_dictionary.get(key), line_break)
         menu += line
-        log.debug('Add line to menu: ' + line.replace(line_break,""))
+        log.debug('Add line to menu: ' + line.replace(line_break, ""))
     return menu
 
 
@@ -94,7 +95,6 @@ def kill_bot(sig=signal.SIGTERM):
 
 
 menu = build_menu()
-
 
 if __name__ == '__main__':
     pass
