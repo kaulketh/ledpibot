@@ -54,7 +54,8 @@ keys = {
         16: "strobe",
         17: "clock 3",
         18: "clock 4",
-        19: "clock 5"
+        19: "clock 5",
+        20: "demo 2"
     }
 
 }
@@ -96,7 +97,8 @@ translation = {
         keys[1].get(16): "strobe",
         keys[1].get(17): "clock 3",
         keys[1].get(18): "clock 4",
-        keys[1].get(19): "clock 5"
+        keys[1].get(19): "clock 5",
+        keys[1].get(20): "colors 2"
     },
 
     "de": {
@@ -135,7 +137,8 @@ translation = {
         keys[1].get(16): "strobe",
         keys[1].get(17): "uhr 3",
         keys[1].get(18): "uhr 4",
-        keys[1].get(19): "uhr 5"
+        keys[1].get(19): "uhr 5",
+        keys[1].get(20): "farben 2"
     },
 
     "de_emoji": {
@@ -174,7 +177,8 @@ translation = {
         keys[1].get(16): u'\U000026A1',
         keys[1].get(17): u'\U000023F1',
         keys[1].get(18): u'\U000023F2',
-        keys[1].get(19): u'\U0001F570'
+        keys[1].get(19): u'\U0001F570',
+        keys[1].get(20): u'\U0001F501'
     },
 
     "en_emoji": {
@@ -213,7 +217,8 @@ translation = {
         keys[1].get(16): u'\U000026A1',
         keys[1].get(17): u'\U000023F1',
         keys[1].get(18): u'\U000023F2',
-        keys[1].get(19): u'\U0001F570'
+        keys[1].get(19): u'\U0001F570',
+        keys[1].get(20): u'\U0001F501'
     }
 
 }

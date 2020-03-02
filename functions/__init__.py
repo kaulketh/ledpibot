@@ -19,7 +19,7 @@ from .clock3 import run_clock3
 from .clock4 import run_clock4
 from .clock5 import run_clock5
 from .colors import \
-    run_red, run_blue, run_green, run_orange, run_yellow, run_white, run_violet, run_demo, run_stroboscope
+    run_red, run_blue, run_green, run_orange, run_yellow, run_white, run_violet, run_demo, run_stroboscope, run_demo2
 from .effects import clear
 from .rainbow import run_rainbow
 from .theater import run_theater
@@ -34,7 +34,7 @@ def _build_dictionary():
                  run_advent, run_candles, run_clock1, run_clock2,
                  run_rainbow, run_theater, run_red, run_blue, run_green,
                  run_yellow, run_orange, run_white, run_violet, run_demo,
-                 run_stroboscope, run_clock3, run_clock4, run_clock5]
+                 run_stroboscope, run_clock3, run_clock4, run_clock5, run_demo2]
     LOG.debug('Build dictionary of required functions')
     for i in range(len(commands)):
         f = functions[i]
