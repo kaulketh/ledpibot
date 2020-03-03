@@ -66,7 +66,7 @@ def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
     LOG.debug(
         "Message posted: {0}|{1}|{2}|{3}".format(
             str(chat_id), text, str(reply_markup), str(parse_mode)).replace("\n", " "))
-    BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+    return BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
 
 # noinspection PyShadowingNames

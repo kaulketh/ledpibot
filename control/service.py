@@ -82,9 +82,9 @@ def log_rotate_bot(log_msg: str):
 
 
 # noinspection PyShadowingNames
-def kill_bot(sig=signal.SIGTERM):
+def kill_bot(log_msg: str, sig=signal.SIGTERM):
     pid = os.getpid()
-
+    LOG.info(log_msg)
     try:
         result = 0
         LOG.debug('Command "kill {0}" returned {1}\n'.format(pid, os.kill(pid, sig)))
