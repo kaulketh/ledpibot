@@ -146,7 +146,7 @@ def _on_chat_message(msg):
             LOG.info(service.system_usage().replace("\n", " "))
         elif command == service.c_kill:
             _send(chat_id, killed, reply_markup=rm_kb)
-            service.kill_bot()
+            service.kill_bot(killed)
         elif command == service.c_test:
             _test(chat_id, BOT)
 
