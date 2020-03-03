@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# based on NeoPixel-60-Ring-Clock of Andy Doro
-# https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
@@ -9,68 +7,96 @@ __status__ = "Development"
 
 import time
 
-from neopixel import Color
-
 import logger
+from config import CLOCK_HOUR_COLOR_2, CLOCK_MINUTE_COLOR_2, CLOCK_SECOND_COLOR_2
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
-intense = 120
-start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
-name = "Clock 3"
-log = logger.get_logger(name)
+NAME = "Clock 3"
+LOG = logger.get_logger(NAME)
+
+hR = CLOCK_HOUR_COLOR_2[0]
+hG = CLOCK_HOUR_COLOR_2[1]
+hB = CLOCK_HOUR_COLOR_2[2]
+
+mR = CLOCK_MINUTE_COLOR_2[0]
+mG = CLOCK_MINUTE_COLOR_2[1]
+mB = CLOCK_MINUTE_COLOR_2[2]
+
+sR = CLOCK_SECOND_COLOR_2[0]
+sG = CLOCK_SECOND_COLOR_2[1]
+sB = CLOCK_SECOND_COLOR_2[2]
 
 
-def _wipe(color, strip):
-    for i in range(strip.numPixels()):
-        strip.setPixelColor((i + start_px) % 24, color)
-        strip.show()
-        time.sleep(0.05)
-
-
-def run_clock3(strip):
+def run_clock3(stripe):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            now = set_brightness_depending_on_daytime(strip)[0]
-            second_value = int(now.second / 2.5)
-            minute_value = int(now.minute / 2.5)
-            hour_value = int(now.hour)
 
-            hour_value = hour_value % 12 * 2
-            hour_value = int((hour_value * 24 + minute_value) / 24)
+            now = set_brightness_depending_on_daytime(stripe)[0]
+            led_for_hour = int(int(now.hour) % 12 * 2)
+            led_for_minute = int(now.minute // 2.5)
+            leds_per_2500ms = int(round(now.second / 2.5))
 
-            # arc mode
-            for i in range(strip.numPixels()):
-                if i <= second_value:
-                    # calculates a faded arc from low to maximum brightness
-                    blue = (i + 1) * (intense / (second_value + 1))
-                else:
-                    blue = 0
+            _dial(stripe)
+            _seconds(leds_per_2500ms, stripe)
+            _minute(led_for_minute, led_for_hour, stripe)
+            _hour(led_for_hour, stripe)
 
-                if i <= minute_value:
-                    green = (i + 1) * (intense / (minute_value + 1))
-                else:
-                    green = 0
-
-                if i <= hour_value:
-                    red = (i + 1) * (intense / (hour_value + 1))
-                else:
-                    red = 0
-                strip.setPixelColor((i + start_px) % 24, Color(int(green), int(red), int(blue)))
-
-            strip.show()
-            time.sleep(0.1)
+            stripe.show()
+            if leds_per_2500ms == stripe.numPixels():
+                time.sleep(1.5)
+                clear(stripe)
 
         except KeyboardInterrupt:
-            log.warn("KeyboardInterrupt.")
+            LOG.warn("KeyboardInterrupt.")
             exit()
 
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
+    clear(stripe)
 
-    clear(strip)
+
+def _seconds(leds_per_2500ms, stripe):
+    for led in range(0, leds_per_2500ms, 1):
+        if 0 < (led + 1) < stripe.numPixels():
+            stripe.setPixelColorRGB(led + 1, sG, sR, sB)
+        if (led + 1) == stripe.numPixels():
+            stripe.setPixelColorRGB(0, sG, sR, sB)
+
+
+def _minute(led, led_hour, stripe):
+    if led < stripe.numPixels():
+        if led == led_hour:
+            _set_minute_led_before_and_after(stripe, led)
+        else:
+            stripe.setPixelColorRGB(led, mG, mR, mB)
+    if led >= stripe.numPixels():
+        if led == led_hour:
+            _set_minute_led_before_and_after(stripe, led_hour)
+            stripe.setPixelColorRGB(0, mG, mR, mB)
+        else:
+            stripe.setPixelColorRGB(0, mG, mR, mB)
+    else:
+        stripe.setPixelColorRGB(led, mG, mR, mB)
+
+
+def _set_minute_led_before_and_after(stripe, led):
+    stripe.setPixelColorRGB(led - 1, (mG // 5), (mR // 5), (mB // 5))
+    stripe.setPixelColorRGB(led + 1, (mG // 5), (mR // 5), (mB // 5))
+
+
+def _hour(led, stripe):
+    stripe.setPixelColorRGB(led, hG, hR, hB)
+
+
+def _dial(stripe):
+    dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
+    # dial = [0, 6, 12, 18]  # quarter only
+    for led in dial:
+        stripe.setPixelColorRGB(led, 125 // 10, 195 // 10, 30 // 10)  # warm yellow
+        # stripe.setPixelColorRGB(led, 15, 15, 15)  # white
 
 
 if __name__ == '__main__':

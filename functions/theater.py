@@ -11,8 +11,8 @@ import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import color_wipe_full, theater_chase, clear
 
-name = "Theater"
-log = logger.get_logger(name)
+NAME = "Theater"
+LOG = logger.get_logger(NAME)
 
 
 def run_theater(strip):
@@ -34,11 +34,11 @@ def run_theater(strip):
                 theater_chase(strip, Color(80, 0, 0))  # Green theater chase
 
         except KeyboardInterrupt:
-            log.warn("KeyboardInterrupt")
+            LOG.warn("KeyboardInterrupt")
             exit()
 
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
 
     clear(strip)

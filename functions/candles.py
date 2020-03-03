@@ -15,8 +15,8 @@ import logger
 from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 from functions.effects import clear
 
-name = "Candles"
-log = logger.get_logger(name)
+NAME = "Candles"
+LOG = logger.get_logger(NAME)
 
 # any warm white / no bright yellow
 red = 195
@@ -51,11 +51,11 @@ def run_candles(strip):
             candle(strip, strip.numPixels())
 
         except KeyboardInterrupt:
-            log.warn("KeyboardInterrupt")
+            LOG.warn("KeyboardInterrupt")
             exit()
 
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
     clear(strip)
 

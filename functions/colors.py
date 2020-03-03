@@ -56,12 +56,15 @@ class Colorizer(object):
         else:
             raise Exception('Key \'' + str(self.color) + '\' not defined in ' + self.name + '.colors')
 
-    def start(self):
+    def start(self, brightness=None):
         try:
             if self.color is None:
                 raise Exception('Start without set color!')
             else:
-                set_brightness_depending_on_daytime(self.strip)
+                if brightness is None:
+                    set_brightness_depending_on_daytime(self.strip)
+                else:
+                    self.strip.setBrightness(brightness)
 
                 for i in range(self.strip.numPixels()):
                     self.strip.setPixelColor(i, self._get_color(self.color))
@@ -146,6 +149,17 @@ def run_demo(stripe):
     for c in _all_colors(stripe):
         c.start()
         time.sleep(uniform(0.25, 1))
+
+
+def run_demo2(stripe):
+    for c in _all_colors(stripe):
+        for i in range(set_brightness_depending_on_daytime(stripe)[1]):
+            c.start(brightness=i)
+            time.sleep(uniform(0.001, 0.05))
+        for i in range(set_brightness_depending_on_daytime(stripe)[1]):
+            b = set_brightness_depending_on_daytime(stripe)[1] - i
+            c.start(brightness=b)
+            time.sleep(uniform(0.001, 0.05))
 
 
 if __name__ == '__main__':

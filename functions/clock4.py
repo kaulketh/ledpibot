@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+# based on NeoPixel-60-Ring-Clock of Andy Doro
+# https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
@@ -14,16 +15,18 @@ import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
-hR = 200
-hG = 0
-hB = 0
+NAME = "Clock 4"
+LOG = logger.get_logger(NAME)
 
-mR = 0
-mG = 0
-mB = 200
+intense = 120
+start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
 
-name = "Clock 4"
-log = logger.get_logger(name)
+
+def _wipe(color, strip):
+    for i in range(strip.numPixels()):
+        strip.setPixelColor((i + start_px) % 24, color)
+        strip.show()
+        time.sleep(0.05)
 
 
 def run_clock4(strip):
@@ -31,62 +34,44 @@ def run_clock4(strip):
     while not get_stop_flag():
         try:
             now = set_brightness_depending_on_daytime(strip)[0]
-            hour = int(int(now.hour) % 12 * 2)
-            minute = int(now.minute // 2.5)
+            second_value = int(now.second / 2.5)
+            minute_value = int(now.minute / 2.5)
+            hour_value = int(now.hour)
 
-            for i in range(0, strip.numPixels(), 1):
-                # hour
-                if 12 < minute <= 23:
-                    strip.setPixelColorRGB(hour, hG, hR, hB)
-                    strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
+            hour_value = hour_value % 12 * 2
+            hour_value = int((hour_value * 24 + minute_value) / 24)
+
+            # arc mode
+            for i in range(strip.numPixels()):
+                if i <= second_value:
+                    # calculates a faded arc from low to maximum brightness
+                    blue = (i + 1) * (intense / (second_value + 1))
                 else:
-                    strip.setPixelColorRGB(hour, hG, hR, hB)
-                # minute
-                if minute == hour:
-                    if 12 < minute < strip.numPixels():
-                        if hour <= 23:
-                            strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-                            strip.setPixelColorRGB(minute, mG, mR, mB)
-                        else:
-                            strip.setPixelColorRGB(0, hG, hR, hB)
-                            strip.setPixelColorRGB(minute - 1, mG, mR, mB)
-                    else:
-                        strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                    blue = 0
+
+                if i <= minute_value:
+                    green = (i + 1) * (intense / (minute_value + 1))
                 else:
-                    strip.setPixelColorRGB(minute, mG, mR, mB)
+                    green = 0
+
+                if i <= hour_value:
+                    red = (i + 1) * (intense / (hour_value + 1))
+                else:
+                    red = 0
+                strip.setPixelColor((i + start_px) % 24, Color(int(green), int(red), int(blue)))
+
             strip.show()
-            time.sleep(150)
-            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute, backward=True)
-            clear(strip)
+            time.sleep(0.1)
+
         except KeyboardInterrupt:
-            print()
-            log.warn("KeyboardInterrupt.")
+            LOG.warn("KeyboardInterrupt.")
             exit()
+
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
+
     clear(strip)
-
-
-def _wipe_second(stripe, color, begin=0, backward=False):
-    if backward:
-        wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0
-    else:
-        wait_ms = (1000.0 // stripe.numPixels()) / 1000.0
-
-    for i in range(begin + 1, stripe.numPixels() + begin):
-        if i >= stripe.numPixels():
-            i -= stripe.numPixels()
-        stripe.setPixelColor(i, Color(color[0], color[1], color[2]))
-        stripe.show()
-        time.sleep(wait_ms)
-    if backward:
-        for i in range(stripe.numPixels() + begin - 1, begin, -1):
-            if i >= stripe.numPixels():
-                i -= stripe.numPixels()
-            stripe.setPixelColor(i, Color(0, 0, 0))
-            stripe.show()
-            time.sleep(wait_ms)
 
 
 if __name__ == '__main__':

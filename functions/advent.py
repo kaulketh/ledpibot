@@ -16,8 +16,8 @@ import logger
 from functions.candles import candle
 from functions.effects import theater_chase, clear
 
-name = "Advent"
-log = logger.get_logger(name)
+NAME = "Advent"
+LOG = logger.get_logger(NAME)
 
 # any warm white / no bright yellow
 fav_red = 195
@@ -71,11 +71,11 @@ def _december_cycle(stripe, month):
             candle(stripe, stripe.numPixels())
 
     except KeyboardInterrupt:
-        log.warn("KeyboardInterrupt")
+        LOG.warn("KeyboardInterrupt")
         exit()
 
     except Exception as e:
-        log.error("Any error occurs: " + str(e))
+        LOG.error("Any error occurs: " + str(e))
         exit()
 
 
@@ -90,7 +90,7 @@ def run_advent(strip):
             _december_cycle(strip, month)
         else:
             while i > 0:
-                log.warn("Wrong month for xmas/advent animation, it\'s {0}!".format(time.strftime("%B")))
+                LOG.warn("Wrong month for xmas/advent animation, it\'s {0}!".format(time.strftime("%B")))
                 i -= 1
             theater_chase(strip, Color(0, 15, 0))
     clear(strip)

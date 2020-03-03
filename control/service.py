@@ -15,15 +15,15 @@ import subprocess
 
 import logger
 
-name = "Service"
-log = logger.get_logger(name.title())
+NAME = "Service"
+LOG = logger.get_logger(NAME)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'
 pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
 
 line_break = "\n"
-menu_header = name + " functions:"
+menu_header = NAME + " functions:"
 c_prefix = "- "
 c_test = "/serviceTest"
 c_system = "/serviceUsage"
@@ -40,13 +40,14 @@ menu_dictionary = {
 }
 
 
+# noinspection PyShadowingNames
 def build_menu():
     menu = "{0}{1}".format(menu_header, line_break)
-    log.debug('Build service menu: ' + menu.replace(line_break,""))
+    LOG.debug('Build service menu: ' + menu.replace(line_break, ""))
     for key in menu_dictionary.keys():
         line = "{0}{1}{2}".format(c_prefix, menu_dictionary.get(key), line_break)
         menu += line
-        log.debug('Add line to menu: ' + line.replace(line_break,""))
+        LOG.debug('Add line to menu: ' + line.replace(line_break, ""))
     return menu
 
 
@@ -66,35 +67,34 @@ def system_usage():
 
 def reboot_device(log_msg: str):
     try:
-        log.info(log_msg)
+        LOG.info(log_msg)
         os.system(reboot)
     except Exception as e:
-        log.error(str(e))
+        LOG.error(str(e))
 
 
 def log_rotate_bot(log_msg: str):
     try:
-        log.info(log_msg)
+        LOG.info(log_msg)
         os.system(log_rotate)
     except Exception as e:
-        log.error(str(e))
+        LOG.error(str(e))
 
 
 # noinspection PyShadowingNames
-def kill_bot(sig=signal.SIGTERM):
+def kill_bot(log_msg: str, sig=signal.SIGTERM):
     pid = os.getpid()
-
+    LOG.info(log_msg)
     try:
         result = 0
-        log.debug('Command "kill {0}" returned {1}\n'.format(pid, os.kill(pid, sig)))
+        LOG.debug('Command "kill {0}" returned {1}\n'.format(pid, os.kill(pid, sig)))
     except Exception as e:
-        log.error('Command "kill {0}" raised exception {1}\n'.format(pid, e))
+        LOG.error('Command "kill {0}" raised exception {1}\n'.format(pid, e))
         result = e
     return result == 0
 
 
 menu = build_menu()
-
 
 if __name__ == '__main__':
     pass
