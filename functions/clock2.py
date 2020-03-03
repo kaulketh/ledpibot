@@ -15,6 +15,9 @@ from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
+NAME = "Clock 2"
+LOG = logger.get_logger(NAME)
+
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]
 hB = CLOCK_HOUR_COLOR[2]
@@ -22,9 +25,6 @@ hB = CLOCK_HOUR_COLOR[2]
 mR = CLOCK_MINUTE_COLOR[0]
 mG = CLOCK_MINUTE_COLOR[1]
 mB = CLOCK_MINUTE_COLOR[2]
-
-name = "Clock 2"
-log = logger.get_logger(name)
 
 
 def run_clock2(strip):
@@ -61,10 +61,10 @@ def run_clock2(strip):
             clear(strip)
         except KeyboardInterrupt:
             print()
-            log.warn("KeyboardInterrupt.")
+            LOG.warn("KeyboardInterrupt.")
             exit()
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
     clear(strip)
 

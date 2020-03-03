@@ -15,10 +15,11 @@ import logger
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
+NAME = "Clock 4"
+LOG = logger.get_logger(NAME)
+
 intense = 120
 start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
-name = "Clock 4"
-log = logger.get_logger(name)
 
 
 def _wipe(color, strip):
@@ -63,11 +64,11 @@ def run_clock4(strip):
             time.sleep(0.1)
 
         except KeyboardInterrupt:
-            log.warn("KeyboardInterrupt.")
+            LOG.warn("KeyboardInterrupt.")
             exit()
 
         except Exception as e:
-            log.error("Any error occurs: " + str(e))
+            LOG.error("Any error occurs: " + str(e))
             exit()
 
     clear(strip)

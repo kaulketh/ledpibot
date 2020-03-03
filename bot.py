@@ -20,8 +20,9 @@ from config import \
     wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed
 from control import run_thread, stop_threads, service
 
-log = logger.get_logger('LedPiBot')
-bot = telepot.Bot(token)
+LOG = logger.get_logger('LedPiBot')
+BOT = telepot.Bot(token)
+
 admins = [access.thk, access.annib]
 
 # region Keyboards
@@ -55,17 +56,17 @@ def _kb_stop(func=None):
 
 # region Methods
 def _ready_to_use():
-    log.info("Bot is running...")
+    LOG.info("Bot is running...")
     for admin in admins:
         _send(admin, started, reply_markup=rm_kb)
 
 
 # noinspection PyShadowingNames
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    log.debug(
+    LOG.debug(
         "Message posted: {0}|{1}|{2}|{3}".format(
             str(chat_id), text, str(reply_markup), str(parse_mode)).replace("\n", " "))
-    bot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+    BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
 
 # noinspection PyShadowingNames
@@ -77,7 +78,7 @@ def _reply_wrong_id(chat_id, msg):
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
     log_msg = 'Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name)
     _send("Attention! " + access.thk, log_msg)
-    log.warning(log_msg)
+    LOG.warning(log_msg)
 
 
 # noinspection PyShadowingNames
@@ -87,7 +88,7 @@ def _reply_wrong_command(chat_id, content):
         raise Exception('Not allowed input: ' + got)
     except Exception as ex:
         _send(chat_id, not_allowed, parse_mode='MarkdownV2')
-        log.warning(str(ex))
+        LOG.warning(str(ex))
     return
 
 
@@ -106,7 +107,7 @@ def _stop(chat_id, msg=stop_msg):
 def _on_chat_message(msg):
     global command, chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
-    log.debug(msg)
+    LOG.debug(msg)
 
     # check user
     if chat_id not in admins:
@@ -115,7 +116,7 @@ def _on_chat_message(msg):
 
     if content_type == 'text':
         command = msg['text']
-        log.info('Requested: ' + command)
+        LOG.info('Requested: ' + command)
         # /start
         if command == "/start":
             _send(chat_id, pls_select.format(msg['from']['first_name']))
@@ -131,7 +132,7 @@ def _on_chat_message(msg):
                 _send(chat_id, pls_select.format(msg['from']['first_name']))
 
         # /service
-        elif command == ('/' + service.name.lower()):
+        elif command == ('/' + service.NAME.lower()):
             if _stop(chat_id):
                 _send(chat_id, service.menu, reply_markup=rm_kb)
         elif command == service.c_rotate:
@@ -142,12 +143,12 @@ def _on_chat_message(msg):
             service.reboot_device(rebooted)
         elif command == service.c_system:
             _send(chat_id, service.system_usage(), reply_markup=rm_kb)
-            log.info(service.system_usage().replace("\n", " "))
+            LOG.info(service.system_usage().replace("\n", " "))
         elif command == service.c_kill:
             _send(chat_id, killed, reply_markup=rm_kb)
             service.kill_bot()
         elif command == service.c_test:
-            _test(chat_id, bot)
+            _test(chat_id, BOT)
 
         # all other commands
         elif any(c for c in commands if (command == c)):
@@ -171,15 +172,15 @@ def external_request(msg, chat_id=None):
 
 def start_bot():
     _ready_to_use()
-    MessageLoop(bot, {'chat': _on_chat_message}).run_as_thread()
+    MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
     while True:
         try:
             signal.pause()
         except KeyboardInterrupt:
-            log.warning('Program interrupted')
+            LOG.warning('Program interrupted')
             exit()
         except Exception as e:
-            log.error('An error occurs: ' + str(e))
+            LOG.error('An error occurs: ' + str(e))
             exit()
 
 

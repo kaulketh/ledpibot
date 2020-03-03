@@ -141,6 +141,47 @@ translation = {
         keys[1].get(20): "farben 2"
     },
 
+
+    "fr": {
+        "name": "Français",
+        keys[0].get(0): "`Bonjour {1}, c'est un bot privé!"
+                        "\nL'Id {0}, {2} {3} a été bloqué."
+                        "\nMerci de votre visite!`",
+        keys[0].get(1): "* Non autorisé pour ce bot\\! *",
+        keys[0].get(2): "Veuillez faire une sélection, {0}.",
+        keys[0].get(3): "*{0}* dure " + str(int(STANDBY_MINUTES)) + " minutes maximum\\.",
+        keys[0].get(4): "Le bot est prêt à l'emploi.",
+        keys[0].get(5): "L'appareil est redémarré.",
+        keys[0].get(6): "Logrotate exécuté manuellement.",
+        keys[0].get(7): "Bot arrêté!",
+        keys[0].get(8): "Arrêt, mise en veille automatique après " + str(int(STANDBY_MINUTES)) + " minutes."
+                                                                                              "\nVeuillez redémarrer!",
+        keys[0].get(9): "Tout s'est arrêté!",
+        keys[0].get(10): "Processus de bot complet annulé!",
+
+        keys[1].get(0): "stop",
+        keys[1].get(1): "start",
+        keys[1].get(2): "advent",
+        keys[1].get(3): "chandelles",
+        keys[1].get(4): "montre 1",
+        keys[1].get(5): "montre 2",
+        keys[1].get(6): "arc en ciel",
+        keys[1].get(7): "théâtre",
+        keys[1].get(8): "rouge",
+        keys[1].get(9): "bleu",
+        keys[1].get(10): "vert",
+        keys[1].get(11): "jaune",
+        keys[1].get(12): "orange",
+        keys[1].get(13): "blanc",
+        keys[1].get(14): "violet",
+        keys[1].get(15): "couleurs",
+        keys[1].get(16): "strobe",
+        keys[1].get(17): "montre 3",
+        keys[1].get(18): "montre 4",
+        keys[1].get(19): "montre 5",
+        keys[1].get(20): "couleurs 2"
+    },
+
     "de_emoji": {
         "name": "Deutsch Emoji",
         keys[0].get(0): "`Hallo {1}, dies ist ein privater Bot!"
