@@ -11,16 +11,17 @@ import time
 from neopixel import Color
 
 import logger
+from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
-hR = 200
-hG = 0
-hB = 0
+hR = CLOCK_HOUR_COLOR[0]
+hG = CLOCK_HOUR_COLOR[1]
+hB = CLOCK_HOUR_COLOR[2]
 
-mR = 0
-mG = 0
-mB = 200
+mR = CLOCK_MINUTE_COLOR[0]
+mG = CLOCK_MINUTE_COLOR[1]
+mB = CLOCK_MINUTE_COLOR[2]
 
 name = "Clock 2"
 log = logger.get_logger(name)
