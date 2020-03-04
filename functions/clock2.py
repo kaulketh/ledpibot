@@ -31,33 +31,31 @@ def run_clock2(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            now = set_brightness_depending_on_daytime(strip)[0]
-            hour = int(int(now.hour) % 12 * 2)
-            minute = int(now.minute // 2.5)
-
-            for i in range(0, strip.numPixels(), 1):
-                # hour
-                if 12 < minute <= 23:
-                    strip.setPixelColorRGB(hour, hG, hR, hB)
-                    strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
-                else:
-                    strip.setPixelColorRGB(hour, hG, hR, hB)
-                # minute
-                if minute == hour:
-                    if 12 < minute < strip.numPixels():
-                        if hour <= 23:
-                            strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-                            strip.setPixelColorRGB(minute, mG, mR, mB)
-                        else:
-                            strip.setPixelColorRGB(0, hG, hR, hB)
-                            strip.setPixelColorRGB(minute - 1, mG, mR, mB)
+            hour, minute, next_minute = _get_pointer(strip)
+            while not minute == next_minute:
+                for i in range(0, strip.numPixels(), 1):
+                    # hour
+                    if 12 < minute <= 23:
+                        strip.setPixelColorRGB(hour, hG, hR, hB)
+                        strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
                     else:
-                        strip.setPixelColorRGB(minute + 1, mG, mR, mB)
-                else:
-                    strip.setPixelColorRGB(minute, mG, mR, mB)
-            strip.show()
-            time.sleep(150)
-            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute, backward=True)
+                        strip.setPixelColorRGB(hour, hG, hR, hB)
+                    # minute
+                    if minute == hour:
+                        if 12 < minute < strip.numPixels():
+                            if hour <= 23:
+                                strip.setPixelColorRGB(hour + 1, hG, hR, hB)
+                                strip.setPixelColorRGB(minute, mG, mR, mB)
+                            else:
+                                strip.setPixelColorRGB(0, hG, hR, hB)
+                                strip.setPixelColorRGB(minute - 1, mG, mR, mB)
+                        else:
+                            strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                    else:
+                        strip.setPixelColorRGB(minute, mG, mR, mB)
+                strip.show()
+                minute = _get_pointer(strip)[1]
+            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute - 1, backward=True)
             clear(strip)
         except KeyboardInterrupt:
             print()
@@ -67,6 +65,14 @@ def run_clock2(strip):
             LOG.error("Any error occurs: " + str(e))
             exit()
     clear(strip)
+
+
+def _get_pointer(strip):
+    now = set_brightness_depending_on_daytime(strip)[0]
+    hour = int(int(now.hour) % 12 * 2)
+    minute = int(now.minute // 2.5)
+    next_minute = minute + 1
+    return hour, minute, next_minute
 
 
 def _wipe_second(stripe, color, begin=0, backward=False):
