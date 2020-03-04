@@ -71,7 +71,10 @@ def _get_pointer(strip):
     now = set_brightness_depending_on_daytime(strip)[0]
     hour = int(int(now.hour) % 12 * 2)
     minute = int(now.minute // 2.5)
-    next_minute = minute + 1
+    if minute <= 22:
+        next_minute = minute + 1
+    else:
+        next_minute = 0
     return hour, minute, next_minute
 
 

@@ -9,7 +9,7 @@ __status__ = "Development"
 import time
 
 import logger
-from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR, CLOCK_SECOND_COLOR
+from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR, CLOCK_SECOND_COLOR, LED_COUNT
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
@@ -31,7 +31,7 @@ sB = CLOCK_SECOND_COLOR[2]
 
 def _all_leds():
     a = [0]
-    for i in range(23):
+    for i in range(LED_COUNT - 1):
         a.append(i + 1)
     a.append(0)
     return a
