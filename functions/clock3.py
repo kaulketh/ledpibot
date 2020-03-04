@@ -8,20 +8,20 @@ __status__ = "Development"
 import time
 
 import logger
-from config import CLOCK_HOUR_COLOR_2, CLOCK_MINUTE_COLOR_2, CLOCK_SECOND_COLOR_2
+from config import CLOCK_SECOND_COLOR_2, CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
 from control.led_strip import set_brightness_depending_on_daytime
 from functions.effects import clear
 
 NAME = "Clock 3"
 LOG = logger.get_logger(NAME)
 
-hR = CLOCK_HOUR_COLOR_2[0]
-hG = CLOCK_HOUR_COLOR_2[1]
-hB = CLOCK_HOUR_COLOR_2[2]
+hR = CLOCK_HOUR_COLOR[0]
+hG = CLOCK_HOUR_COLOR[1]
+hB = CLOCK_HOUR_COLOR[2]
 
-mR = CLOCK_MINUTE_COLOR_2[0]
-mG = CLOCK_MINUTE_COLOR_2[1]
-mB = CLOCK_MINUTE_COLOR_2[2]
+mR = CLOCK_MINUTE_COLOR[0]
+mG = CLOCK_MINUTE_COLOR[1]
+mB = CLOCK_MINUTE_COLOR[2]
 
 sR = CLOCK_SECOND_COLOR_2[0]
 sG = CLOCK_SECOND_COLOR_2[1]

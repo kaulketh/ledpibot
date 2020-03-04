@@ -38,13 +38,13 @@ def _all_leds():
 
 
 pendulum = _all_leds()
-wait_ms = 1 / pendulum.__len__()
+wait_ms = 1 / len(pendulum)
 
 
 def run_clock5(strip):
     from control import get_stop_flag
     p_left = 0
-    p_right = pendulum.__len__() - 1
+    p_right = len(pendulum) - 1
     while not get_stop_flag():
         try:
             clear(strip)
@@ -53,17 +53,17 @@ def run_clock5(strip):
             minute = int(now.minute // 2.5)
 
             # pendulum of second
-            for i in range(pendulum.__len__()):
-                strip.setPixelColorRGB(pendulum.__getitem__(i), sG // 4, sR // 4, sB // 4)
-            if p_left >= pendulum.__len__() - 1:
+            for i in range(len(pendulum)):
+                strip.setPixelColorRGB(pendulum[i], sG // 4, sR // 4, sB // 4)
+            if p_left >= len(pendulum) - 1:
                 if p_right <= 0:
-                    p_right = pendulum.__len__() - 1
+                    p_right = len(pendulum) - 1
                     p_left = 0
                 else:
-                    strip.setPixelColorRGB(pendulum.__getitem__(p_right), sG, sR, sB)
+                    strip.setPixelColorRGB(pendulum[p_right], sG, sR, sB)
                     p_right -= 1
             else:
-                strip.setPixelColorRGB(pendulum.__getitem__(p_left), sG, sR, sB)
+                strip.setPixelColorRGB(pendulum[p_left], sG, sR, sB)
                 p_left += 1
 
             # pointer
