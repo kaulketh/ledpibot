@@ -12,13 +12,17 @@ import logger
 
 
 class Update:
-    def __init__(self):
+    def __init__(self, branch: str = None):
         self.name = "update"
+        if branch is None:
+            self.branch = 'master'
+        else:
+            self.branch = branch
         self.save_secret = 'mv -v config/secret.py secret.py'
         self.restore_secret = 'mv -v secret.py config/secret.py'
         self.prepare = 'touch tmp'
         self.remove_clone = 'rm -rfv ledpibot/'
-        self.clone = 'git clone https://github.com/kaulketh/ledpibot'
+        self.clone = 'git clone -b ' + self.branch + ' https://github.com/kaulketh/ledpibot'
         self.log = logger.get_logger(self.name)
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.subfolders = [f.path for f in os.scandir(self.folder) if f.is_dir()]
