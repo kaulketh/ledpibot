@@ -382,7 +382,7 @@ def _get_translations(txts_index):
     """
     Load translations from dictionary.
 
-    :param txts_index: 0 = messages, 1 = commands
+    :param txts_index: messages, commands
     :return: list of texts
     """
     global language, translations, text
