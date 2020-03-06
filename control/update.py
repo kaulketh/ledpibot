@@ -7,6 +7,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 import os
+import sys
 
 import logger
 
@@ -43,7 +44,7 @@ class Update:
             self.log.info('Delete old folders.')
             for f in self.subfolders:
                 if not f == "logs":
-                    os.system('rm -rf ' + f)
+                    os.system('rm -rfv ' + f)
             os.system(self.prepare)
             self.log.info('Clone from repository')
             os.system(self.clone)
@@ -63,4 +64,4 @@ class Update:
 
 
 if __name__ == '__main__':
-    pass
+    Update(sys.argv[1]).run()
