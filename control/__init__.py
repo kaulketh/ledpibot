@@ -18,7 +18,7 @@ from config import STANDBY_MINUTES as COUNTDOWN, LED_BRIGHTNESS, standby
 from functions import clear, dictionary_functions
 from .led_strip import strip, set_brightness_depending_on_daytime
 
-NAME = "Thread Control"
+NAME = "control"
 LOG = logger.get_logger(NAME)
 EXPIRED = "Runtime expired"
 STOPPED = "Stop requested, stopped"
