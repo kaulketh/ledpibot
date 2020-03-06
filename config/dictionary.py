@@ -13,14 +13,13 @@ __status__ = "Development"
 import logger
 from .settings import STANDBY_MINUTES
 
-log = logger.get_logger('Dictionary')
+LOG = logger.get_logger('Language')
 language = None
 translations = None
 text = None
 
-keys = {
-    0: {
-        "name": "message text",
+txts = {
+    "message": {
         0: "wrong_id",
         1: "not_allowed",
         2: "pls_select",
@@ -33,8 +32,7 @@ keys = {
         9: "stop_msg",
         10: "killed"
     },
-    1: {
-        "name": "button label",
+    "command": {
         0: "stop",
         1: "start",
         2: "advent",
@@ -56,216 +54,315 @@ keys = {
         18: "clock 4",
         19: "clock 5",
         20: "demo 2"
+    },
+    "de": {
+        0: "`Hallo {1}, dies ist ein privater Bot!\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
+        1: "* Nicht erlaubt für diesen Bot\\! *",
+        2: "Bitte triff eine Auswahl, {0}.",
+        3: "*{0}* läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
+        4: "Bot ist einsatzbereit.",
+        5: "Gerät wird neu gestartet.",
+        6: "Logrotate manuell ausgeführt.",
+        7: "Bot angehalten!",
+        8: "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten.\nBitte Neustart!",
+        9: "Alles gestoppt.",
+        10: "Kompletten Bot-Prozess abgebrochen!",
+        11: "stop",
+        12: "start",
+        13: "advent",
+        14: "kerzen",
+        15: "uhr 1",
+        16: "uhr 2",
+        17: "regenbogen",
+        18: "theater",
+        19: "rot",
+        20: "blau",
+        21: "grün",
+        22: "gelb",
+        23: "orange",
+        24: "weiß",
+        25: "violett",
+        26: "farben",
+        27: "strobe",
+        28: "uhr 3",
+        29: "uhr 4",
+        30: "uhr 5",
+        31: "farben 2"
+    },
+    "emoji": {
+        0: u'\U000023F9',
+        1: u'\U000025B6',
+        2: u'\U0001F384',
+        3: u'\U0001F56F',
+        4: u'\U000023F0',
+        5: u'\U0001F55C',
+        6: u'\U0001F308',
+        7: u'\U0001F3AA',
+        8: u'\U0001F7E5',
+        9: u'\U0001F7E6',
+        10: u'\U0001F7E9',
+        11: u'\U0001F7E8',
+        12: u'\U0001F7E7',
+        13: u'\U00002B1C',
+        14: u'\U0001F7EA',
+        15: u'\U0001F500',
+        16: u'\U000026A1',
+        17: u'\U000023F1',
+        18: u'\U000023F2',
+        19: u'\U0001F570',
+        20: u'\U0001F501'
+    },
+    "en": {
+        0: "`Hello {1}, this is a private bot!\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
+        1: "* Not allowed for this bot\\! *",
+        2: "Please make a suitable selection, {0}!",
+        3: "*{0}* was started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
+        4: "Bot ready for use.",
+        5: "Device rebooted.",
+        6: "Logrotate executed manually.",
+        7: "Bot stopped.",
+        8: "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes.\nPlease restart!",
+        9: "Everything stopped.",
+        10: "Bot process killed!",
+        11: "stop",
+        12: "start",
+        13: "advent",
+        14: "candles",
+        15: "clock 1",
+        16: "clock 2",
+        17: "rainbow",
+        18: "theater",
+        19: "red",
+        20: "blue",
+        21: "green",
+        22: "yellow",
+        23: "orange",
+        24: "white",
+        25: "violet",
+        26: "colors",
+        27: "strobe",
+        28: "clock 3",
+        29: "clock 4",
+        30: "clock 5",
+        31: "colors 2"
+    },
+    "fr": {
+        0: "`Bonjour {1}, c'est un bot privé!\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
+        1: "* Non autorisé pour ce bot\\! *",
+        2: "Veuillez faire une sélection, {0}.",
+        3: "*{0}* dure " + str(int(STANDBY_MINUTES)) + " minutes maximum\\.",
+        4: "Le bot est prêt à l'emploi.",
+        5: "L'appareil est redémarré.",
+        6: "Logrotate exécuté manuellement.",
+        7: "Bot arrêté!",
+        8: "Arrêt, mise en veille automatique après " + str(int(STANDBY_MINUTES)) + " minutes.\nVeuillez redémarrer!",
+        9: "Tout s'est arrêté!",
+        10: "Processus de bot complet annulé!",
+        11: "stop",
+        12: "start",
+        13: "advent",
+        14: "chandelles",
+        15: "montre 1",
+        16: "montre 2",
+        17: "arc en ciel",
+        18: "théâtre",
+        19: "rouge",
+        20: "bleu",
+        21: "vert",
+        22: "jaune",
+        23: "orange",
+        24: "blanc",
+        25: "violet",
+        26: "couleurs",
+        27: "strobe",
+        28: "montre 3",
+        29: "montre 4",
+        30: "montre 5",
+        31: "couleurs 2"
     }
-
 }
 
 translation = {
+    "de": {
+        "name": "German",
+        txts["message"].get(0): txts["de"].get(0),
+        txts["message"].get(1): txts["de"].get(1),
+        txts["message"].get(2): txts["de"].get(2),
+        txts["message"].get(3): txts["de"].get(3),
+        txts["message"].get(4): txts["de"].get(4),
+        txts["message"].get(5): txts["de"].get(5),
+        txts["message"].get(6): txts["de"].get(6),
+        txts["message"].get(7): txts["de"].get(7),
+        txts["message"].get(8): txts["de"].get(8),
+        txts["message"].get(9): txts["de"].get(9),
+        txts["message"].get(10): txts["de"].get(10),
+        txts["command"].get(0): txts["de"].get(11),
+        txts["command"].get(1): txts["de"].get(12),
+        txts["command"].get(2): txts["de"].get(13),
+        txts["command"].get(3): txts["de"].get(14),
+        txts["command"].get(4): txts["de"].get(15),
+        txts["command"].get(5): txts["de"].get(16),
+        txts["command"].get(6): txts["de"].get(17),
+        txts["command"].get(7): txts["de"].get(18),
+        txts["command"].get(8): txts["de"].get(19),
+        txts["command"].get(9): txts["de"].get(20),
+        txts["command"].get(10): txts["de"].get(21),
+        txts["command"].get(11): txts["de"].get(22),
+        txts["command"].get(12): txts["de"].get(23),
+        txts["command"].get(13): txts["de"].get(24),
+        txts["command"].get(14): txts["de"].get(25),
+        txts["command"].get(15): txts["de"].get(26),
+        txts["command"].get(16): txts["de"].get(27),
+        txts["command"].get(17): txts["de"].get(28),
+        txts["command"].get(18): txts["de"].get(29),
+        txts["command"].get(19): txts["de"].get(30),
+        txts["command"].get(20): txts["de"].get(31)
+
+    },
+    "de_emoji": {
+        "name": "German with emoji",
+        txts["message"].get(0): txts["de"].get(0),
+        txts["message"].get(1): txts["de"].get(1),
+        txts["message"].get(2): txts["de"].get(2),
+        txts["message"].get(3): txts["de"].get(3),
+        txts["message"].get(4): txts["de"].get(4),
+        txts["message"].get(5): txts["de"].get(5),
+        txts["message"].get(6): txts["de"].get(6),
+        txts["message"].get(7): txts["de"].get(7),
+        txts["message"].get(8): txts["de"].get(8),
+        txts["message"].get(9): txts["de"].get(9),
+        txts["message"].get(10): txts["de"].get(10),
+        txts["command"].get(0): txts["emoji"].get(0),
+        txts["command"].get(1): txts["emoji"].get(1),
+        txts["command"].get(2): txts["emoji"].get(2),
+        txts["command"].get(3): txts["emoji"].get(3),
+        txts["command"].get(4): txts["emoji"].get(4),
+        txts["command"].get(5): txts["emoji"].get(5),
+        txts["command"].get(6): txts["emoji"].get(6),
+        txts["command"].get(7): txts["emoji"].get(7),
+        txts["command"].get(8): txts["emoji"].get(8),
+        txts["command"].get(9): txts["emoji"].get(9),
+        txts["command"].get(10): txts["emoji"].get(10),
+        txts["command"].get(11): txts["emoji"].get(11),
+        txts["command"].get(12): txts["emoji"].get(12),
+        txts["command"].get(13): txts["emoji"].get(13),
+        txts["command"].get(14): txts["emoji"].get(14),
+        txts["command"].get(15): txts["emoji"].get(15),
+        txts["command"].get(16): txts["emoji"].get(16),
+        txts["command"].get(17): txts["emoji"].get(17),
+        txts["command"].get(18): txts["emoji"].get(18),
+        txts["command"].get(19): txts["emoji"].get(19),
+        txts["command"].get(20): txts["emoji"].get(20),
+    },
     "en": {
         "name": "English",
-        keys[0].get(0): "`Hello {1}, this is a private bot!"
-                        "\nID {0}, {2} {3} has been blocked."
-                        "\nThanks for visit!`",
-        keys[0].get(1): "* Not allowed for this bot\\! *",
-        keys[0].get(2): "Please make a suitable selection, {0}!",
-        keys[0].get(3): "*{0}* was started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
-        keys[0].get(4): "Bot ready for use.",
-        keys[0].get(5): "Device rebooted.",
-        keys[0].get(6): "Logrotate executed manually.",
-        keys[0].get(7): "Bot stopped.",
-        keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
-                                                                                          "\nPlease restart!",
-        keys[0].get(9): "Everything stopped.",
-        keys[0].get(10): "Bot process killed!",
-
-        keys[1].get(0): "stop",
-        keys[1].get(1): "start",
-        keys[1].get(2): "advent",
-        keys[1].get(3): "candles",
-        keys[1].get(4): "clock 1",
-        keys[1].get(5): "clock 2",
-        keys[1].get(6): "rainbow",
-        keys[1].get(7): "theater",
-        keys[1].get(8): "red",
-        keys[1].get(9): "blue",
-        keys[1].get(10): "green",
-        keys[1].get(11): "yellow",
-        keys[1].get(12): "orange",
-        keys[1].get(13): "white",
-        keys[1].get(14): "violet",
-        keys[1].get(15): "colors",
-        keys[1].get(16): "strobe",
-        keys[1].get(17): "clock 3",
-        keys[1].get(18): "clock 4",
-        keys[1].get(19): "clock 5",
-        keys[1].get(20): "colors 2"
+        txts["message"].get(0): txts["en"].get(0),
+        txts["message"].get(1): txts["en"].get(1),
+        txts["message"].get(2): txts["en"].get(2),
+        txts["message"].get(3): txts["en"].get(3),
+        txts["message"].get(4): txts["en"].get(4),
+        txts["message"].get(5): txts["en"].get(5),
+        txts["message"].get(6): txts["en"].get(6),
+        txts["message"].get(7): txts["en"].get(7),
+        txts["message"].get(8): txts["en"].get(8),
+        txts["message"].get(9): txts["en"].get(9),
+        txts["message"].get(10): txts["en"].get(10),
+        txts["command"].get(0): txts["en"].get(11),
+        txts["command"].get(1): txts["en"].get(12),
+        txts["command"].get(2): txts["en"].get(13),
+        txts["command"].get(3): txts["en"].get(14),
+        txts["command"].get(4): txts["en"].get(15),
+        txts["command"].get(5): txts["en"].get(16),
+        txts["command"].get(6): txts["en"].get(17),
+        txts["command"].get(7): txts["en"].get(18),
+        txts["command"].get(8): txts["en"].get(19),
+        txts["command"].get(9): txts["en"].get(20),
+        txts["command"].get(10): txts["en"].get(21),
+        txts["command"].get(11): txts["en"].get(22),
+        txts["command"].get(12): txts["en"].get(23),
+        txts["command"].get(13): txts["en"].get(24),
+        txts["command"].get(14): txts["en"].get(25),
+        txts["command"].get(15): txts["en"].get(26),
+        txts["command"].get(16): txts["en"].get(27),
+        txts["command"].get(17): txts["en"].get(28),
+        txts["command"].get(18): txts["en"].get(29),
+        txts["command"].get(19): txts["en"].get(30),
+        txts["command"].get(20): txts["en"].get(31)
     },
-
-    "de": {
-        "name": "Deutsch",
-        keys[0].get(0): "`Hallo {1}, dies ist ein privater Bot!"
-                        "\nID {0}, {2} {3} wurde geblockt."
-                        "\nDanke für den Besuch!`",
-        keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
-        keys[0].get(2): "Bitte triff eine Auswahl, {0}.",
-        keys[0].get(3): "*{0}* läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
-        keys[0].get(4): "Bot ist einsatzbereit.",
-        keys[0].get(5): "Gerät wird neu gestartet.",
-        keys[0].get(6): "Logrotate manuell ausgeführt.",
-        keys[0].get(7): "Bot angehalten!",
-        keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
-                                                                                              "\nBitte Neustart!",
-        keys[0].get(9): "Alles gestoppt.",
-        keys[0].get(10): "Kompletten Bot-Prozess abgebrochen!",
-
-        keys[1].get(0): "stop",
-        keys[1].get(1): "start",
-        keys[1].get(2): "advent",
-        keys[1].get(3): "kerzen",
-        keys[1].get(4): "uhr 1",
-        keys[1].get(5): "uhr 2",
-        keys[1].get(6): "regenbogen",
-        keys[1].get(7): "theater",
-        keys[1].get(8): "rot",
-        keys[1].get(9): "blau",
-        keys[1].get(10): "grün",
-        keys[1].get(11): "gelb",
-        keys[1].get(12): "orange",
-        keys[1].get(13): "weiß",
-        keys[1].get(14): "violett",
-        keys[1].get(15): "farben",
-        keys[1].get(16): "strobe",
-        keys[1].get(17): "uhr 3",
-        keys[1].get(18): "uhr 4",
-        keys[1].get(19): "uhr 5",
-        keys[1].get(20): "farben 2"
-    },
-
-
-    "fr": {
-        "name": "Français",
-        keys[0].get(0): "`Bonjour {1}, c'est un bot privé!"
-                        "\nL'Id {0}, {2} {3} a été bloqué."
-                        "\nMerci de votre visite!`",
-        keys[0].get(1): "* Non autorisé pour ce bot\\! *",
-        keys[0].get(2): "Veuillez faire une sélection, {0}.",
-        keys[0].get(3): "*{0}* dure " + str(int(STANDBY_MINUTES)) + " minutes maximum\\.",
-        keys[0].get(4): "Le bot est prêt à l'emploi.",
-        keys[0].get(5): "L'appareil est redémarré.",
-        keys[0].get(6): "Logrotate exécuté manuellement.",
-        keys[0].get(7): "Bot arrêté!",
-        keys[0].get(8): "Arrêt, mise en veille automatique après " + str(int(STANDBY_MINUTES)) + " minutes."
-                                                                                              "\nVeuillez redémarrer!",
-        keys[0].get(9): "Tout s'est arrêté!",
-        keys[0].get(10): "Processus de bot complet annulé!",
-
-        keys[1].get(0): "stop",
-        keys[1].get(1): "start",
-        keys[1].get(2): "advent",
-        keys[1].get(3): "chandelles",
-        keys[1].get(4): "montre 1",
-        keys[1].get(5): "montre 2",
-        keys[1].get(6): "arc en ciel",
-        keys[1].get(7): "théâtre",
-        keys[1].get(8): "rouge",
-        keys[1].get(9): "bleu",
-        keys[1].get(10): "vert",
-        keys[1].get(11): "jaune",
-        keys[1].get(12): "orange",
-        keys[1].get(13): "blanc",
-        keys[1].get(14): "violet",
-        keys[1].get(15): "couleurs",
-        keys[1].get(16): "strobe",
-        keys[1].get(17): "montre 3",
-        keys[1].get(18): "montre 4",
-        keys[1].get(19): "montre 5",
-        keys[1].get(20): "couleurs 2"
-    },
-
-    "de_emoji": {
-        "name": "Deutsch Emoji",
-        keys[0].get(0): "`Hallo {1}, dies ist ein privater Bot!"
-                        "\nID {0}, {2} {3} wurde geblockt."
-                        "\nDanke für den Besuch!`",
-        keys[0].get(1): "* Nicht erlaubt für diesen Bot\\! *",
-        keys[0].get(2): "Bitte triff eine Auswahl, {0}.",
-        keys[0].get(3): "{0}  Animation läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
-        keys[0].get(4): "Bot ist einsatzbereit.",
-        keys[0].get(5): "Gerät wird neu gestartet.",
-        keys[0].get(6): "Logrotate manuell ausgeführt.",
-        keys[0].get(7): "Bot angehalten!",
-        keys[0].get(8): "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten."
-                                                                                              "\nBitte Neustart!",
-        keys[0].get(9): "Alles gestoppt.",
-        keys[0].get(10): "Kompletten Bot-Prozess abgebrochen!",
-
-        keys[1].get(0): u'\U000023F9',
-        keys[1].get(1): u'\U000025B6',
-        keys[1].get(2): u'\U0001F384',
-        keys[1].get(3): u'\U0001F56F',
-        keys[1].get(4): u'\U000023F0',
-        keys[1].get(5): u'\U0001F55C',
-        keys[1].get(6): u'\U0001F308',
-        keys[1].get(7): u'\U0001F3AA',
-        keys[1].get(8): u'\U0001F7E5',
-        keys[1].get(9): u'\U0001F7E6',
-        keys[1].get(10): u'\U0001F7E9',
-        keys[1].get(11): u'\U0001F7E8',
-        keys[1].get(12): u'\U0001F7E7',
-        keys[1].get(13): u'\U00002B1C',
-        keys[1].get(14): u'\U0001F7EA',
-        keys[1].get(15): u'\U0001F500',
-        keys[1].get(16): u'\U000026A1',
-        keys[1].get(17): u'\U000023F1',
-        keys[1].get(18): u'\U000023F2',
-        keys[1].get(19): u'\U0001F570',
-        keys[1].get(20): u'\U0001F501'
-    },
-
     "en_emoji": {
-        "name": "English emoji",
-        keys[0].get(0): "`Hello {1}, this is a private bot!"
-                        "\nID {0}, {2} {3} has been blocked."
-                        "\nThanks for visit!`",
-        keys[0].get(1): "* Not allowed for this bot\\! *",
-        keys[0].get(2): "Please make a suitable selection, {0}!",
-        keys[0].get(3): "{0}  Animation started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
-        keys[0].get(4): "Bot ready for use.",
-        keys[0].get(5): "Device rebooted.",
-        keys[0].get(6): "Logrotate executed manually.",
-        keys[0].get(7): "Bot stopped.",
-        keys[0].get(8): "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes."
-                                                                                          "\nPlease restart!",
-        keys[0].get(9): "Everything stopped.",
-        keys[0].get(10): "Bot process killed!",
-
-        keys[1].get(0): u'\U000023F9',
-        keys[1].get(1): u'\U000025B6',
-        keys[1].get(2): u'\U0001F384',
-        keys[1].get(3): u'\U0001F56F',
-        keys[1].get(4): u'\U000023F0',
-        keys[1].get(5): u'\U0001F55C',
-        keys[1].get(6): u'\U0001F308',
-        keys[1].get(7): u'\U0001F3AA',
-        keys[1].get(8): u'\U0001F7E5',
-        keys[1].get(9): u'\U0001F7E6',
-        keys[1].get(10): u'\U0001F7E9',
-        keys[1].get(11): u'\U0001F7E8',
-        keys[1].get(12): u'\U0001F7E7',
-        keys[1].get(13): u'\U00002B1C',
-        keys[1].get(14): u'\U0001F7EA',
-        keys[1].get(15): u'\U0001F500',
-        keys[1].get(16): u'\U000026A1',
-        keys[1].get(17): u'\U000023F1',
-        keys[1].get(18): u'\U000023F2',
-        keys[1].get(19): u'\U0001F570',
-        keys[1].get(20): u'\U0001F501'
+        "name": "English with emoji",
+        txts["message"].get(0): txts["en"].get(0),
+        txts["message"].get(1): txts["en"].get(1),
+        txts["message"].get(2): txts["en"].get(2),
+        txts["message"].get(3): txts["en"].get(3),
+        txts["message"].get(4): txts["en"].get(4),
+        txts["message"].get(5): txts["en"].get(5),
+        txts["message"].get(6): txts["en"].get(6),
+        txts["message"].get(7): txts["en"].get(7),
+        txts["message"].get(8): txts["en"].get(8),
+        txts["message"].get(9): txts["en"].get(9),
+        txts["message"].get(10): txts["en"].get(10),
+        txts["command"].get(0): txts["emoji"].get(0),
+        txts["command"].get(1): txts["emoji"].get(1),
+        txts["command"].get(2): txts["emoji"].get(2),
+        txts["command"].get(3): txts["emoji"].get(3),
+        txts["command"].get(4): txts["emoji"].get(4),
+        txts["command"].get(5): txts["emoji"].get(5),
+        txts["command"].get(6): txts["emoji"].get(6),
+        txts["command"].get(7): txts["emoji"].get(7),
+        txts["command"].get(8): txts["emoji"].get(8),
+        txts["command"].get(9): txts["emoji"].get(9),
+        txts["command"].get(10): txts["emoji"].get(10),
+        txts["command"].get(11): txts["emoji"].get(11),
+        txts["command"].get(12): txts["emoji"].get(12),
+        txts["command"].get(13): txts["emoji"].get(13),
+        txts["command"].get(14): txts["emoji"].get(14),
+        txts["command"].get(15): txts["emoji"].get(15),
+        txts["command"].get(16): txts["emoji"].get(16),
+        txts["command"].get(17): txts["emoji"].get(17),
+        txts["command"].get(18): txts["emoji"].get(18),
+        txts["command"].get(19): txts["emoji"].get(19),
+        txts["command"].get(20): txts["emoji"].get(20),
+    },
+    "fr": {
+        "name": "French",
+        txts["message"].get(0): txts["fr"].get(0),
+        txts["message"].get(1): txts["fr"].get(1),
+        txts["message"].get(2): txts["fr"].get(2),
+        txts["message"].get(3): txts["fr"].get(3),
+        txts["message"].get(4): txts["fr"].get(4),
+        txts["message"].get(5): txts["fr"].get(5),
+        txts["message"].get(6): txts["fr"].get(6),
+        txts["message"].get(7): txts["fr"].get(7),
+        txts["message"].get(8): txts["fr"].get(8),
+        txts["message"].get(9): txts["fr"].get(9),
+        txts["message"].get(10): txts["fr"].get(10),
+        txts["command"].get(0): txts["fr"].get(11),
+        txts["command"].get(1): txts["fr"].get(12),
+        txts["command"].get(2): txts["fr"].get(13),
+        txts["command"].get(3): txts["fr"].get(14),
+        txts["command"].get(4): txts["fr"].get(15),
+        txts["command"].get(5): txts["fr"].get(16),
+        txts["command"].get(6): txts["fr"].get(17),
+        txts["command"].get(7): txts["fr"].get(18),
+        txts["command"].get(8): txts["fr"].get(19),
+        txts["command"].get(9): txts["fr"].get(20),
+        txts["command"].get(10): txts["fr"].get(21),
+        txts["command"].get(11): txts["fr"].get(22),
+        txts["command"].get(12): txts["fr"].get(23),
+        txts["command"].get(13): txts["fr"].get(24),
+        txts["command"].get(14): txts["fr"].get(25),
+        txts["command"].get(15): txts["fr"].get(26),
+        txts["command"].get(16): txts["fr"].get(27),
+        txts["command"].get(17): txts["fr"].get(28),
+        txts["command"].get(18): txts["fr"].get(29),
+        txts["command"].get(19): txts["fr"].get(30),
+        txts["command"].get(20): txts["fr"].get(31)
     }
-
 }
 
 
-def _set_language(lng='en'):
+def set_language(lng='en'):
     """
     Set chat language, default = English.
 
@@ -274,18 +371,18 @@ def _set_language(lng='en'):
     """
     global language
     if lng not in translation:
-        log.warning("Language key \'{0}\' not found, set default chat language!".format(lng))
+        LOG.warning("Language key \'{0}\' not found, set default chat language!".format(lng))
         language = 'en'
     else:
         language = lng
-    log.debug("Chat language: {0}".format((translation[language].get('name')).upper()))
+    LOG.info("Apart form service menu chat language is set to '{0}'.".format((translation[language].get('name'))))
 
 
-def _get_translations(key_index):
+def _get_translations(txts_index):
     """
     Load translations from dictionary.
 
-    :param key_index: 0 = messages, 1 = commands
+    :param txts_index: 0 = messages, 1 = commands
     :return: list of texts
     """
     global language, translations, text
@@ -293,25 +390,24 @@ def _get_translations(key_index):
     text = ""
 
     # noinspection PyShadowingNames
-    def generated_texts(i: int):
-        for k in keys[i].keys():
-            if isinstance(k, int):
-                text = translation[language].get(keys[i].get(k))
-                if i == 1:
-                    text = text.title()
-                log.debug("Load {0} ({1}:{2}) {3}".format(
-                    str(keys[i].get("name")), str(k), str(keys[i].get(k)), text.replace("\n", " ")))
-                yield text
+    def generated_texts(txt: str):
+        for k in txts[txt].keys():
+            text = translation[language].get(txts[txt].get(k))
+            if txt == "command":
+                text = text.title()
+            LOG.debug("Load {0} ({1}:{2}) {3}".format(
+                txt, str(k), str(txts[txt].get(k)), text.replace("\n", " ")))
+            yield text
 
     try:
-        for t in generated_texts(key_index):
+        for t in generated_texts(txts_index):
             translations.append(t)
         return translations
     except Exception as e:
-        log.error('Error while import from translations! ' + str(e))
+        LOG.error('Error while import from translations! ' + str(e))
 
 
-_set_language("de")
+set_language("de")
 wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed \
-    = _get_translations(0)
-commands = _get_translations(1)
+    = _get_translations("message")
+commands = _get_translations("command")
