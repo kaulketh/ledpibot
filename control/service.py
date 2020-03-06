@@ -100,7 +100,7 @@ def update_bot(log_msg: str):
     LOG.info(log_msg)
     from .update import Update
     if Update('develop').run():
-        reboot_device()
+        reboot_device('Update done.\n')
 
 
 menu = build_menu()
