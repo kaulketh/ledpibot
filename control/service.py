@@ -99,7 +99,7 @@ def kill_bot(log_msg: str=None, sig=signal.SIGTERM):
 def update_bot(log_msg: str):
     LOG.info(log_msg)
     from .update import Update
-    if Update('develop').run():
+    if Update().run():
         reboot_device('Update done.\n')
         return True
     else:
