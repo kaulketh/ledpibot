@@ -7,7 +7,6 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
 import os
-import sys
 
 import logger
 
@@ -28,14 +27,6 @@ class Update:
         self.root_folder = os.path.join(self.folder, '..')
         self.subs = [f for f in os.listdir(self.root_folder)]
 
-    # Execute bash command, assign default output (stdout 1 and stderr 2) to file, read in variable and get back
-    # noinspection PyMethodMayBeStatic
-    def _os_cmd(self, cmd: str) -> str:
-        os.system(cmd + ' > tmp 2>&1')
-        file = open('tmp', 'r')
-        data = file.read()
-        file.close()
-        return data.replace('\n', ' ')
 
     def run(self):
         self.log.info('Starting update...')
@@ -45,9 +36,9 @@ class Update:
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
             self.log.info('Copy files and folders...')
             for f in cloned_f:
-                self.log.debug(self._os_cmd('cp -rv ledpibot/' + f + ' /home/pi/bot/'))
+                os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
             self.log.info('Remove not needed files...')
-            self.log.debug(self._os_cmd(self.remove_clone))
+            os.system(self.remove_clone)
         except Exception as e:
             self.log.error('Update failure: ' + str(e))
             return False
