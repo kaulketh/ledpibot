@@ -22,7 +22,7 @@ class Update:
         self.save_secret = 'mv -v config/secret.py secret.py'
         self.restore_secret = 'mv -v secret.py config/secret.py'
         self.remove_clone = 'rm -rf ledpibot/'
-        self.clone = 'git clone -b ' + self.branch + ' https://github.com/kaulketh/ledpibot'
+        self.clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b '+ self.branch
         self.log = logger.get_logger(self.name)
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.root_folder = os.path.join(self.folder, '..')

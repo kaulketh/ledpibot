@@ -150,7 +150,6 @@ def _on_chat_message(msg):
         elif command == service.c_update:
             if service.update_bot(updated):
                 _send(chat_id, updated, reply_markup=rm_kb)
-
         elif command == service.c_test:
             _test(chat_id, BOT)
 
