@@ -27,7 +27,7 @@ class Update:
         self.log = logger.get_logger(self.name)
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.root_folder = os.path.join(self.folder, '..')
-        self.subfolders = [f for f in os.listdir(self.root_folder)]
+        self.subs = [f for f in os.listdir(self.root_folder)]
 
     # Execute bash command, assign default output (stdout 1 and stderr 2) to file, read in variable and get back
     # noinspection PyMethodMayBeStatic
@@ -41,21 +41,15 @@ class Update:
     def run(self):
         self.log.info('Starting update...')
         try:
-            self.log.info(self._os_cmd(self.save_secret))
-            self.log.info('Delete old folders.')
-            for f in self.subfolders:
-                if not f == "logs":
-                    self.log.info(self._os_cmd('rm -rfv ' + f + '/'))
             os.system(self.prepare)
-            self.log.info('Clone from repository')
+            self.log.info('Clone from repository...')
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
             self.log.info('Copy files and folders...')
             for f in cloned_f:
-                self.log.info(self._os_cmd('cp -rv ledpibot/' + f + ' /home/pi/bot/'))
+                self.log.debug(self._os_cmd('cp -rv ledpibot/' + f + ' /home/pi/bot/'))
             self.log.info('Remove not needed files...')
-            os.system(self.remove_clone)
-            self.log.info(self._os_cmd(self.restore_secret))
+            self.log.debug(self._os_cmd(self.remove_clone))
         except Exception as e:
             self.log.error('Update failure: ' + str(e))
             return False
@@ -63,4 +57,4 @@ class Update:
 
 
 if __name__ == '__main__':
-    Update(sys.argv[1]).run()
+    pass
