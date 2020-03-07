@@ -21,7 +21,6 @@ class Update:
             self.branch = branch
         self.save_secret = 'mv -v config/secret.py secret.py'
         self.restore_secret = 'mv -v secret.py config/secret.py'
-        self.prepare = 'touch tmp'
         self.remove_clone = 'rm -rf ledpibot/'
         self.clone = 'git clone -b ' + self.branch + ' https://github.com/kaulketh/ledpibot'
         self.log = logger.get_logger(self.name)
@@ -41,7 +40,6 @@ class Update:
     def run(self):
         self.log.info('Starting update...')
         try:
-            os.system(self.prepare)
             self.log.info('Clone from repository...')
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]

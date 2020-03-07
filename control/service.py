@@ -101,6 +101,10 @@ def update_bot(log_msg: str):
     from .update import Update
     if Update('develop').run():
         reboot_device('Update done.\n')
+        return True
+    else:
+        LOG.error('Update failed.')
+        return False
 
 
 menu = build_menu()
