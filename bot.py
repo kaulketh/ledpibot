@@ -17,7 +17,7 @@ import logger
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed
+    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed, updated
 from control import run_thread, stop_threads, service
 
 LOG = logger.get_logger('LedPiBot')
@@ -147,6 +147,9 @@ def _on_chat_message(msg):
         elif command == service.c_kill:
             _send(chat_id, killed, reply_markup=rm_kb)
             service.kill_bot(killed)
+        elif command == service.c_update:
+            _send(chat_id, updated, reply_markup=rm_kb)
+            service.update_bot(updated)
         elif command == service.c_test:
             _test(chat_id, BOT)
 

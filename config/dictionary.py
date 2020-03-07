@@ -30,7 +30,8 @@ txts = {
         7: "stopped",
         8: "standby",
         9: "stop_msg",
-        10: "killed"
+        10: "killed",
+        11: "updated"
     },
     "command": {
         0: "stop",
@@ -87,7 +88,8 @@ txts = {
         28: "uhr 3",
         29: "uhr 4",
         30: "uhr 5",
-        31: "farben 2"
+        31: "farben 2",
+        32: "Bot-Update, Reboot folgt."
     },
     "emoji": {
         0: u'\U000023F9',
@@ -144,7 +146,8 @@ txts = {
         28: "clock 3",
         29: "clock 4",
         30: "clock 5",
-        31: "colors 2"
+        31: "colors 2",
+        32: "Bot update, reboot shortly."
     },
     "fr": {
         0: "`Bonjour {1}, c'est un bot privé!\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
@@ -178,7 +181,8 @@ txts = {
         28: "montre 3",
         29: "montre 4",
         30: "montre 5",
-        31: "couleurs 2"
+        31: "couleurs 2",
+        32: "Mise à jour, le bot est redémarré."
     }
 }
 
@@ -216,7 +220,8 @@ translation = {
         txts["command"].get(17): txts["de"].get(28),
         txts["command"].get(18): txts["de"].get(29),
         txts["command"].get(19): txts["de"].get(30),
-        txts["command"].get(20): txts["de"].get(31)
+        txts["command"].get(20): txts["de"].get(31),
+        txts["message"].get(11): txts["de"].get(32)
 
     },
     "de_emoji": {
@@ -253,6 +258,7 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
+        txts["message"].get(11): txts["de"].get(32)
     },
     "en": {
         "name": "English",
@@ -287,7 +293,8 @@ translation = {
         txts["command"].get(17): txts["en"].get(28),
         txts["command"].get(18): txts["en"].get(29),
         txts["command"].get(19): txts["en"].get(30),
-        txts["command"].get(20): txts["en"].get(31)
+        txts["command"].get(20): txts["en"].get(31),
+        txts["message"].get(11): txts["en"].get(32)
     },
     "en_emoji": {
         "name": "English with emoji",
@@ -323,6 +330,7 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
+        txts["message"].get(11): txts["en"].get(32)
     },
     "fr": {
         "name": "French",
@@ -357,7 +365,8 @@ translation = {
         txts["command"].get(17): txts["fr"].get(28),
         txts["command"].get(18): txts["fr"].get(29),
         txts["command"].get(19): txts["fr"].get(30),
-        txts["command"].get(20): txts["fr"].get(31)
+        txts["command"].get(20): txts["fr"].get(31),
+        txts["message"].get(11): txts["fr"].get(32)
     }
 }
 
@@ -382,7 +391,7 @@ def _get_translations(txts_index):
     """
     Load translations from dictionary.
 
-    :param txts_index: 0 = messages, 1 = commands
+    :param txts_index: messages, commands
     :return: list of texts
     """
     global language, translations, text
@@ -408,6 +417,6 @@ def _get_translations(txts_index):
 
 
 set_language("de")
-wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed \
+wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed, updated \
     = _get_translations("message")
 commands = _get_translations("command")
