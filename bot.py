@@ -148,8 +148,8 @@ def _on_chat_message(msg):
             _send(chat_id, killed, reply_markup=rm_kb)
             service.kill_bot(killed)
         elif command == service.c_update:
-            if service.update_bot(updated):
-                _send(chat_id, updated, reply_markup=rm_kb)
+            _send(chat_id, updated, reply_markup=rm_kb)
+            service.update_bot(updated)
         elif command == service.c_test:
             _test(chat_id, BOT)
 
