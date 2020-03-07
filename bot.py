@@ -135,23 +135,23 @@ def _on_chat_message(msg):
         elif command == ('/' + service.NAME.lower()):
             if _stop(chat_id):
                 _send(chat_id, service.menu, reply_markup=rm_kb)
-        elif command == service.c_rotate:
-            service.log_rotate_bot(rotated)
-            _send(chat_id, rotated, reply_markup=rm_kb)
+        # elif command == service.c_rotate:
+        #     service.log_rotate_bot(rotated)
+        #     _send(chat_id, rotated, reply_markup=rm_kb)
         elif command == service.c_reboot:
             _send(chat_id, rebooted, reply_markup=rm_kb)
             service.reboot_device(rebooted)
         elif command == service.c_system:
             _send(chat_id, service.system_usage(), reply_markup=rm_kb)
             LOG.info(service.system_usage().replace("\n", " "))
-        elif command == service.c_kill:
-            _send(chat_id, killed, reply_markup=rm_kb)
-            service.kill_bot(killed)
+        # elif command == service.c_kill:
+        #     _send(chat_id, killed, reply_markup=rm_kb)
+        #     service.kill_bot(killed)
         elif command == service.c_update:
             _send(chat_id, updated, reply_markup=rm_kb)
             service.update_bot(updated)
-        elif command == service.c_test:
-            _test(chat_id, BOT)
+        # elif command == service.c_test:
+        #     _test(chat_id, BOT)
 
         # all other commands
         elif any(c for c in commands if (command == c)):

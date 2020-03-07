@@ -30,7 +30,7 @@ class Update:
     def run(self):
         self.log.info('Starting update...')
         try:
-            self.log.info('Clone from repository...')
+            self.log.info('Clone branch \''+ self.branch +'\' from Github repository...')
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
             self.log.info('Copy files and folders...')

@@ -33,12 +33,12 @@ c_kill = "/serviceKill"
 c_update = "/serviceUpdate"
 
 menu_dictionary = {
-    0: c_kill,
+    # 0: c_kill,
     1: c_reboot,
     2: c_system,
-    3: c_rotate,
+    # 3: c_rotate,
     4: c_update,
-    5: c_test
+    # 5: c_test
 }
 
 
