@@ -67,7 +67,7 @@ def system_usage():
         .replace("b'", "").replace("'", "").replace("\\n", "")
 
 
-def reboot_device(log_msg: str=None):
+def reboot_device(log_msg: str = None):
     try:
         LOG.info(log_msg)
         os.system(reboot)
@@ -83,7 +83,7 @@ def log_rotate_bot(log_msg: str):
         LOG.error(str(e))
 
 
-def kill_bot(log_msg: str=None, sig=signal.SIGTERM):
+def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
     pid = os.getpid()
     if log_msg is not None:
         LOG.info(log_msg)
