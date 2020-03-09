@@ -53,6 +53,7 @@ def run_clock2(strip):
                 else:
                     strip.setPixelColorRGB(minute, mG, mR, mB)
                 strip.show()
+                time.sleep(0.2)
                 minute = _get_pointer(strip)[1]
             _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute - 1, backward=True)
             clear(strip)
