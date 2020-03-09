@@ -44,9 +44,11 @@ def run_clock3(stripe):
             _hour(led_for_hour, stripe)
 
             stripe.show()
+            time.sleep(0.2)
             if leds_per_2500ms == stripe.numPixels():
-                time.sleep(1.5)
+                time.sleep(1.3)
                 clear(stripe)
+
 
         except KeyboardInterrupt:
             LOG.warn("KeyboardInterrupt.")

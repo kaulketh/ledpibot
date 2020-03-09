@@ -33,27 +33,27 @@ def run_clock2(strip):
         try:
             hour, minute, next_minute = _get_pointer(strip)
             while not minute == next_minute:
-                for i in range(0, strip.numPixels(), 1):
-                    # hour
-                    if 12 < minute <= 23:
-                        strip.setPixelColorRGB(hour, hG, hR, hB)
-                        strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
-                    else:
-                        strip.setPixelColorRGB(hour, hG, hR, hB)
-                    # minute
-                    if minute == hour:
-                        if 12 < minute < strip.numPixels():
-                            if hour <= 23:
-                                strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-                                strip.setPixelColorRGB(minute, mG, mR, mB)
-                            else:
-                                strip.setPixelColorRGB(0, hG, hR, hB)
-                                strip.setPixelColorRGB(minute - 1, mG, mR, mB)
+                # hour
+                if 12 < minute <= 23:
+                    strip.setPixelColorRGB(hour, hG, hR, hB)
+                    strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
+                else:
+                    strip.setPixelColorRGB(hour, hG, hR, hB)
+                # minute
+                if minute == hour:
+                    if 12 < minute < strip.numPixels():
+                        if hour <= 23:
+                            strip.setPixelColorRGB(hour + 1, hG, hR, hB)
+                            strip.setPixelColorRGB(minute, mG, mR, mB)
                         else:
-                            strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                            strip.setPixelColorRGB(0, hG, hR, hB)
+                            strip.setPixelColorRGB(minute - 1, mG, mR, mB)
                     else:
-                        strip.setPixelColorRGB(minute, mG, mR, mB)
+                        strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                else:
+                    strip.setPixelColorRGB(minute, mG, mR, mB)
                 strip.show()
+                time.sleep(0.2)
                 minute = _get_pointer(strip)[1]
             _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute - 1, backward=True)
             clear(strip)
