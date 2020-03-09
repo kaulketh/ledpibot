@@ -33,12 +33,12 @@ c_kill = "/serviceKill"
 c_update = "/serviceUpdate"
 
 menu_dictionary = {
-    0: c_kill,
+    # 0: c_kill,
     1: c_reboot,
     2: c_system,
-    3: c_rotate,
+    # 3: c_rotate,
     4: c_update,
-    5: c_test
+    # 5: c_test
 }
 
 
@@ -67,7 +67,7 @@ def system_usage():
         .replace("b'", "").replace("'", "").replace("\\n", "")
 
 
-def reboot_device(log_msg: str=None):
+def reboot_device(log_msg: str = None):
     try:
         LOG.info(log_msg)
         os.system(reboot)
@@ -83,7 +83,7 @@ def log_rotate_bot(log_msg: str):
         LOG.error(str(e))
 
 
-def kill_bot(log_msg: str=None, sig=signal.SIGTERM):
+def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
     pid = os.getpid()
     if log_msg is not None:
         LOG.info(log_msg)
