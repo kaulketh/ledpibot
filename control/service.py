@@ -9,18 +9,21 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
+import datetime
 import os
 import signal
 import subprocess
+import time
 
 import logger
+from control import CountdownThread
 
 NAME = "Service"
 LOG = logger.get_logger(NAME)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'
-pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
+get_pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
 
 line_break = "\n"
 menu_header = NAME + " functions:"
@@ -105,6 +108,38 @@ def update_bot(log_msg: str):
     else:
         LOG.error('Update failed.')
         return False
+
+
+def init_auto_reboot():
+    name = "Auto reboot"
+
+    def is_midnight():
+        hour = datetime.datetime.now().hour
+        minute = datetime.datetime.now().minute
+        sec = datetime.datetime.now().second
+        about_midnight = ((hour == minute == 0) and (0 <= sec <= 5))
+        # for test only
+        # anytime = (hour == 21 and minute == 30 and sec == 0)
+        # return anytime
+        return about_midnight
+
+    class AutoReboot(CountdownThread):
+        def __init__(self):
+            super(AutoReboot, self).__init__(None, None, name=name, n=0)
+
+        def _process(self):
+            pass
+
+        def run(self):
+            LOG.info("Auto reboot initialized for midnight")
+            while not is_midnight():
+                time.sleep(2)
+            from bot import external_request
+            external_request(name)
+            reboot_device(name)
+
+    AutoReboot().start()
+    return
 
 
 menu = build_menu()

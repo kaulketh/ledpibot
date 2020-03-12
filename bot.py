@@ -176,6 +176,7 @@ def external_request(msg, chat_id=None):
 def start_bot():
     _ready_to_use()
     MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
+    service.init_auto_reboot()
     while True:
         try:
             signal.pause()
