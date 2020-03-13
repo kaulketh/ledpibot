@@ -101,14 +101,17 @@ def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
 
 
 def update_bot(log_msg: str):
-    LOG.info(log_msg)
-    from .update import Update
-    if Update('develop').run():
-        reboot_device('Update done.\n')
-        return True
-    else:
-        LOG.error('Update failed.')
-        return False
+    try:
+        LOG.info(log_msg)
+        from .update import Update
+        if Update('develop').run():
+            reboot_device('Update done.\n')
+            return True
+        else:
+            LOG.warning('Update failed.')
+            return False
+    except Exception as e:
+        LOG.error(str(e))
 
 
 def init_auto_reboot():
@@ -134,11 +137,17 @@ def init_auto_reboot():
             external_request(rebooted)
             reboot_device("auto reboot")
 
-    AutoReboot().start()
-    return
+    try:
+        AutoReboot().start()
+        return
+    except Exception as e:
+        LOG.error(str(e))
 
 
-menu = build_menu()
+try:
+    menu = build_menu()
+except Exception as ex:
+    LOG.error(str(ex))
 
 if __name__ == '__main__':
     pass
