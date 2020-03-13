@@ -7,7 +7,7 @@ Service functions
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 import datetime
 import os
@@ -37,12 +37,11 @@ c_kill = "/serviceKill"
 c_update = "/serviceUpdate"
 
 menu_dictionary = {
-    # 0: c_kill,
+    0: c_kill,
     1: c_reboot,
-    2: c_system,
-    # 3: c_rotate,
-    4: c_update,
-    # 5: c_test
+    2: c_rotate,
+    3: c_system,
+    4: c_update
 }
 
 
@@ -104,7 +103,7 @@ def update_bot(log_msg: str):
     try:
         LOG.info(log_msg)
         from .update import Update
-        if Update('develop').run():
+        if Update().run():
             reboot_device('Update done.\n')
             return True
         else:

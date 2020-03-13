@@ -6,7 +6,7 @@ Configurations and settings
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).

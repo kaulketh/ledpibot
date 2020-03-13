@@ -4,7 +4,7 @@
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 import codecs
 import signal
@@ -17,7 +17,7 @@ import logger
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated
+    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated, killed, rotated
 from control import run_thread, stop_threads, service
 
 LOG = logger.get_logger('LedPiBot')
@@ -135,24 +135,21 @@ def _on_chat_message(msg):
         elif command == ('/' + service.NAME.lower()):
             if _stop(chat_id):
                 _send(chat_id, service.menu, reply_markup=rm_kb)
-        # elif command == service.c_rotate:
-        #     service.log_rotate_bot(rotated)
-        #     _send(chat_id, rotated, reply_markup=rm_kb)
+        elif command == service.c_rotate:
+            service.log_rotate_bot(rotated)
+            _send(chat_id, rotated, reply_markup=rm_kb)
         elif command == service.c_reboot:
             _send(chat_id, rebooted, reply_markup=rm_kb)
             service.reboot_device(rebooted)
         elif command == service.c_system:
             _send(chat_id, service.system_usage(), reply_markup=rm_kb)
             LOG.info(service.system_usage().replace("\n", " "))
-        # elif command == service.c_kill:
-        #     _send(chat_id, killed, reply_markup=rm_kb)
-        #     service.kill_bot(killed)
+        elif command == service.c_kill:
+            _send(chat_id, killed, reply_markup=rm_kb)
+            service.kill_bot(killed)
         elif command == service.c_update:
             _send(chat_id, updated, reply_markup=rm_kb)
             service.update_bot(updated)
-        # elif command == service.c_test:
-        #     _test(chat_id, BOT)
-
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
@@ -186,11 +183,6 @@ def start_bot():
         except Exception as e:
             LOG.error('An error occurs: ' + str(e))
             exit()
-
-
-# noinspection PyShadowingNames,PyUnusedLocal
-def _test(chat_id=None, bot=None):
-    pass
 
 
 # endregion
