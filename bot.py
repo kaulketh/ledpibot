@@ -17,7 +17,7 @@ import logger
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, rotated, stopped, stop_msg, killed, updated
+    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated
 from control import run_thread, stop_threads, service
 
 LOG = logger.get_logger('LedPiBot')
@@ -176,6 +176,7 @@ def external_request(msg, chat_id=None):
 def start_bot():
     _ready_to_use()
     MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
+    service.init_auto_reboot()
     while True:
         try:
             signal.pause()

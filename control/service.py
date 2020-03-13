@@ -9,18 +9,22 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Development"
 
+import datetime
 import os
 import signal
 import subprocess
+import time
 
 import logger
+from config import rebooted
+from control import CountdownThread
 
 NAME = "Service"
 LOG = logger.get_logger(NAME)
 
 log_rotate = 'logrotate -f /etc/logrotate.conf &'
 reboot = 'shutdown -r now'
-pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
+get_pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
 
 line_break = "\n"
 menu_header = NAME + " functions:"
@@ -97,17 +101,53 @@ def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
 
 
 def update_bot(log_msg: str):
-    LOG.info(log_msg)
-    from .update import Update
-    if Update().run():
-        reboot_device('Update done.\n')
-        return True
-    else:
-        LOG.error('Update failed.')
-        return False
+    try:
+        LOG.info(log_msg)
+        from .update import Update
+        if Update('develop').run():
+            reboot_device('Update done.\n')
+            return True
+        else:
+            LOG.warning('Update failed.')
+            return False
+    except Exception as e:
+        LOG.error(str(e))
 
 
-menu = build_menu()
+def init_auto_reboot():
+    def is_midnight():
+        hour = datetime.datetime.now().hour
+        minute = datetime.datetime.now().minute
+        sec = datetime.datetime.now().second
+        about_midnight = (hour == 0 and minute == 0 and sec <= 5)
+        return about_midnight
+
+    class AutoReboot(CountdownThread):
+        def __init__(self):
+            super(AutoReboot, self).__init__(None, None, name="auto reboot", n=0)
+
+        def _process(self):
+            pass
+
+        def run(self):
+            LOG.info("Auto reboot initialized for midnight.")
+            while not is_midnight():
+                time.sleep(2)
+            from bot import external_request
+            external_request(rebooted)
+            reboot_device("auto reboot")
+
+    try:
+        AutoReboot().start()
+        return
+    except Exception as e:
+        LOG.error(str(e))
+
+
+try:
+    menu = build_menu()
+except Exception as ex:
+    LOG.error(str(ex))
 
 if __name__ == '__main__':
     pass
