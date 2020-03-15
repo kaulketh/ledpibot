@@ -33,7 +33,7 @@ class AutoReboot(CountdownThread):
         pass
 
     def run(self):
-        LOG.info("Auto reboot initialized for midnight.")
+        LOG.info("Auto reboot initialized for " + str(self.t) + " o'clock.")
         while not is_time(self.t):
             time.sleep(2)
         from bot import external_request
