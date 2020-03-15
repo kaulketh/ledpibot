@@ -25,7 +25,7 @@ def is_time(t: int = 0):
 
 
 class AutoReboot(CountdownThread):
-    def __init__(self, t):
+    def __init__(self, t: int):
         self.t = t
         super(AutoReboot, self).__init__(None, None, name=NAME, n=0)
 
@@ -33,7 +33,7 @@ class AutoReboot(CountdownThread):
         pass
 
     def run(self):
-        LOG.info("Auto reboot initialized for " + str(self.t) + " o'clock.")
+        LOG.info(f"Auto reboot initialized for {self.t}:00:00.")
         while not is_time(self.t):
             time.sleep(2)
         from bot import external_request

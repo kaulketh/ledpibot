@@ -54,7 +54,7 @@ class Colorizer(object):
         if key in self.colors.keys():
             return self.colors.get(key)
         else:
-            raise Exception('Key \'' + str(self.color) + '\' not defined in ' + self.name + '.colors')
+            raise Exception(f'Key \'{self.color}\' not defined in {self.name} colors.')
 
     def start(self, brightness=None):
         try:
@@ -75,7 +75,7 @@ class Colorizer(object):
             exit()
 
         except Exception as e:
-            self.log.error("An error occurs: " + str(e))
+            self.log.error(f"An error occurs: {e}")
             exit()
 
 

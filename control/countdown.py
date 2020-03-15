@@ -34,9 +34,7 @@ class CountdownThread(Thread):
             self._name = name
 
     def _process(self):
-        LOG.info(
-            "Thread '{0}' initialized, start process '{1}' for {2} seconds".format(
-                str(self._name), self._function, str(self.n)))
+        LOG.info(f"Thread '{self._name}' initialized, start process '{self._function}' for {self.n} seconds")
         func_p = Process(target=self._function, name=self._name, args=(self._strip,))
         func_p.start()
         return func_p
@@ -49,7 +47,7 @@ class CountdownThread(Thread):
             time.sleep(1)
         if self.n <= 0:
             from bot import external_request
-            LOG.info("{0}: {1}".format(EXPIRED, str(self._function)))
+            LOG.info(f"{EXPIRED}: {self._function}")
             external_request(standby)
         p.terminate()
         clear(self._strip)
@@ -58,7 +56,7 @@ class CountdownThread(Thread):
 
     def stop(self):
         self.do_run = False
-        LOG.info("{0}: {1}".format(STOPPED, str(self._function)))
+        LOG.info(f"{STOPPED}: {self._function}")
 
     @property
     def is_running(self) -> bool:

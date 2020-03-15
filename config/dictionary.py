@@ -60,12 +60,12 @@ txts = {
         0: "`Hallo {1}, dies ist ein privater Bot!\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
         1: "* Nicht erlaubt für diesen Bot\\! *",
         2: "Bitte triff eine Auswahl, {0}.",
-        3: "*{0}* läuft für maximal " + str(int(STANDBY_MINUTES)) + " Minuten\\.",
+        3: "*{0}* läuft für maximal " + str(STANDBY_MINUTES) + " Minuten\\.",
         4: "Bot ist einsatzbereit.",
         5: "Gerät wird neu gestartet.",
         6: "Logrotate manuell ausgeführt.",
         7: "Bot angehalten!",
-        8: "Gestoppt, automatischer Standby nach " + str(int(STANDBY_MINUTES)) + " Minuten.\nBitte Neustart!",
+        8: "Gestoppt, automatischer Standby nach " + str(STANDBY_MINUTES) + " Minuten.\nBitte Neustart!",
         9: "Alles gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
         11: "stop",
@@ -118,12 +118,12 @@ txts = {
         0: "`Hello {1}, this is a private bot!\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
         1: "* Not allowed for this bot\\! *",
         2: "Please make a suitable selection, {0}!",
-        3: "*{0}* was started for a maximum of " + str(int(STANDBY_MINUTES)) + " minutes\\.",
+        3: "*{0}* was started for a maximum of " + str(STANDBY_MINUTES) + " minutes\\.",
         4: "Bot ready for use.",
         5: "Device rebooted.",
         6: "Logrotate executed manually.",
         7: "Bot stopped.",
-        8: "Stopped, automatic standby after " + str(int(STANDBY_MINUTES)) + " minutes.\nPlease restart!",
+        8: "Stopped, automatic standby after " + str(STANDBY_MINUTES) + " minutes.\nPlease restart!",
         9: "Everything stopped.",
         10: "Bot process killed!",
         11: "stop",
@@ -153,12 +153,12 @@ txts = {
         0: "`Bonjour {1}, c'est un bot privé!\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
         1: "* Non autorisé pour ce bot\\! *",
         2: "Veuillez faire une sélection, {0}.",
-        3: "*{0}* dure " + str(int(STANDBY_MINUTES)) + " minutes maximum\\.",
+        3: "*{0}* dure " + str(STANDBY_MINUTES) + " minutes maximum\\.",
         4: "Le bot est prêt à l'emploi.",
         5: "L'appareil est redémarré.",
         6: "Logrotate exécuté manuellement.",
         7: "Bot arrêté!",
-        8: "Arrêt, mise en veille automatique après " + str(int(STANDBY_MINUTES)) + " minutes.\nVeuillez redémarrer!",
+        8: "Arrêt, mise en veille automatique après " + str(STANDBY_MINUTES) + " minutes.\nVeuillez redémarrer!",
         9: "Tout s'est arrêté!",
         10: "Processus de bot complet annulé!",
         11: "stop",
@@ -380,11 +380,11 @@ def set_language(lng='en'):
     """
     global language
     if lng not in translation:
-        LOG.warning("Language key \'{0}\' not found, set default chat language!".format(lng))
+        LOG.warning(f"Language key \'{lng}\' not found, set default chat language!")
         language = 'en'
     else:
         language = lng
-    LOG.info("Apart form service menu chat language is set to '{0}'.".format((translation[language].get('name'))))
+    LOG.info(f"Apart form service menu chat language is set to '{(translation[language].get('name'))}'.")
 
 
 def _get_translations(txts_index):
@@ -404,8 +404,8 @@ def _get_translations(txts_index):
             text = translation[language].get(txts[txt].get(k))
             if txt == "command":
                 text = text.title()
-            LOG.debug("Load {0} ({1}:{2}) {3}".format(
-                txt, str(k), str(txts[txt].get(k)), text.replace("\n", " ")))
+            newline, space = ("\n", " ")
+            LOG.debug(f"Load {txt} ({k}:{txts[txt].get(k)}) {text.replace(newline, space)}")
             yield text
 
     try:
@@ -413,7 +413,7 @@ def _get_translations(txts_index):
             translations.append(t)
         return translations
     except Exception as e:
-        LOG.error('Error while import from translations! ' + str(e))
+        LOG.error(f"Error while import from translations: {e}")
 
 
 set_language("de")

@@ -72,7 +72,7 @@ def reboot_device(log_msg: str = None):
         LOG.info(log_msg)
         os.system(reboot)
     except Exception as e:
-        LOG.error(str(e))
+        LOG.error(f"{e}")
 
 
 def log_rotate_bot(log_msg: str):
@@ -80,7 +80,7 @@ def log_rotate_bot(log_msg: str):
         LOG.info(log_msg)
         os.system(log_rotate)
     except Exception as e:
-        LOG.error(str(e))
+        LOG.error(f"{e}")
 
 
 def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
@@ -89,9 +89,9 @@ def kill_bot(log_msg: str = None, sig=signal.SIGTERM):
         LOG.info(log_msg)
     try:
         result = 0
-        LOG.debug('Command "kill {0}" returned {1}\n'.format(pid, os.kill(pid, sig)))
+        LOG.debug(f"Command \"kill {pid}\" returned {os.kill(pid, sig)}\n")
     except Exception as e:
-        LOG.error('Command "kill {0}" raised exception {1}\n'.format(pid, e))
+        LOG.error(f"Command \"kill {pid}\" raised exception {e}\n")
         result = e
     return result == 0
 
@@ -107,7 +107,7 @@ def update_bot(log_msg: str):
             LOG.warning('Update failed.')
             return False
     except Exception as e:
-        LOG.error(str(e))
+        LOG.error(f"{e}")
 
 
 def init_auto_reboot(time):
@@ -115,13 +115,13 @@ def init_auto_reboot(time):
         AutoReboot(time).start()
         return
     except Exception as e:
-        LOG.error(str(e))
+        LOG.error(f"{e}")
 
 
 try:
     menu = build_menu()
 except Exception as ex:
-    LOG.error(str(ex))
+    LOG.error(f"{ex}")
 
 if __name__ == '__main__':
     pass

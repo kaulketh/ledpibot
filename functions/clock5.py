@@ -95,7 +95,7 @@ def run_clock5(strip):
             LOG.warn("KeyboardInterrupt.")
             exit()
         except Exception as e:
-            LOG.error("Any error occurs: " + str(e))
+            LOG.error(f"Any error occurs: {e}")
             exit()
     clear(strip)
 

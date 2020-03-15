@@ -90,7 +90,8 @@ def run_advent(strip):
             _december_cycle(strip, month)
         else:
             while i > 0:
-                LOG.warn("Wrong month for xmas/advent animation, it\'s {0}!".format(time.strftime("%B")))
+                m = time.strftime("%B")
+                LOG.warn(f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
             theater_chase(strip, Color(0, 15, 0))
     clear(strip)

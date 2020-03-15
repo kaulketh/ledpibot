@@ -30,7 +30,7 @@ class Update:
     def run(self):
         self.log.info('Starting update...')
         try:
-            self.log.info('Clone branch \'' + self.branch + '\' from Github repository...')
+            self.log.info(f'Clone branch \'{self.branch}\' from Github repository...')
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
             self.log.info('Copy files and folders...')
@@ -39,7 +39,7 @@ class Update:
             self.log.info('Remove not needed files...')
             os.system(self.remove_clone)
         except Exception as e:
-            self.log.error('Update failure: ' + str(e))
+            self.log.error(f'Update failure: {e}')
             return False
         return True
 

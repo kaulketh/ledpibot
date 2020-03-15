@@ -39,7 +39,7 @@ def _build_dictionary():
     for i in range(len(commands)):
         f = functions[i]
         dictionary[commands[i]] = f
-        LOG.debug('Added ' + str(i) + ':' + str(f))
+        LOG.debug(f'Added {i} : {f}')
     return dictionary
 
 

@@ -64,9 +64,7 @@ def _ready_to_use():
 
 # noinspection PyShadowingNames
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    LOG.debug(
-        "Message posted: {0}|{1}|{2}|{3}".format(
-            str(chat_id), text, str(reply_markup), str(parse_mode)).replace("\n", " "))
+    LOG.debug(f"Message posted: {chat_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
     return BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
 
@@ -76,8 +74,8 @@ def _reply_wrong_id(chat_id, msg):
     first_name = msg['from']['first_name']
     last_name = msg['from']['last_name']
     username = msg['from']['username']
+    log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    log_msg = 'Unauthorized access: ID {0} User:{1}, {2} {3} '.format(chat_id, username, first_name, last_name)
     _send("Attention! " + access.thk, log_msg)
     LOG.warning(log_msg)
 
@@ -86,7 +84,7 @@ def _reply_wrong_id(chat_id, msg):
 def _reply_wrong_command(chat_id, content):
     try:
         got = str(codecs.encode(content, 'utf-8')).replace('b', '')
-        raise Exception('Not allowed input: ' + got)
+        raise Exception(f'Not allowed input: {got}')
     except Exception as ex:
         _send(chat_id, not_allowed, parse_mode='MarkdownV2')
         LOG.warning(str(ex))
@@ -117,7 +115,7 @@ def _on_chat_message(msg):
 
     if content_type == 'text':
         command = msg['text']
-        LOG.info('Requested: ' + command)
+        LOG.info(f'Requested: {command}')
         # /start
         if command == "/start":
             _send(chat_id, pls_select.format(msg['from']['first_name']))
@@ -183,7 +181,7 @@ def start_bot():
             LOG.warning('Program interrupted')
             exit()
         except Exception as e:
-            LOG.error('An error occurs: ' + str(e))
+            LOG.error(f"Any error occurs: {e}")
             exit()
 
 

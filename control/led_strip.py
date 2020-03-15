@@ -33,7 +33,6 @@ def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
     else:
         s.setBrightness(LED_NIGHT_BRIGHTNESS)
     b = s.getBrightness()
-    # log.debug('Set brightness to {0}'.format(str(b)))
     return now, b
 
 
@@ -43,10 +42,10 @@ def get_strip():
 
     :return: NeoPixel/WS281x LED display/strip as s
     """
-    LOG.debug("Create LED Strip: "
-              "COUNT:{0}, PIN:{1}, FREQ:{2}, DMA:{3}, INVERT:{4}, BRIGHTN.:{5}"
-              .format(str(LED_COUNT), str(LED_PIN), str(LED_FREQ_HZ), str(LED_DMA), str(LED_INVERT),
-                      str(LED_BRIGHTNESS)))
+    LOG.debug(
+        f"Create LED Strip: "
+        f"COUNT:{LED_COUNT}, PIN:{LED_PIN}, FREQ:{LED_FREQ_HZ}, "
+        f"DMA:{LED_DMA}, INVERT:{LED_INVERT}, BRIGHTN.:{LED_BRIGHTNESS}")
     s = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
     LOG.debug("Initialize " + str(s))
     s.begin()
