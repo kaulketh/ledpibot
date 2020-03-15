@@ -7,7 +7,7 @@ Control light functions and effects
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 import time
 from multiprocessing import Process

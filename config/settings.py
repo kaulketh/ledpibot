@@ -6,7 +6,7 @@ Configurations and settings
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 AUTO_REBOOT_ENABLED = True
 AUTO_REBOOT_CLOCK_TIME = 1

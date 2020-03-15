@@ -8,7 +8,7 @@ for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
-__status__ = "Development"
+__status__ = "Production"
 
 import logger
 from .settings import STANDBY_MINUTES
