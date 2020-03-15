@@ -16,16 +16,17 @@ NAME = "Auto reboot"
 LOG = logger.get_logger(NAME)
 
 
-def is_midnight():
+def is_time(t: int = 0):
     hour = datetime.datetime.now().hour
     minute = datetime.datetime.now().minute
     sec = datetime.datetime.now().second
-    about_midnight = (hour == 0 and minute == 0 and sec <= 5)
-    return about_midnight
+    about_time = (hour == t and minute == 0 and sec <= 5)
+    return about_time
 
 
 class AutoReboot(CountdownThread):
-    def __init__(self):
+    def __init__(self, t):
+        self.t = t
         super(AutoReboot, self).__init__(None, None, name=NAME, n=0)
 
     def _process(self):
@@ -33,7 +34,7 @@ class AutoReboot(CountdownThread):
 
     def run(self):
         LOG.info("Auto reboot initialized for midnight.")
-        while not is_midnight():
+        while not is_time(self.t):
             time.sleep(2)
         from bot import external_request
         from config import rebooted

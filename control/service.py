@@ -111,9 +111,9 @@ def update_bot(log_msg: str):
         LOG.error(str(e))
 
 
-def init_auto_reboot():
+def init_auto_reboot(time):
     try:
-        AutoReboot().start()
+        AutoReboot(time).start()
         return
     except Exception as e:
         LOG.error(str(e))
