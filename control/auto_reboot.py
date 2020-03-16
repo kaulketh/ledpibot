@@ -24,7 +24,7 @@ class AutoReboot(CountdownThread):
 
     def run(self):
         self.log.info(f"{self.name} initialized for {self._hour}:00.")
-        while not self._time_reached:
+        while not self.time_reached:
             time.sleep(2)
         from bot import external_request
         from config import rebooted
@@ -33,9 +33,8 @@ class AutoReboot(CountdownThread):
         reboot_device(self.name)
 
     @property
-    def _time_reached(self):
+    def time_reached(self):
         now = datetime.datetime.now()
-        print(now)
         return now.hour == self._hour and now.minute == 0 and now.second <= 5
 
 

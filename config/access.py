@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# config/access.py
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"

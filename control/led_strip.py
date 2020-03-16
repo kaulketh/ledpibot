@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
-LED-strip
-"""
+
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
@@ -53,3 +51,6 @@ def get_strip():
 
 
 strip = get_strip()
+
+if __name__ == '__main__':
+    pass
