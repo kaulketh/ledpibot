@@ -15,3 +15,6 @@ acces_token_to_github = secret.acces_token_to_github
 annib = secret.annib
 thk = secret.thk
 token = secret.token
+
+if __name__ == '__main__':
+    pass

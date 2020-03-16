@@ -14,7 +14,7 @@ import logger
 from control.auto_reboot import AutoReboot
 
 NAME = "Service"
-LOG = logger.get_logger(NAME)
+LOG = logger.get_logger(__name__)
 
 log_rotate = "logrotate -f /etc/logrotate.conf &"
 reboot = "shutdown -r now"

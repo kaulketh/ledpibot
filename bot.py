@@ -21,7 +21,7 @@ from config import \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 
-LOG = logger.get_logger('LedPiBot')
+LOG = logger.get_logger("LedPiBot")
 BOT = telepot.Bot(token)
 
 admins = [access.thk, access.annib]

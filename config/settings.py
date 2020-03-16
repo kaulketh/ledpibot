@@ -29,3 +29,6 @@ CLOCK_SECOND_COLOR = (92, 67, 6)
 CLOCK_HOUR_COLOR_2 = (100, 20, 0)
 CLOCK_MINUTE_COLOR_2 = (20, 0, 100)
 CLOCK_SECOND_COLOR_2 = (6, 30, 10)
+
+if __name__ == '__main__':
+    pass

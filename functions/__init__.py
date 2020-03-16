@@ -21,7 +21,7 @@ from .effects import clear
 from .rainbow import run_rainbow
 from .theater import run_theater
 
-LOG = logger.get_logger("functions")
+LOG = logger.get_logger(__name__)
 
 
 def _build_dictionary():

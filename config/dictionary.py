@@ -14,7 +14,7 @@ __status__ = "Production"
 import logger
 from .settings import STANDBY_MINUTES
 
-LOG = logger.get_logger('Language')
+LOG = logger.get_logger(__name__)
 language = None
 translations = None
 text = None
@@ -388,7 +388,7 @@ def set_language(lng='en'):
     LOG.info(f"Apart form service menu chat language is set to '{(translation[language].get('name'))}'.")
 
 
-def _get_translations(txts_index):
+def get_translations(txts_index):
     """
     Load translations from dictionary.
 
@@ -416,7 +416,5 @@ def _get_translations(txts_index):
         LOG.error(f"Error while import from translations: {e}")
 
 
-set_language("de")
-wrong_id, not_allowed, pls_select, called, started, rebooted, rotated, stopped, standby, stop_msg, killed, updated \
-    = _get_translations("message")
-commands = _get_translations("command")
+if __name__ == '__main__':
+    pass

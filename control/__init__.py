@@ -11,8 +11,7 @@ from functions import dictionary_functions, clear
 from .countdown import CountdownThread
 from .led_strip import strip, set_brightness_depending_on_daytime
 
-NAME = "control"
-LOG = logger.get_logger(NAME)
+LOG = logger.get_logger(__name__)
 ERROR = "An error occurs: "
 
 stop_flag = None

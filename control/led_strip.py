@@ -15,7 +15,7 @@ from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED
     LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
 
-LOG = logger.get_logger("LED strip")
+LOG = logger.get_logger(__name__)
 
 
 def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
