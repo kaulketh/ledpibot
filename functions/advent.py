@@ -29,11 +29,14 @@ adv_green = 30
 adv_blue = 0
 
 
-# from http://stackoverflow.com/questions/2003870/how-can-i-select-all-of-the-sundays-for-a-year-using-python
 # noinspection PyShadowingNames
 def _allsundays(year):
+    """
+    http://stackoverflow.com/questions/2003870/how-can-i-select-all-of-the-sundays-for-a-year-using-python
+    """
     # start with Nov-27 which is the first possible day of Advent
     # 4 advents == 4 weeks == 28 days -> 25th Dec - 28 day = 27th Nov ;-)
+
     d = date(year, 11, 27)
     # find the next Sunday after the above date
     d += timedelta(days=6 - d.weekday())

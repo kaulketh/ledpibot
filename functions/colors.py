@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# colors.py
+
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
@@ -45,10 +45,7 @@ class Colorizer(object):
         return self.colors.keys()
 
     def set_color(self, color_key):
-        if isinstance(color_key, int):
-            self.color = color_key
-        else:
-            self.color = color_key.lower()
+        self.color = color_key if isinstance(color_key, int) else color_key.lower()
 
     def _get_color(self, key):
         if key in self.colors.keys():

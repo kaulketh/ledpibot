@@ -14,6 +14,7 @@ from .led_strip import strip, set_brightness_depending_on_daytime
 
 NAME = "control"
 LOG = logger.get_logger(NAME)
+ERROR = "An error occurs: "
 
 stop_flag = None
 
@@ -39,7 +40,7 @@ def run_thread(func_name):
     try:
         if stop_threads():
             f = _thread_function(dictionary_functions, func_name)
-            LOG.debug("Init thread for function: {0}".format(str(f)))
+            LOG.debug(f"Init thread for function: {f}")
             t = CountdownThread(
                 function=f,
                 stripe=strip,
@@ -48,7 +49,7 @@ def run_thread(func_name):
             set_stop_flag(False)
             return t
     except Exception as e:
-        LOG.error('An error occurs: ' + str(e))
+        LOG.error(f"{ERROR}{e}")
 
 
 def stop_threads():
@@ -59,7 +60,7 @@ def stop_threads():
                 t.stop()
         return True
     except Exception as e:
-        LOG.error('An error occurs: ' + str(e))
+        LOG.error(f"{ERROR}{e}")
     return False
 
 
@@ -67,4 +68,4 @@ def _thread_function(dictionary, key):
     try:
         return dictionary[key]
     except Exception as e:
-        LOG.error('An error occurs: ' + str(e))
+        LOG.error(f"{ERROR}{e}")

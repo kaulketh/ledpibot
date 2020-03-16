@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# config/dictionary.py
+
 """
 Translations dictionary for command/button label and message texts.
 for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
@@ -401,9 +401,8 @@ def _get_translations(txts_index):
     # noinspection PyShadowingNames
     def generated_texts(txt: str):
         for k in txts[txt].keys():
-            text = translation[language].get(txts[txt].get(k))
-            if txt == "command":
-                text = text.title()
+            text = translation[language].get(txts[txt].get(k)).title() if txt == "command" \
+                else translation[language].get(txts[txt].get(k))
             newline, space = ("\n", " ")
             LOG.debug(f"Load {txt} ({k}:{txts[txt].get(k)}) {text.replace(newline, space)}")
             yield text

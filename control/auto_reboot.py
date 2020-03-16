@@ -12,33 +12,31 @@ import time
 from control import CountdownThread
 
 
-def is_time(t: int = 0):
-    hour = datetime.datetime.now().hour
-    minute = datetime.datetime.now().minute
-    sec = datetime.datetime.now().second
-    about_time = (hour == t and minute == 0 and sec <= 5)
-    return about_time
-
-
 class AutoReboot(CountdownThread):
     name = "Auto reboot"
 
-    def __init__(self, t: int):
-        self.t = t
-        super(AutoReboot, self).__init__(None, None, name=AutoReboot.name, n=0)
+    def __init__(self, hour: int = 0):
+        self._hour = hour
+        super(AutoReboot, self).__init__(None, None, name=self.name, n=0)
 
     def _process(self):
         pass
 
     def run(self):
-        self.log.info(f"Auto reboot initialized for {self.t}:00.")
-        while not is_time(self.t):
+        self.log.info(f"{self.name} initialized for {self._hour}:00.")
+        while not self._time_reached:
             time.sleep(2)
         from bot import external_request
         from config import rebooted
         external_request(rebooted)
         from control.service import reboot_device
-        reboot_device(AutoReboot.name)
+        reboot_device(self.name)
+
+    @property
+    def _time_reached(self):
+        now = datetime.datetime.now()
+        print(now)
+        return now.hour == self._hour and now.minute == 0 and now.second <= 5
 
 
 if __name__ == '__main__':

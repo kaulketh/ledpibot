@@ -28,8 +28,8 @@ LOG = logger.get_logger("functions")
 
 
 def _build_dictionary():
-    dictionary = {}
     """Ensure right order of functions, depends on the command order in ~.config.dictionary.py"""
+    dictionary = {}
     functions = [None, None,  # index 0 and 1 not needed, direct bot commands
                  run_advent, run_candles, run_clock1, run_clock2,
                  run_rainbow, run_theater, run_red, run_blue, run_green,

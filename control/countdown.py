@@ -17,12 +17,13 @@ from functions import clear
 
 class CountdownThread(Thread):
     threads = []
+    name = "Countdown"
 
     def __init__(self, function, stripe, name=None, n=COUNTDOWN):
         super(CountdownThread, self).__init__()
         self.expired = "Runtime expired"
         self.stopped = "Stop requested, stopped"
-        self.log = logger.get_logger("countdown")
+        self.log = logger.get_logger(self.name)
         self.n = n * 60
         self.do_run = True
         self._function = function
@@ -37,7 +38,7 @@ class CountdownThread(Thread):
 
     def run(self):
         p = self._process()
-        CountdownThread.threads.append(self)
+        self.threads.append(self)
         while self.__getattribute__('do_run') and self.n > 0:
             self.n -= 1
             time.sleep(1)
@@ -48,7 +49,7 @@ class CountdownThread(Thread):
         p.terminate()
         clear(self._strip)
         self._strip.setBrightness(LED_BRIGHTNESS)
-        CountdownThread.threads.remove(self)
+        self.threads.remove(self)
 
     def stop(self):
         self.do_run = False
