@@ -9,7 +9,7 @@ __status__ = "Production"
 
 import logger
 from functions import dictionary_functions, clear
-from .countdown import CountdownThread, threads
+from .countdown import CountdownThread
 from .led_strip import strip, set_brightness_depending_on_daytime
 
 NAME = "control"
@@ -54,7 +54,7 @@ def run_thread(func_name):
 def stop_threads():
     set_stop_flag(True)
     try:
-        for t in threads:
+        for t in CountdownThread.threads:
             if t is not None and t.is_running:
                 t.stop()
         return True

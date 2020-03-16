@@ -14,10 +14,7 @@ import logger
 class Update:
     def __init__(self, branch: str = None):
         self.name = "update"
-        if branch is None:
-            self.branch = 'master'
-        else:
-            self.branch = branch
+        self.branch = 'master' if branch is None else branch
         self.save_secret = 'mv -v config/secret.py secret.py'
         self.restore_secret = 'mv -v secret.py config/secret.py'
         self.remove_clone = 'rm -rf ledpibot/'
@@ -28,18 +25,18 @@ class Update:
         self.subs = [f for f in os.listdir(self.root_folder)]
 
     def run(self):
-        self.log.info('Starting update...')
+        self.log.info("Starting update...")
         try:
-            self.log.info(f'Clone branch \'{self.branch}\' from Github repository...')
+            self.log.info(f"Clone branch \'{self.branch}\' from Github repository...")
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
-            self.log.info('Copy files and folders...')
+            self.log.info("Copy files and folders...")
             for f in cloned_f:
                 os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
-            self.log.info('Remove not needed files...')
+            self.log.info("Remove not needed files...")
             os.system(self.remove_clone)
         except Exception as e:
-            self.log.error(f'Update failure: {e}')
+            self.log.error(f"Update failure: {e}")
             return False
         return True
 

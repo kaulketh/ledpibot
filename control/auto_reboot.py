@@ -9,11 +9,7 @@ __status__ = "Production"
 import datetime
 import time
 
-import logger
 from control import CountdownThread
-
-NAME = "Auto reboot"
-LOG = logger.get_logger(NAME)
 
 
 def is_time(t: int = 0):
@@ -25,22 +21,24 @@ def is_time(t: int = 0):
 
 
 class AutoReboot(CountdownThread):
+    name = "Auto reboot"
+
     def __init__(self, t: int):
         self.t = t
-        super(AutoReboot, self).__init__(None, None, name=NAME, n=0)
+        super(AutoReboot, self).__init__(None, None, name=AutoReboot.name, n=0)
 
     def _process(self):
         pass
 
     def run(self):
-        LOG.info(f"Auto reboot initialized for {self.t}:00:00.")
+        self.log.info(f"Auto reboot initialized for {self.t}:00.")
         while not is_time(self.t):
             time.sleep(2)
         from bot import external_request
         from config import rebooted
         external_request(rebooted)
         from control.service import reboot_device
-        reboot_device(NAME)
+        reboot_device(AutoReboot.name)
 
 
 if __name__ == '__main__':

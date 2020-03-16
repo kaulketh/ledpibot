@@ -47,7 +47,7 @@ def get_strip():
         f"COUNT:{LED_COUNT}, PIN:{LED_PIN}, FREQ:{LED_FREQ_HZ}, "
         f"DMA:{LED_DMA}, INVERT:{LED_INVERT}, BRIGHTN.:{LED_BRIGHTNESS}")
     s = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    LOG.debug("Initialize " + str(s))
+    LOG.debug(f"Initialize {s}")
     s.begin()
     return s
 

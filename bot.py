@@ -47,10 +47,8 @@ rm_kb = ReplyKeyboardRemove()
 
 
 def _kb_stop(func=None):
-    if func is None:
-        return ReplyKeyboardMarkup(keyboard=[[_btn(stop)]])
-    else:
-        return ReplyKeyboardMarkup(keyboard=[[_btn(stop + ' \"' + func + '\"')]])
+    return ReplyKeyboardMarkup(keyboard=[[_btn(stop)]]) \
+        if func is None else ReplyKeyboardMarkup(keyboard=[[_btn(stop + '\"' + func + '\"')]])
 
 
 # endregion
@@ -76,7 +74,7 @@ def _reply_wrong_id(chat_id, msg):
     username = msg['from']['username']
     log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    _send("Attention! " + access.thk, log_msg)
+    _send(f"Attention! {access.thk}", log_msg)
     LOG.warning(log_msg)
 
 
@@ -95,10 +93,7 @@ def _reply_wrong_command(chat_id, content):
 def _stop(chat_id, msg=stop_msg):
     if msg is not None:
         _send(chat_id, msg, reply_markup=rm_kb)
-    if stop_threads():
-        return_bool = True
-    else:
-        return_bool = False
+    return_bool = True if stop_threads() else False
     return return_bool
 
 

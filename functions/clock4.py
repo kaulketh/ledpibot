@@ -43,23 +43,11 @@ def run_clock4(strip):
 
             # arc mode
             for i in range(strip.numPixels()):
-                if i <= second_value:
-                    # calculates a faded arc from low to maximum brightness
-                    blue = (i + 1) * (intense / (second_value + 1))
-                else:
-                    blue = 0
-
-                if i <= minute_value:
-                    green = (i + 1) * (intense / (minute_value + 1))
-                else:
-                    green = 0
-
-                if i <= hour_value:
-                    red = (i + 1) * (intense / (hour_value + 1))
-                else:
-                    red = 0
+                # calculates a faded arc from low to maximum brightness
+                blue = (i + 1) * (intense / (second_value + 1)) if i <= second_value else 0
+                green = (i + 1) * (intense / (minute_value + 1)) if i <= minute_value else 0
+                red = (i + 1) * (intense / (hour_value + 1)) if i <= hour_value else 0
                 strip.setPixelColor((i + start_px) % 24, Color(int(green), int(red), int(blue)))
-
             strip.show()
             time.sleep(0.1)
 

@@ -19,12 +19,13 @@ from control.auto_reboot import AutoReboot
 NAME = "Service"
 LOG = logger.get_logger(NAME)
 
-log_rotate = 'logrotate -f /etc/logrotate.conf &'
-reboot = 'shutdown -r now'
+log_rotate = "logrotate -f /etc/logrotate.conf &"
+reboot = "shutdown -r now"
 get_pid = "ps -o pid,args -C python3 | awk \'/bot.py/ { print $1 }\'"
 
-line_break = "\n"
-menu_header = NAME + " functions:"
+new_line = "\n"
+empty = ""
+menu_header = f"{NAME} functions:"
 c_prefix = "- "
 c_test = "/serviceTest"
 c_system = "/serviceUsage"
@@ -44,12 +45,12 @@ menu_dictionary = {
 
 # noinspection PyShadowingNames
 def build_menu():
-    menu = "{0}{1}".format(menu_header, line_break)
-    LOG.debug('Build service menu: ' + menu.replace(line_break, ""))
+    menu = f"{menu_header}{new_line}"
+    LOG.debug(f"Build service menu: {menu.replace(new_line, empty)}")
     for key in menu_dictionary.keys():
-        line = "{0}{1}{2}".format(c_prefix, menu_dictionary.get(key), line_break)
+        line = f"{c_prefix}{menu_dictionary.get(key)}{new_line}"
         menu += line
-        LOG.debug('Add line to menu: ' + line.replace(line_break, ""))
+        LOG.debug(f"Add line to menu: {line.replace(new_line, empty)}")
     return menu
 
 
@@ -63,7 +64,7 @@ def system_usage():
     c = subprocess.check_output(
         "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
         "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-    return "{5}{0}{4}{0}{1}{0}{2}{0}{3}".format(line_break, m, d, c, ip, host) \
+    return f"{host}{new_line}{ip}{new_line}{m}{new_line}{d}{new_line}{c}"\
         .replace("b'", "").replace("'", "").replace("\\n", "")
 
 

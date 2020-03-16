@@ -75,7 +75,7 @@ def _december_cycle(stripe, month):
         exit()
 
     except Exception as e:
-        LOG.error("Any error occurs: " + str(e))
+        LOG.error(f"Any error occurs: {e}")
         exit()
 
 

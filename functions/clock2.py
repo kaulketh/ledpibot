@@ -71,18 +71,12 @@ def _get_pointer(strip):
     now = set_brightness_depending_on_daytime(strip)[0]
     hour = int(int(now.hour) % 12 * 2)
     minute = int(now.minute // 2.5)
-    if minute <= 22:
-        next_minute = minute + 1
-    else:
-        next_minute = 0
+    next_minute = minute + 1 if minute <= 22 else 0
     return hour, minute, next_minute
 
 
 def _wipe_second(stripe, color, begin=0, backward=False):
-    if backward:
-        wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0
-    else:
-        wait_ms = (1000.0 // stripe.numPixels()) / 1000.0
+    wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0 if backward else (1000.0 // stripe.numPixels()) / 1000.0
 
     for i in range(begin + 1, stripe.numPixels() + begin):
         if i >= stripe.numPixels():

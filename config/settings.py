@@ -9,7 +9,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 AUTO_REBOOT_ENABLED = True
-AUTO_REBOOT_CLOCK_TIME = 1
+AUTO_REBOOT_CLOCK_TIME = 2
 
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).
@@ -17,8 +17,8 @@ LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
-LED_DAY_BRIGHTNESS = 130
-LED_NIGHT_BRIGHTNESS = 50
+LED_DAY_BRIGHTNESS = 150
+LED_NIGHT_BRIGHTNESS = 70
 LED_MORNING_CUT_OFF = 8
 LED_NIGHT_CUT_OFF = 18
 
