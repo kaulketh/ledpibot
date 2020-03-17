@@ -7,7 +7,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 from .access import *
-from .dictionary import *
+from .dictionary import get_translations, set_language
 from .secret import *
 from .settings import *
 

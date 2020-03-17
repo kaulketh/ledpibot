@@ -40,4 +40,7 @@ def _build_dictionary():
     return dictionary
 
 
-dictionary_functions = _build_dictionary()
+try:
+    dictionary_functions = _build_dictionary()
+except Exception as ex:
+    LOG.error(f"{ex}")

@@ -27,12 +27,14 @@ class Update:
     def run(self):
         self.log.info("Starting update...")
         try:
+            os.system(self.save_secret)
             self.log.info(f"Clone branch \'{self.branch}\' from Github repository...")
             os.system(self.clone)
             cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
             self.log.info("Copy files and folders...")
             for f in cloned_f:
                 os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
+            os.system(self.restore_secret)
             self.log.info("Remove not needed files...")
             os.system(self.remove_clone)
         except Exception as e:
