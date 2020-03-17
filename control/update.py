@@ -15,8 +15,8 @@ class Update:
     def __init__(self, branch: str = None):
         self.name = "update"
         self.branch = 'master' if branch is None else branch
-        self.save_secret = 'mv -v config/secret.py secret.py'
-        self.restore_secret = 'mv -v secret.py config/secret.py'
+        self.save_secret = 'mv -v /home/pi/bot/config/secret.py /home/pi/bot/secret.py'
+        self.restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
         self.remove_clone = 'rm -rf ledpibot/'
         self.clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.branch
         self.log = logger.get_logger(self.name)
