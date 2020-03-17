@@ -46,7 +46,7 @@ format_info = \
                       'linenr.%(lineno)s ] %(message).150s', datefmt='%Y-%m-%d %H:%M:%S')
 format_error = \
     logging.Formatter('%(asctime)s  %(levelname)-8s '
-                      '[%(name)s] [ %(module)s.%(funcName)s  '
+                      '[ %(module)s.%(funcName)s  '
                       'linenr.%(lineno)s ] [ thread: %(threadName)s ] %(message)s')
 handler_info.setFormatter(format_info)
 handler_error.setFormatter(format_error)

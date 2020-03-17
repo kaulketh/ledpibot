@@ -10,12 +10,10 @@ import datetime
 
 from neopixel import *
 
-import logger
 from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, \
     LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
-
-LOG = logger.get_logger(__name__)
+from logger import LOGGER as LOG
 
 
 def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):

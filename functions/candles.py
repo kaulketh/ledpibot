@@ -11,12 +11,9 @@ from random import randint
 
 from neopixel import Color
 
-import logger
 from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 from functions.effects import clear
-
-NAME = "Candles"
-LOG = logger.get_logger(NAME)
+from logger import LOGGER as LOG
 
 # any warm white / no bright yellow
 red = 195

@@ -9,12 +9,11 @@ __status__ = "Production"
 import os
 import subprocess
 
-import logger
-from control.auto_reboot import AutoReboot
+from control.autoreboot import AutoReboot
+from logger import LOGGER as LOG
+from .update import Update
 
 NAME = "Service"
-LOG = logger.get_logger(__name__)
-
 reboot = "shutdown -r now"
 
 new_line = "\n"
@@ -68,7 +67,6 @@ def reboot_device(log_msg: str = None):
 def update_bot(log_msg: str):
     try:
         LOG.info(log_msg)
-        from .update import Update
         if Update().run():
             reboot_device('Update done.')
         else:

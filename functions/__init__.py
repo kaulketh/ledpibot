@@ -6,8 +6,8 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
-import logger
 from config import commands
+from logger import LOGGER as LOG
 from .advent import run_advent
 from .candles import run_candles
 from .clock1 import run_clock1
@@ -20,8 +20,6 @@ from .colors import \
 from .effects import clear
 from .rainbow import run_rainbow
 from .theater import run_theater
-
-LOG = logger.get_logger(__name__)
 
 
 def _build_dictionary():

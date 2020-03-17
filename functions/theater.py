@@ -8,12 +8,9 @@ __status__ = "Production"
 
 from neopixel import Color
 
-import logger
-from control.led_strip import set_brightness_depending_on_daytime
+from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import color_wipe_full, theater_chase, clear
-
-NAME = "Theater"
-LOG = logger.get_logger(NAME)
+from logger import LOGGER as LOG
 
 
 def run_theater(strip):

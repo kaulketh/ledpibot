@@ -11,10 +11,9 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
-import logger
+from logger import LOGGER as LOG
 from .settings import STANDBY_MINUTES
 
-LOG = logger.get_logger(__name__)
 language = None
 translations = None
 text = None

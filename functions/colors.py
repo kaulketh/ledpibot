@@ -11,16 +11,16 @@ from random import uniform
 
 from neopixel import Color, Adafruit_NeoPixel
 
-import logger
-from control.led_strip import set_brightness_depending_on_daytime
+from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
+from logger import LOGGER as LOG
 
 
 class Colorizer(object):
     def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
         self.color = None
         self.name = Colorizer.__name__
-        self.log = logger.get_logger(self.name)
+        self.log = LOG
         self.strip = strip
         self.div = 3  # to reduce brightness
 

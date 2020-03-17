@@ -8,12 +8,9 @@ __status__ = "Production"
 
 import time
 
-import logger
-from control.led_strip import set_brightness_depending_on_daytime
+from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import wheel, clear
-
-NAME = "Rainbow"
-LOG = logger.get_logger(NAME)
+from logger import LOGGER as LOG
 
 
 def run_rainbow(strip):

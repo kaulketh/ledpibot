@@ -6,12 +6,11 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
-import logger
 from functions import dictionary_functions, clear
+from logger import LOGGER as LOG
 from .countdown import CountdownThread
-from .led_strip import strip, set_brightness_depending_on_daytime
+from .ledstrip import strip, set_brightness_depending_on_daytime
 
-LOG = logger.get_logger(__name__)
 ERROR = "An error occurs: "
 
 stop_flag = None

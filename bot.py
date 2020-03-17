@@ -13,15 +13,14 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-import logger
 from config import \
     token, access, \
     commands, \
     wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
+from logger import LOGGER as LOG
 
-LOG = logger.get_logger("LedPiBot")
 BOT = telepot.Bot(token)
 
 admins = [access.thk, access.annib]

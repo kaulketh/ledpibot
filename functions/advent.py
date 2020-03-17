@@ -12,12 +12,9 @@ from random import randint
 
 from neopixel import Color
 
-import logger
 from functions.candles import candle
 from functions.effects import theater_chase, clear
-
-NAME = "Advent"
-LOG = logger.get_logger(NAME)
+from logger import LOGGER as LOG
 
 # any warm white / no bright yellow
 fav_red = 195

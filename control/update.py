@@ -8,7 +8,7 @@ __status__ = "Production"
 
 import os
 
-import logger
+from logger import LOGGER as LOG
 
 
 class Update:
@@ -19,7 +19,7 @@ class Update:
         self.restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
         self.remove_clone = 'rm -rf ledpibot/'
         self.clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.branch
-        self.log = logger.get_logger(self.name)
+        self.log = LOG
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.root_folder = os.path.join(self.folder, '..')
         self.subs = [f for f in os.listdir(self.root_folder)]

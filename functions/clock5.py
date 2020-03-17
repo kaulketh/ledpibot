@@ -8,13 +8,9 @@ __status__ = "Production"
 
 import time
 
-import logger
 from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR, CLOCK_SECOND_COLOR, LED_COUNT
-from control.led_strip import set_brightness_depending_on_daytime
+from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
-
-NAME = "Clock 5"
-LOG = logger.get_logger(NAME)
 
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]

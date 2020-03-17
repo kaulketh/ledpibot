@@ -12,12 +12,8 @@ import time
 
 from neopixel import Color
 
-import logger
-from control.led_strip import set_brightness_depending_on_daytime
+from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
-
-NAME = "Clock 4"
-LOG = logger.get_logger(NAME)
 
 intense = 120
 start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12

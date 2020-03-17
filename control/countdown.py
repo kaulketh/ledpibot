@@ -10,9 +10,9 @@ import time
 from multiprocessing import Process
 from threading import Thread
 
-import logger
 from config import STANDBY_MINUTES as COUNTDOWN, LED_BRIGHTNESS, standby
 from functions import clear
+from logger import LOGGER as LOG
 
 
 class CountdownThread(Thread):
@@ -23,7 +23,7 @@ class CountdownThread(Thread):
         super(CountdownThread, self).__init__()
         self.expired = "Runtime expired"
         self.stopped = "Stop requested, stopped"
-        self.log = logger.get_logger(self.name)
+        self.log = LOG
         self.n = n * 60
         self.do_run = True
         self._function = function
