@@ -17,9 +17,9 @@ NAME = "Service"
 class OSCommand:
     logger = LOGGER
     c_prefix = "- "
-    c_system = "/serviceInfo"
-    c_reboot = "/serviceReboot"
-    c_update = "/serviceUpdate"
+    c_system = "/systemInfo"
+    c_reboot = "/reboot"
+    c_update = "/update"
 
     menu_header = f"{NAME} functions:"
 
@@ -63,7 +63,6 @@ class OSCommand:
     def system_info(cls):
         try:
             host = subprocess.check_output("hostname", shell=True).upper()
-
             ip = "IP :  " + str(subprocess.check_output("hostname -I | cut -d\' \' -f1", shell=True))
             m = subprocess.check_output(
                 "free -m | awk 'NR==2{printf \"Memory :  %s / %s MB (%.0f%%)\", $3,$2,$3*100/$2 }'", shell=True)
