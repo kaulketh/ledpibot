@@ -21,6 +21,7 @@ class Update:
         self.save_secret = 'mv -v /home/pi/bot/config/secret.py /home/pi/bot/secret.py'
         self.restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
         self.remove_clone = 'rm -rf ledpibot/'
+        self.remove_hw = 'rm -rf /home/pi/bot/hardware/'
         self.clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.branch
         self.folder = os.path.dirname(os.path.abspath(__file__))
         self.root_folder = os.path.join(self.folder, '..')
@@ -39,6 +40,7 @@ class Update:
             os.system(self.restore_secret)
             self.logger.info("Remove not needed files...")
             os.system(self.remove_clone)
+            os.system(self.remove_hw)
         except Exception as e:
             self.logger.error(f"Update failure: {e}")
             return False

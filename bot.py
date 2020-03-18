@@ -128,8 +128,8 @@ def _on_chat_message(msg):
             _send(chat_id, rebooted, reply_markup=rm_kb)
             service.reboot_device(rebooted)
         elif command == service.OSCommand.c_system:
-            _send(chat_id, service.system_usage(), reply_markup=rm_kb)
-            LOGGER.info(service.system_usage().replace("\n", " "))
+            _send(chat_id, service.system_info(), reply_markup=rm_kb)
+            LOGGER.info(service.system_info().replace("\n", " "))
         elif command == service.OSCommand.c_update:
             _send(chat_id, updated, reply_markup=rm_kb)
             update_bot(updated)

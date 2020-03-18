@@ -17,7 +17,7 @@ NAME = "Service"
 class OSCommand:
     logger = LOGGER
     c_prefix = "- "
-    c_system = "/serviceUsage"
+    c_system = "/serviceInfo"
     c_reboot = "/serviceReboot"
     c_update = "/serviceUpdate"
 
@@ -63,6 +63,7 @@ class OSCommand:
     def system_info(cls):
         try:
             host = subprocess.check_output("hostname", shell=True).upper()
+
             ip = "IP :  " + str(subprocess.check_output("hostname -I | cut -d\' \' -f1", shell=True))
             m = subprocess.check_output(
                 "free -m | awk 'NR==2{printf \"Memory :  %s / %s MB (%.0f%%)\", $3,$2,$3*100/$2 }'", shell=True)
@@ -71,17 +72,29 @@ class OSCommand:
             c = subprocess.check_output(
                 "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
                 "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-            return f"{host}{cls.new_line}{ip}{cls.new_line}{m}{cls.new_line}{d}{cls.new_line}{c}" \
+            return f"{host} ({OSCommand.latest_commit()[1]}){cls.new_line}" \
+                   f"{ip}{cls.new_line}" \
+                   f"{m}{cls.new_line}" \
+                   f"{d}{cls.new_line}" \
+                   f"{c}" \
                 .replace("b'", "").replace("'", "").replace("\\n", "")
         except Exception as e:
             cls.logger.error(f"{e}")
+
+    @classmethod
+    def latest_commit(cls):
+        commit = "curl -s https://api.github.com/repos/kaulketh/ledpibot/commits/master --insecure "
+        latest_commit = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
+            .replace("b'", "").replace("'", "").replace("\\n", "")
+        commit_url_text = f"[{latest_commit[0:7]}](https://github.com/kaulketh/ledpibot/commit/{latest_commit})"
+        return latest_commit[0:7], commit_url_text
 
 
 def reboot_device(log_msg: str = None):
     OSCommand("shutdown -r now", log_msg).execute()
 
 
-def system_usage():
+def system_info():
     return OSCommand.system_info()
 
 
