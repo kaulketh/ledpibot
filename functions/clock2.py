@@ -13,6 +13,7 @@ from neopixel import Color
 from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
+from logger import LOGGER
 
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]
@@ -55,10 +56,10 @@ def run_clock2(strip):
             clear(strip)
         except KeyboardInterrupt:
             print()
-            LOG.warn("KeyboardInterrupt.")
+            LOGGER.warn("KeyboardInterrupt.")
             exit()
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
     clear(strip)
 

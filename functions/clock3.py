@@ -11,6 +11,7 @@ import time
 from config import CLOCK_SECOND_COLOR_2, CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
+from logger import LOGGER
 
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]
@@ -48,11 +49,11 @@ def run_clock3(stripe):
 
 
         except KeyboardInterrupt:
-            LOG.warn("KeyboardInterrupt.")
+            LOGGER.warn("KeyboardInterrupt.")
             exit()
 
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
     clear(stripe)
 

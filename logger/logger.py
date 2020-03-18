@@ -50,9 +50,7 @@ handler_info.setFormatter(format_info)
 handler_error.setFormatter(format_error)
 
 
-def get_logger(name=None):
-    if name is None:
-        name = __name__
+def get_logger(name: str = __name__):
     logger = logging.getLogger(name)
     # Add handlers to the logger
     logger.addHandler(handler_info)

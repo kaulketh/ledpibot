@@ -7,15 +7,15 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 from functions import dictionary_functions, clear
-from logger import LOGGER as LOG
+from logger import LOGGER
 from .countdown import CountdownThread
-from .ledstrip import strip, set_brightness_depending_on_daytime
+from .ledstrip import STRIP, set_brightness_depending_on_daytime
 
 ERROR = "An error occurs: "
 
 stop_flag = None
 
-clear(strip)
+clear(STRIP)
 
 
 def get_stop_flag():
@@ -37,16 +37,16 @@ def run_thread(func_name):
     try:
         if stop_threads():
             f = _thread_function(dictionary_functions, func_name)
-            LOG.debug(f"Init thread for function: {f}")
+            LOGGER.debug(f"Init thread for function: {f}")
             t = CountdownThread(
                 function=f,
-                stripe=strip,
+                stripe=STRIP,
                 name=func_name)
             t.start()
             set_stop_flag(False)
             return t
     except Exception as e:
-        LOG.error(f"{ERROR}{e}")
+        LOGGER.error(f"{ERROR}{e}")
 
 
 def stop_threads():
@@ -57,7 +57,7 @@ def stop_threads():
                 t.stop()
         return True
     except Exception as e:
-        LOG.error(f"{ERROR}{e}")
+        LOGGER.error(f"{ERROR}{e}")
     return False
 
 
@@ -65,4 +65,4 @@ def _thread_function(dictionary, key):
     try:
         return dictionary[key]
     except Exception as e:
-        LOG.error(f"{ERROR}{e}")
+        LOGGER.error(f"{ERROR}{e}")

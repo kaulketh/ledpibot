@@ -11,7 +11,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
-from logger import LOGGER as LOG
+from logger import LOGGER
 from .settings import STANDBY_MINUTES
 
 language = None
@@ -380,11 +380,11 @@ def set_language(lng='en'):
     """
     global language
     if lng not in translation:
-        LOG.warning(f"Language key \'{lng}\' not found, set default chat language!")
+        LOGGER.warning(f"Language key \'{lng}\' not found, set default chat language!")
         language = 'en'
     else:
         language = lng
-    LOG.info(f"Apart form service menu chat language is set to '{(translation[language].get('name'))}'.")
+    LOGGER.info(f"Apart from service menu chat language is set to '{(translation[language].get('name'))}'.")
 
 
 def get_translations(txts_index):
@@ -404,7 +404,7 @@ def get_translations(txts_index):
             text = translation[language].get(txts[txt].get(k)).title() if txt == "command" \
                 else translation[language].get(txts[txt].get(k))
             newline, space = ("\n", " ")
-            LOG.debug(f"Load {txt} ({k}:{txts[txt].get(k)}) {text.replace(newline, space)}")
+            LOGGER.debug(f"Load {txt} ({k}:{txts[txt].get(k)}) {text.replace(newline, space)}")
             yield text
 
     try:
@@ -412,7 +412,7 @@ def get_translations(txts_index):
             translations.append(t)
         return translations
     except Exception as e:
-        LOG.error(f"Error while import from translations: {e}")
+        LOGGER.error(f"Error while import from translations: {e}")
 
 
 if __name__ == '__main__':

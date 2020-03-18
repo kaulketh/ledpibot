@@ -10,7 +10,7 @@ from neopixel import Color
 
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import color_wipe_full, theater_chase, clear
-from logger import LOGGER as LOG
+from logger import LOGGER
 
 
 def run_theater(strip):
@@ -32,11 +32,11 @@ def run_theater(strip):
                 theater_chase(strip, Color(80, 0, 0))  # Green theater chase
 
         except KeyboardInterrupt:
-            LOG.warn("KeyboardInterrupt")
+            LOGGER.warn("KeyboardInterrupt")
             exit()
 
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
 
     clear(strip)

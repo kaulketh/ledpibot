@@ -14,7 +14,7 @@ from neopixel import Color
 
 from functions.candles import candle
 from functions.effects import theater_chase, clear
-from logger import LOGGER as LOG
+from logger import LOGGER
 
 # any warm white / no bright yellow
 fav_red = 195
@@ -71,11 +71,11 @@ def _december_cycle(stripe, month):
             candle(stripe, stripe.numPixels())
 
     except KeyboardInterrupt:
-        LOG.warn("KeyboardInterrupt")
+        LOGGER.warn("KeyboardInterrupt")
         exit()
 
     except Exception as e:
-        LOG.error(f"Any error occurs: {e}")
+        LOGGER.error(f"Any error occurs: {e}")
         exit()
 
 
@@ -91,7 +91,7 @@ def run_advent(strip):
         else:
             while i > 0:
                 m = time.strftime("%B")
-                LOG.warn(f"Wrong month for xmas/advent animation, it\'s {m}!")
+                LOGGER.warn(f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
             theater_chase(strip, Color(0, 15, 0))
     clear(strip)

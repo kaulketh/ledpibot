@@ -32,12 +32,12 @@ class CountdownThread(Thread):
 
     @property
     def __process(self):
-        self.logger.info(f"Thread '{self._name}' initialized, start process '{self.function}' for {self.n} seconds")
         func_p = Process(target=self.function, name=self._name, args=(self.strip,))
         func_p.start()
         return func_p
 
     def run(self):
+        self.logger.info(f"Thread '{self._name}' initialized, start process '{self.function}' for {self.n} seconds")
         p = self.__process
         self.threads.append(self)
         while self.__getattribute__('do_run') and self.n > 0:

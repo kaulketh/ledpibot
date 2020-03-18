@@ -13,7 +13,37 @@ from neopixel import *
 from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, \
     LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
-from logger import LOGGER as LOG
+from logger import LOGGER
+
+
+class Strip(object):
+    logger = LOGGER
+    name = "LED Strip"
+
+    def __init__(self, count, pin, hz, dma, invert, brightness):
+        self.count = count
+        self.pin = pin
+        self.hz = hz
+        self.dma = dma
+        self.invert = invert
+        self.brightness = brightness
+        self.logger.debug(f"Create {self}")
+        self.strip = Adafruit_NeoPixel(self.count, self.pin, self.hz, self.dma, self.invert, self.brightness)
+        self.logger.debug(f"Initialized: {self.strip}")
+        self.strip.begin()
+
+    def __repr__(self):
+        return(
+            f"{self.name}: "
+            f"COUNT:{self.count}, "
+            f"PIN:{self.pin}, "
+            f"FREQ:{self.hz}, "
+            f"DMA:{self.dma}, "
+            f"INVERT:{self.invert}, "
+            f"BRIGHTN.:{self.brightness}")
+
+    def get_instance(self):
+        return self.strip
 
 
 def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
@@ -32,23 +62,7 @@ def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
     return now, b
 
 
-def get_strip():
-    """
-    Create NeoPixel object with appropriate configuration and initialize the library.
-
-    :return: NeoPixel/WS281x LED display/strip as s
-    """
-    LOG.debug(
-        f"Create LED Strip: "
-        f"COUNT:{LED_COUNT}, PIN:{LED_PIN}, FREQ:{LED_FREQ_HZ}, "
-        f"DMA:{LED_DMA}, INVERT:{LED_INVERT}, BRIGHTN.:{LED_BRIGHTNESS}")
-    s = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS)
-    LOG.debug(f"Initialize {s}")
-    s.begin()
-    return s
-
-
-strip = get_strip()
+STRIP = Strip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS).get_instance()
 
 if __name__ == '__main__':
     pass

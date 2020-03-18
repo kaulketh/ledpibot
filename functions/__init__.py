@@ -7,7 +7,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 from config import commands
-from logger import LOGGER as LOG
+from logger import LOGGER
 from .advent import run_advent
 from .candles import run_candles
 from .clock1 import run_clock1
@@ -23,22 +23,22 @@ from .theater import run_theater
 
 
 def _build_dictionary():
-    """Ensure right order of functions, depends on the command order in ~.config.dictionary.py"""
-    dictionary = {}
-    functions = [None, None,  # index 0 and 1 not needed, direct bot commands
-                 run_advent, run_candles, run_clock1, run_clock2,
-                 run_rainbow, run_theater, run_red, run_blue, run_green,
-                 run_yellow, run_orange, run_white, run_violet, run_demo,
-                 run_stroboscope, run_clock3, run_clock4, run_clock5, run_demo2]
-    LOG.debug("Build dictionary of required functions")
-    for i in range(len(commands)):
-        f = functions[i]
-        dictionary[commands[i]] = f
-        LOG.debug(f'Added {i} : {f}')
-    return dictionary
+    try:
+        """Ensure right order of functions, depends on the command order in ~.config.dictionary.py"""
+        dictionary = {}
+        functions = [None, None,  # index 0 and 1 not needed, direct bot commands
+                     run_advent, run_candles, run_clock1, run_clock2,
+                     run_rainbow, run_theater, run_red, run_blue, run_green,
+                     run_yellow, run_orange, run_white, run_violet, run_demo,
+                     run_stroboscope, run_clock3, run_clock4, run_clock5, run_demo2]
+        LOGGER.debug("Build dictionary of required functions")
+        for i in range(len(commands)):
+            f = functions[i]
+            dictionary[commands[i]] = f
+            LOGGER.debug(f'Added {i} : {f}')
+        return dictionary
+    except Exception as ex:
+        LOGGER.error(f"{ex}")
 
 
-try:
-    dictionary_functions = _build_dictionary()
-except Exception as ex:
-    LOG.error(f"{ex}")
+dictionary_functions = _build_dictionary()

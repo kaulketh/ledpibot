@@ -19,6 +19,10 @@ class AutoReboot(CountdownThread):
         self.hour = hour
         super(AutoReboot, self).__init__(None, None, name=self.name, n=0)
 
+    def start(self) -> None:
+        self.run()
+        return
+
     def __process(self):
         pass
 
@@ -39,11 +43,6 @@ class AutoReboot(CountdownThread):
     def __time_reached(self):
         now = datetime.datetime.now()
         return now.hour == self.hour and now.minute == 0 and now.second <= 5
-
-
-def init_auto_reboot(h):
-    AutoReboot(h).start()
-    return
 
 
 if __name__ == '__main__':

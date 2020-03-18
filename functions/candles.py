@@ -13,7 +13,7 @@ from neopixel import Color
 
 from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 from functions.effects import clear
-from logger import LOGGER as LOG
+from logger import LOGGER
 
 # any warm white / no bright yellow
 red = 195
@@ -48,11 +48,11 @@ def run_candles(strip):
             candle(strip, strip.numPixels())
 
         except KeyboardInterrupt:
-            LOG.warn("KeyboardInterrupt")
+            LOGGER.warn("KeyboardInterrupt")
             exit()
 
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
     clear(strip)
 

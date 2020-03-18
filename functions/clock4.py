@@ -14,6 +14,7 @@ from neopixel import Color
 
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
+from logger import LOGGER
 
 intense = 120
 start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
@@ -49,11 +50,11 @@ def run_clock4(strip):
             time.sleep(0.1)
 
         except KeyboardInterrupt:
-            LOG.warn("KeyboardInterrupt.")
+            LOGGER.warn("KeyboardInterrupt.")
             exit()
 
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
 
     clear(strip)

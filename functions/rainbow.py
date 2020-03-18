@@ -10,7 +10,7 @@ import time
 
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import wheel, clear
-from logger import LOGGER as LOG
+from logger import LOGGER
 
 
 def run_rainbow(strip):
@@ -28,10 +28,10 @@ def run_rainbow(strip):
                         time.sleep(.02)
 
         except KeyboardInterrupt:
-            LOG.warn("KeyboardInterrupt")
+            LOGGER.warn("KeyboardInterrupt")
             exit()
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
 
     clear(strip)

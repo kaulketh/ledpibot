@@ -19,9 +19,9 @@ from config import \
     wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
-from control.autoreboot import init_auto_reboot
+from control.autoreboot import AutoReboot
 from control.update import update_bot
-from logger import LOGGER as LOG
+from logger import LOGGER
 
 BOT = telepot.Bot(token)
 
@@ -55,15 +55,9 @@ def _kb_stop(func=None):
 # endregion
 
 # region Methods
-def _ready_to_use():
-    LOG.info("Bot is running...")
-    for admin in admins:
-        _send(admin, started, reply_markup=rm_kb)
-
-
 # noinspection PyShadowingNames
 def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    LOG.debug(f"Message posted: {chat_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
+    LOGGER.debug(f"Message posted: {chat_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
     return BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
 
@@ -76,7 +70,7 @@ def _reply_wrong_id(chat_id, msg):
     log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
     _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
     _send(f"Attention! {access.thk}", log_msg)
-    LOG.warning(log_msg)
+    LOGGER.warning(log_msg)
 
 
 # noinspection PyShadowingNames
@@ -86,7 +80,7 @@ def _reply_wrong_command(chat_id, content):
         raise Exception(f'Not allowed input: {got}')
     except Exception as ex:
         _send(chat_id, not_allowed, parse_mode='MarkdownV2')
-        LOG.warning(str(ex))
+        LOGGER.warning(str(ex))
     return
 
 
@@ -102,7 +96,7 @@ def _stop(chat_id, msg=stop_msg):
 def _on_chat_message(msg):
     global command, chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
-    LOG.debug(msg)
+    LOGGER.debug(msg)
 
     # check user
     if chat_id not in admins:
@@ -111,7 +105,7 @@ def _on_chat_message(msg):
 
     if content_type == 'text':
         command = msg['text']
-        LOG.info(f'Requested: {command}')
+        LOGGER.info(f'Requested: {command}')
         # /start
         if command == "/start":
             _send(chat_id, pls_select.format(msg['from']['first_name']))
@@ -135,7 +129,7 @@ def _on_chat_message(msg):
             service.reboot_device(rebooted)
         elif command == service.OSCommand.c_system:
             _send(chat_id, service.system_usage(), reply_markup=rm_kb)
-            LOG.info(service.system_usage().replace("\n", " "))
+            LOGGER.info(service.system_usage().replace("\n", " "))
         elif command == service.OSCommand.c_update:
             _send(chat_id, updated, reply_markup=rm_kb)
             update_bot(updated)
@@ -160,18 +154,22 @@ def external_request(msg, chat_id=None):
 
 
 def start_bot():
-    _ready_to_use()
+    LOGGER.info("Bot is running...")
+    for admin in admins:
+        _send(admin, started, reply_markup=rm_kb)
+
     MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
     if AUTO_REBOOT_ENABLED:
-        init_auto_reboot(AUTO_REBOOT_CLOCK_TIME)
+        AutoReboot(AUTO_REBOOT_CLOCK_TIME).start()
+
     while True:
         try:
             signal.pause()
         except KeyboardInterrupt:
-            LOG.warning('Program interrupted')
+            LOGGER.warning('Program interrupted')
             exit()
         except Exception as e:
-            LOG.error(f"Any error occurs: {e}")
+            LOGGER.error(f"Any error occurs: {e}")
             exit()
 
 
