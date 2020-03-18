@@ -32,75 +32,74 @@ stop = commands[0]
 start = commands[1]
 
 
-def _btn(text):
+def btn(text):
     return KeyboardButton(text=text)
 
 
 kb_markup = ReplyKeyboardMarkup(keyboard=[
-    [_btn(commands[2]), _btn(commands[3]), _btn(commands[6]), _btn(commands[7]), _btn(commands[16])],
-    [_btn(commands[4]), _btn(commands[5]), _btn(commands[17]), _btn(commands[18]), _btn(commands[19])],
-    [_btn(commands[15]), _btn(commands[20])],
-    [_btn(commands[8]), _btn(commands[9]), _btn(commands[10]),
-     _btn(commands[13]), _btn(commands[11]), _btn(commands[12]), _btn(commands[14])]
+    [btn(commands[2]), btn(commands[3]), btn(commands[6]), btn(commands[7]), btn(commands[16])],
+    [btn(commands[4]), btn(commands[5]), btn(commands[17]), btn(commands[18]), btn(commands[19])],
+    [btn(commands[15]), btn(commands[20])],
+    [btn(commands[8]), btn(commands[9]), btn(commands[10]),
+     btn(commands[13]), btn(commands[11]), btn(commands[12]), btn(commands[14])]
 ])
 
 rm_kb = ReplyKeyboardRemove()
 
 
-def _kb_stop(func=None):
-    return ReplyKeyboardMarkup(keyboard=[[_btn(stop)]]) \
-        if func is None else ReplyKeyboardMarkup(keyboard=[[_btn(stop + '\"' + func + '\"')]])
+def kb_stop(func=None):
+    return ReplyKeyboardMarkup(keyboard=[[btn(stop)]]) \
+        if func is None else ReplyKeyboardMarkup(keyboard=[[btn(stop + '\"' + func + '\"')]])
 
 
 # endregion
 
 # region Methods
 # noinspection PyShadowingNames
-def _send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
+def send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
     LOGGER.debug(f"Message posted: {chat_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
     return BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
 
 # noinspection PyShadowingNames
-def _reply_wrong_id(chat_id, msg):
+def reply_wrong_id(chat_id, msg):
     user_id = msg['from']['id']
     first_name = msg['from']['first_name']
     last_name = msg['from']['last_name']
     username = msg['from']['username']
     log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
-    _send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    _send(f"Attention! {access.thk}", log_msg)
+    send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
+    send(f"Attention! {access.thk}", log_msg)
     LOGGER.warning(log_msg)
 
 
 # noinspection PyShadowingNames
-def _reply_wrong_command(chat_id, content):
+def reply_wrong_command(chat_id, content):
     try:
         got = str(codecs.encode(content, 'utf-8')).replace('b', '')
         raise Exception(f'Not allowed input: {got}')
     except Exception as ex:
-        _send(chat_id, not_allowed, parse_mode='MarkdownV2')
+        send(chat_id, not_allowed, parse_mode='MarkdownV2')
         LOGGER.warning(str(ex))
     return
 
 
 # noinspection PyShadowingNames
-def _stop(chat_id, msg=stop_msg):
+def stop_function(chat_id, msg=stop_msg):
     if msg is not None:
-        _send(chat_id, msg, reply_markup=rm_kb)
-    return_bool = True if stop_threads() else False
-    return return_bool
+        send(chat_id, msg, reply_markup=rm_kb)
+    return True if stop_threads() else False
 
 
 # noinspection PyGlobalUndefined
-def _on_chat_message(msg):
+def handle(msg):
     global command, chat_id
     content_type, chat_type, chat_id = telepot.glance(msg)
     LOGGER.debug(msg)
 
     # check user
     if chat_id not in admins:
-        _reply_wrong_id(chat_id, msg)
+        reply_wrong_id(chat_id, msg)
         return
 
     if content_type == 'text':
@@ -108,57 +107,57 @@ def _on_chat_message(msg):
         LOGGER.info(f'Requested: {command}')
         # /start
         if command == "/start":
-            _send(chat_id, pls_select.format(msg['from']['first_name']))
+            send(chat_id, pls_select.format(msg['from']['first_name']))
 
         # /stop
         elif command == "/stop":
-            if _stop(chat_id, msg=None):
-                _send(chat_id, stopped, reply_markup=rm_kb)
+            if stop_function(chat_id, msg=None):
+                send(chat_id, stopped, reply_markup=rm_kb)
 
         # stop function
         elif (command.startswith(stop)) or (command.startswith(stop.lower())):
-            if _stop(chat_id, msg=command):
-                _send(chat_id, pls_select.format(msg['from']['first_name']))
+            if stop_function(chat_id, msg=None):
+                send(chat_id, pls_select.format(msg['from']['first_name']))
 
         # /service
         elif command == ('/' + service.NAME.lower()):
-            if _stop(chat_id):
-                _send(chat_id, service.menu, reply_markup=rm_kb)
+            if stop_function(chat_id):
+                send(chat_id, service.menu, reply_markup=rm_kb)
         elif command == service.OSCommand.c_reboot:
-            _send(chat_id, rebooted, reply_markup=rm_kb)
+            send(chat_id, rebooted, reply_markup=rm_kb)
             service.reboot_device(rebooted)
         elif command == service.OSCommand.c_system:
-            _send(chat_id, service.system_info(), reply_markup=rm_kb)
+            send(chat_id, service.system_info(), reply_markup=rm_kb)
             LOGGER.info(service.system_info().replace("\n", " "))
         elif command == service.OSCommand.c_update:
-            _send(chat_id, updated, reply_markup=rm_kb)
+            send(chat_id, updated, reply_markup=rm_kb)
             update_bot(updated)
         # all other commands
         elif any(c for c in commands if (command == c)):
-            if _stop(chat_id, msg=None):
-                _send(chat_id, called.format(command), reply_markup=_kb_stop(), parse_mode='MarkdownV2')
+            if stop_function(chat_id, msg=None):
+                send(chat_id, called.format(command), reply_markup=kb_stop(), parse_mode='MarkdownV2')
                 run_thread(command)
         else:
-            _reply_wrong_command(chat_id, command)
+            reply_wrong_command(chat_id, command)
     else:
-        _reply_wrong_command(chat_id, content_type)
+        reply_wrong_command(chat_id, content_type)
 
 
 # noinspection PyShadowingNames
 def external_request(msg, chat_id=None):
     if chat_id is None:
         for chat_id in admins:
-            _send(chat_id, msg)
+            send(chat_id, msg)
     else:
-        _send(chat_id, msg)
+        send(chat_id, msg)
 
 
 def start_bot():
     LOGGER.info("Bot is running...")
     for admin in admins:
-        _send(admin, started, reply_markup=rm_kb)
+        send(admin, started, reply_markup=rm_kb)
 
-    MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
+    MessageLoop(BOT, {'chat': handle}).run_as_thread()
     if AUTO_REBOOT_ENABLED:
         AutoReboot(AUTO_REBOOT_CLOCK_TIME).start()
 

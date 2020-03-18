@@ -33,7 +33,7 @@ class Strip(object):
         self.strip.begin()
 
     def __repr__(self):
-        return(
+        return (
             f"{self.name}: "
             f"COUNT:{self.count}, "
             f"PIN:{self.pin}, "
@@ -45,21 +45,25 @@ class Strip(object):
     def get_instance(self):
         return self.strip
 
+    @classmethod
+    def setup(cls, s: Adafruit_NeoPixel):
+        """
+        Low light during given period.
+
+        :param s: Adafruit_NeoPixel
+        :return: Datetime, Brightness
+        """
+        now = datetime.datetime.now()
+        if LED_MORNING_CUT_OFF < int(now.hour) < LED_NIGHT_CUT_OFF:
+            s.setBrightness(LED_DAY_BRIGHTNESS)
+        else:
+            s.setBrightness(LED_NIGHT_BRIGHTNESS)
+        b = s.getBrightness()
+        return now, b
+
 
 def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
-    """
-    Low light during given period.
-
-    :param s: Adafruit_NeoPixel
-    :return: Datetime, Brightness
-    """
-    now = datetime.datetime.now()
-    if LED_MORNING_CUT_OFF < int(now.hour) < LED_NIGHT_CUT_OFF:
-        s.setBrightness(LED_DAY_BRIGHTNESS)
-    else:
-        s.setBrightness(LED_NIGHT_BRIGHTNESS)
-    b = s.getBrightness()
-    return now, b
+    return Strip.setup(s)
 
 
 STRIP = Strip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS).get_instance()
