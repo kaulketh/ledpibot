@@ -16,26 +16,34 @@ class AutoReboot(CountdownThread):
     name = "Auto reboot"
 
     def __init__(self, hour: int = 0):
-        self._hour = hour
+        self.hour = hour
         super(AutoReboot, self).__init__(None, None, name=self.name, n=0)
 
-    def _process(self):
+    def __process(self):
         pass
 
     def run(self):
-        self.log.info(f"{self.name} initialized for {self._hour}:00.")
-        while not self.time_reached:
-            time.sleep(2)
-        from bot import external_request
-        from config import rebooted
-        external_request(rebooted)
-        from control.service import reboot_device
-        reboot_device(self.name)
+        try:
+            self.logger.info(f"{self.name} initialized for {self.hour}:00.")
+            while not self.__time_reached:
+                time.sleep(2)
+            from bot import external_request
+            from config import rebooted
+            external_request(rebooted)
+            from control.service import reboot_device
+            reboot_device(self.name)
+        except Exception as e:
+            self.logger.error(f"{e}")
 
     @property
-    def time_reached(self):
+    def __time_reached(self):
         now = datetime.datetime.now()
-        return now.hour == self._hour and now.minute == 0 and now.second <= 5
+        return now.hour == self.hour and now.minute == 0 and now.second <= 5
+
+
+def init_auto_reboot(h):
+    AutoReboot(h).start()
+    return
 
 
 if __name__ == '__main__':

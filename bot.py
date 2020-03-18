@@ -19,6 +19,8 @@ from config import \
     wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
+from control.autoreboot import init_auto_reboot
+from control.update import update_bot
 from logger import LOGGER as LOG
 
 BOT = telepot.Bot(token)
@@ -128,15 +130,15 @@ def _on_chat_message(msg):
         elif command == ('/' + service.NAME.lower()):
             if _stop(chat_id):
                 _send(chat_id, service.menu, reply_markup=rm_kb)
-        elif command == service.c_reboot:
+        elif command == service.OSCommand.c_reboot:
             _send(chat_id, rebooted, reply_markup=rm_kb)
             service.reboot_device(rebooted)
-        elif command == service.c_system:
+        elif command == service.OSCommand.c_system:
             _send(chat_id, service.system_usage(), reply_markup=rm_kb)
             LOG.info(service.system_usage().replace("\n", " "))
-        elif command == service.c_update:
+        elif command == service.OSCommand.c_update:
             _send(chat_id, updated, reply_markup=rm_kb)
-            service.update_bot(updated)
+            update_bot(updated)
         # all other commands
         elif any(c for c in commands if (command == c)):
             if _stop(chat_id, msg=None):
@@ -161,7 +163,7 @@ def start_bot():
     _ready_to_use()
     MessageLoop(BOT, {'chat': _on_chat_message}).run_as_thread()
     if AUTO_REBOOT_ENABLED:
-        service.init_auto_reboot(AUTO_REBOOT_CLOCK_TIME)
+        init_auto_reboot(AUTO_REBOOT_CLOCK_TIME)
     while True:
         try:
             signal.pause()
