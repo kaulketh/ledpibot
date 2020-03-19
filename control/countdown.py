@@ -40,13 +40,20 @@ class CountdownThread(Thread):
         self.logger.info(f"Thread '{self._name}' initialized, start process '{self.function}' for {self.n} seconds")
         p = self.__process
         self.threads.append(self)
+        start = self.n
         while self.__getattribute__('do_run') and self.n > 0:
             self.n -= 1
             time.sleep(1)
+            if self.n == (start // 2) and self.n > 60:
+                from bot import external_request, kb_stop
+                msg =f"Stop *{self._name}*  T-{round(self.n / 60, 2)} min."
+                self.logger.info(msg.replace("*",""))
+                external_request(msg, reply_markup=kb_stop())
+                start = self.n
         if self.n <= 0:
-            from bot import external_request
+            from bot import external_request, kb_markup
             self.logger.info(f"{self.expired}: {self.function}")
-            external_request(standby)
+            external_request(standby, reply_markup=kb_markup)
         p.terminate()
         clear(self.strip)
         self.strip.setBrightness(LED_BRIGHTNESS)
@@ -54,7 +61,7 @@ class CountdownThread(Thread):
 
     def stop(self):
         self.do_run = False
-        self.logger.info(f"{self.stopped}: {self.function}")
+        self.logger.info(f"{self._name}: {self.stopped}: {self.function}")
 
     @property
     def is_running(self) -> bool:

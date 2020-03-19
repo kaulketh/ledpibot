@@ -144,12 +144,12 @@ def handle(msg):
 
 
 # noinspection PyShadowingNames
-def external_request(msg, chat_id=None):
+def external_request(msg, chat_id=None, reply_markup=None):
     if chat_id is None:
         for chat_id in admins:
-            send(chat_id, msg)
+            send(chat_id, msg, reply_markup)
     else:
-        send(chat_id, msg)
+        send(chat_id, msg, reply_markup)
 
 
 def start_bot():
