@@ -28,26 +28,26 @@ class CountdownThread(Thread):
         self.do_run = True
         self.function = function
         self.strip = stripe
-        self._name = function if name is None else name
+        self.f_name = function if name is None else name
 
     @property
     def __process(self):
-        func_p = Process(target=self.function, name=self._name, args=(self.strip,))
-        func_p.start()
-        return func_p
+        f_process = Process(target=self.function, name=self.f_name, args=(self.strip,))
+        f_process.start()
+        return f_process
 
     def run(self):
-        self.logger.info(f"Thread '{self._name}' initialized, start process '{self.function}' for {self.n} seconds")
+        self.logger.info(f"Thread '{self.f_name}' initialized, start process '{self.function}' for {self.n} seconds")
         p = self.__process
         self.threads.append(self)
         start = self.n
         while self.__getattribute__('do_run') and self.n > 0:
             self.n -= 1
             time.sleep(1)
-            if self.n == (start // 2) and self.n > 60:
+            if self.n == (start // 2) and self.n >= 300:
                 from bot import external_request, kb_stop
-                msg =f"Stop *{self._name}*  T-{round(self.n / 60, 2)} min."
-                self.logger.info(msg.replace("*",""))
+                msg = f"Stop *{self.f_name}*: T minus *{self.n // 60}* min."
+                self.logger.info(msg.replace("*", ""))
                 external_request(msg, reply_markup=kb_stop())
                 start = self.n
         if self.n <= 0:
@@ -61,7 +61,7 @@ class CountdownThread(Thread):
 
     def stop(self):
         self.do_run = False
-        self.logger.info(f"{self._name}: {self.stopped}: {self.function}")
+        self.logger.info(f"{self.f_name}: {self.stopped}: {self.function}")
 
     @property
     def is_running(self) -> bool:
