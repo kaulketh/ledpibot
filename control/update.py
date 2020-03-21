@@ -27,13 +27,18 @@ class Update:
         self.root_folder = os.path.join(self.folder, '..')
         self.subs = [f for f in os.listdir(self.root_folder)]
 
+    @staticmethod
+    def ignored(f_name: str):
+        return f_name.startswith('.') or f_name == 'hardware'
+
+    @property
     def run(self):
         self.logger.info("Starting update...")
         try:
             os.system(self.save_secret)
             self.logger.info(f"Clone branch \'{self.branch}\' from Github repository...")
             os.system(self.clone)
-            cloned_f = [f for f in os.listdir('ledpibot') if not f.startswith('.')]
+            cloned_f = [f for f in os.listdir('ledpibot') if not self.ignored(f)]
             self.logger.info("Copy files and folders...")
             for f in cloned_f:
                 os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
@@ -50,7 +55,7 @@ class Update:
 def update_bot(log_msg: str):
     try:
         Update.logger.info(log_msg)
-        if Update().run():
+        if Update().run:
             reboot_device('Update done.')
         else:
             Update.logger.warning('Update failed.')
