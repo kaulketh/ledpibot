@@ -20,7 +20,7 @@ class CountdownThread(Thread):
     name = "Countdown"
     logger = LOGGER
 
-    def __init__(self, function, stripe, name=None, n=COUNTDOWN):
+    def __init__(self, function, stripe, name=None, n=COUNTDOWN, request_id=None):
         super(CountdownThread, self).__init__()
         self.expired = "Runtime expired"
         self.stopped = "Stop requested, stopped"
@@ -29,6 +29,7 @@ class CountdownThread(Thread):
         self.function = function
         self.strip = stripe
         self.f_name = function if name is None else name
+        self._chat_id = request_id if request_id is not None else None
 
     @property
     def __process(self):
@@ -37,7 +38,7 @@ class CountdownThread(Thread):
         return f_process
 
     def run(self):
-        self.logger.info(f"Thread '{self.f_name}' initialized, start process '{self.function}' for {self.n} seconds")
+        self.logger.info(f"Thread '{self.f_name}' initialized from ID:{self._chat_id}, start process '{self.function}' for {self.n} seconds")
         p = self.__process
         self.threads.append(self)
         start = self.n
@@ -48,12 +49,12 @@ class CountdownThread(Thread):
                 from bot import external_request, kb_stop
                 msg = f"Stop *{self.f_name}*: T minus *{self.n // 60}* min."
                 self.logger.info(msg.replace("*", ""))
-                external_request(msg, reply_markup=kb_stop())
+                external_request(msg, reply_markup=kb_stop(), chat_id=self._chat_id)
                 start = self.n
         if self.n <= 0:
             from bot import external_request, kb_markup
             self.logger.info(f"{self.expired}: {self.function}")
-            external_request(standby, reply_markup=kb_markup)
+            external_request(standby, reply_markup=kb_markup, chat_id=self._chat_id)
         p.terminate()
         clear(self.strip)
         self.strip.setBrightness(LED_BRIGHTNESS)

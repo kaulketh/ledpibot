@@ -136,7 +136,7 @@ def handle(msg):
         elif any(c for c in commands if (command == c)):
             if stop_function(chat_id, msg=None):
                 send(chat_id, called.format(command), reply_markup=kb_stop(), parse_mode='MarkdownV2')
-                run_thread(command)
+                run_thread(command, chat_id)
         else:
             reply_wrong_command(chat_id, command)
     else:
