@@ -32,24 +32,35 @@ stop = commands[0]
 start = commands[1]
 
 
-def btn(text):
+def button(text) -> KeyboardButton:
+    LOGGER.debug(f"Build button: {text}")
     return KeyboardButton(text=text)
 
 
+def buttons(indices: list, command_list: list = commands) -> list:
+    t = []
+    for i in indices:
+        LOGGER.debug(f"Build and append button to tuple: {command_list[i]}")
+        t.append(KeyboardButton(text=command_list[i]))
+    LOGGER.debug(f"Button tuple: {t}")
+    return t
+
+
 kb_markup = ReplyKeyboardMarkup(keyboard=[
-    [btn(commands[2]), btn(commands[3]), btn(commands[6]), btn(commands[7]), btn(commands[16])],
-    [btn(commands[4]), btn(commands[5]), btn(commands[17]), btn(commands[18]), btn(commands[19])],
-    [btn(commands[15]), btn(commands[20])],
-    [btn(commands[8]), btn(commands[9]), btn(commands[10]),
-     btn(commands[13]), btn(commands[11]), btn(commands[12]), btn(commands[14])]
+    buttons([2, 3, 6, 7, 16]),
+    buttons([4, 5, 17, 18, 19]),
+    buttons([15, 20]),
+    buttons([8, 9, 10, 13, 11, 12, 14])
 ])
 
 rm_kb = ReplyKeyboardRemove()
 
 
 def kb_stop(func=None):
-    return ReplyKeyboardMarkup(keyboard=[[btn(stop)]]) \
-        if func is None else ReplyKeyboardMarkup(keyboard=[[btn(stop + '\"' + func + '\"')]])
+    r = ReplyKeyboardMarkup(keyboard=[[button(stop)]]) \
+        if func is None else ReplyKeyboardMarkup(keyboard=[[button(f"{stop} \"{func}\"")]])
+    LOGGER.debug(f"Stop keyboard markup: {r}")
+    return r
 
 
 # endregion
@@ -63,14 +74,17 @@ def send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
 
 # noinspection PyShadowingNames
 def reply_wrong_id(chat_id, msg):
-    user_id = msg['from']['id']
-    first_name = msg['from']['first_name']
-    last_name = msg['from']['last_name']
-    username = msg['from']['username']
-    log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
-    send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-    send(f"Attention! {access.thk}", log_msg)
-    LOGGER.warning(log_msg)
+    try:
+        user_id = msg['from']['id']
+        first_name = msg['from']['first_name']
+        last_name = msg['from']['last_name']
+        username = msg['from']['username']
+        log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
+        send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
+        send(f"Attention! {access.thk}", log_msg)
+        raise Exception(log_msg)
+    except Exception as ex:
+        LOGGER.warning(f"{ex}")
 
 
 # noinspection PyShadowingNames
@@ -79,7 +93,7 @@ def reply_wrong_command(chat_id, content):
         got = str(codecs.encode(content, 'utf-8')).replace('b', '')
         raise Exception(f'Not allowed input: {got}')
     except Exception as ex:
-        send(chat_id, not_allowed, parse_mode='MarkdownV2')
+        send(chat_id, not_allowed, parse_mode='MarkdownV2', reply_markup=None)
         LOGGER.warning(str(ex))
     return
 
