@@ -38,7 +38,9 @@ class CountdownThread(Thread):
         return f_process
 
     def run(self):
-        self.logger.info(f"Thread '{self.f_name}' initialized from ID:{self._chat_id}, start process '{self.function}' for {self.n} seconds")
+        self.logger.info(
+            f"Thread '{self.f_name}' initialized from ID:{self._chat_id}, "
+            f"start process '{self.function}' for {self.n} seconds")
         p = self.__process
         self.threads.append(self)
         start = self.n
