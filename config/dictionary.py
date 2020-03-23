@@ -14,6 +14,7 @@ __status__ = "Production"
 from logger import LOGGER
 from .settings import STANDBY_MINUTES
 
+# noinspection SpellCheckingInspection
 txts = {
     "message": {
         0: "wrong_id",
@@ -385,11 +386,11 @@ def set_language(lng='en'):
 
 
 # noinspection PyGlobalUndefined
-def get_translations(txts_index):
+def get_translations(text_index):
     """
     Load translations from dictionary.
 
-    :param txts_index: messages, commands
+    :param text_index: messages, commands
     :return: list of texts
     """
     global language, translations, text
@@ -406,7 +407,7 @@ def get_translations(txts_index):
             yield text
 
     try:
-        for t in generated_texts(txts_index):
+        for t in generated_texts(text_index):
             translations.append(t)
         return translations
     except Exception as e:

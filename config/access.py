@@ -9,7 +9,7 @@ __status__ = "Production"
 from . import secret
 
 # github
-acces_token_to_github = secret.acces_token_to_github
+access_token_to_github = secret.access_token_to_github
 
 # bot
 annib = secret.annib

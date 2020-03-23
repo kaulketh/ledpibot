@@ -47,7 +47,6 @@ def run_clock3(stripe):
                 time.sleep(1.3)
                 clear(stripe)
 
-
         except KeyboardInterrupt:
             LOGGER.warn("KeyboardInterrupt.")
             exit()
