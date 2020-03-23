@@ -18,61 +18,62 @@ from logger import LOGGER
 
 class Colorizer(object):
     def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
-        self.color = None
-        self.name = Colorizer.__name__
-        self.log = LOGGER
-        self.strip = strip
-        self.div = 3  # to reduce brightness
+        self.__color = None
+        self.__name = Colorizer.__name__
+        self.__log = LOGGER
+        self.__strip = strip
+        self.__div = 3  # to reduce brightness
 
         if color_key is not None:
             self.set_color(color_key)
 
         # colors here defined in order G(reen) R(ed) B(lue)
-        self.colors = {
+        self.__colors = {
             0: Color(0, 0, 0),
             1: Color(255, 255, 255),
-            'red': Color(10 // self.div, 165 // self.div, 10 // self.div),
-            'blue': Color(50 // self.div, 0 // self.div, 135 // self.div),
-            'green': Color(135 // self.div, 0 // self.div, 50 // self.div),
-            'yellow': Color(165 // self.div, 255 // self.div, 0 // self.div),
-            'orange': Color(70 // self.div, 210 // self.div, 0 // self.div),
-            'white': Color(255 // (self.div * 2), 255 // (self.div * 2), 255 // (self.div * 2)),
-            'violet': Color(18 // self.div, 238 // self.div, 137 // self.div)
+            'red': Color(10 // self.__div, 165 // self.__div, 10 // self.__div),
+            'blue': Color(50 // self.__div, 0 // self.__div, 135 // self.__div),
+            'green': Color(135 // self.__div, 0 // self.__div, 50 // self.__div),
+            'yellow': Color(165 // self.__div, 255 // self.__div, 0 // self.__div),
+            'orange': Color(70 // self.__div, 210 // self.__div, 0 // self.__div),
+            'white': Color(255 // (self.__div * 2), 255 // (self.__div * 2), 255 // (self.__div * 2)),
+            'violet': Color(18 // self.__div, 238 // self.__div, 137 // self.__div)
         }
 
+    @property
     def colors(self):
         """ Returns defined colors """
-        return self.colors.keys()
+        return self.__colors.keys()
 
     def set_color(self, color_key):
-        self.color = color_key if isinstance(color_key, int) else color_key.lower()
+        self.__color = color_key if isinstance(color_key, int) else color_key.lower()
 
-    def _get_color(self, key):
-        if key in self.colors.keys():
-            return self.colors.get(key)
+    def __get_color(self, key):
+        if key in self.colors:
+            return self.__colors.get(key)
         else:
-            raise Exception(f'Key \'{self.color}\' not defined in {self.name} colors.')
+            raise Exception(f'Key \'{self.__color}\' not defined in {self.__name} colors.')
 
     def start(self, brightness=None):
         try:
-            if self.color is None:
+            if self.__color is None:
                 raise Exception('Start without set color!')
             else:
                 if brightness is None:
-                    set_brightness_depending_on_daytime(self.strip)
+                    set_brightness_depending_on_daytime(self.__strip)
                 else:
-                    self.strip.setBrightness(brightness)
+                    self.__strip.setBrightness(brightness)
 
-                for i in range(self.strip.numPixels()):
-                    self.strip.setPixelColor(i, self._get_color(self.color))
-                self.strip.show()
+                for i in range(self.__strip.numPixels()):
+                    self.__strip.setPixelColor(i, self.__get_color(self.__color))
+                self.__strip.show()
 
         except KeyboardInterrupt:
-            self.log.warn("KeyboardInterrupt")
+            self.__log.warn("KeyboardInterrupt")
             exit()
 
         except Exception as e:
-            self.log.error(f"An error occurs: {e}")
+            self.__log.error(f"An error occurs: {e}")
             exit()
 
 

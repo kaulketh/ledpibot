@@ -17,33 +17,33 @@ class Update:
     name = "update"
 
     def __init__(self, branch: str = None):
-        self.branch = 'master' if branch is None else branch
-        self.save_secret = 'mv -v /home/pi/bot/config/secret.py /home/pi/bot/secret.py'
-        self.restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
-        self.remove_clone = 'rm -rf ledpibot/'
-        self.clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.branch
-        self.folder = os.path.dirname(os.path.abspath(__file__))
-        self.root_folder = os.path.join(self.folder, '..')
-        self.subs = [f for f in os.listdir(self.root_folder)]
+        self.__branch = 'master' if branch is None else branch
+        self.__save_secret = 'mv -v /home/pi/bot/config/secret.py /home/pi/bot/secret.py'
+        self.__restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
+        self.__remove_clone = 'rm -rf ledpibot/'
+        self.__clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.__branch
+        self.__folder = os.path.dirname(os.path.abspath(__file__))
+        self.__root_folder = os.path.join(self.__folder, '..')
+        self.__subs = [f for f in os.listdir(self.__root_folder)]
 
     @staticmethod
-    def ignored(f_name: str):
+    def __ignored(f_name: str):
         return f_name.startswith('.') or f_name == 'hardware'
 
     @property
     def run(self):
         self.logger.info("Starting update...")
         try:
-            os.system(self.save_secret)
-            self.logger.info(f"Clone branch \'{self.branch}\' from Github repository...")
-            os.system(self.clone)
-            cloned_f = [f for f in os.listdir('ledpibot') if not self.ignored(f)]
+            os.system(self.__save_secret)
+            self.logger.info(f"Clone branch \'{self.__branch}\' from Github repository...")
+            os.system(self.__clone)
+            cloned_f = [f for f in os.listdir('ledpibot') if not self.__ignored(f)]
             self.logger.info("Copy files and folders...")
             for f in cloned_f:
                 os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
-            os.system(self.restore_secret)
+            os.system(self.__restore_secret)
             self.logger.info("Remove not needed files...")
-            os.system(self.remove_clone)
+            os.system(self.__remove_clone)
         except Exception as e:
             self.logger.error(f"Update failure: {e}")
             return False

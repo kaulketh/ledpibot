@@ -22,7 +22,7 @@ from .rainbow import run_rainbow
 from .theater import run_theater
 
 
-def _build_dictionary():
+def build_dictionary():
     try:
         """Ensure right order of functions, depends on the command order in ~.config.dictionary.py"""
         dictionary = {}
@@ -41,4 +41,4 @@ def _build_dictionary():
         LOGGER.error(f"{ex}")
 
 
-dictionary_functions = _build_dictionary()
+dictionary_functions = build_dictionary()

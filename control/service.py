@@ -21,16 +21,16 @@ class OSCommand:
     c_reboot = "/reboot"
     c_update = "/update"
 
-    menu_header = f"{NAME} functions:"
+    __menu_header = f"{NAME} functions:"
 
-    menu_dictionary = {
+    __menu_dictionary = {
         0: c_reboot,
         1: c_system,
         2: c_update
     }
 
-    new_line = "\n"
-    empty = ""
+    __new_line = "\n"
+    __empty = ""
 
     def __init__(self, command: str = None, log_msg: str = None):
         self.__logger = OSCommand.logger
@@ -50,12 +50,12 @@ class OSCommand:
     @classmethod
     def build_menu(cls):
         try:
-            m = f"{cls.menu_header}{cls.new_line}"
-            cls.logger.debug(f"Build service menu: {m.replace(cls.new_line, cls.empty)}")
-            for key in cls.menu_dictionary.keys():
-                line = f"{cls.c_prefix}{cls.menu_dictionary.get(key)}{cls.new_line}"
+            m = f"{cls.__menu_header}{cls.__new_line}"
+            cls.logger.debug(f"Build service menu: {m.replace(cls.__new_line, cls.__empty)}")
+            for key in cls.__menu_dictionary.keys():
+                line = f"{cls.c_prefix}{cls.__menu_dictionary.get(key)}{cls.__new_line}"
                 m += line
-                cls.logger.debug(f"Add line to menu: {line.replace(cls.new_line, cls.empty)}")
+                cls.logger.debug(f"Add line to menu: {line.replace(cls.__new_line, cls.__empty)}")
             return m
         except Exception as e:
             cls.logger.error(f"{e}")
@@ -72,17 +72,17 @@ class OSCommand:
             c = subprocess.check_output(
                 "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
                 "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-            return f"{host} ({OSCommand.latest_commit()[1]}){cls.new_line}" \
-                   f"{ip}{cls.new_line}" \
-                   f"{m}{cls.new_line}" \
-                   f"{d}{cls.new_line}" \
+            return f"{host} ({OSCommand.__latest_commit()[1]}){cls.__new_line}" \
+                   f"{ip}{cls.__new_line}" \
+                   f"{m}{cls.__new_line}" \
+                   f"{d}{cls.__new_line}" \
                    f"{c}" \
                 .replace("b'", "").replace("'", "").replace("\\n", "")
         except Exception as e:
             cls.logger.error(f"{e}")
 
     @classmethod
-    def latest_commit(cls):
+    def __latest_commit(cls):
         commit = "curl -s https://api.github.com/repos/kaulketh/ledpibot/commits/master --insecure "
         latest_commit = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
             .replace("b'", "").replace("'", "").replace("\\n", "")
