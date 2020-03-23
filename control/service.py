@@ -33,16 +33,17 @@ class OSCommand:
     empty = ""
 
     def __init__(self, command: str = None, log_msg: str = None):
-        self.log_msg = log_msg
-        self.command = command
+        self.__logger = OSCommand.logger
+        self.__log_msg = log_msg
+        self.__command = command
 
     def execute(self):
-        if self.command is not None:
+        if self.__command is not None:
             try:
-                self.logger.info(self.log_msg) if self.log_msg is not None else self.command
-                os.system(self.command)
+                self.__logger.info(self.__log_msg) if self.__log_msg is not None else self.__command
+                os.system(self.__command)
             except Exception as e:
-                self.logger.error(f"{e}")
+                self.__logger.error(f"{e}")
         else:
             raise Exception("No executable command found!")
 
