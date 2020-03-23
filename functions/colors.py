@@ -16,7 +16,7 @@ from functions.effects import clear
 from logger import LOGGER
 
 
-class Colorizer(object):
+class Colorizer:
     def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
         self.__color = None
         self.__name = Colorizer.__name__

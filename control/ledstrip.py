@@ -16,7 +16,7 @@ from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED
 from logger import LOGGER
 
 
-class Strip(object):
+class Strip:
     logger = LOGGER
     name = "LED Strip"
 

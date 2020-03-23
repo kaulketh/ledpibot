@@ -110,7 +110,6 @@ class LedPiBot:
         return True if stop_threads() else False
 
     def __handle(self, msg):
-        # global command, chat_id
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.__log.debug(msg)
 
@@ -143,12 +142,13 @@ class LedPiBot:
             elif command == service.OSCommand.c_reboot:
                 self.__send(chat_id, rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(rebooted)
-            elif command == service.OSCommand.c_system:
+            elif command == service.OSCommand.c_info:
                 self.__send(chat_id, service.system_info(), reply_markup=self.rm_kb)
                 self.__log.info(service.system_info().replace("\n", " "))
             elif command == service.OSCommand.c_update:
                 self.__send(chat_id, updated, reply_markup=self.rm_kb)
                 update_bot(updated)
+
             # all other commands
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):

@@ -11,13 +11,14 @@ import subprocess
 
 from logger import LOGGER
 
+GIT_API_URL = "https://api.github.com/repos/kaulketh/ledpibot"
 NAME = "Service"
 
 
 class OSCommand:
     logger = LOGGER
     c_prefix = "- "
-    c_system = "/info"
+    c_info = "/info"
     c_reboot = "/reboot"
     c_update = "/update"
 
@@ -25,7 +26,7 @@ class OSCommand:
 
     __menu_dictionary = {
         0: c_reboot,
-        1: c_system,
+        1: c_info,
         2: c_update
     }
 
@@ -72,7 +73,7 @@ class OSCommand:
             c = subprocess.check_output(
                 "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
                 "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-            return f"{host} {OSCommand.__latest_release()} ({OSCommand.__latest_commit()[1]}){cls.__new_line}" \
+            return f"{host} {cls.__latest_release()} ({cls.__latest_commit()}){cls.__new_line}" \
                    f"{ip}{cls.__new_line}" \
                    f"{m}{cls.__new_line}" \
                    f"{d}{cls.__new_line}" \
@@ -83,15 +84,15 @@ class OSCommand:
 
     @classmethod
     def __latest_commit(cls):
-        commit = "curl -s https://api.github.com/repos/kaulketh/ledpibot/commits/master --insecure "
+        commit = f"curl -s {GIT_API_URL}/commits/master --insecure "
         latest_commit = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
             .replace("b'", "").replace("'", "").replace("\\n", "")
         commit_url_text = f"[{latest_commit[0:7]}](https://github.com/kaulketh/ledpibot/commit/{latest_commit})"
-        return latest_commit[0:7], commit_url_text
+        return commit_url_text
 
     @classmethod
     def __latest_release(cls):
-        release = "curl -s https://api.github.com/repos/kaulketh/ledpibot/releases/latest --insecure |" \
+        release = f"curl -s {GIT_API_URL}/releases/latest --insecure |" \
                   " grep -Po '\"tag_name\": \"\\K.*?(?=\")'"
         return f"{subprocess.check_output(release, shell=True)}".replace("b'", "").replace("'", "").replace("\\n", "")
 

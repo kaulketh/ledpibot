@@ -11,6 +11,11 @@ import os
 from control.service import reboot_device
 from logger import LOGGER
 
+GIT = "https://github.com/kaulketh/ledpibot.git"
+HOME_PI_BOT = "/home/pi/bot"
+PROJECT = "ledpibot"
+SECRET = "secret.py"
+
 
 class Update:
     logger = LOGGER
@@ -18,17 +23,17 @@ class Update:
 
     def __init__(self, branch: str = None):
         self.__branch = 'master' if branch is None else branch
-        self.__save_secret = 'mv -v /home/pi/bot/config/secret.py /home/pi/bot/secret.py'
-        self.__restore_secret = 'mv -v /home/pi/bot/secret.py /home/pi/bot/config/secret.py'
-        self.__remove_clone = 'rm -rf ledpibot/'
-        self.__clone = 'git clone -v https://github.com/kaulketh/ledpibot.git -b ' + self.__branch
+        self.__save_secret = f"mv -v {HOME_PI_BOT}/config/{SECRET} {HOME_PI_BOT}/{SECRET}"
+        self.__restore_secret = f"mv -v {HOME_PI_BOT}/{SECRET} {HOME_PI_BOT}/config/{SECRET}"
+        self.__remove_clone = f"rm -rf {PROJECT}/"
+        self.__clone = f"git clone -v {GIT} -b {self.__branch}"
         self.__folder = os.path.dirname(os.path.abspath(__file__))
         self.__root_folder = os.path.join(self.__folder, '..')
         self.__subs = [f for f in os.listdir(self.__root_folder)]
 
     @staticmethod
     def __ignored(f_name: str):
-        return f_name.startswith('.') or f_name == 'hardware'
+        return f_name.startswith('.') or f_name == 'hardware' or f_name.endswith('.md')
 
     @property
     def run(self):
@@ -37,15 +42,15 @@ class Update:
             os.system(self.__save_secret)
             self.logger.info(f"Clone branch \'{self.__branch}\' from Github repository...")
             os.system(self.__clone)
-            cloned_f = [f for f in os.listdir('ledpibot') if not self.__ignored(f)]
+            cloned_f = [f for f in os.listdir(PROJECT) if not self.__ignored(f)]
             self.logger.info("Copy files and folders...")
             for f in cloned_f:
-                os.system('cp -rv ledpibot/' + f + ' /home/pi/bot/')
+                os.system(f"cp -rv {PROJECT}/{f} {HOME_PI_BOT}/")
             os.system(self.__restore_secret)
             self.logger.info("Remove not needed files...")
             os.system(self.__remove_clone)
         except Exception as e:
-            self.logger.error(f"Update failure: {e}")
+            self.logger.error(f"{e}")
             return False
         return True
 
