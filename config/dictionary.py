@@ -14,10 +14,6 @@ __status__ = "Production"
 from logger import LOGGER
 from .settings import STANDBY_MINUTES
 
-language = None
-translations = None
-text = None
-
 txts = {
     "message": {
         0: "wrong_id",
@@ -371,6 +367,7 @@ translation = {
 }
 
 
+# noinspection PyGlobalUndefined
 def set_language(lng='en'):
     """
     Set chat language, default = English.
@@ -387,6 +384,7 @@ def set_language(lng='en'):
     LOGGER.info(f"Apart from service menu chat language is set to '{(translation[language].get('name'))}'.")
 
 
+# noinspection PyGlobalUndefined
 def get_translations(txts_index):
     """
     Load translations from dictionary.
