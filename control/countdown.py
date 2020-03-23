@@ -20,55 +20,60 @@ class CountdownThread(Thread):
     name = "Countdown"
     logger = LOGGER
 
-    def __init__(self, function, stripe, name=None, n=COUNTDOWN, request_id=None):
+    def __init__(self, function, stripe, name=None, n=COUNTDOWN, request_id=None, bot=None):
         super(CountdownThread, self).__init__()
-        self.expired = "Runtime expired"
-        self.stopped = "Stop requested, stopped"
-        self.n = n * 60
-        self.do_run = True
-        self.function = function
-        self.strip = stripe
-        self.f_name = function if name is None else name
-        self._chat_id = request_id if request_id is not None else None
+        self._logger = CountdownThread.logger
+
+        self.__bot = bot
+        self.__do_run = True
+        self.__expired = "Runtime expired"
+        self.__stopped = "Stop requested, stopped"
+        self.__n = n * 60
+        self.__function = function
+        self.__strip = stripe
+        self.__f_name = function if name is None else name
+        self.__chat_id = request_id if request_id is not None else None
 
     @property
     def __process(self):
-        f_process = Process(target=self.function, name=self.f_name, args=(self.strip,))
+        f_process = Process(target=self.__function, name=self.__f_name, args=(self.__strip,))
         f_process.start()
         return f_process
 
+    @property
+    def is_running(self) -> bool:
+        return self.__do_run
+
     def run(self):
-        self.logger.info(
-            f"Thread '{self.f_name}' initialized from ID:{self._chat_id}, "
-            f"start process '{self.function}' for {self.n} seconds")
+        self._logger.info(
+            f"Thread '{self.__f_name}' initialized from ID:{self.__chat_id}, "
+            f"start process '{self.__function}' for {self.__n} seconds")
         p = self.__process
         self.threads.append(self)
-        start = self.n
-        while self.__getattribute__('do_run') and self.n > 0:
-            self.n -= 1
+        start = self.__n
+        while self.__do_run and self.__n > 0:
+            self.__n -= 1
             time.sleep(1)
-            if self.n == (start // 2) and self.n >= 300:
-                from bot import external_request, kb_stop
-                msg = f"Stop *{self.f_name}*: T minus *{self.n // 60}* min."
-                self.logger.info(msg.replace("*", ""))
-                external_request(msg, reply_markup=kb_stop(), chat_id=self._chat_id)
-                start = self.n
-        if self.n <= 0:
-            from bot import external_request, kb_markup
-            self.logger.info(f"{self.expired}: {self.function}")
-            external_request(standby, reply_markup=kb_markup, chat_id=self._chat_id)
+            if self.__n == (start // 2) and self.__n >= 300:
+                from bot import LedPiBot
+                msg = f"Stop *{self.__f_name}*: T minus *{self.__n // 60}* min."
+                self._logger.info(msg.replace("*", ""))
+                LedPiBot.external_request(
+                    msg, reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id, bot=self.__bot)
+                start = self.__n
+        if self.__n <= 0:
+            from bot import LedPiBot
+            self._logger.info(f"{self.__expired}: {self.__function}")
+            LedPiBot.external_request(
+                standby, reply_markup=self.__bot.kb_markup, chat_id=self.__chat_id, bot=self.__bot)
         p.terminate()
-        clear(self.strip)
-        self.strip.setBrightness(LED_BRIGHTNESS)
+        clear(self.__strip)
+        self.__strip.setBrightness(LED_BRIGHTNESS)
         self.threads.remove(self)
 
     def stop(self):
-        self.do_run = False
-        self.logger.info(f"{self.f_name}: {self.stopped}: {self.function}")
-
-    @property
-    def is_running(self) -> bool:
-        return self.do_run
+        self.__do_run = False
+        self._logger.info(f"{self.__f_name}: {self.__stopped}: {self.__function}")
 
 
 if __name__ == '__main__':

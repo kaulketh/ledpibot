@@ -23,169 +23,168 @@ from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
 
-BOT = telepot.Bot(token)
-
 admins = [access.thk, access.annib]
-
-# region Keyboards
 stop = commands[0]
 start = commands[1]
 
 
-def button(text) -> KeyboardButton:
-    LOGGER.debug(f"Build button: {text}")
-    return KeyboardButton(text=text)
+class LedPiBot:
+    log = LOGGER
 
+    def __init__(self, t, ids):
+        """
+        :param t: bot token
+        :param ids: allowed chat ids
 
-def buttons(indices: list, command_list: list = commands) -> list:
-    t = []
-    for i in indices:
-        LOGGER.debug(f"Build and append button to tuple: {command_list[i]}")
-        t.append(KeyboardButton(text=command_list[i]))
-    LOGGER.debug(f"Button tuple: {t}")
-    return t
+        :type t: str
+        :type ids: list of int
+        """
+        self.__log = LedPiBot.log
+        self.__log.debug(f"Initialize LED-RaspberryPi-Telegram-Bot: {self.__class__.__name__}")
+        self.__token = t
+        self.__admins = ids
+        self.__telebot_bot = telepot.Bot(self.__token)
 
+        self.__remove_keyboard = ReplyKeyboardRemove()
+        self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
+            self.__buttons([2, 3, 6, 7, 16]),
+            self.__buttons([4, 5, 17, 18, 19]),
+            self.__buttons([15, 20]),
+            self.__buttons([8, 9, 10, 13, 11, 12, 14])
+        ])
 
-kb_markup = ReplyKeyboardMarkup(keyboard=[
-    buttons([2, 3, 6, 7, 16]),
-    buttons([4, 5, 17, 18, 19]),
-    buttons([15, 20]),
-    buttons([8, 9, 10, 13, 11, 12, 14])
-])
+    @property
+    def rm_kb(self):
+        return self.__remove_keyboard
 
-rm_kb = ReplyKeyboardRemove()
+    @property
+    def kb_markup(self):
+        return self.__keyboard_markup
 
+    @property
+    def kb_stop(self):
+        r = ReplyKeyboardMarkup(keyboard=[[self.__button(stop)]])
+        self.__log.debug(f"Stop keyboard markup: {r}")
+        return r
 
-def kb_stop(func=None):
-    r = ReplyKeyboardMarkup(keyboard=[[button(stop)]]) \
-        if func is None else ReplyKeyboardMarkup(keyboard=[[button(f"{stop} \"{func}\"")]])
-    LOGGER.debug(f"Stop keyboard markup: {r}")
-    return r
+    def __button(self, text) -> KeyboardButton:
+        self.__log.debug(f"Build button: {text}")
+        return KeyboardButton(text=text)
 
+    def __buttons(self, indices: list, command_list: list = commands) -> list:
+        t = []
+        for i in indices:
+            self.__log.debug(f"Build and append button to tuple: {command_list[i]}")
+            t.append(KeyboardButton(text=command_list[i]))
+        self.__log.debug(f"Button tuple: {t}")
+        return t
 
-# endregion
+    def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
+        self.__log.debug(f"Message posted: {ch_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
+        self.__telebot_bot.sendMessage(ch_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
 
-# region Methods
-# noinspection PyShadowingNames
-def send(chat_id, text, reply_markup=kb_markup, parse_mode='Markdown'):
-    LOGGER.debug(f"Message posted: {chat_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
-    return BOT.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+    def __reply_wrong_id(self, ch_id, msg):
+        try:
+            user_id = msg['from']['id']
+            first_name = msg['from']['first_name']
+            last_name = msg['from']['last_name']
+            username = msg['from']['username']
+            log_msg = f"Unauthorized access: ID {ch_id} User:{username}, {first_name} {last_name}"
+            self.__send(ch_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=self.rm_kb)
+            raise Exception(log_msg)
+        except Exception as ex:
+            self.__log.warning(f"{ex}")
 
-
-# noinspection PyShadowingNames
-def reply_wrong_id(chat_id, msg):
-    try:
-        user_id = msg['from']['id']
-        first_name = msg['from']['first_name']
-        last_name = msg['from']['last_name']
-        username = msg['from']['username']
-        log_msg = f"Unauthorized access: ID {chat_id} User:{username}, {first_name} {last_name}"
-        send(chat_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=rm_kb)
-        send(f"Attention! {access.thk}", log_msg)
-        raise Exception(log_msg)
-    except Exception as ex:
-        LOGGER.warning(f"{ex}")
-
-
-# noinspection PyShadowingNames
-def reply_wrong_command(chat_id, content):
-    try:
-        got = str(codecs.encode(content, 'utf-8')).replace('b', '')
-        raise Exception(f'Not allowed input: {got}')
-    except Exception as ex:
-        send(chat_id, not_allowed, parse_mode='MarkdownV2', reply_markup=None)
-        LOGGER.warning(str(ex))
-    return
-
-
-# noinspection PyShadowingNames
-def stop_function(chat_id, msg=stop_msg):
-    if msg is not None:
-        send(chat_id, msg, reply_markup=rm_kb)
-    return True if stop_threads() else False
-
-
-# noinspection PyGlobalUndefined
-def handle(msg):
-    global command, chat_id
-    content_type, chat_type, chat_id = telepot.glance(msg)
-    LOGGER.debug(msg)
-
-    # check user
-    if chat_id not in admins:
-        reply_wrong_id(chat_id, msg)
+    def __reply_wrong_command(self, ch_id, content):
+        try:
+            got = str(codecs.encode(content, 'utf-8')).replace('b', '')
+            raise Exception(f'Not allowed input: {got}')
+        except Exception as ex:
+            self.__send(ch_id, not_allowed, parse_mode='MarkdownV2', reply_markup=None)
+            self.__log.warning(str(ex))
         return
 
-    if content_type == 'text':
-        command = msg['text']
-        LOGGER.info(f'Requested: {command}')
-        # /start
-        if command == "/start":
-            send(chat_id, pls_select.format(msg['from']['first_name']))
+    def __stop_function(self, ch_id, msg=stop_msg):
+        if msg is not None:
+            self.__send(ch_id, msg, reply_markup=self.rm_kb)
+        return True if stop_threads() else False
 
-        # /stop
-        elif command == "/stop":
-            if stop_function(chat_id, msg=None):
-                send(chat_id, stopped, reply_markup=rm_kb)
+    def __handle(self, msg):
+        # global command, chat_id
+        content_type, chat_type, chat_id = telepot.glance(msg)
+        self.__log.debug(msg)
 
-        # stop function
-        elif (command.startswith(stop)) or (command.startswith(stop.lower())):
-            if stop_function(chat_id, msg=None):
-                send(chat_id, pls_select.format(msg['from']['first_name']))
+        # check user
+        if chat_id not in admins:
+            self.__reply_wrong_id(chat_id, msg)
+            return
 
-        # /service
-        elif command == ('/' + service.NAME.lower()):
-            if stop_function(chat_id):
-                send(chat_id, service.menu, reply_markup=rm_kb)
-        elif command == service.OSCommand.c_reboot:
-            send(chat_id, rebooted, reply_markup=rm_kb)
-            service.reboot_device(rebooted)
-        elif command == service.OSCommand.c_system:
-            send(chat_id, service.system_info(), reply_markup=rm_kb)
-            LOGGER.info(service.system_info().replace("\n", " "))
-        elif command == service.OSCommand.c_update:
-            send(chat_id, updated, reply_markup=rm_kb)
-            update_bot(updated)
-        # all other commands
-        elif any(c for c in commands if (command == c)):
-            if stop_function(chat_id, msg=None):
-                send(chat_id, called.format(command), reply_markup=kb_stop(), parse_mode='MarkdownV2')
-                run_thread(command, chat_id)
+        if content_type == 'text':
+            command = msg['text']
+            self.__log.info(f'Requested: {command}')
+            # /start
+            if command == "/start":
+                self.__send(chat_id, pls_select.format(msg['from']['first_name']), reply_markup=self.kb_markup)
+
+            # /stop
+            elif command == "/stop":
+                if self.__stop_function(chat_id, msg=None):
+                    self.__send(chat_id, stopped, reply_markup=self.rm_kb)
+
+            # stop function
+            elif (command.startswith(stop)) or (command.startswith(stop.lower())):
+                if self.__stop_function(chat_id, msg=None):
+                    self.__send(chat_id, pls_select.format(msg['from']['first_name']), reply_markup=self.kb_markup)
+
+            # /service
+            elif command == ('/' + service.NAME.lower()):
+                if self.__stop_function(chat_id):
+                    self.__send(chat_id, service.menu, reply_markup=self.rm_kb)
+            elif command == service.OSCommand.c_reboot:
+                self.__send(chat_id, rebooted, reply_markup=self.rm_kb)
+                service.reboot_device(rebooted)
+            elif command == service.OSCommand.c_system:
+                self.__send(chat_id, service.system_info(), reply_markup=self.rm_kb)
+                self.__log.info(service.system_info().replace("\n", " "))
+            elif command == service.OSCommand.c_update:
+                self.__send(chat_id, updated, reply_markup=self.rm_kb)
+                update_bot(updated)
+            # all other commands
+            elif any(c for c in commands if (command == c)):
+                if self.__stop_function(chat_id, msg=None):
+                    self.__send(chat_id, called.format(command), reply_markup=self.kb_stop, parse_mode='MarkdownV2')
+                    run_thread(command, chat_id, self)
+            else:
+                self.__reply_wrong_command(chat_id, command)
         else:
-            reply_wrong_command(chat_id, command)
-    else:
-        reply_wrong_command(chat_id, content_type)
+            self.__reply_wrong_command(chat_id, content_type)
+
+    def start(self):
+        self.__log.info("Bot is running...")
+        for a in self.__admins:
+            self.__send(a, started, reply_markup=self.rm_kb)
+        MessageLoop(self.__telebot_bot, {'chat': self.__handle}).run_as_thread()
+        if AUTO_REBOOT_ENABLED:
+            AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
+
+        while True:
+            try:
+                signal.pause()
+            except KeyboardInterrupt:
+                self.__log.warning('Program interrupted')
+                exit()
+            except Exception as e:
+                self.__log.error(f"Any error occurs: {e}")
+                exit()
+
+    @classmethod
+    def external_request(cls, msg, chat_id=None, reply_markup=None, bot=None):
+        if chat_id is None:
+            for admin in admins:
+                bot.__send(admin, text=msg, reply_markup=reply_markup)
+        else:
+            bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
 
-# noinspection PyShadowingNames
-def external_request(msg, chat_id=None, reply_markup=None):
-    if chat_id is None:
-        for chat_id in admins:
-            send(chat_id, msg, reply_markup)
-    else:
-        send(chat_id, msg, reply_markup)
-
-
-def start_bot():
-    LOGGER.info("Bot is running...")
-    for admin in admins:
-        send(admin, started, reply_markup=rm_kb)
-
-    MessageLoop(BOT, {'chat': handle}).run_as_thread()
-    if AUTO_REBOOT_ENABLED:
-        AutoReboot(AUTO_REBOOT_CLOCK_TIME).start()
-
-    while True:
-        try:
-            signal.pause()
-        except KeyboardInterrupt:
-            LOGGER.warning('Program interrupted')
-            exit()
-        except Exception as e:
-            LOGGER.error(f"Any error occurs: {e}")
-            exit()
-
-
-# endregion
 if __name__ == '__main__':
-    start_bot()
+    LedPiBot(token, admins).start()

@@ -33,16 +33,17 @@ def set_stop_flag(flag):
     stop_flag = flag
 
 
-def run_thread(func_name, request_id):
+def run_thread(func_name, request_id, bot):
     try:
         if stop_threads():
-            f = _thread_function(dictionary_functions, func_name)
+            f = thread_function(dictionary_functions, func_name)
             LOGGER.debug(f"Init thread for function: {f}")
             t = CountdownThread(
                 function=f,
                 stripe=STRIP,
                 name=func_name,
-                request_id=request_id)
+                request_id=request_id,
+                bot=bot)
             t.start()
             set_stop_flag(False)
             return t
@@ -62,7 +63,7 @@ def stop_threads():
     return False
 
 
-def _thread_function(dictionary, key):
+def thread_function(dictionary, key):
     try:
         return dictionary[key]
     except Exception as e:
