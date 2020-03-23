@@ -4,8 +4,8 @@
  * **Felix Stern** https://tutorials-raspberrypi.de
 ---
 
-# LedPiBot ![release](https://img.shields.io/github/release/kaulketh/ledpibot.svg?color=darkblue)
-![size](https://img.shields.io/github/repo-size/kaulketh/ledpibot.svg?color=blue) ![commit](https://img.shields.io/github/last-commit/kaulketh/ledpibot.svg?color=darkviolet) ![platform](https://img.shields.io/badge/platform-linux-blue.svg?color=yellow) ![languages](https://img.shields.io/github/languages/count/kaulketh/ledpibot.svg?color=yellowgreen) ![coverage](https://img.shields.io/github/languages/top/kaulketh/ledpibot.svg?color=darkgreen&style=flat) [![license](https://img.shields.io/github/license/kaulketh/ledpibot.svg?color=darkred)](https://unlicense.org/)<br>
+# LedPiBot
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/kaulketh/ledpibot?color=red) ![size](https://img.shields.io/github/repo-size/kaulketh/ledpibot.svg?color=blue) ![commit](https://img.shields.io/github/last-commit/kaulketh/ledpibot.svg?color=darkviolet) ![platform](https://img.shields.io/badge/platform-linux-blue.svg?color=yellow) ![languages](https://img.shields.io/github/languages/count/kaulketh/ledpibot.svg?color=yellowgreen) ![coverage](https://img.shields.io/github/languages/top/kaulketh/ledpibot.svg?color=darkgreen&style=flat) [![license](https://img.shields.io/github/license/kaulketh/ledpibot.svg?color=darkred)](https://unlicense.org/)<br>
 With this bot it is possible to control 24 artificial candles, in this case a wooden wreath is used and animated. 
 
 Refer [Hardware description](./hardware/HARDWARE.md) and see some [impressions](hardware/media).
