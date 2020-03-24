@@ -23,23 +23,26 @@ class AutoReboot(CountdownThread):
     def __process(self):
         pass
 
-    def run(self):
-        try:
-            self._logger.info(f"{self.name} initialized for {self.__hour}:00.")
-            while not self.__time_reached:
-                time.sleep(2)
-            from config import rebooted
-            from bot import LedPiBot
-            LedPiBot.external_request(rebooted, self.__bot)
-            from control.service import reboot_device
-            reboot_device(self.name)
-        except Exception as e:
-            self._logger.error(f"{e}")
+    def __reboot(self):
+        from bot import LedPiBot
+        from config import rebooted
+        from control.service import reboot_device
+        LedPiBot.external_request(msg=rebooted, bot=self.__bot)
+        reboot_device(self.name)
 
     @property
     def __time_reached(self):
         now = datetime.datetime.now()
         return now.hour == self.__hour and now.minute == 0 and now.second <= 5
+
+    def run(self):
+        try:
+            self._logger.info(f"{self.name} initialized for {self.__hour}:00.")
+            while not self.__time_reached:
+                time.sleep(2)
+            self.__reboot()
+        except Exception as e:
+            self._logger.error(f"{e}")
 
 
 if __name__ == '__main__':

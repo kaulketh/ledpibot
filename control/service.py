@@ -18,9 +18,9 @@ NAME = "Service"
 class OSCommand:
     logger = LOGGER
     c_prefix = "- "
-    c_info = "/info"
-    c_reboot = "/reboot"
-    c_update = "/update"
+    c_info = "/Info"
+    c_reboot = "/Reboot"
+    c_update = "/Update"
 
     __menu_header = f"{NAME} functions:"
 
