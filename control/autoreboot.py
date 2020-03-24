@@ -30,7 +30,7 @@ class AutoReboot(CountdownThread):
                 time.sleep(2)
             from config import rebooted
             from bot import LedPiBot
-            LedPiBot.external_request(rebooted, self.__bot)
+            LedPiBot.external_request(msg=rebooted, bot=self.__bot)
             from control.service import reboot_device
             reboot_device(self.name)
         except Exception as e:
