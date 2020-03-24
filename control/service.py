@@ -17,17 +17,20 @@ NAME = "Service"
 
 class OSCommand:
     logger = LOGGER
+
     c_prefix = "- "
     c_info = "/Info"
     c_reboot = "/Reboot"
     c_update = "/Update"
+    c_test = "/TEST"
 
     __menu_header = f"{NAME} functions:"
 
     __menu_dictionary = {
         0: c_reboot,
         1: c_info,
-        2: c_update
+        2: c_update,
+        3: c_test
     }
 
     __new_line = "\n"
@@ -47,6 +50,23 @@ class OSCommand:
                 self.__logger.error(f"{e}")
         else:
             raise Exception("No executable command found!")
+
+    @classmethod
+    def get_info_log(cls, n=None):
+        lines = cls.__new_line
+        n = 5 if n == None else n
+
+        def logged(n, level='info'):
+            this_folder = os.path.dirname(os.path.abspath(__file__))
+            log_folder = os.path.join(this_folder, '../logs')
+            file = f"{log_folder}/{level}.log"
+            for line in get_last_n_lines(file, n):
+                yield line
+
+        for line in logged(n):
+            lines += f"{line}{cls.__new_line}"
+
+        return lines
 
     @classmethod
     def build_menu(cls):
@@ -103,6 +123,46 @@ def reboot_device(log_msg: str = None):
 
 def system_info():
     return OSCommand.system_info()
+
+
+def get_last_n_lines(file_name, n):
+    # Create an empty list to keep the track of last n lines
+    list_of_lines = []
+    # Open file for reading in binary mode
+    with open(file_name, 'rb') as read_obj:
+        # Move the cursor to the end of the file
+        read_obj.seek(0, os.SEEK_END)
+        # Create a buffer to keep the last read line
+        buffer = bytearray()
+        # Get the current position of pointer i.e eof
+        pointer_location = read_obj.tell()
+        # Loop till pointer reaches the top of the file
+        while pointer_location >= 0:
+            # Move the file pointer to the location pointed by pointer_location
+            read_obj.seek(pointer_location)
+            # Shift pointer location by -1
+            pointer_location = pointer_location - 1
+            # read that byte / character
+            new_byte = read_obj.read(1)
+            # If the read byte is new line character then it means one line is read
+            if new_byte == b'\n':
+                # Save the line in list of lines
+                list_of_lines.append(buffer.decode()[::-1])
+                # If the size of list reaches n, then return the reversed list
+                if len(list_of_lines) == n:
+                    return list(reversed(list_of_lines))
+                # Reinitialize the byte array to save next line
+                buffer = bytearray()
+            else:
+                # If last read character is not eol then add it in buffer
+                buffer.extend(new_byte)
+
+        # As file is read completely, if there is still data in buffer, then its first line.
+        if len(buffer) > 0:
+            list_of_lines.append(buffer.decode()[::-1])
+
+    # return the reversed list
+    return list(reversed(list_of_lines))
 
 
 menu = OSCommand.build_menu()

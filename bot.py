@@ -148,6 +148,9 @@ class LedPiBot:
             elif command == service.OSCommand.c_update:
                 self.__send(chat_id, updated, reply_markup=self.rm_kb)
                 update_bot(updated)
+            # TODO: clean later
+            elif command == service.OSCommand.c_test:
+                self.__send(chat_id, service.OSCommand.get_info_log(20), reply_markup=self.rm_kb)
 
             # all other commands
             elif any(c for c in commands if (command == c)):
