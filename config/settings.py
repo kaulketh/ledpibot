@@ -6,7 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
-AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_CLOCK_TIME = 2
 
 LED_COUNT = 24  # Number of LED pixels.
@@ -20,7 +20,8 @@ LED_NIGHT_BRIGHTNESS = 70
 LED_MORNING_CUT_OFF = 8
 LED_NIGHT_CUT_OFF = 18
 
-STANDBY_MINUTES = 360
+COUNTDOWN_MINUTES = (6 * 60)
+COUNTDOWN_RESTART_MINUTES = (18 * 60)
 
 CLOCK_HOUR_COLOR = (200, 0, 0)
 CLOCK_MINUTE_COLOR = (0, 0, 200)

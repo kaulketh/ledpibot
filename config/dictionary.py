@@ -12,7 +12,7 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 from logger import LOGGER
-from .settings import STANDBY_MINUTES
+from .settings import COUNTDOWN_MINUTES, COUNTDOWN_RESTART_MINUTES
 
 # noinspection SpellCheckingInspection
 txts = {
@@ -57,12 +57,13 @@ txts = {
         0: "`Hallo {1}, dies ist ein privater Bot!\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
         1: "* Nicht erlaubt für diesen Bot\\! *",
         2: "Bitte triff eine Auswahl, {0}.",
-        3: "*{0}* läuft für maximal " + str(STANDBY_MINUTES) + " Minuten\\.",
+        3: "*{0}* läuft für " + str(COUNTDOWN_MINUTES // 60) + " Stunden",
         4: "Bot ist einsatzbereit.",
         5: "Gerät wird neu gestartet.",
         6: "Logrotate manuell ausgeführt.",
         7: "Bot angehalten!",
-        8: "Gestoppt, automatischer Standby nach " + str(STANDBY_MINUTES) + " Minuten.\nBitte Neustart!",
+        8: f"Gestoppt, automatischer Standby nach {COUNTDOWN_MINUTES // 60} Stunden."
+           f"\nNeustart in {COUNTDOWN_RESTART_MINUTES // 60} Stunden!",
         9: "Alles gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
         11: "stop",
@@ -115,12 +116,13 @@ txts = {
         0: "`Hello {1}, this is a private bot!\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
         1: "* Not allowed for this bot\\! *",
         2: "Please make a suitable selection, {0}!",
-        3: "*{0}* was started for a maximum of " + str(STANDBY_MINUTES) + " minutes\\.",
+        3: "*{0}* was started for " + str(COUNTDOWN_MINUTES // 60) + " hours",
         4: "Bot ready for use.",
         5: "Device rebooted.",
         6: "Logrotate executed manually.",
         7: "Bot stopped.",
-        8: "Stopped, automatic standby after " + str(STANDBY_MINUTES) + " minutes.\nPlease restart!",
+        8: f"Stopped, automatic standby after {COUNTDOWN_MINUTES // 60} hours."
+           f"\nRestart in {COUNTDOWN_RESTART_MINUTES // 60} hours!",
         9: "Everything stopped.",
         10: "Bot process killed!",
         11: "stop",
@@ -150,12 +152,13 @@ txts = {
         0: "`Bonjour {1}, c'est un bot privé!\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
         1: "* Non autorisé pour ce bot\\! *",
         2: "Veuillez faire une sélection, {0}.",
-        3: "*{0}* dure " + str(STANDBY_MINUTES) + " minutes maximum\\.",
+        3: "*{0}* dure " + str(COUNTDOWN_MINUTES // 60) + " heures",
         4: "Le bot est prêt à l'emploi.",
         5: "L'appareil est redémarré.",
         6: "Logrotate exécuté manuellement.",
         7: "Bot arrêté!",
-        8: "Arrêt, mise en veille automatique après " + str(STANDBY_MINUTES) + " minutes.\nVeuillez redémarrer!",
+        8: f"Arrêt, mise en veille automatique après {COUNTDOWN_MINUTES // 60} heures."
+           f"\nRedémarrez en {COUNTDOWN_RESTART_MINUTES // 60} heures!",
         9: "Tout s'est arrêté!",
         10: "Processus de bot complet annulé!",
         11: "stop",
