@@ -33,7 +33,11 @@ class Update:
 
     @staticmethod
     def __ignored(f_name: str):
-        return f_name.startswith('.') or f_name == 'hardware' or f_name.endswith('.md')
+        ignored = f_name.startswith('.') or \
+                  f_name == 'hardware' or \
+                  f_name.endswith('.md') or \
+                  f_name == 'UNLICNESE'
+        return ignored
 
     @property
     def run(self):
