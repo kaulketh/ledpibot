@@ -11,9 +11,12 @@ import logging
 import os
 from logging.config import fileConfig
 
+# runtime location
 this_folder = os.path.dirname(os.path.abspath(__file__))
-
+# define log folder related to location
 log_folder = os.path.join(this_folder, '../logs')
+
+# define ini and log files
 ini_file = 'logger.ini'
 info_log_file = log_folder + '/info.log'
 error_log_file = log_folder + '/error.log'
@@ -30,21 +33,23 @@ except TypeError:
         else:
             raise
 
+# setup configuration
 config_file = os.path.join(this_folder, ini_file)
 fileConfig(config_file, disable_existing_loggers=True)
 
-# Create handlers
+# create handlers
 handler_info = logging.FileHandler(os.path.join(this_folder, info_log_file))
 handler_error = logging.FileHandler(os.path.join(this_folder, error_log_file))
+# set levels
 handler_info.setLevel(logging.INFO)
 handler_error.setLevel(logging.ERROR)
 
-# Create formatters and add it to handlers
+# create formatters and add to handlers
 format_info = \
-    logging.Formatter('%(asctime)s  %(levelname)-8s '
-                      '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] %(message).150s', datefmt='%Y-%m-%d %H:%M:%S')
+    logging.Formatter('%(asctime)s  %(levelname)s '
+                      '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] %(message).180s', datefmt='%Y-%m-%d %H:%M:%S')
 format_error = \
-    logging.Formatter('%(asctime)s  %(levelname)-8s '
+    logging.Formatter('%(asctime)s  %(levelname)s '
                       '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] [ thread: %(threadName)s ] %(message)s')
 handler_info.setFormatter(format_info)
 handler_error.setFormatter(format_error)
@@ -52,7 +57,7 @@ handler_error.setFormatter(format_error)
 
 def get_logger(name: str = __name__):
     logger = logging.getLogger(name)
-    # Add handlers to the logger
+    # add handler
     logger.addHandler(handler_info)
     logger.addHandler(handler_error)
     return logger

@@ -143,8 +143,9 @@ class LedPiBot:
                 self.__send(chat_id, rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(rebooted)
             elif command == service.OSCommand.c_info:
-                self.__send(chat_id, service.system_info(), reply_markup=self.rm_kb)
-                self.__log.info(service.system_info().replace("\n", " "))
+                info = service.system_info()
+                self.__send(chat_id, info, reply_markup=self.rm_kb)
+                self.__log.info(info.replace("\n", "").replace(" ", ""))
             elif command == service.OSCommand.c_update:
                 self.__send(chat_id, updated, reply_markup=self.rm_kb)
                 update_bot(updated)
@@ -166,7 +167,7 @@ class LedPiBot:
         MessageLoop(self.__telebot_bot, {'chat': self.__handle}).run_as_thread()
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
-
+        self.__log.info(f"Autoreboot enabled: {AUTO_REBOOT_ENABLED}")
         while True:
             try:
                 signal.pause()
