@@ -9,6 +9,8 @@ __status__ = "Production"
 
 import time
 
+from neopixel import *
+
 
 def clear(strip):
     for i in range(strip.numPixels()):

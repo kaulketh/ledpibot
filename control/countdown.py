@@ -86,6 +86,12 @@ class CountdownThread(Thread):
                     msg, reply_markup=self.__bot.kb_stop,
                     chat_id=self.__chat_id, bot=self.__bot)
                 start = self.__countdown
+            elif self.__countdown == (
+                    start // 2) \
+                    and self.__countdown >= 300:
+                self._logger.debug(
+                    f"remaining time of {self.__f_name}: {self.__countdown}")
+                start = self.__countdown
         # runtime expired
         if self.__countdown <= 0 and self.__do_run:
             from bot import LedPiBot
