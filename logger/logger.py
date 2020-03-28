@@ -3,8 +3,6 @@
 
 __author___ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-__maintainer___ = "Thomas Kaulke"
-__status__ = "Production"
 
 import errno
 import logging
@@ -17,7 +15,7 @@ this_folder = os.path.dirname(os.path.abspath(__file__))
 log_folder = os.path.join(this_folder, '../logs')
 
 # define ini and log files
-ini_file = 'logger.ini'
+ini_file = 'debug.ini'
 info_log_file = log_folder + '/info.log'
 error_log_file = log_folder + '/error.log'
 
@@ -47,11 +45,13 @@ handler_error.setLevel(logging.ERROR)
 # create formatters and add to handlers
 format_info = \
     logging.Formatter('%(asctime)s  %(levelname)s '
-                      '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] %(message).180s',
-                      datefmt='%Y-%m-%d %H:%M:%S')
+                      '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] '
+                      '%(message).180s', datefmt='%Y-%m-%d %H:%M:%S')
 format_error = \
-    logging.Formatter('%(asctime)s  %(levelname)s '
-                      '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] [ thread: %(threadName)s ] %(message)s')
+    logging.Formatter(
+        '%(asctime)s  %(levelname)s '
+        '[ %(module)s.%(funcName)s  linenr.%(lineno)s ] '
+        '[ thread: %(threadName)s ] %(message)s')
 handler_info.setFormatter(format_info)
 handler_error.setFormatter(format_error)
 
