@@ -38,7 +38,8 @@ class Update:
         ignored = f_name.startswith('.') or \
                   f_name == 'hardware' or \
                   f_name.endswith('.md') or \
-                  f_name == 'UNLICNESE'
+                  f_name == 'UNLICENSE' or \
+                  f_name == 'LICENSE'
         return ignored
 
     @property
