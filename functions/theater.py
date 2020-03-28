@@ -25,7 +25,8 @@ def run_theater(strip):
             if not get_stop_flag():
                 color_wipe_full(strip, Color(0, 0, 127))  # Blue wipe
             if not get_stop_flag():
-                theater_chase(strip, Color(127, 127, 127))  # White theater chase
+                theater_chase(strip,
+                              Color(127, 127, 127))  # White theater chase
             if not get_stop_flag():
                 theater_chase(strip, Color(0, 0, 127))  # Blue theater chase
             if not get_stop_flag():

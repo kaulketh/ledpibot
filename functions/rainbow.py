@@ -22,7 +22,8 @@ def run_rainbow(strip):
                 if not get_stop_flag():
                     for i in range(strip.numPixels()):
                         if not get_stop_flag():
-                            strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
+                            strip.setPixelColor(i, wheel(
+                                (int(i * 256 / strip.numPixels()) + j) & 255))
                     if not get_stop_flag():
                         strip.show()
                         time.sleep(.02)

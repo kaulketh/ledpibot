@@ -54,7 +54,8 @@ txts = {
         20: "demo 2"
     },
     "de": {
-        0: "`Hallo {1}, dies ist ein privater Bot!\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
+        0: "`Hallo {1}, dies ist ein privater Bot!"
+           "\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
         1: "* Nicht erlaubt für diesen Bot\\! *",
         2: "Bitte triff eine Auswahl, {0}.",
         3: "*{0}* läuft für " + str(COUNTDOWN_MINUTES // 60) + " Stunden",
@@ -62,7 +63,8 @@ txts = {
         5: "Gerät wird neu gestartet.",
         6: "Logrotate manuell ausgeführt.",
         7: "Bot angehalten!",
-        8: f"Gestoppt, automatischer Standby nach {COUNTDOWN_MINUTES // 60} Stunden."
+        8: f"Gestoppt, "
+           f"automatischer Standby nach {COUNTDOWN_MINUTES // 60} Stunden."
            f"\nNeustart in {COUNTDOWN_RESTART_MINUTES // 60} Stunden!",
         9: "Alles gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
@@ -113,7 +115,8 @@ txts = {
         20: u'\U0001F501'
     },
     "en": {
-        0: "`Hello {1}, this is a private bot!\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
+        0: "`Hello {1}, this is a private bot!"
+           "\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
         1: "* Not allowed for this bot\\! *",
         2: "Please make a suitable selection, {0}!",
         3: "*{0}* was started for " + str(COUNTDOWN_MINUTES // 60) + " hours",
@@ -149,7 +152,8 @@ txts = {
         32: "Bot update, reboot shortly."
     },
     "fr": {
-        0: "`Bonjour {1}, c'est un bot privé!\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
+        0: "`Bonjour {1}, c'est un bot privé!"
+           "\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
         1: "* Non autorisé pour ce bot\\! *",
         2: "Veuillez faire une sélection, {0}.",
         3: "*{0}* dure " + str(COUNTDOWN_MINUTES // 60) + " heures",
@@ -157,7 +161,8 @@ txts = {
         5: "L'appareil est redémarré.",
         6: "Logrotate exécuté manuellement.",
         7: "Bot arrêté!",
-        8: f"Arrêt, mise en veille automatique après {COUNTDOWN_MINUTES // 60} heures."
+        8: f"Arrêt, mise en veille automatique après "
+           f"{COUNTDOWN_MINUTES // 60} heures."
            f"\nRedémarrez en {COUNTDOWN_RESTART_MINUTES // 60} heures!",
         9: "Tout s'est arrêté!",
         10: "Processus de bot complet annulé!",
@@ -381,11 +386,14 @@ def set_language(lng='en'):
     """
     global language
     if lng not in translation:
-        LOGGER.warning(f"Language key \'{lng}\' not found, set default chat language!")
+        LOGGER.warning(
+            f"Language key \'{lng}\' not found, set default chat language!")
         language = 'en'
     else:
         language = lng
-    LOGGER.info(f"Apart from service menu chat language is set to '{(translation[language].get('name'))}'.")
+    LOGGER.info(
+        f"Apart from service menu chat language is set to '"
+        f"{(translation[language].get('name'))}'.")
 
 
 # noinspection PyGlobalUndefined
@@ -403,10 +411,13 @@ def get_translations(text_index):
     # noinspection PyShadowingNames
     def generated_texts(txt: str):
         for k in txts[txt].keys():
-            text = translation[language].get(txts[txt].get(k)).title() if txt == "command" \
+            text = translation[language].get(
+                txts[txt].get(k)).title() if txt == "command" \
                 else translation[language].get(txts[txt].get(k))
             newline, space = ("\n", " ")
-            LOGGER.debug(f"Load {txt} ({k}:{txts[txt].get(k)}) {text.replace(newline, space)}")
+            LOGGER.debug(
+                f"Load {txt} ({k}:{txts[txt].get(k)}) "
+                f"{text.replace(newline, space)}")
             yield text
 
     try:

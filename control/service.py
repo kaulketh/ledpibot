@@ -41,7 +41,9 @@ class OSCommand:
     def execute(self):
         if self.__command is not None:
             try:
-                self.__logger.info(self.__log_msg) if self.__log_msg is not None else self.__command
+                self.__logger.info(
+                    self.__log_msg) \
+                    if self.__log_msg is not None else self.__command
                 os.system(self.__command)
             except Exception as e:
                 self.__logger.error(f"{e}")
@@ -52,11 +54,17 @@ class OSCommand:
     def build_menu(cls):
         try:
             m = f"{cls.__menu_header}{cls.__new_line}"
-            cls.logger.debug(f"Build service menu: {m.replace(cls.__new_line, cls.__empty)}")
+            cls.logger.debug(
+                f"Build service menu: "
+                f"{m.replace(cls.__new_line, cls.__empty)}")
             for key in cls.__menu_dictionary.keys():
-                line = f"{cls.c_prefix}{cls.__menu_dictionary.get(key)}{cls.__new_line}"
+                line = f"{cls.c_prefix}" \
+                       f"{cls.__menu_dictionary.get(key)}" \
+                       f"{cls.__new_line}"
                 m += line
-                cls.logger.debug(f"Add line to menu: {line.replace(cls.__new_line, cls.__empty)}")
+                cls.logger.debug(
+                    f"Add line to menu: "
+                    f"{line.replace(cls.__new_line, cls.__empty)}")
             return m
         except Exception as e:
             cls.logger.error(f"{e}")
@@ -65,15 +73,24 @@ class OSCommand:
     def system_info(cls):
         try:
             host = subprocess.check_output("hostname", shell=True).upper()
-            ip = "IP :  " + str(subprocess.check_output("hostname -I | cut -d\' \' -f1", shell=True))
+            ip = "IP :  " + str(
+                subprocess.check_output("hostname -I | cut -d\' \' -f1",
+                                        shell=True))
             m = subprocess.check_output(
-                "free -m | awk 'NR==2{printf \"Memory :  %s / %s MB (%.0f%%)\", $3,$2,$3*100/$2 }'", shell=True)
+                "free -m | awk 'NR==2{printf \""
+                "Memory :  %s / %s MB (%.0f%%)\", $3,$2,$3*100/$2 }'",
+                shell=True)
             d = subprocess.check_output(
-                "df -h | awk '$NF==\"/\"{printf \"Disk :  %d / %d GB (%s)\", $3,$2,$5}'", shell=True)
+                "df -h | awk '$NF==\"/\"{printf \""
+                "Disk :  %d / %d GB (%s)\", $3,$2,$5}'",
+                shell=True)
             c = subprocess.check_output(
-                "top - bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
+                "top - bn1 | grep \"Cpu(s)\""
+                " | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
                 "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
-            return f"{host} {cls.__latest_release()} ({cls.__latest_commit()}){cls.__new_line}" \
+            return f"{host} " \
+                   f"{cls.__latest_release()} " \
+                   f"({cls.__latest_commit()}){cls.__new_line}" \
                    f"{ip}{cls.__new_line}" \
                    f"{m}{cls.__new_line}" \
                    f"{d}{cls.__new_line}" \
@@ -85,16 +102,19 @@ class OSCommand:
     @classmethod
     def __latest_commit(cls):
         commit = f"curl -s {GIT_API_URL}/commits/master --insecure "
-        latest_commit = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
-            .replace("b'", "").replace("'", "").replace("\\n", "")
-        commit_url_text = f"[{latest_commit[0:7]}](https://github.com/kaulketh/ledpibot/commit/{latest_commit})"
+        latest_com = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
+                     f"".replace("b'", "").replace("'", "").replace("\\n", "")
+        commit_url_text = f"[{latest_com[0:7]}]" \
+                          f"(https://github.com/kaulketh/ledpibot/commit/" \
+                          f"{latest_com})"
         return commit_url_text
 
     @classmethod
     def __latest_release(cls):
         release = f"curl -s {GIT_API_URL}/releases/latest --insecure |" \
                   " grep -Po '\"tag_name\": \"\\K.*?(?=\")'"
-        return f"{subprocess.check_output(release, shell=True)}".replace("b'", "").replace("'", "").replace("\\n", "")
+        return f"{subprocess.check_output(release, shell=True)}" \
+            .replace("b'", "").replace("'", "").replace("\\n", "")
 
 
 def reboot_device(log_msg: str = None):

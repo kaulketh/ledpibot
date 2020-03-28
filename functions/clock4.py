@@ -17,7 +17,7 @@ from functions.effects import clear
 from logger import LOGGER
 
 intense = 120
-start_px = 0  # where do we start? shift the arcs if the wiring does not start at the 12
+start_px = 0
 
 
 def _wipe(color, strip):
@@ -42,10 +42,14 @@ def run_clock4(strip):
             # arc mode
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                blue = (i + 1) * (intense / (second_value + 1)) if i <= second_value else 0
-                green = (i + 1) * (intense / (minute_value + 1)) if i <= minute_value else 0
-                red = (i + 1) * (intense / (hour_value + 1)) if i <= hour_value else 0
-                strip.setPixelColor((i + start_px) % 24, Color(int(green), int(red), int(blue)))
+                blue = (i + 1) * (intense / (
+                            second_value + 1)) if i <= second_value else 0
+                green = (i + 1) * (intense / (
+                            minute_value + 1)) if i <= minute_value else 0
+                red = (i + 1) * (intense / (
+                            hour_value + 1)) if i <= hour_value else 0
+                strip.setPixelColor((i + start_px) % 24,
+                                    Color(int(green), int(red), int(blue)))
             strip.show()
             time.sleep(0.1)
 

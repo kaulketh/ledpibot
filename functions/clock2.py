@@ -52,7 +52,8 @@ def run_clock2(strip):
                 strip.show()
                 time.sleep(0.2)
                 minute = _get_pointer(strip)[1]
-            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute - 1, backward=True)
+            _wipe_second(strip, (mG // 5, mR // 5, mB // 5), minute - 1,
+                         backward=True)
             clear(strip)
         except KeyboardInterrupt:
             print()
@@ -73,7 +74,8 @@ def _get_pointer(strip):
 
 
 def _wipe_second(stripe, color, begin=0, backward=False):
-    wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0 if backward else (1000.0 // stripe.numPixels()) / 1000.0
+    wait_ms = ((1000.0 // stripe.numPixels()) // 2) / 1000.0 \
+        if backward else (1000.0 // stripe.numPixels()) / 1000.0
 
     for i in range(begin + 1, stripe.numPixels() + begin):
         if i >= stripe.numPixels():

@@ -62,9 +62,13 @@ def _december_cycle(stripe, month):
                 div = randint(randint(6, 8), randint(30, 40))
                 # set up different colors for days
                 if (i + 1) in advent:
-                    stripe.setPixelColor(i, Color(adv_green / div, adv_red / div, adv_blue / div))
+                    stripe.setPixelColor(i,
+                                         Color(adv_green / div, adv_red / div,
+                                               adv_blue / div))
                 else:
-                    stripe.setPixelColor(i, Color(fav_green / div, fav_red / div, fav_blue / div))
+                    stripe.setPixelColor(i,
+                                         Color(fav_green / div, fav_red / div,
+                                               fav_blue / div))
                 stripe.show()
             time.sleep(0.15)
         else:
@@ -91,7 +95,8 @@ def run_advent(strip):
         else:
             while i > 0:
                 m = time.strftime("%B")
-                LOGGER.warn(f"Wrong month for xmas/advent animation, it\'s {m}!")
+                LOGGER.warn(
+                    f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
             theater_chase(strip, Color(0, 15, 0))
     clear(strip)

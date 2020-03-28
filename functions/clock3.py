@@ -94,7 +94,8 @@ def _dial(stripe):
     dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
     # dial = [0, 6, 12, 18]  # quarter only
     for led in dial:
-        stripe.setPixelColorRGB(led, 125 // 10, 195 // 10, 30 // 10)  # warm yellow
+        stripe.setPixelColorRGB(led, 125 // 10, 195 // 10,
+                                30 // 10)  # warm yellow
         # stripe.setPixelColorRGB(led, 15, 15, 15)  # white
 
 

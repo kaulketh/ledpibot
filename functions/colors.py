@@ -31,13 +31,20 @@ class Colorizer:
         self.__colors = {
             0: Color(0, 0, 0),
             1: Color(255, 255, 255),
-            'red': Color(10 // self.__div, 165 // self.__div, 10 // self.__div),
-            'blue': Color(50 // self.__div, 0 // self.__div, 135 // self.__div),
-            'green': Color(135 // self.__div, 0 // self.__div, 50 // self.__div),
-            'yellow': Color(165 // self.__div, 255 // self.__div, 0 // self.__div),
-            'orange': Color(70 // self.__div, 210 // self.__div, 0 // self.__div),
-            'white': Color(255 // (self.__div * 2), 255 // (self.__div * 2), 255 // (self.__div * 2)),
-            'violet': Color(18 // self.__div, 238 // self.__div, 137 // self.__div)
+            'red': Color(10 // self.__div, 165 // self.__div,
+                         10 // self.__div),
+            'blue': Color(50 // self.__div, 0 // self.__div,
+                          135 // self.__div),
+            'green': Color(135 // self.__div, 0 // self.__div,
+                           50 // self.__div),
+            'yellow': Color(165 // self.__div, 255 // self.__div,
+                            0 // self.__div),
+            'orange': Color(70 // self.__div, 210 // self.__div,
+                            0 // self.__div),
+            'white': Color(255 // (self.__div * 2), 255 // (self.__div * 2),
+                           255 // (self.__div * 2)),
+            'violet': Color(18 // self.__div, 238 // self.__div,
+                            137 // self.__div)
         }
 
     @property
@@ -46,13 +53,15 @@ class Colorizer:
         return self.__colors.keys()
 
     def set_color(self, color_key):
-        self.__color = color_key if isinstance(color_key, int) else color_key.lower()
+        self.__color = color_key if isinstance(color_key,
+                                               int) else color_key.lower()
 
     def __get_color(self, key):
         if key in self.colors:
             return self.__colors.get(key)
         else:
-            raise Exception(f'Key \'{self.__color}\' not defined in {self.__name} colors.')
+            raise Exception(
+                f'Key \'{self.__color}\' not defined in {self.__name} colors.')
 
     def start(self, brightness=None):
         try:
@@ -65,7 +74,8 @@ class Colorizer:
                     self.__strip.setBrightness(brightness)
 
                 for i in range(self.__strip.numPixels()):
-                    self.__strip.setPixelColor(i, self.__get_color(self.__color))
+                    self.__strip.setPixelColor(i,
+                                               self.__get_color(self.__color))
                 self.__strip.show()
 
         except KeyboardInterrupt:

@@ -14,7 +14,7 @@ LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
-LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
+LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
 LED_DAY_BRIGHTNESS = 150
 LED_NIGHT_BRIGHTNESS = 70
 LED_MORNING_CUT_OFF = 8
@@ -22,6 +22,7 @@ LED_NIGHT_CUT_OFF = 18
 
 COUNTDOWN_MINUTES = (6 * 60)
 COUNTDOWN_RESTART_MINUTES = (18 * 60)
+COUNTDOWN_DISPLAY_REMAINING_TIME = False
 
 CLOCK_HOUR_COLOR = (200, 0, 0)
 CLOCK_MINUTE_COLOR = (0, 0, 200)

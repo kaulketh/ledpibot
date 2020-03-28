@@ -8,9 +8,8 @@ __status__ = "Production"
 
 import datetime
 
-from neopixel import *
-
-from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, LED_INVERT, LED_NIGHT_CUT_OFF, \
+from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, \
+    LED_INVERT, LED_NIGHT_CUT_OFF, \
     LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
     LED_NIGHT_BRIGHTNESS
 from logger import LOGGER
@@ -29,7 +28,8 @@ class Strip:
         self.__invert = invert
         self.__brightness = brightness
         self.__logger.debug(f"Create {self}")
-        self.__strip = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz, self.__dma, self.__invert,
+        self.__strip = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz,
+                                         self.__dma, self.__invert,
                                          self.__brightness)
         self.__logger.debug(f"Initialized: {self.__strip}")
         self.__strip.begin()
@@ -68,7 +68,8 @@ def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
     return Strip.setup(s)
 
 
-STRIP = Strip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS).get_strip()
+STRIP = Strip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT,
+              LED_BRIGHTNESS).get_strip()
 
 if __name__ == '__main__':
     pass

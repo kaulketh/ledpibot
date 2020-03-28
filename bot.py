@@ -11,12 +11,14 @@ import signal
 
 import telepot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, \
+    ReplyKeyboardRemove
 
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, stop_msg, updated, \
+    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, \
+    stop_msg, updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
@@ -24,12 +26,11 @@ from control.update import update_bot
 from logger import LOGGER
 
 admins = [access.thk, access.annib]
-stop = commands[0]
-start = commands[1]
 
 
 class LedPiBot:
     log = LOGGER
+    stop = commands[0]
 
     def __init__(self, t, ids):
         """
@@ -40,7 +41,9 @@ class LedPiBot:
         :type ids: list of int
         """
         self.__log = LedPiBot.log
-        self.__log.debug(f"Initialize LED-RaspberryPi-Telegram-Bot: {self.__class__.__name__}")
+        self.__log.debug(
+            f"Initialize LED-RaspberryPi-Telegram-Bot: "
+            f"{self.__class__.__name__}")
         self.__token = t
         self.__admins = ids
         self.__telebot_bot = telepot.Bot(self.__token)
@@ -63,9 +66,17 @@ class LedPiBot:
 
     @property
     def kb_stop(self):
-        r = ReplyKeyboardMarkup(keyboard=[[self.__button(stop)]])
+        r = ReplyKeyboardMarkup(keyboard=[[self.__button(self.stop)]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
+
+    @classmethod
+    def external_request(cls, msg, chat_id=None, reply_markup=None, bot=None):
+        if chat_id is None:
+            for admin in bot.__admins:
+                bot.__send(admin, text=msg, reply_markup=reply_markup)
+        else:
+            bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
     def __button(self, text) -> KeyboardButton:
         self.__log.debug(f"Build button: {text}")
@@ -74,14 +85,18 @@ class LedPiBot:
     def __buttons(self, indices: list, command_list: list = commands) -> list:
         t = []
         for i in indices:
-            self.__log.debug(f"Build and append button to tuple: {command_list[i]}")
+            self.__log.debug(
+                f"Build and append button to tuple: {command_list[i]}")
             t.append(KeyboardButton(text=command_list[i]))
         self.__log.debug(f"Button tuple: {t}")
         return t
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
-        self.__log.debug(f"Message posted: {ch_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
-        self.__telebot_bot.sendMessage(ch_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+        self.__log.debug(
+            f"Message posted: "
+            f"{ch_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
+        self.__telebot_bot.sendMessage(ch_id, text, reply_markup=reply_markup,
+                                       parse_mode=parse_mode)
 
     def __reply_wrong_id(self, ch_id, msg):
         try:
@@ -89,8 +104,11 @@ class LedPiBot:
             first_name = msg['from']['first_name']
             last_name = msg['from']['last_name']
             username = msg['from']['username']
-            log_msg = f"Unauthorized access: ID {ch_id} User:{username}, {first_name} {last_name}"
-            self.__send(ch_id, wrong_id.format(user_id, username, first_name, last_name), reply_markup=self.rm_kb)
+            log_msg = f"Unauthorized access: ID " \
+                      f"{ch_id} User:{username}, {first_name} {last_name}"
+            self.__send(ch_id, wrong_id.format(user_id, username, first_name,
+                                               last_name),
+                        reply_markup=self.rm_kb)
             raise Exception(log_msg)
         except Exception as ex:
             self.__log.warning(f"{ex}")
@@ -100,7 +118,8 @@ class LedPiBot:
             got = str(codecs.encode(content, 'utf-8')).replace('b', '')
             raise Exception(f'Not allowed input: {got}')
         except Exception as ex:
-            self.__send(ch_id, not_allowed, parse_mode='MarkdownV2', reply_markup=None)
+            self.__send(ch_id, not_allowed, parse_mode='MarkdownV2',
+                        reply_markup=None)
             self.__log.warning(str(ex))
         return
 
@@ -114,16 +133,18 @@ class LedPiBot:
         self.__log.debug(msg)
 
         # check user
-        if chat_id not in admins:
+        if chat_id not in self.__admins:
             self.__reply_wrong_id(chat_id, msg)
-            return
+            return None
 
         if content_type == 'text':
             command = msg['text']
             self.__log.info(f'Requested: {command}')
             # /start
             if command == "/start":
-                self.__send(chat_id, pls_select.format(msg['from']['first_name']), reply_markup=self.kb_markup)
+                self.__send(chat_id,
+                            pls_select.format(msg['from']['first_name']),
+                            reply_markup=self.kb_markup)
 
             # /stop
             elif command == "/stop":
@@ -131,9 +152,12 @@ class LedPiBot:
                     self.__send(chat_id, stopped, reply_markup=self.rm_kb)
 
             # stop function
-            elif (command.startswith(stop)) or (command.startswith(stop.lower())):
+            elif (command.startswith(self.stop)) \
+                    or (command.startswith(self.stop.lower())):
                 if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, pls_select.format(msg['from']['first_name']), reply_markup=self.kb_markup)
+                    self.__send(chat_id,
+                                pls_select.format(msg['from']['first_name']),
+                                reply_markup=self.kb_markup)
 
             # /service
             elif command == ('/' + service.NAME.lower()):
@@ -153,7 +177,9 @@ class LedPiBot:
             # all other commands
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, called.format(command), reply_markup=self.kb_stop, parse_mode='MarkdownV2')
+                    self.__send(chat_id, called.format(command),
+                                reply_markup=self.kb_stop,
+                                parse_mode='MarkdownV2')
                     run_thread(command, chat_id, self)
             else:
                 self.__reply_wrong_command(chat_id, command)
@@ -164,7 +190,8 @@ class LedPiBot:
         self.__log.info("Bot is running...")
         for a in self.__admins:
             self.__send(a, started, reply_markup=self.rm_kb)
-        MessageLoop(self.__telebot_bot, {'chat': self.__handle}).run_as_thread()
+        MessageLoop(self.__telebot_bot,
+                    {'chat': self.__handle}).run_as_thread()
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
         self.__log.info(f"Autoreboot enabled: {AUTO_REBOOT_ENABLED}")
@@ -177,14 +204,6 @@ class LedPiBot:
             except Exception as e:
                 self.__log.error(f"Any error occurs: {e}")
                 exit()
-
-    @classmethod
-    def external_request(cls, msg, chat_id=None, reply_markup=None, bot=None):
-        if chat_id is None:
-            for admin in admins:
-                bot.__send(admin, text=msg, reply_markup=reply_markup)
-        else:
-            bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
 
 if __name__ == '__main__':

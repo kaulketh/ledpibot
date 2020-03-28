@@ -23,8 +23,10 @@ class Update:
 
     def __init__(self, branch: str = None):
         self.__branch = 'master' if branch is None else branch
-        self.__save_secret = f"mv -v {HOME_PI_BOT}/config/{SECRET} {HOME_PI_BOT}/{SECRET}"
-        self.__restore_secret = f"mv -v {HOME_PI_BOT}/{SECRET} {HOME_PI_BOT}/config/{SECRET}"
+        self.__save_secret = f"mv -v {HOME_PI_BOT}" \
+                             f"/config/{SECRET} {HOME_PI_BOT}/{SECRET}"
+        self.__restore_secret = f"mv -v {HOME_PI_BOT}/{SECRET} " \
+                                f"{HOME_PI_BOT}/config/{SECRET}"
         self.__remove_clone = f"rm -rf {PROJECT}/"
         self.__clone = f"git clone -v {GIT} -b {self.__branch}"
         self.__folder = os.path.dirname(os.path.abspath(__file__))
@@ -44,9 +46,11 @@ class Update:
         self.logger.info("Starting update...")
         try:
             os.system(self.__save_secret)
-            self.logger.info(f"Clone branch \'{self.__branch}\' from Github repository...")
+            self.logger.info(
+                f"Clone branch \'{self.__branch}\' from Github repository...")
             os.system(self.__clone)
-            cloned_f = [f for f in os.listdir(PROJECT) if not self.__ignored(f)]
+            cloned_f = [f for f in os.listdir(PROJECT) if
+                        not self.__ignored(f)]
             self.logger.info("Copy files and folders...")
             for f in cloned_f:
                 os.system(f"cp -rv {PROJECT}/{f} {HOME_PI_BOT}/")

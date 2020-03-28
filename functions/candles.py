@@ -27,7 +27,8 @@ def percent():
 
 
 def _rand_brightness(stripe, factor=1.0):
-    stripe.setBrightness(int(randint(LED_NIGHT_BRIGHTNESS, LED_DAY_BRIGHTNESS) * factor))
+    stripe.setBrightness(
+        int(randint(LED_NIGHT_BRIGHTNESS, LED_DAY_BRIGHTNESS) * factor))
 
 
 # candle lights from 0 to leds

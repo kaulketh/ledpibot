@@ -10,7 +10,9 @@ import time
 from multiprocessing import Process
 from threading import Thread
 
-from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, standby, called, COUNTDOWN_RESTART_MINUTES
+from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, standby, called, \
+    COUNTDOWN_RESTART_MINUTES, \
+    COUNTDOWN_DISPLAY_REMAINING_TIME
 from functions import clear
 from logger import LOGGER
 
@@ -44,8 +46,13 @@ class CountdownThread(Thread):
         return COUNTDOWN_MINUTES * 60
 
     @property
+    def __report_remaining_time(self):
+        return COUNTDOWN_DISPLAY_REMAINING_TIME
+
+    @property
     def __process(self):
-        f_process = Process(target=self.__function, name=self.__f_name, args=(self.__strip,))
+        f_process = Process(target=self.__function, name=self.__f_name,
+                            args=(self.__strip,))
         f_process.start()
         return f_process
 
@@ -56,21 +63,28 @@ class CountdownThread(Thread):
     def run(self):
         self._logger.info(
             f"Thread '{self.__f_name}' initialized from ID:{self.__chat_id}, "
-            f"start process '{self.__function}' for {self.__countdown} seconds")
+            f"start process '{self.__function}' "
+            f"for {self.__countdown} seconds")
         p = self.__process
         self.threads.append(self)
-        start = self.__countdown
+
         # countdown
+        start = self.__countdown
         while self.__do_run and self.__countdown > 0:
             self.__countdown -= 1
             time.sleep(1)
-            # counter remain time
-            if self.__countdown == (start // 2) and self.__countdown >= 300:
+            # display remaining time
+            if self.__countdown == (
+                    start // 2) \
+                    and self.__countdown >= 300 \
+                    and CountdownThread.__report_remaining_time:
                 from bot import LedPiBot
-                msg = f"Stop *{self.__f_name}*: T minus *{self.__countdown // 60}* min."
+                msg = f"Stop *{self.__f_name}*: " \
+                      f"T minus *{self.__countdown // 60}* min."
                 self._logger.info(msg.replace("*", ""))
                 LedPiBot.external_request(
-                    msg, reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id, bot=self.__bot)
+                    msg, reply_markup=self.__bot.kb_stop,
+                    chat_id=self.__chat_id, bot=self.__bot)
                 start = self.__countdown
         # runtime expired
         if self.__countdown <= 0 and self.__do_run:
@@ -78,11 +92,14 @@ class CountdownThread(Thread):
             self._logger.info(f"{self.__expired}: {self.__function}")
             LedPiBot.external_request(
                 f"{self.__f_name}\n{standby}",
-                reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id, bot=self.__bot)
+                reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id,
+                bot=self.__bot)
             p.terminate()
             clear(self.__strip)
             self._logger.info(
-                f"Standby, waiting to restart of {self.__function} in {CountdownThread.restart_seconds()} seconds")
+                f"Standby, "
+                f"waiting to restart of {self.__function} "
+                f"in {CountdownThread.restart_seconds()} seconds")
             # standby
             while self.__do_run and self.__restart > 0:
                 time.sleep(1)
@@ -93,7 +110,8 @@ class CountdownThread(Thread):
                 self.__restart = CountdownThread.restart_seconds()
                 LedPiBot.external_request(
                     called.format(self.__f_name),
-                    reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id, bot=self.__bot)
+                    reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id,
+                    bot=self.__bot)
                 self.run()
         # stop
         p.terminate()
@@ -103,7 +121,8 @@ class CountdownThread(Thread):
 
     def stop(self):
         self.__do_run = False
-        self._logger.info(f"{self.__f_name}: {self.__stopped}: {self.__function}")
+        self._logger.info(
+            f"{self.__f_name}: {self.__stopped}: {self.__function}")
 
 
 if __name__ == '__main__':

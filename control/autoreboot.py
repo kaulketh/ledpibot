@@ -18,7 +18,8 @@ class AutoReboot(CountdownThread):
     def __init__(self, hour: int = 0, bot=None):
         self.__hour = hour
         self.__bot = bot
-        super(AutoReboot, self).__init__(None, None, name=self.name, bot=self.__bot)
+        super(AutoReboot, self).__init__(None, None, name=self.name,
+                                         bot=self.__bot)
 
     def restart_seconds(self):
         pass
