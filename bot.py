@@ -31,6 +31,7 @@ admins = [access.thk, access.annib]
 class LedPiBot:
     log = LOGGER
     stop = commands[0]
+    standby = commands[21]
 
     def __init__(self, t, ids):
         """
@@ -55,6 +56,7 @@ class LedPiBot:
             self.__buttons([15, 20]),
             self.__buttons([8, 9, 10, 13, 11, 12, 14])
         ])
+        self.__func_thread = None
 
     @property
     def rm_kb(self):
@@ -66,7 +68,18 @@ class LedPiBot:
 
     @property
     def kb_stop(self):
-        r = ReplyKeyboardMarkup(keyboard=[[self.__button(self.stop)]])
+        r = ReplyKeyboardMarkup(
+            keyboard=[[self.__button(self.stop)]])
+        self.__log.debug(f"Stop keyboard markup: {r}")
+        return r
+
+    @property
+    def kb_stop_standby(self):
+        r = ReplyKeyboardMarkup(
+            keyboard=[
+                [self.__button(self.stop)],
+                [self.__button(self.standby)]
+            ])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -158,6 +171,10 @@ class LedPiBot:
                     self.__send(chat_id,
                                 pls_select.format(msg['from']['first_name']),
                                 reply_markup=self.kb_markup)
+            # force standby
+            elif command == self.standby:
+                self.__func_thread.force_standby()
+                self.__send(chat_id, self.standby, reply_markup=self.kb_stop)
 
             # /service
             elif command == ('/' + service.NAME.lower()):
@@ -178,9 +195,9 @@ class LedPiBot:
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):
                     self.__send(chat_id, called.format(command),
-                                reply_markup=self.kb_stop,
+                                reply_markup=self.kb_stop_standby,
                                 parse_mode='MarkdownV2')
-                    run_thread(command, chat_id, self)
+                    self.__func_thread = run_thread(command, chat_id, self)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:

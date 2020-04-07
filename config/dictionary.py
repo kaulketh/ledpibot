@@ -51,7 +51,8 @@ txts = {
         17: "clock 3",
         18: "clock 4",
         19: "clock 5",
-        20: "demo 2"
+        20: "demo 2",
+        21: "standby"
     },
     "de": {
         0: "`Hallo {1}, dies ist ein privater Bot!"
@@ -89,7 +90,8 @@ txts = {
         29: "uhr 4",
         30: "uhr 5",
         31: "farben 2",
-        32: "Bot-Update, Reboot folgt."
+        32: "Bot-Update, Reboot folgt.",
+        33: "Standby"
     },
     "emoji": {
         0: u'\U000023F9',
@@ -112,7 +114,8 @@ txts = {
         17: u'\U000023F1',
         18: u'\U000023F2',
         19: u'\U0001F570',
-        20: u'\U0001F501'
+        20: u'\U0001F501',
+        21: u'\U000023F3'
     },
     "en": {
         0: "`Hello {1}, this is a private bot!"
@@ -149,7 +152,8 @@ txts = {
         29: "clock 4",
         30: "clock 5",
         31: "colors 2",
-        32: "Bot update, reboot shortly."
+        32: "Bot update, reboot shortly.",
+        33: "Standby"
     },
     "fr": {
         0: "`Bonjour {1}, c'est un bot privé!"
@@ -187,7 +191,8 @@ txts = {
         29: "montre 4",
         30: "montre 5",
         31: "couleurs 2",
-        32: "Mise à jour, le bot est redémarré."
+        32: "Mise à jour, le bot est redémarré.",
+        33: "Etre prêt"
     }
 }
 
@@ -226,7 +231,8 @@ translation = {
         txts["command"].get(18): txts["de"].get(29),
         txts["command"].get(19): txts["de"].get(30),
         txts["command"].get(20): txts["de"].get(31),
-        txts["message"].get(11): txts["de"].get(32)
+        txts["message"].get(11): txts["de"].get(32),
+        txts["command"].get(21): txts["de"].get(33)
 
     },
     "de_emoji": {
@@ -263,7 +269,8 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
-        txts["message"].get(11): txts["de"].get(32)
+        txts["message"].get(11): txts["de"].get(32),
+        txts["command"].get(21): txts["emoji"].get(21)
     },
     "en": {
         "name": "English",
@@ -299,7 +306,8 @@ translation = {
         txts["command"].get(18): txts["en"].get(29),
         txts["command"].get(19): txts["en"].get(30),
         txts["command"].get(20): txts["en"].get(31),
-        txts["message"].get(11): txts["en"].get(32)
+        txts["message"].get(11): txts["en"].get(32),
+        txts["command"].get(21): txts["en"].get(33)
     },
     "en_emoji": {
         "name": "English with emoji",
@@ -335,7 +343,9 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
-        txts["message"].get(11): txts["en"].get(32)
+        txts["message"].get(11): txts["en"].get(32),
+        txts["command"].get(21): txts["emoji"].get(21)
+
     },
     "fr": {
         "name": "French",
@@ -371,7 +381,8 @@ translation = {
         txts["command"].get(18): txts["fr"].get(29),
         txts["command"].get(19): txts["fr"].get(30),
         txts["command"].get(20): txts["fr"].get(31),
-        txts["message"].get(11): txts["fr"].get(32)
+        txts["message"].get(11): txts["fr"].get(32),
+        txts["command"].get(21): txts["fr"].get(33)
     }
 }
 

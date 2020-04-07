@@ -28,16 +28,16 @@ def build_dictionary():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in ~.config.dictionary.py
+        in ~.config.dictionary.py !!!!
         """
         dictionary = {}
         functions = [None, None,
-                     # index 0 and 1 not needed, direct bot commands
+                     # index 0 and 1 not needed, direct bot commands, as last
                      run_advent, run_candles, run_clock1, run_clock2,
                      run_rainbow, run_theater, run_red, run_blue, run_green,
                      run_yellow, run_orange, run_white, run_violet, run_demo,
                      run_stroboscope, run_clock3, run_clock4, run_clock5,
-                     run_demo2]
+                     run_demo2, None]
         LOGGER.debug("Build dictionary of required functions")
         for i in range(len(commands)):
             f = functions[i]

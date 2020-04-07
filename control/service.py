@@ -17,17 +17,20 @@ NAME = "Service"
 
 class OSCommand:
     logger = LOGGER
+
     c_prefix = "- "
     c_info = "/Info"
     c_reboot = "/Reboot"
     c_update = "/Update"
+    c_test = "/TEST"
 
     __menu_header = f"{NAME} functions:"
 
     __menu_dictionary = {
         0: c_reboot,
         1: c_info,
-        2: c_update
+        2: c_update,
+        3: c_test  # TODO: remove later
     }
 
     __new_line = "\n"

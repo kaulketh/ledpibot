@@ -28,6 +28,7 @@ class CountdownThread(Thread):
 
         self.__bot = bot
         self.__do_run = True
+        self.__do_standby = False
         self.__expired = "Runtime expired"
         self.__stopped = "Stop requested, stopped"
         self.__countdown = CountdownThread.countdown_seconds()
@@ -83,7 +84,7 @@ class CountdownThread(Thread):
                       f"T minus *{self.__countdown // 60}* min."
                 self._logger.info(msg.replace("*", ""))
                 LedPiBot.external_request(
-                    msg, reply_markup=self.__bot.kb_stop,
+                    msg, reply_markup=self.__bot.kb_stop_standby,
                     chat_id=self.__chat_id, bot=self.__bot)
                 start = self.__countdown
             elif self.__countdown == (
@@ -98,7 +99,8 @@ class CountdownThread(Thread):
             self._logger.info(f"{self.__expired}: {self.__function}")
             LedPiBot.external_request(
                 f"{self.__f_name}\n{standby}",
-                reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id,
+                reply_markup=self.__bot.kb_stop,
+                chat_id=self.__chat_id,
                 bot=self.__bot)
             p.terminate()
             clear(self.__strip)
@@ -116,7 +118,8 @@ class CountdownThread(Thread):
                 self.__restart = CountdownThread.restart_seconds()
                 LedPiBot.external_request(
                     called.format(self.__f_name),
-                    reply_markup=self.__bot.kb_stop, chat_id=self.__chat_id,
+                    reply_markup=self.__bot.kb_stop_standby,
+                    chat_id=self.__chat_id,
                     bot=self.__bot)
                 self.run()
         # stop
@@ -124,6 +127,11 @@ class CountdownThread(Thread):
         clear(self.__strip)
         self.__strip.setBrightness(LED_BRIGHTNESS)
         self.threads.remove(self)
+
+    def force_standby(self):
+        self.__countdown = 0
+        self.__do_standby = True
+        self._logger.info("Manual reset of runtime, standby forced.")
 
     def stop(self):
         self.__do_run = False
