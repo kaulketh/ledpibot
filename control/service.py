@@ -30,7 +30,7 @@ class OSCommand:
         0: c_reboot,
         1: c_info,
         2: c_update,
-        3: c_test
+        3: c_test  # TODO: remove later
     }
 
     __new_line = "\n"
@@ -53,6 +53,7 @@ class OSCommand:
         else:
             raise Exception("No executable command found!")
 
+    # TODO: remove later
     @classmethod
     def get_info_log(cls, n=None):
         lines = cls.__new_line
