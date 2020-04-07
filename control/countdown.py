@@ -28,6 +28,7 @@ class CountdownThread(Thread):
 
         self.__bot = bot
         self.__do_run = True
+        self.__do_standby = False
         self.__expired = "Runtime expired"
         self.__stopped = "Stop requested, stopped"
         self.__countdown = CountdownThread.countdown_seconds()
@@ -124,6 +125,11 @@ class CountdownThread(Thread):
         clear(self.__strip)
         self.__strip.setBrightness(LED_BRIGHTNESS)
         self.threads.remove(self)
+
+    def force_standby(self):
+        self.__countdown = 0
+        self.__do_standby = True
+        self._logger.info("blablabla")
 
     def stop(self):
         self.__do_run = False
