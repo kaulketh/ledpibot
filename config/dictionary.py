@@ -270,7 +270,7 @@ translation = {
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
         txts["message"].get(11): txts["de"].get(32),
-        txts["command"].get(21): txts["emoji"].get(33)
+        txts["command"].get(21): txts["emoji"].get(21)
     },
     "en": {
         "name": "English",
@@ -344,7 +344,7 @@ translation = {
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
         txts["message"].get(11): txts["en"].get(32),
-        txts["command"].get(21): txts["emoji"].get(33)
+        txts["command"].get(21): txts["emoji"].get(21)
 
     },
     "fr": {
