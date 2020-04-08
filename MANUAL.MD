@@ -61,10 +61,11 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
         * **Colors**: Switching simple colors in random time periods
         * **Colors 2**: Fading over simple colors in random time periods
         * All LEDs at once can switched to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
-* **Service menu:** 
+* **Service menu** no app-in menu, will build due runtime but will handled like a app-in command because of the slash in front 
     * **/Reboot** - What should I write here?
     * **/Info** - Information about latest commit/release verions on Github, host name, IP, memory usage, disk usage, cpu load
     * **/Update** - Force update from Github to the latest version in master branch
+    * **/Help** - Short version of this manual
 * **Logging:**
     * Folder _**logs**_ in project root (if not exists will be created)
     * Log level DEBUG is shown in terminal/console (_stdout_)
