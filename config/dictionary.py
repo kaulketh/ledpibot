@@ -12,23 +12,22 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 from logger import LOGGER
-from .settings import COUNTDOWN_MINUTES, COUNTDOWN_RESTART_MINUTES
 
 # noinspection SpellCheckingInspection
 txts = {
     "message": {
-        0: "wrong_id",
-        1: "not_allowed",
-        2: "pls_select",
-        3: "called",
-        4: "started",
-        5: "rebooted",
-        6: "rotated",
-        7: "stopped",
-        8: "standby",
-        9: "stop_msg",
-        10: "killed",
-        11: "updated"
+        0: "m_wrong_id",
+        1: "m_not_allowed",
+        2: "m_pls_select",
+        3: "m_called",
+        4: "m_started",
+        5: "m_rebooted",
+        6: "m_rotated",
+        7: "m_stopped",
+        8: "m_standby",
+        9: "m_stop",
+        10: "m_killed",
+        11: "m_updated"
     },
     "command": {
         0: "stop",
@@ -59,14 +58,12 @@ txts = {
            "\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
         1: "* Nicht erlaubt für diesen Bot\\! *",
         2: "Bitte triff eine Auswahl, {0}.",
-        3: "*{0}* läuft für " + str(COUNTDOWN_MINUTES // 60) + " Stunden",
+        3: "*{0}* läuft bis {1}",
         4: "Bot ist einsatzbereit.",
         5: "Gerät wird neu gestartet.",
         6: "Logrotate manuell ausgeführt.",
         7: "Bot angehalten!",
-        8: f"Gestoppt, "
-           f"automatischer Standby nach {COUNTDOWN_MINUTES // 60} Stunden."
-           f"\nNeustart in {COUNTDOWN_RESTART_MINUTES // 60} Stunden!",
+        8: "Gestoppt, Standby\nNeustart um {0}",
         9: "Alles gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
         11: "stop",
@@ -122,13 +119,12 @@ txts = {
            "\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
         1: "* Not allowed for this bot\\! *",
         2: "Please make a suitable selection, {0}!",
-        3: "*{0}* was started for " + str(COUNTDOWN_MINUTES // 60) + " hours",
+        3: "*{0}* runs until {1}",
         4: "Bot ready for use.",
         5: "Device rebooted.",
         6: "Logrotate executed manually.",
         7: "Bot stopped.",
-        8: f"Stopped, automatic standby after {COUNTDOWN_MINUTES // 60} hours."
-           f"\nRestart in {COUNTDOWN_RESTART_MINUTES // 60} hours!",
+        8: "Stopped, standby\nRestart at {0}",
         9: "Everything stopped.",
         10: "Bot process killed!",
         11: "stop",
@@ -160,14 +156,12 @@ txts = {
            "\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
         1: "* Non autorisé pour ce bot\\! *",
         2: "Veuillez faire une sélection, {0}.",
-        3: "*{0}* dure " + str(COUNTDOWN_MINUTES // 60) + " heures",
+        3: "*{0}* s'exécute jusqu'à {1}",
         4: "Le bot est prêt à l'emploi.",
         5: "L'appareil est redémarré.",
         6: "Logrotate exécuté manuellement.",
         7: "Bot arrêté!",
-        8: f"Arrêt, mise en veille automatique après "
-           f"{COUNTDOWN_MINUTES // 60} heures."
-           f"\nRedémarrez en {COUNTDOWN_RESTART_MINUTES // 60} heures!",
+        8: "Arrêt, veille\nRedémarrez à {0}",
         9: "Tout s'est arrêté!",
         10: "Processus de bot complet annulé!",
         11: "stop",

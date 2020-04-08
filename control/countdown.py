@@ -7,10 +7,11 @@ __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
 import time
+from datetime import timedelta, datetime
 from multiprocessing import Process
 from threading import Thread
 
-from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, standby, called, \
+from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, m_standby, m_called, \
     COUNTDOWN_RESTART_MINUTES, \
     COUNTDOWN_DISPLAY_REMAINING_TIME
 from functions import clear
@@ -20,15 +21,13 @@ from logger import LOGGER
 class CountdownThread(Thread):
     threads = []
     name = "Countdown"
-    logger = LOGGER
 
     def __init__(self, function, stripe, name=None, request_id=None, bot=None):
         super(CountdownThread, self).__init__()
-        self._logger = CountdownThread.logger
+        self._logger = LOGGER
 
         self.__bot = bot
         self.__do_run = True
-        self.__do_standby = False
         self.__expired = "Runtime expired"
         self.__stopped = "Stop requested, stopped"
         self.__countdown = CountdownThread.countdown_seconds()
@@ -37,6 +36,20 @@ class CountdownThread(Thread):
         self.__strip = stripe
         self.__f_name = function if name is None else name
         self.__chat_id = request_id if request_id is not None else None
+
+    @staticmethod
+    def get_calc_time(hours):
+        now = datetime.combine(datetime.today(), datetime.time(datetime.now()))
+        now += timedelta(hours=hours)
+        return now.strftime('%H:%M')
+
+    @staticmethod
+    def countdown_hours():
+        return COUNTDOWN_MINUTES // 60
+
+    @staticmethod
+    def restart_hours():
+        return COUNTDOWN_RESTART_MINUTES // 60
 
     @staticmethod
     def restart_seconds():
@@ -98,7 +111,8 @@ class CountdownThread(Thread):
             from bot import LedPiBot
             self._logger.info(f"{self.__expired}: {self.__function}")
             LedPiBot.external_request(
-                f"{self.__f_name}\n{standby}",
+                m_standby.format(
+                    self.get_calc_time(self.restart_hours())),
                 reply_markup=self.__bot.kb_stop,
                 chat_id=self.__chat_id,
                 bot=self.__bot)
@@ -117,7 +131,9 @@ class CountdownThread(Thread):
                 self.__countdown = CountdownThread.countdown_seconds()
                 self.__restart = CountdownThread.restart_seconds()
                 LedPiBot.external_request(
-                    called.format(self.__f_name),
+                    m_called.format(
+                        self.__f_name,
+                        self.get_calc_time(self.countdown_hours())),
                     reply_markup=self.__bot.kb_stop_standby,
                     chat_id=self.__chat_id,
                     bot=self.__bot)
@@ -130,7 +146,6 @@ class CountdownThread(Thread):
 
     def force_standby(self):
         self.__countdown = 0
-        self.__do_standby = True
         self._logger.info("Manual reset of runtime, standby forced.")
 
     def stop(self):

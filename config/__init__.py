@@ -11,10 +11,10 @@ from .dictionary import get_translations, set_language
 from .secret import *
 from .settings import *
 
-set_language("de")
+set_language(LANGUAGE)
 
-wrong_id, not_allowed, pls_select, called, started,\
-    rebooted, rotated, stopped, standby, stop_msg, killed, updated \
-    = get_translations("message")
+m_wrong_id, m_not_allowed, m_pls_select, m_called, m_started, m_rebooted, \
+m_rotated, m_stopped, m_standby, m_stop, m_killed, \
+m_updated = get_translations("message")
 
 commands = get_translations("command")
