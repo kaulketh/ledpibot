@@ -17,8 +17,8 @@ from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, \
 from config import \
     token, access, \
     commands, \
-    wrong_id, pls_select, not_allowed, called, started, rebooted, stopped, \
-    stop_msg, updated, \
+    m_wrong_id, m_pls_select, m_not_allowed, m_called, \
+    m_started, m_rebooted, m_stopped, m_stop, m_updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
@@ -29,9 +29,6 @@ admins = [access.thk, access.annib]
 
 
 class LedPiBot:
-    log = LOGGER
-    stop = commands[0]
-    standby = commands[21]
 
     def __init__(self, t, ids):
         """
@@ -41,7 +38,7 @@ class LedPiBot:
         :type t: str
         :type ids: list of int
         """
-        self.__log = LedPiBot.log
+        self.__log = LOGGER
         self.__log.debug(
             f"Initialize LED-RaspberryPi-Telegram-Bot: "
             f"{self.__class__.__name__}")
@@ -69,7 +66,7 @@ class LedPiBot:
     @property
     def kb_stop(self):
         r = ReplyKeyboardMarkup(
-            keyboard=[[self.__button(self.stop)]])
+            keyboard=[[self.__button(commands[0])]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -77,8 +74,8 @@ class LedPiBot:
     def kb_stop_standby(self):
         r = ReplyKeyboardMarkup(
             keyboard=[
-                [self.__button(self.stop)],
-                [self.__button(self.standby)]
+                [self.__button(commands[0])],
+                [self.__button(commands[21])]
             ])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
@@ -119,8 +116,8 @@ class LedPiBot:
             username = msg['from']['username']
             log_msg = f"Unauthorized access: ID " \
                       f"{ch_id} User:{username}, {first_name} {last_name}"
-            self.__send(ch_id, wrong_id.format(user_id, username, first_name,
-                                               last_name),
+            self.__send(ch_id, m_wrong_id.format(user_id, username, first_name,
+                                                 last_name),
                         reply_markup=self.rm_kb)
             raise Exception(log_msg)
         except Exception as ex:
@@ -131,12 +128,12 @@ class LedPiBot:
             got = str(codecs.encode(content, 'utf-8')).replace('b', '')
             raise Exception(f'Not allowed input: {got}')
         except Exception as ex:
-            self.__send(ch_id, not_allowed, parse_mode='MarkdownV2',
+            self.__send(ch_id, m_not_allowed, parse_mode='MarkdownV2',
                         reply_markup=None)
             self.__log.warning(str(ex))
         return
 
-    def __stop_function(self, ch_id, msg=stop_msg):
+    def __stop_function(self, ch_id, msg=m_stop):
         if msg is not None:
             self.__send(ch_id, msg, reply_markup=self.rm_kb)
         return True if stop_threads() else False
@@ -156,47 +153,52 @@ class LedPiBot:
             # /start
             if command == "/start":
                 self.__send(chat_id,
-                            pls_select.format(msg['from']['first_name']),
+                            m_pls_select.format(msg['from']['first_name']),
                             reply_markup=self.kb_markup)
 
             # /stop
             elif command == "/stop":
                 if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, stopped, reply_markup=self.rm_kb)
+                    self.__send(chat_id, m_stopped, reply_markup=self.rm_kb)
 
             # stop function
-            elif (command.startswith(self.stop)) \
-                    or (command.startswith(self.stop.lower())):
+            elif (command.startswith(commands[0])) \
+                    or (command.startswith(commands[0].lower())):
                 if self.__stop_function(chat_id, msg=None):
                     self.__send(chat_id,
-                                pls_select.format(msg['from']['first_name']),
+                                m_pls_select.format(msg['from']['first_name']),
                                 reply_markup=self.kb_markup)
             # force standby
-            elif command == self.standby:
+            elif command == commands[21]:
                 self.__func_thread.force_standby()
-                self.__send(chat_id, self.standby, reply_markup=self.kb_stop)
 
             # /service
             elif command == ('/' + service.NAME.lower()):
                 if self.__stop_function(chat_id):
                     self.__send(chat_id, service.menu, reply_markup=self.rm_kb)
             elif command == service.OSCommand.c_reboot:
-                self.__send(chat_id, rebooted, reply_markup=self.rm_kb)
-                service.reboot_device(rebooted)
+                self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
+                service.reboot_device(m_rebooted)
             elif command == service.OSCommand.c_info:
                 info = service.system_info()
                 self.__send(chat_id, info, reply_markup=self.rm_kb)
                 self.__log.info(info.replace("\n", "").replace(" ", ""))
             elif command == service.OSCommand.c_update:
-                self.__send(chat_id, updated, reply_markup=self.rm_kb)
-                update_bot(updated)
+                self.__send(chat_id, m_updated, reply_markup=self.rm_kb)
+                update_bot(m_updated)
 
             # all other commands
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, called.format(command),
-                                reply_markup=self.kb_stop_standby,
-                                parse_mode='MarkdownV2')
+                    self.__func_thread = run_thread(command, chat_id, self)
+                    self.__send(
+                        chat_id,
+                        m_called.format(
+                            command,
+                            self.__func_thread.get_calc_time(
+                                self.__func_thread.countdown_hours())),
+                        reply_markup=self.kb_stop_standby,
+                        parse_mode='MarkdownV2')
                     self.__func_thread = run_thread(command, chat_id, self)
             else:
                 self.__reply_wrong_command(chat_id, command)
@@ -206,7 +208,7 @@ class LedPiBot:
     def start(self):
         self.__log.info("Bot is running...")
         for a in self.__admins:
-            self.__send(a, started, reply_markup=self.rm_kb)
+            self.__send(a, m_started, reply_markup=self.rm_kb)
         MessageLoop(self.__telebot_bot,
                     {'chat': self.__handle}).run_as_thread()
         if AUTO_REBOOT_ENABLED:

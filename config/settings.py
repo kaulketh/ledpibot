@@ -6,6 +6,10 @@ __email__ = "kaulketh@gmail.com"
 __maintainer___ = "Thomas Kaulke"
 __status__ = "Production"
 
+LANGUAGE = "de"
+# language keys: "de", "de_emoji", "en", "en_emoji", "fr"
+# refer dictionary.py"""
+
 AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_CLOCK_TIME = 2
 
@@ -20,8 +24,8 @@ LED_NIGHT_BRIGHTNESS = 70
 LED_MORNING_CUT_OFF = 8
 LED_NIGHT_CUT_OFF = 18
 
-COUNTDOWN_MINUTES = (6 * 60)
-COUNTDOWN_RESTART_MINUTES = (18 * 60)
+COUNTDOWN_MINUTES = (7 * 60)
+COUNTDOWN_RESTART_MINUTES = (17 * 60)
 COUNTDOWN_DISPLAY_REMAINING_TIME = False
 
 CLOCK_HOUR_COLOR = (200, 0, 0)

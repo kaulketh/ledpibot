@@ -18,10 +18,10 @@ SECRET = "secret.py"
 
 
 class Update:
-    logger = LOGGER
     name = "update"
 
     def __init__(self, branch: str = None):
+        self.__log = LOGGER
         self.__branch = 'master' if branch is None else branch
         self.__save_secret = f"mv -v {HOME_PI_BOT}" \
                              f"/config/{SECRET} {HOME_PI_BOT}/{SECRET}"
@@ -44,35 +44,35 @@ class Update:
 
     @property
     def run(self):
-        self.logger.info("Starting update...")
+        self.__log.info("Starting update...")
         try:
             os.system(self.__save_secret)
-            self.logger.info(
+            self.__log.info(
                 f"Clone branch \'{self.__branch}\' from Github repository...")
             os.system(self.__clone)
             cloned_f = [f for f in os.listdir(PROJECT) if
                         not self.__ignored(f)]
-            self.logger.info("Copy files and folders...")
+            self.__log.info("Copy files and folders...")
             for f in cloned_f:
                 os.system(f"cp -rv {PROJECT}/{f} {HOME_PI_BOT}/")
             os.system(self.__restore_secret)
-            self.logger.info("Remove not needed files...")
+            self.__log.info("Remove not needed files...")
             os.system(self.__remove_clone)
         except Exception as e:
-            self.logger.error(f"{e}")
+            self.__log.error(f"{e}")
             return False
         return True
 
 
 def update_bot(log_msg: str):
     try:
-        Update.logger.info(log_msg)
+        Update.__log.info(log_msg)
         if Update().run:
             reboot_device('Update done.')
         else:
-            Update.logger.warning('Update failed.')
+            Update.__log.warning('Update failed.')
     except Exception as e:
-        Update.logger.error(f"{e}")
+        Update.__log.error(f"{e}")
 
 
 if __name__ == '__main__':

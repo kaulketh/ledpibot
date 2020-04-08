@@ -21,6 +21,15 @@ class AutoReboot(CountdownThread):
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
 
+    def get_calc_time(self):
+        pass
+
+    def restart_hours(self):
+        pass
+
+    def countdown_hours(self):
+        pass
+
     def restart_seconds(self):
         pass
 
@@ -32,9 +41,9 @@ class AutoReboot(CountdownThread):
 
     def __reboot(self):
         from bot import LedPiBot
-        from config import rebooted
+        from config import m_rebooted
         from control.service import reboot_device
-        LedPiBot.external_request(msg=rebooted, bot=self.__bot)
+        LedPiBot.external_request(msg=m_rebooted, bot=self.__bot)
         reboot_device(self.name)
 
     @property
