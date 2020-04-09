@@ -13,33 +13,82 @@ from logger import LOGGER
 
 GIT_API_URL = "https://api.github.com/repos/kaulketh/ledpibot"
 NAME = "Service"
+HELP_TEXT = [
+    "- After boot bot will inform user that it is ready to use via message",
+    "- Use in-app command /start to start",
+    "- Bot welcomes the user",
+    "- Select any function/color to run",
+    "- Bot messages about run and the clock time of auto-standby",
+    "- Keyboard changes to 2-button keyboard (stop/standby)",
+    "- User is able to stop the running function or to force standby"
+    "- Bot messages the clock time of restart",
+    "- When standby mode is reached only one stop button is displayed"
+    "      User is able to break the running standby\n"
+    "      It is possible to call in-app commands at any time!\n"
+    "      Call of an built-in command will break running function!",
+    "- Functions/Animations:\n"
+    "      Clock 1: One LED per 'pointer', Red hours 'pointer', blue minutes "
+    "'pointer', warm yellow running seconds 'pointer' every 2.5 seconds\n"
+    "      Clock 2: One LED per 'pointer', Red hours 'pointer', blue minutes "
+    "'pointer', a blue running light every 2.5 minutes from the current "
+    "'minute' to the '12'\n"
+    "      Clock 3: One LED per 'pointer', Red hours 'pointer', blue minutes "
+    "'pointer', green seconds 'scale' will extends every 2.5 seconds, there is"
+    " also a 'dial', a subtly warm yellow LED on each 'number'.\n"
+    "      Clock 4: Colorful, full color 'scale' to minute, hour, second, "
+    "'scales' will overridden and colors mixed/changed thus\n"
+    "      Clock 5: Red hours 'pointer', blue minutes 'pointer' and a warm "
+    "yellow 1 second 'pendulum' over all LEDs\n"
+    "      Advent: Advent calendar, works in December only! For every day of "
+    "December will one LED flickering like a candle light. If it is Advent "
+    "Sunday it flickers red. If month is other than December all LEDs "
+    "flickering in red as warning\n"
+    "      Candles: Each LED flickers like candle light\n"
+    "      Rainbow: Rainbow animation with circular fading effect\n"
+    "      Theater: Extremely colorful animation with chaser, "
+    "spinning, wiping effects\n"
+    "      Strobe: Emitting brief and rapid flashes of white light in random "
+    "frequency\n"
+    "      Colors: Switching simple colors in random time periods\n"
+    "      Colors 2: Fading over simple colors in random time periods\n"
+    "      All LEDs at once can switched to: "
+    "red, blue, green, white, yellow, orange, violet",
+    "- Service menu:\n"
+    "      /Reboot : ...\n"
+    "      /Info : Information about latest commit/release verions on Github, "
+    "host name, IP, memory usage, disk usage, cpu load\n"
+    "      /Update : Force update from Github to the latest version in "
+    "master branch\n"
+    "      /Help : This menu"
+]
 
 
-class OSCommand:
-    logger = LOGGER
-
+class Service:
     c_prefix = "- "
     c_info = "/Info"
     c_reboot = "/Reboot"
     c_update = "/Update"
-
-    __menu_header = f"{NAME} functions:"
-
-    __menu_dictionary = {
-        0: c_reboot,
-        1: c_info,
-        2: c_update
-    }
-
-    __new_line = "\n"
-    __empty = ""
+    c_help = "/Help"
 
     def __init__(self, command: str = None, log_msg: str = None):
-        self.__logger = OSCommand.logger
+        self.__logger = LOGGER
         self.__log_msg = log_msg
         self.__command = command
+        self.__help_txt = HELP_TEXT
 
-    def execute(self):
+        self.__menu_header = f"{NAME} functions:"
+
+        self.__menu_dictionary = {
+            0: self.c_reboot,
+            1: self.c_info,
+            2: self.c_update,
+            3: self.c_help
+        }
+
+        self.__new_line = "\n"
+        self.__empty = ""
+
+    def execute_os_command(self):
         if self.__command is not None:
             try:
                 self.__logger.info(
@@ -51,27 +100,28 @@ class OSCommand:
         else:
             raise Exception("No executable command found!")
 
-    @classmethod
-    def build_menu(cls):
+    def build_menu(self):
         try:
-            m = f"{cls.__menu_header}{cls.__new_line}"
-            cls.logger.debug(
+            m = f"{self.__menu_header}{self.__new_line}"
+            self.__logger.debug(
                 f"Build service menu: "
-                f"{m.replace(cls.__new_line, cls.__empty)}")
-            for key in cls.__menu_dictionary.keys():
-                line = f"{cls.c_prefix}" \
-                       f"{cls.__menu_dictionary.get(key)}" \
-                       f"{cls.__new_line}"
+                f"{m.replace(self.__new_line, self.__empty)}")
+            for key in self.__menu_dictionary.keys():
+                line = f"{self.c_prefix}" \
+                       f"{self.__menu_dictionary.get(key)}" \
+                       f"{self.__new_line}"
                 m += line
-                cls.logger.debug(
+                self.__logger.debug(
                     f"Add line to menu: "
-                    f"{line.replace(cls.__new_line, cls.__empty)}")
+                    f"{line.replace(self.__new_line, self.__empty)}")
             return m
         except Exception as e:
-            cls.logger.error(f"{e}")
+            self.__logger.error(f"{e}")
 
-    @classmethod
-    def system_info(cls):
+    def build_help_text(self):
+        return '\n'.join(self.__help_txt)
+
+    def system_info(self):
         try:
             host = subprocess.check_output("hostname", shell=True).upper()
             ip = "IP :  " + str(
@@ -90,18 +140,18 @@ class OSCommand:
                 " | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | "
                 "awk '{print \"CPU Load :  \"100 - $1\"%\"}'", shell=True)
             return f"{host} " \
-                   f"{cls.__latest_release()} " \
-                   f"({cls.__latest_commit()}){cls.__new_line}" \
-                   f"{ip}{cls.__new_line}" \
-                   f"{m}{cls.__new_line}" \
-                   f"{d}{cls.__new_line}" \
+                   f"{self.__latest_release()} " \
+                   f"({self.__latest_commit()}){self.__new_line}" \
+                   f"{ip}{self.__new_line}" \
+                   f"{m}{self.__new_line}" \
+                   f"{d}{self.__new_line}" \
                    f"{c}" \
                 .replace("b'", "").replace("'", "").replace("\\n", "")
         except Exception as e:
-            cls.logger.error(f"{e}")
+            self.__logger.error(f"{e}")
 
-    @classmethod
-    def __latest_commit(cls):
+    @staticmethod
+    def __latest_commit():
         commit = f"curl -s {GIT_API_URL}/commits/master --insecure "
         latest_com = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
                      f"".replace("b'", "").replace("'", "").replace("\\n", "")
@@ -110,8 +160,8 @@ class OSCommand:
                           f"{latest_com})"
         return commit_url_text
 
-    @classmethod
-    def __latest_release(cls):
+    @staticmethod
+    def __latest_release():
         release = f"curl -s {GIT_API_URL}/releases/latest --insecure |" \
                   " grep -Po '\"tag_name\": \"\\K.*?(?=\")'"
         return f"{subprocess.check_output(release, shell=True)}" \
@@ -119,14 +169,25 @@ class OSCommand:
 
 
 def reboot_device(log_msg: str = None):
-    OSCommand("shutdown -r now", log_msg).execute()
+    Service("shutdown -r now", log_msg).execute_os_command()
 
 
 def system_info():
-    return OSCommand.system_info()
+    s = Service()
+    return s.system_info()
 
 
-menu = OSCommand.build_menu()
+def get_help_text():
+    s = Service()
+    return s.build_help_text()
+
+
+def service_menu():
+    s = Service()
+    return s.build_menu()
+
+
+menu = service_menu()
 
 if __name__ == '__main__':
     pass

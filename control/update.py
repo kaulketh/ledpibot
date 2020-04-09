@@ -38,6 +38,7 @@ class Update:
         ignored = f_name.startswith('.') or \
                   f_name == 'hardware' or \
                   f_name.endswith('.md') or \
+                  f_name.endswith('.MD') or \
                   f_name == 'UNLICENSE' or \
                   f_name == 'LICENSE'
         return ignored
@@ -63,16 +64,20 @@ class Update:
             return False
         return True
 
+    def start(self, log_str: str):
+        try:
+            self.__log.info(log_str)
+            if self.run:
+                reboot_device('Update done.')
+            else:
+                self.__log.warning('Update failed.')
+        except Exception as e:
+            self.__log.error(f"{e}")
+
 
 def update_bot(log_msg: str):
-    try:
-        Update.__log.info(log_msg)
-        if Update().run:
-            reboot_device('Update done.')
-        else:
-            Update.__log.warning('Update failed.')
-    except Exception as e:
-        Update.__log.error(f"{e}")
+    bot_update = Update()
+    bot_update.start(log_msg)
 
 
 if __name__ == '__main__':
