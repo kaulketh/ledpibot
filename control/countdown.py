@@ -120,7 +120,7 @@ class CountdownThread(Thread):
             clear(self.__strip)
             self._logger.info(
                 f"Standby, "
-                f"waiting to restart of {self.__function} "
+                f"waiting to restart {self.__function} "
                 f"in {CountdownThread.restart_seconds()} seconds")
             # standby
             while self.__do_run and self.__restart > 0:
