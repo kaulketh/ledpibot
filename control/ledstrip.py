@@ -18,11 +18,10 @@ from logger import LOGGER
 
 
 class Strip:
-    logger = LOGGER
     name = "LED Strip"
 
     def __init__(self, count, pin, hz, dma, invert, brightness):
-        self.__logger = Strip.logger
+        self.__logger = LOGGER
         self.__count = count
         self.__pin = pin
         self.__hz = hz

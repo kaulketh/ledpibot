@@ -176,16 +176,23 @@ class LedPiBot:
             elif command == ('/' + service.NAME.lower()):
                 if self.__stop_function(chat_id):
                     self.__send(chat_id, service.menu, reply_markup=self.rm_kb)
-            elif command == service.OSCommand.c_reboot:
+            elif command == service.Service.c_reboot:
                 self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(m_rebooted)
-            elif command == service.OSCommand.c_info:
-                info = service.system_info()
-                self.__send(chat_id, info, reply_markup=self.rm_kb)
-                self.__log.info(info.replace("\n", "").replace(" ", ""))
-            elif command == service.OSCommand.c_update:
-                self.__send(chat_id, m_updated, reply_markup=self.rm_kb)
-                update_bot(m_updated)
+            elif command == service.Service.c_info:
+                if self.__stop_function(chat_id):
+                    info = service.system_info()
+                    self.__send(chat_id, info, reply_markup=self.rm_kb)
+                    self.__log.info(info.replace("\n", "").replace(" ", ""))
+            elif command == service.Service.c_update:
+                if self.__stop_function(chat_id):
+                    self.__send(chat_id, m_updated, reply_markup=self.rm_kb)
+                    update_bot(m_updated)
+            elif command == service.Service.c_help \
+                    or command == service.Service.c_help.lower():
+                if self.__stop_function(chat_id):
+                    self.__send(chat_id, service.get_help_text(),
+                                reply_markup=self.rm_kb)
 
             # all other commands
             elif any(c for c in commands if (command == c)):

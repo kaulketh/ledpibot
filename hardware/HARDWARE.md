@@ -15,4 +15,3 @@
     * It has enough power to do its job.
     * It is small. just right, not too big.
     * Additionally we need a power supply also, don't forget!
-* [These](https://github.com/kaulketh/ledpibot) scripts
