@@ -146,7 +146,7 @@ class CountdownThread(Thread):
 
     def force_standby(self):
         self.__countdown = 0
-        self._logger.info("Manual reset of runtime, standby forced.")
+        self._logger.info("Manual reset of runtime, force standby.")
 
     def stop(self):
         self.__do_run = False
