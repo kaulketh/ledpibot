@@ -44,6 +44,7 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
             * **/start**
             * **/stop**
             * **/service**
+            * **/help**
         * **Call of an built-in command will break running function!**
 * **Functions/Animations:**
     * _**Clocks**_
