@@ -206,7 +206,6 @@ class LedPiBot:
                                 self.__func_thread.countdown_hours())),
                         reply_markup=self.kb_stop_standby,
                         parse_mode='MarkdownV2')
-                    self.__func_thread = run_thread(command, chat_id, self)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:

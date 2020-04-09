@@ -86,54 +86,53 @@ class Colorizer:
             self.__log.error(f"An error occurs: {e}")
             exit()
 
+    @staticmethod
+    def run_color(stripe, color_key: str):
+        from control import get_stop_flag
+        while not get_stop_flag():
+            Colorizer(stripe, color_key).start()
+        clear(stripe)
 
-def _run_color(stripe, color_key: str):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        c = Colorizer(stripe, color_key)
-        c.start()
-    clear(stripe)
-
-
-def _all_colors(stripe):
-    from control import get_stop_flag
-    while not get_stop_flag():
-        new_strip = Colorizer(stripe)
-        for color in new_strip.colors:
-            if isinstance(color, str) and not get_stop_flag():
-                new_strip.set_color(color)
-                yield new_strip
-            if get_stop_flag():
-                break
-    clear(stripe)
+    @staticmethod
+    def all_colors(stripe):
+        from control import get_stop_flag
+        while not get_stop_flag():
+            new_strip = Colorizer(stripe)
+            for color in new_strip.colors:
+                if isinstance(color, str) and not get_stop_flag():
+                    new_strip.set_color(color)
+                    yield new_strip
+                if get_stop_flag():
+                    break
+        clear(stripe)
 
 
 def run_red(stripe):
-    _run_color(stripe, 'red')
+    Colorizer.run_color(stripe, 'red')
 
 
 def run_blue(stripe):
-    _run_color(stripe, 'blue')
+    Colorizer.run_color(stripe, 'blue')
 
 
 def run_green(stripe):
-    _run_color(stripe, 'green')
+    Colorizer.run_color(stripe, 'green')
 
 
 def run_yellow(stripe):
-    _run_color(stripe, 'yellow')
+    Colorizer.run_color(stripe, 'yellow')
 
 
 def run_orange(stripe):
-    _run_color(stripe, 'orange')
+    Colorizer.run_color(stripe, 'orange')
 
 
 def run_white(stripe):
-    _run_color(stripe, 'white')
+    Colorizer.run_color(stripe, 'white')
 
 
 def run_violet(stripe):
-    _run_color(stripe, 'violet')
+    Colorizer.run_color(stripe, 'violet')
 
 
 def run_stroboscope(stripe):
@@ -154,13 +153,13 @@ def run_stroboscope(stripe):
 
 
 def run_demo(stripe):
-    for c in _all_colors(stripe):
+    for c in Colorizer.all_colors(stripe):
         c.start()
         time.sleep(uniform(0.25, 1))
 
 
 def run_demo2(stripe):
-    for c in _all_colors(stripe):
+    for c in Colorizer.all_colors(stripe):
         for i in range(set_brightness_depending_on_daytime(stripe)[1]):
             c.start(brightness=i)
             time.sleep(uniform(0.001, 0.05))
