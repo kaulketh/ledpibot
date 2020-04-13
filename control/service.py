@@ -14,51 +14,57 @@ from logger import LOGGER
 GIT_API_URL = "https://api.github.com/repos/kaulketh/ledpibot"
 NAME = "Service"
 HELP_TEXT = [
+    "*Manual*",
     "- After boot bot will inform user that it is ready to use via message",
     "- Use in-app command /start to start",
     "- Bot welcomes the user",
     "- Select any function/color to run",
     "- Bot messages about run and the clock time of auto-standby",
     "- Keyboard changes to 2-button keyboard (stop/standby)",
-    "- User is able to stop the running function or to force standby"
+    "- User is able to stop the running function or to force standby",
     "- Bot messages the clock time of restart",
-    "- When standby mode is reached only one stop button is displayed"
+    "- When standby mode is reached only one stop button is displayed\n"
     "      User is able to break the running standby\n"
     "      It is possible to call in-app commands at any time!\n"
-    "      Call of an built-in command will break running function!",
-    "- Functions/Animations:\n"
-    "      Clock 1: One LED per 'pointer', red hours 'pointer', blue minutes "
-    "'pointer', warm yellow running seconds 'pointer' every 2.5 seconds\n"
-    "      Clock 2: One LED per 'pointer', red hours 'pointer', blue minutes "
-    "'pointer', a blue running light every 2.5 minutes from the current "
-    "'minute' to the '12'\n"
-    "      Clock 3: One LED per 'pointer', red hours 'pointer', blue minutes "
-    "'pointer', green seconds 'scale' will extends every 2.5 seconds, there is"
-    " also a 'dial', a subtly warm yellow LED on each 'number'.\n"
-    "      Clock 4: Colorful, full color 'scale' for minute, hour, second, "
-    "'scales' will overridden and colors mixed/changed thus\n"
-    "      Clock 5: Red hours 'pointer', blue minutes 'pointer' and a warm "
-    "yellow 1 second 'pendulum' over all LEDs\n"
-    "      Advent: Advent calendar, works in December only! For every day of "
-    "December will one LED flicker like a candle light. If it is Advent "
-    "Sunday it flickers red. If month is other than December all LEDs are "
-    "flickering in red as warning\n"
-    "      Candles: Each LED simulates candle light\n"
-    "      Rainbow: Rainbow animation with circular fading effect\n"
-    "      Theater: Extremely colorful animation with chaser, "
-    "spinning, wiping effects\n"
-    "      Strobe: Emitting brief and rapid flashes of white light in random "
-    "frequency\n"
-    "      Colors: Switching simple colors in random time periods\n"
-    "      Colors 2: Fading over simple colors in random time periods\n"
-    "      All LEDs at once can switched to: "
-    "red, blue, green, white, yellow, orange, violet",
-    "- Service menu:\n"
+    "      *Call of any built-in command will break running function!*",
+    "\n",
+    "- *Functions/Animations:*\n"
+    "      Clock 1:  One LED per 'pointer', red hours 'pointer', \n"
+    "                blue minutes 'pointer', warm yellow running seconds \n"
+    "                'pointer' every 2.5 seconds\n"
+    "      Clock 2:  One LED per 'pointer', red hour, blue minute\n"
+    "                a blue running light every 2.5 minutes from \n"
+    "                the current 'minute' to the '12'\n"
+    "      Clock 3:  One LED per 'pointer', red hour, blue minute, \n"
+    "                green seconds 'scale' will extends every 2.5 \n"
+    "                seconds, there is also a 'dial', \n"
+    "                a subtly warm yellow LED on each 'number'.\n"
+    "      Clock 4:  Colorful, full color 'scale' for minute, hour, second, \n"
+    "                'scales' will overridden and colors mixed/changed thus\n"
+    "      Clock 5:  Red hours 'pointer', blue minutes 'pointer' and a warm \n"
+    "                yellow 1 second 'pendulum' over all LEDs\n"
+    "      Advent:  Advent calendar, works in December only! For every day\n"
+    "               of December will one LED flicker like a candle light. \n"
+    "               If it is Advent Sunday it flickers red. If month is \n"
+    "               other than December all LEDs are flickering in red \n"
+    "               as warning\n"
+    "      Candles:  Each LED simulates candle light\n"
+    "      Rainbow:  Rainbow animation with circular fading effect\n"
+    "      Theater:  Extremely colorful animation with chaser, \n"
+    "                spinning, wiping effects\n"
+    "      Strobe:  Emitting brief and rapid flashes of white light \n"
+    "               in random frequency\n"
+    "      Colors:  Switching simple colors in random time periods\n"
+    "      Colors 2:  Fading over simple colors in random time periods\n"
+    "      Red, blue, green, white, yellow, orange, violet: \n"
+    "                 All LEDs at once can switched to same color",
+    "\n",
+    "- *Service menu:*\n"
     "      /Reboot : ...\n"
-    "      /Info : Information about latest commit/release verions on Github, "
-    "host name, IP, memory usage, disk usage, cpu load\n"
-    "      /Update : Force update from Github to the latest version in "
-    "master branch\n"
+    "      /Info : Information about latest commit/release verions on \n"
+    "              Github, host name, IP, memory usage, disk usage, cpu load\n"
+    "      /Update : Force update from Github to the latest version of \n"
+    "                master branch\n"
     "      /Help : This menu"
 ]
 

@@ -65,6 +65,7 @@ class Colorizer:
 
     def start(self, brightness=None):
         try:
+            self.__log.debug("running...")
             if self.__color is None:
                 raise Exception('Start without set color!')
             else:

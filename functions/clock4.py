@@ -30,6 +30,7 @@ def _wipe(color, strip):
 def run_clock4(strip):
     from control import get_stop_flag
     while not get_stop_flag():
+        LOGGER.debug("running...")
         try:
             now = set_brightness_depending_on_daytime(strip)[0]
             second_value = int(now.second / 2.5)

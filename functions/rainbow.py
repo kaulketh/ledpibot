@@ -16,6 +16,7 @@ from logger import LOGGER
 def run_rainbow(strip):
     from control import get_stop_flag
     while not get_stop_flag():
+        LOGGER.debug("running...")
         try:
             set_brightness_depending_on_daytime(strip)
             for j in range(256 * 5):

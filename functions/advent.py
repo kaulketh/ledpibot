@@ -88,6 +88,7 @@ def run_advent(strip):
     from control import get_stop_flag
     i = 1
     while not get_stop_flag():
+        LOGGER.debug("running...")
         month = datetime.now().month
         # month = 12  # uncomment to test
         if month == 12:

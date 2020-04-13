@@ -25,13 +25,13 @@ def get_stop_flag():
 
 def set_stop_flag(flag):
     """
-    Set a global stop_flag. It is necessary for stopping while loops.
+    Set a global stop_flag for stopping while loops.
 
     :type flag: bool
     """
     global stop_flag
     stop_flag = flag
-    LOGGER.debug(f"Stop flag set: {stop_flag}")
+    LOGGER.debug(f"Stop flag set to {stop_flag}")
 
 
 def run_thread(func_name, request_id, bot):

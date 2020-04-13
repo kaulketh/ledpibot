@@ -45,6 +45,7 @@ def candle(stripe, leds):
 def run_candles(strip):
     from control import get_stop_flag
     while not get_stop_flag():
+        LOGGER.debug("running...")
         try:
             candle(strip, strip.numPixels())
 

@@ -27,6 +27,7 @@ mB = CLOCK_MINUTE_COLOR[2]
 def run_clock2(strip):
     from control import get_stop_flag
     while not get_stop_flag():
+        LOGGER.debug("running...")
         try:
             hour, minute, next_minute = _get_pointer(strip)
             while not minute == next_minute:

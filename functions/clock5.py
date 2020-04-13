@@ -44,6 +44,7 @@ def run_clock5(strip):
     p_left = 0
     p_right = len(pendulum) - 1
     while not get_stop_flag():
+        LOGGER.debug("running...")
         try:
             clear(strip)
             now = set_brightness_depending_on_daytime(strip)[0]

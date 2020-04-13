@@ -21,7 +21,9 @@ class AutoReboot(CountdownThread):
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
 
-    def get_calc_time(self):
+    def recalculated_time(self, hours: float = 0,
+                          minutes: float = 0,
+                          seconds: float = 0):
         pass
 
     def restart_hours(self):
@@ -40,21 +42,21 @@ class AutoReboot(CountdownThread):
         pass
 
     def __reboot(self):
-        from bot import LedPiBot
+        from bot import TelepotBot
         from config import m_rebooted
         from control.service import reboot_device
-        LedPiBot.external_request(msg=m_rebooted, bot=self.__bot)
+        TelepotBot.external_request(msg=m_rebooted, bot=self.__bot)
         reboot_device(self.name)
 
     @property
-    def __time_reached(self):
+    def __hour_reached(self):
         now = datetime.datetime.now()
         return now.hour == self.__hour and now.minute == 0 and now.second <= 5
 
     def run(self):
         try:
             self._logger.info(f"{self.name} initialized for {self.__hour}:00.")
-            while not self.__time_reached:
+            while not self.__hour_reached:
                 time.sleep(2)
             self.__reboot()
         except Exception as e:

@@ -12,7 +12,7 @@ from multiprocessing import Process
 from threading import Thread
 
 from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, m_standby, m_called, \
-    COUNTDOWN_RESTART_MINUTES, \
+    m_stop_f, COUNTDOWN_RESTART_MINUTES, \
     COUNTDOWN_DISPLAY_REMAINING_TIME
 from functions import clear
 from logger import LOGGER
@@ -35,13 +35,14 @@ class CountdownThread(Thread):
         self.__function = function
         self.__strip = stripe
         self.__f_name = function if name is None else name
-        self.__chat_id = request_id if request_id is not None else None
+        self.__chat_id = request_id
 
     @staticmethod
-    def get_calc_time(hours):
+    def recalculated_time(hours: float = 0, minutes: float = 0,
+                          seconds: float = 0):
         now = datetime.combine(datetime.today(), datetime.time(datetime.now()))
-        now += timedelta(hours=hours)
-        return now.strftime('%H:%M')
+        now += timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        return now.strftime('%H:%M:%S')
 
     @staticmethod
     def countdown_hours():
@@ -76,9 +77,9 @@ class CountdownThread(Thread):
 
     def run(self):
         self._logger.info(
-            f"Thread '{self.__f_name}' initialized from ID:{self.__chat_id}, "
-            f"start process '{self.__function}' "
-            f"for {self.__countdown} seconds")
+            f"Initialized '{self.__f_name}' from ID:{self.__chat_id}, "
+            f"process: {self.__function} "
+            f"until {self.recalculated_time(seconds=self.__countdown)}")
         p = self.__process
         self.threads.append(self)
 
@@ -92,11 +93,10 @@ class CountdownThread(Thread):
                     start // 2) \
                     and self.__countdown >= 300 \
                     and CountdownThread.__report_remaining_time:
-                from bot import LedPiBot
                 msg = f"Stop *{self.__f_name}*: " \
                       f"T minus *{self.__countdown // 60}* min."
                 self._logger.info(msg.replace("*", ""))
-                LedPiBot.external_request(
+                self.__bot.external_request(
                     msg, reply_markup=self.__bot.kb_stop_standby,
                     chat_id=self.__chat_id, bot=self.__bot)
                 start = self.__countdown
@@ -108,11 +108,11 @@ class CountdownThread(Thread):
                 start = self.__countdown
         # runtime expired
         if self.__countdown <= 0 and self.__do_run:
-            from bot import LedPiBot
             self._logger.info(f"{self.__expired}: {self.__function}")
-            LedPiBot.external_request(
-                m_standby.format(
-                    self.get_calc_time(self.restart_hours())),
+            self.__bot.external_request(
+                m_standby.format(self.__f_name,
+                                 self.recalculated_time(
+                                     seconds=self.__restart)),
                 reply_markup=self.__bot.kb_stop,
                 chat_id=self.__chat_id,
                 bot=self.__bot)
@@ -120,8 +120,8 @@ class CountdownThread(Thread):
             clear(self.__strip)
             self._logger.info(
                 f"Standby, "
-                f"waiting to restart {self.__function} "
-                f"in {CountdownThread.restart_seconds()} seconds")
+                f"restart {self.__function} "
+                f"at {self.recalculated_time(seconds=self.__restart)}")
             # standby
             while self.__do_run and self.__restart > 0:
                 time.sleep(1)
@@ -130,10 +130,10 @@ class CountdownThread(Thread):
             if self.__do_run and self.__restart <= 0:
                 self.__countdown = CountdownThread.countdown_seconds()
                 self.__restart = CountdownThread.restart_seconds()
-                LedPiBot.external_request(
+                self.__bot.external_request(
                     m_called.format(
                         self.__f_name,
-                        self.get_calc_time(self.countdown_hours())),
+                        self.recalculated_time(seconds=self.__countdown)),
                     reply_markup=self.__bot.kb_stop_standby,
                     chat_id=self.__chat_id,
                     bot=self.__bot)
@@ -146,12 +146,15 @@ class CountdownThread(Thread):
 
     def force_standby(self):
         self.__countdown = 0
-        self._logger.info("Manual reset of runtime, force standby.")
+        self._logger.info(f"Force standby, runtime = {self.__countdown}")
 
     def stop(self):
         self.__do_run = False
         self._logger.info(
             f"{self.__f_name}: {self.__stopped}: {self.__function}")
+        self.__bot.external_request(m_stop_f.format(self.__f_name),
+                                    reply_markup=None,
+                                    chat_id=self.__chat_id, bot=self.__bot)
 
 
 if __name__ == '__main__':
