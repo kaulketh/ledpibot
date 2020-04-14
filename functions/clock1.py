@@ -27,9 +27,9 @@ sB = CLOCK_SECOND_COLOR[2]
 
 
 def run_clock1(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     while not get_stop_flag():
-        LOGGER.debug("running...")
         # noinspection PyBroadException
         try:
             now = set_brightness_depending_on_daytime(strip)[0]

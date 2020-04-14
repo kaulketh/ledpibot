@@ -17,10 +17,12 @@ from logger import LOGGER
 
 
 class Colorizer:
+    logger = LOGGER
+
     def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
         self.__color = None
-        self.__name = Colorizer.__name__
-        self.__log = LOGGER
+        self.__name = self.__class__.__name__
+        self.__log = Colorizer.logger
         self.__strip = strip
         self.__div = 3  # to reduce brightness
 
@@ -64,8 +66,8 @@ class Colorizer:
                 f'Key \'{self.__color}\' not defined in {self.__name} colors.')
 
     def start(self, brightness=None):
+
         try:
-            self.__log.debug("running...")
             if self.__color is None:
                 raise Exception('Start without set color!')
             else:
@@ -89,6 +91,7 @@ class Colorizer:
 
     @staticmethod
     def run_color(stripe, color_key: str):
+        Colorizer.logger.debug(f"running '{color_key.title()}'...")
         from control import get_stop_flag
         while not get_stop_flag():
             Colorizer(stripe, color_key).start()
@@ -96,6 +99,7 @@ class Colorizer:
 
     @staticmethod
     def all_colors(stripe):
+        Colorizer.logger.debug("running...")
         from control import get_stop_flag
         while not get_stop_flag():
             new_strip = Colorizer(stripe)
@@ -139,6 +143,7 @@ def run_violet(stripe):
 def run_stroboscope(stripe):
     from control import get_stop_flag
     stripe.setBrightness(255)
+    Colorizer.logger.debug("running...")
     while not get_stop_flag():
         Colorizer(stripe, 1).start()
         t = uniform(0.005, 0.05)

@@ -14,9 +14,9 @@ from logger import LOGGER
 
 
 def run_theater(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     while not get_stop_flag():
-        LOGGER.debug("running...")
         try:
             set_brightness_depending_on_daytime(strip)
 
