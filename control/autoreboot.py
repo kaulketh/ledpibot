@@ -42,10 +42,9 @@ class AutoReboot(CountdownThread):
         pass
 
     def __reboot(self):
-        from bot import TelepotBot
         from config import m_rebooted
         from control.service import reboot_device
-        TelepotBot.external_request(msg=m_rebooted, bot=self.__bot)
+        self.__bot.external_request(msg=m_rebooted, bot=self.__bot)
         reboot_device(self.name)
 
     @property

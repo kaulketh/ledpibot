@@ -16,7 +16,9 @@ Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[i
 ### Apart from default packages following is required additionally
 * gcc , make, build-essential, python-dev, git, scons, swig
 * from https://github.com/jgarff/rpi_ws281x clone, compile/build/install neopixel package 
-* telepot as Python framework, https://telepot.readthedocs.io/en/latest/reference.html
+* Python frameworks for Telegram Bot API:
+    * telepot, https://telepot.readthedocs.io/en/latest/reference.html
+    * telegram, https://python-telegram-bot.org
 * logrotate
 
 ### Enable [run at bootup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#local)
