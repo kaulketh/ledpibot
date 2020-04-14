@@ -28,6 +28,7 @@ def _wipe(color, strip):
 
 
 def run_clock4(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     while not get_stop_flag():
         try:

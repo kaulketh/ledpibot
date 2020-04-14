@@ -17,31 +17,40 @@ PROJECT = "ledpibot"
 SECRET = "secret.py"
 
 
+def ignored(f):
+    return f.startswith('.') or \
+           f == 'hardware' or \
+           f.endswith('.md') or \
+           f.endswith('.MD') or \
+           f == 'UNLICENSE' or \
+           f == 'LICENSE'
+
+
 class Update:
     name = "update"
 
-    def __init__(self, branch: str = None):
+    def __init__(self, source, target, project, branch: str = None,
+                 secret: str = None):
+        self.__source = source
+        self.__target = target
+        self.__project = project
+        self.__secret = secret
         self.__log = LOGGER
         self.__branch = 'master' if branch is None else branch
-        self.__save_secret = f"mv -v {HOME_PI_BOT}" \
-                             f"/config/{SECRET} {HOME_PI_BOT}/{SECRET}"
-        self.__restore_secret = f"mv -v {HOME_PI_BOT}/{SECRET} " \
-                                f"{HOME_PI_BOT}/config/{SECRET}"
-        self.__remove_clone = f"rm -rf {PROJECT}/"
-        self.__clone = f"git clone -v {GIT} -b {self.__branch}"
+        if self.__secret is not None:
+            self.__save_secret = f"mv -v {self.__target}" \
+                                 f"/config/{self.__secret} " \
+                                 f"{self.__target}/{self.__secret}"
+            self.__restore_secret = f"mv -v {self.__target}/{self.__secret} " \
+                                    f"{self.__target}/config/{self.__secret}"
+        else:
+            self.__save_secret = ""
+            self.__restore_secret = ""
+        self.__remove_clone = f"rm -rf {self.__project}/"
+        self.__clone = f"git clone -v {self.__source} -b {self.__branch}"
         self.__folder = os.path.dirname(os.path.abspath(__file__))
         self.__root_folder = os.path.join(self.__folder, '..')
         self.__subs = [f for f in os.listdir(self.__root_folder)]
-
-    @staticmethod
-    def __ignored(f_name: str):
-        ignored = f_name.startswith('.') or \
-                  f_name == 'hardware' or \
-                  f_name.endswith('.md') or \
-                  f_name.endswith('.MD') or \
-                  f_name == 'UNLICENSE' or \
-                  f_name == 'LICENSE'
-        return ignored
 
     @property
     def run(self):
@@ -49,13 +58,13 @@ class Update:
         try:
             os.system(self.__save_secret)
             self.__log.info(
-                f"Clone branch \'{self.__branch}\' from Github repository...")
+                f"Clone branch '{self.__branch}' from '{self.__source}'...")
             os.system(self.__clone)
-            cloned_f = [f for f in os.listdir(PROJECT) if
-                        not self.__ignored(f)]
+            cloned_f = [f for f in os.listdir(self.__project) if
+                        not ignored(f)]
             self.__log.info("Copy files and folders...")
             for f in cloned_f:
-                os.system(f"cp -rv {PROJECT}/{f} {HOME_PI_BOT}/")
+                os.system(f"cp -rv {self.__project}/{f} {self.__target}/")
             os.system(self.__restore_secret)
             self.__log.info("Remove not needed files...")
             os.system(self.__remove_clone)
@@ -76,7 +85,7 @@ class Update:
 
 
 def update_bot(log_msg: str):
-    bot_update = Update()
+    bot_update = Update(GIT, HOME_PI_BOT, PROJECT, secret=SECRET)
     bot_update.start(log_msg)
 
 

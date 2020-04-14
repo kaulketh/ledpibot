@@ -85,6 +85,7 @@ def _december_cycle(stripe, month):
 
 # noinspection PyShadowingNames
 def run_advent(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     i = 1
     while not get_stop_flag():

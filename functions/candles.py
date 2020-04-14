@@ -43,6 +43,7 @@ def candle(stripe, leds):
 
 
 def run_candles(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     while not get_stop_flag():
         try:

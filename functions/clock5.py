@@ -40,6 +40,7 @@ wait_ms = 1 / len(pendulum)
 
 
 def run_clock5(strip):
+    LOGGER.debug("running...")
     from control import get_stop_flag
     p_left = 0
     p_right = len(pendulum) - 1

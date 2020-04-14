@@ -45,16 +45,16 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
             * **/stop**
             * **/service**
             * **/help**
-        * **Call of an built-in command will break running function!**
+        * **Call of an built-in command will break any running function!**
 * **Functions/Animations:**
     * _**Clocks**_
-        * **Clock 1** One LED per "pointer", Red hours "pointer", blue minutes "pointer", warm yellow running seconds "pointer" every 2.5 seconds
-        * **Clock 2** One LED per "pointer", Red hours "pointer", blue minutes "pointer", a blue running light every 2.5 minutes from the current "minute" to the "12" 
-        * **Clock 3** One LED per "pointer", Red hours "pointer", blue minutes "pointer", green seconds "scale" will extends every 2.5 seconds, there is also a "dial", a subtly warm yellow LED on each "number".
-        * **Clock 4** Colorful, full color "scale" to minute, hour, second, "scales" will overridden and colors mixed/changed thus 
+        * **Clock 1** One LED per "pointer", red hours "pointer", blue minutes "pointer", warm yellow running seconds "pointer" every 2.5 seconds
+        * **Clock 2** One LED per "pointer", red hours "pointer", blue minutes "pointer", a blue running light every 2.5 minutes from the current "minute" to the "12" 
+        * **Clock 3** One LED per "pointer", red hours "pointer", blue minutes "pointer", green seconds "scale" will extends every 2.5 seconds, there is also a "dial", a subtly warm yellow LED on each "number".
+        * **Clock 4** Colorful, full color "scale" for minute, hour, second, "scales" will overridden and colors mixed/changed thus 
         * **Clock 5** Red hours "pointer", blue minutes "pointer" and a warm yellow 1 second "pendulum" over all LEDs
-    * **Advent**: Advent calendar, works in December only! For every day of December will one LED flickering like a candle light. If it is Advent Sunday it flickers red. If month is other than December all LEDs flickering in red as warning  
-    * **Candles**: Each LED flickers like candle light
+    * **Advent**: Advent calendar, works in December only! For every day of December one LED flickers like a candle light. If it is Advent Sunday it flickers red. If month is other than December all LEDs are flickering in red as warning  
+    * **Candles**: Each LED simulates candle light
     * **Rainbow**: Rainbow animation with circular fading effect
     * **Theater**: Extremely colorful animation with chaser, spinning, wiping effects
     * **Strobe**: Emitting brief and rapid flashes of white light in random frequency
