@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-__author___ = "Thomas Kaulke"
+__author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-__maintainer___ = "Thomas Kaulke"
+__maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 __doc__ = "Singleton/_Singleton works in Python 2 & 3, \n" \
           "https://www.it-swarm.dev/de/python/" \

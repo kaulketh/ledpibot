@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-__author___ = "Thomas Kaulke"
+__author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-__maintainer___ = "Thomas Kaulke"
+__maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 __doc__ = "To make sure that only one bot instance is running, " \
           "bot class is subclass of Singleton!"
