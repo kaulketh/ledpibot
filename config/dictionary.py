@@ -6,9 +6,9 @@ Translations dictionary for command/button label and message texts.
 for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
 """
 
-__author___ = "Thomas Kaulke"
+__author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-__maintainer___ = "Thomas Kaulke"
+__maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 from logger import LOGGER
