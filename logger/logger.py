@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-__author___ = "Thomas Kaulke"
+__author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 
 import errno

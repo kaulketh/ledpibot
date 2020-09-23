@@ -4,7 +4,7 @@
 
 __author___ = "Tony DiCola"
 __email__ = "tony@tonydicola.com"
-__maintainer___ = "Thomas Kaulke, kaulketh@gmail.com"
+__maintainer__ = "Thomas Kaulke, kaulketh@gmail.com"
 __status__ = "Production"
 
 import time

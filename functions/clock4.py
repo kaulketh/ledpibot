@@ -3,9 +3,9 @@
 # based on NeoPixel-60-Ring-Clock of Andy Doro
 # https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
 
-__author___ = "Thomas Kaulke"
+__author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
-__maintainer___ = "Thomas Kaulke"
+__maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import time
