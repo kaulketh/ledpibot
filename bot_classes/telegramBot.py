@@ -168,7 +168,8 @@ class TelegramBot(Singleton):
     def __error(self, update: Update, context: CallbackContext):
         try:
             self.__logger.error(
-                f"Update \"{update}\" caused error \"{context.error}\"")
+                f"Update \"{update}\"\n"
+                f"caused error \"{context.error}\"")
         except KeyboardInterrupt:
             self.__logger.warning('Program interrupted')
             exit()

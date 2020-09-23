@@ -10,5 +10,5 @@ from bot_classes import *
 
 """ Call the preferred class """
 if __name__ == '__main__':
-    # telegramBot.main()
-    telepotBot.main()
+    telegramBot.main()
+    # telepotBot.main()
