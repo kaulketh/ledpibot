@@ -6,9 +6,9 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from bot_classes import *
+from bots import *
 
-""" Call the preferred class """
 if __name__ == '__main__':
-    # telegramBot.main()
-    telepotBot.main()
+    # Call your preferred class here.
+    telegramBot.main()
+    # telepotBot.main()

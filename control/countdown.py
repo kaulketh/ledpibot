@@ -146,7 +146,12 @@ class CountdownThread(Thread):
 
     def force_standby(self):
         self.__countdown = 0
-        self._logger.info(f"Force standby, runtime = {self.__countdown}")
+        self.__restart += CountdownThread.countdown_seconds()
+        self._logger.info(
+            f"Standby forced for "
+            f"{self.__restart // 60} minutes"
+            f"({self.__restart // 60 // 60} hours)"
+            f", runtime = {self.__countdown}")
 
     def stop(self):
         self.__do_run = False
