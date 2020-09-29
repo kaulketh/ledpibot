@@ -14,7 +14,7 @@ from telegram import ReplyKeyboardRemove as telegram_ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, CallbackContext, \
     MessageHandler, Filters
 
-from bot_classes import Singleton
+from bots import Singleton
 from config import \
     token, access, \
     commands, \
@@ -38,7 +38,7 @@ class TelegramBot(Singleton):
 
     def __init__(self, t, ids):
         """
-        :param t: bot_classes token
+        :param t: bots token
         :param ids: allowed chat ids
 
         :type t: str
