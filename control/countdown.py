@@ -93,9 +93,9 @@ class CountdownThread(Thread):
                     start // 2) \
                     and self.__countdown >= 300 \
                     and CountdownThread.__report_remaining_time:
-                msg = f"Stop *{self.__f_name}*: " \
-                      f"T minus *{self.__countdown // 60}* min."
-                self._logger.info(msg.replace("*", ""))
+                msg = f"Stop '{self.__f_name}': " \
+                      f"T minus {self.__countdown // 60} min."
+                self._logger.info(msg)
                 self.__bot.external_request(
                     msg, reply_markup=self.__bot.kb_stop_standby,
                     chat_id=self.__chat_id, bot=self.__bot)
