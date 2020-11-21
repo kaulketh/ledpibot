@@ -21,8 +21,8 @@ LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
 LED_DAY_BRIGHTNESS = 150
 LED_NIGHT_BRIGHTNESS = 70
-LED_MORNING_CUT_OFF = 8
-LED_NIGHT_CUT_OFF = 18
+LED_MORNING_CUT_OFF = 7
+LED_NIGHT_CUT_OFF = 17
 
 COUNTDOWN_MINUTES = (7 * 60)
 COUNTDOWN_RESTART_MINUTES = (17 * 60)
