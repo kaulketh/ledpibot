@@ -13,7 +13,8 @@ from threading import Thread
 
 from config import COUNTDOWN_MINUTES, LED_BRIGHTNESS, m_standby, m_called, \
     m_stop_f, COUNTDOWN_RESTART_MINUTES, \
-    COUNTDOWN_DISPLAY_REMAINING_TIME
+    COUNTDOWN_DISPLAY_REMAINING_RUNTIME, \
+    COUNTDOWN_MIN_TIME_DISPLAY_REMAINING_RUNTIME
 from functions import clear
 from logger import LOGGER
 
@@ -61,10 +62,6 @@ class CountdownThread(Thread):
         return COUNTDOWN_MINUTES * 60
 
     @property
-    def __report_remaining_time(self):
-        return COUNTDOWN_DISPLAY_REMAINING_TIME
-
-    @property
     def __process(self):
         f_process = Process(target=self.__function, name=self.__f_name,
                             args=(self.__strip,))
@@ -88,24 +85,26 @@ class CountdownThread(Thread):
         while self.__do_run and self.__countdown > 0:
             self.__countdown -= 1
             time.sleep(1)
-            # display remaining time
-            if self.__countdown == (
-                    start // 2) \
-                    and self.__countdown >= 300 \
-                    and CountdownThread.__report_remaining_time:
-                msg = f"Stop '{self.__f_name}': " \
-                      f"T minus {self.__countdown // 60} min."
-                self._logger.info(msg)
-                self.__bot.external_request(
-                    msg, reply_markup=self.__bot.kb_stop_standby,
-                    chat_id=self.__chat_id, bot=self.__bot)
-                start = self.__countdown
-            elif self.__countdown == (
-                    start // 2) \
-                    and self.__countdown >= 300:
-                self._logger.debug(
-                    f"remaining time of {self.__f_name}: {self.__countdown}")
-                start = self.__countdown
+            # display remaining runtime
+            if COUNTDOWN_DISPLAY_REMAINING_RUNTIME:
+                if self.__countdown == (start // 2) \
+                        and self.__countdown >= \
+                        COUNTDOWN_MIN_TIME_DISPLAY_REMAINING_RUNTIME:
+                    msg = f"Stop '{self.__f_name}': " \
+                          f"T minus {self.__countdown // 60} min."
+                    self._logger.info(msg)
+                    self.__bot.external_request(
+                        msg, reply_markup=self.__bot.kb_stop_standby,
+                        chat_id=self.__chat_id, bot=self.__bot)
+                    start = self.__countdown
+                elif self.__countdown == (start // 2) \
+                        and \
+                        self.__countdown >= \
+                        COUNTDOWN_MIN_TIME_DISPLAY_REMAINING_RUNTIME:
+                    self._logger.debug(
+                        f"remaining time of "
+                        f"{self.__f_name}: {self.__countdown}")
+                    start = self.__countdown
         # runtime expired
         if self.__countdown <= 0 and self.__do_run:
             self._logger.info(f"{self.__expired}: {self.__function}")
