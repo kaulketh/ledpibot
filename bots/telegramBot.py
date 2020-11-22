@@ -182,6 +182,7 @@ class TelegramBot(Singleton):
     def __stop(self, update: Update, context: CallbackContext):
         if self.__stop_function(update, context):
             self.__reply(update, m_stopped, markup=self.rm_kb)
+        self.__logger.info("Bot stopped,  got '/stop'!")
 
     # noinspection PyUnusedLocal
     def __stop_function(self, update: Update, context: CallbackContext,
