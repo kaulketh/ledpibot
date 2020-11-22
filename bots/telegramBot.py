@@ -20,7 +20,7 @@ from config import \
     commands, \
     m_wrong_id, m_pls_select, m_not_allowed, m_called, \
     m_started, m_rebooted, m_stopped, m_updated, AUTO_REBOOT_ENABLED, \
-    AUTO_REBOOT_CLOCK_TIME, COUNTDOWN_DISPLAY_REMAINING_TIME
+    AUTO_REBOOT_CLOCK_TIME, COUNTDOWN_DISPLAY_REMAINING_RUNTIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -91,7 +91,7 @@ class TelegramBot(Singleton):
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self.__bot).start()
         self.__logger.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
         self.__logger.info(f"Countdown display remaining time enabled = "
-                           f"{COUNTDOWN_DISPLAY_REMAINING_TIME}")
+                           f"{COUNTDOWN_DISPLAY_REMAINING_RUNTIME}")
         self.__updater.start_polling()
         self.__logger.info(RUNNING)
         for a in self.__admins:
@@ -182,6 +182,7 @@ class TelegramBot(Singleton):
     def __stop(self, update: Update, context: CallbackContext):
         if self.__stop_function(update, context):
             self.__reply(update, m_stopped, markup=self.rm_kb)
+        self.__logger.info("Bot stopped,  got '/stop'!")
 
     # noinspection PyUnusedLocal
     def __stop_function(self, update: Update, context: CallbackContext,

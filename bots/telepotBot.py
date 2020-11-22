@@ -23,7 +23,7 @@ from config import \
     m_wrong_id, m_pls_select, m_not_allowed, m_called, \
     m_started, m_rebooted, m_stopped, m_updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME, \
-    COUNTDOWN_DISPLAY_REMAINING_TIME
+    COUNTDOWN_DISPLAY_REMAINING_RUNTIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -229,7 +229,7 @@ class TelepotBot(Singleton):
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
         self.__log.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
         self.__log.info(f"Countdown display remaining time enabled = "
-                        f"{COUNTDOWN_DISPLAY_REMAINING_TIME}")
+                        f"{COUNTDOWN_DISPLAY_REMAINING_RUNTIME}")
         while True:
             try:
                 signal.pause()
