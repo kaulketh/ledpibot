@@ -27,7 +27,9 @@ from control.update import update_bot
 from logger import LOGGER
 
 RUNNING = "Bot is running..."
-admins = [access.thk, access.annib]
+admins = [access.thk]
+# admins = [access.thk, access.annib]
+
 
 
 class TelegramBot(Singleton):
