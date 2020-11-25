@@ -22,13 +22,8 @@ Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[i
     * telegram, https://python-telegram-bot.org
 * logrotate
 
-### Enable [run at bootup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#local)
-````bash
-# Edit rc.local 
-sudo nano /etc/rc.local
-# Insert 
-sudo python3 /home/pi/bot.py &
-````
+### Enable [run at bootup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#SYSTEMD)
+... to use the _systemd_ files. _systemd_ provides a standard process for controlling what programs run when a Linux system boots up. Note that _systemd_ is available only from the Jessie versions of Raspbian OS.
 
 
 [![license](https://img.shields.io/github/license/kaulketh/ledpibot.svg?color=darkred)](https://unlicense.org/)<br>
