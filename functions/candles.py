@@ -11,7 +11,6 @@ from random import randint
 
 from neopixel import Color
 
-from config.settings import LED_DAY_BRIGHTNESS, LED_NIGHT_BRIGHTNESS
 from functions.effects import clear
 from logger import LOGGER
 
@@ -21,21 +20,16 @@ green = 125
 blue = 30
 
 
-def percent():
-    scope = randint(2, 10)
+def _percent():
+    scope = randint(5, 10)
     return scope / 100
-
-
-def _rand_brightness(stripe, factor=1.0):
-    stripe.setBrightness(
-        int(randint(LED_NIGHT_BRIGHTNESS, LED_DAY_BRIGHTNESS) * factor))
 
 
 # candle lights from 0 to leds
 def candle(stripe, leds):
     for turns in range(leds):
         for i in range(leds):
-            p = percent()
+            p = _percent()
             c = Color(int(green * p), int(red * p), int(blue * p))
             stripe.setPixelColor(i, c)
         stripe.show()

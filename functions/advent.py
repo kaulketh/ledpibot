@@ -18,8 +18,8 @@ from logger import LOGGER
 
 # any warm white / no bright yellow
 fav_red = 195
-fav_green = 150
-fav_blue = 50
+fav_green = 125  # 150
+fav_blue = 30  # 50
 
 adv_red = 255
 adv_green = 30
@@ -28,6 +28,7 @@ adv_blue = 0
 
 # noinspection PyShadowingNames
 def _allsundays(year):
+    # noinspection LongLine
     """
     http://stackoverflow.com/questions/2003870/how-can-i-select-all-of-the-sundays-for-a-year-using-python
     """
@@ -53,24 +54,28 @@ def _december_cycle(stripe, month):
             if d < xmas:
                 advent.append(d.day)
 
-        # advent = [2, 4, 6, 8, 10, 12, 14, 16]  # uncomment and adapt to test
+        # advent = [2, 4, 6, 12, 14, 16]  # uncomment and/or adapt to test
         day = datetime.now().day
         # day = 22  # uncomment and adapt to test
         # ensure only the day related LEDs are set as candle
         if stripe.numPixels() > day:
             for i in range(day):
-                div = randint(randint(6, 8), randint(30, 40))
-                # set up different colors for days
+                # set up different color and brightness per day
                 if (i + 1) in advent:
-                    stripe.setPixelColor(i,
-                                         Color(adv_green / div, adv_red / div,
-                                               adv_blue / div))
+                    p = randint(5, 10) / 100
+                    c = Color(int(adv_green * p),
+                              int(adv_red * p),
+                              int(adv_blue * p))
+                    stripe.setPixelColor(i, c)
+
                 else:
-                    stripe.setPixelColor(i,
-                                         Color(fav_green / div, fav_red / div,
-                                               fav_blue / div))
+                    p = randint(5, 10) / 100
+                    c = Color(int(fav_green * p),
+                              int(fav_red * p),
+                              int(fav_blue * p))
+                    stripe.setPixelColor(i, c)
                 stripe.show()
-            time.sleep(0.15)
+            time.sleep(randint(13, 15) / 100)
         else:
             candle(stripe, stripe.numPixels())
 
