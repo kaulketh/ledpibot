@@ -28,8 +28,9 @@ from logger import LOGGER
 
 RUNNING = "Bot is running..."
 admins = [access.thk]
-# admins = [access.thk, access.annib]
 
+
+# admins = [access.thk, access.annib]
 
 
 class TelegramBot(Singleton):
@@ -52,6 +53,7 @@ class TelegramBot(Singleton):
         self.__logger.debug(
             f"Initialize instance of {self.__class__.__name__}")
 
+        self.__logger.debug(f"Building keyboards....")
         self._remove_keyboard = telegram_ReplyKeyboardRemove()
         self.__buttons = [
             [commands[2], commands[3], commands[6], commands[7],
@@ -97,6 +99,8 @@ class TelegramBot(Singleton):
         self.__updater.start_polling()
         self.__logger.info(RUNNING)
         for a in self.__admins:
+            self.__logger.debug(
+                f"Inform Admin '{a}' by message that bot is running.")
             self.__bot.send_message(a, m_started,
                                     reply_markup=self.rm_kb)
         self.__updater.idle()

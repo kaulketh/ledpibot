@@ -66,6 +66,7 @@ txts = {
         8: "Standby: {0}\nNeustart um {1}",
         9: "{0} gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
+
         11: "stop",
         12: "start",
         13: "advent",
@@ -87,7 +88,9 @@ txts = {
         29: "uhr 4",
         30: "uhr 5",
         31: "farben 2",
+
         32: "Bot-Update, Reboot folgt.",
+
         33: "Standby"
     },
     "emoji": {
@@ -127,6 +130,7 @@ txts = {
         8: "Standby: {0}\nRestart at {1}",
         9: "{0} stopped.",
         10: "Bot process killed!",
+
         11: "stop",
         12: "start",
         13: "advent",
@@ -148,7 +152,9 @@ txts = {
         29: "clock 4",
         30: "clock 5",
         31: "colors 2",
+
         32: "Bot update, reboot shortly.",
+
         33: "Standby"
     },
     "fr": {
@@ -164,6 +170,7 @@ txts = {
         8: "Veille: {0}\nRedémarrez à {1}",
         9: "{0} arrêté.",
         10: "Processus de bot complet annulé!",
+
         11: "stop",
         12: "start",
         13: "advent",
@@ -185,7 +192,9 @@ txts = {
         29: "montre 4",
         30: "montre 5",
         31: "couleurs 2",
+
         32: "Mise à jour, le bot est redémarré.",
+
         33: "Etre prêt"
     }
 }
@@ -204,6 +213,9 @@ translation = {
         txts["message"].get(8): txts["de"].get(8),
         txts["message"].get(9): txts["de"].get(9),
         txts["message"].get(10): txts["de"].get(10),
+
+        txts["message"].get(11): txts["de"].get(32),
+
         txts["command"].get(0): txts["de"].get(11),
         txts["command"].get(1): txts["de"].get(12),
         txts["command"].get(2): txts["de"].get(13),
@@ -225,7 +237,6 @@ translation = {
         txts["command"].get(18): txts["de"].get(29),
         txts["command"].get(19): txts["de"].get(30),
         txts["command"].get(20): txts["de"].get(31),
-        txts["message"].get(11): txts["de"].get(32),
         txts["command"].get(21): txts["de"].get(33)
 
     },
@@ -242,6 +253,9 @@ translation = {
         txts["message"].get(8): txts["de"].get(8),
         txts["message"].get(9): txts["de"].get(9),
         txts["message"].get(10): txts["de"].get(10),
+
+        txts["message"].get(11): txts["de"].get(32),
+
         txts["command"].get(0): txts["emoji"].get(0),
         txts["command"].get(1): txts["emoji"].get(1),
         txts["command"].get(2): txts["emoji"].get(2),
@@ -263,7 +277,6 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
-        txts["message"].get(11): txts["de"].get(32),
         txts["command"].get(21): txts["emoji"].get(21)
     },
     "en": {
@@ -279,6 +292,9 @@ translation = {
         txts["message"].get(8): txts["en"].get(8),
         txts["message"].get(9): txts["en"].get(9),
         txts["message"].get(10): txts["en"].get(10),
+
+        txts["message"].get(11): txts["en"].get(32),
+
         txts["command"].get(0): txts["en"].get(11),
         txts["command"].get(1): txts["en"].get(12),
         txts["command"].get(2): txts["en"].get(13),
@@ -300,7 +316,6 @@ translation = {
         txts["command"].get(18): txts["en"].get(29),
         txts["command"].get(19): txts["en"].get(30),
         txts["command"].get(20): txts["en"].get(31),
-        txts["message"].get(11): txts["en"].get(32),
         txts["command"].get(21): txts["en"].get(33)
     },
     "en_emoji": {
@@ -316,6 +331,9 @@ translation = {
         txts["message"].get(8): txts["en"].get(8),
         txts["message"].get(9): txts["en"].get(9),
         txts["message"].get(10): txts["en"].get(10),
+
+        txts["message"].get(11): txts["en"].get(32),
+
         txts["command"].get(0): txts["emoji"].get(0),
         txts["command"].get(1): txts["emoji"].get(1),
         txts["command"].get(2): txts["emoji"].get(2),
@@ -337,7 +355,6 @@ translation = {
         txts["command"].get(18): txts["emoji"].get(18),
         txts["command"].get(19): txts["emoji"].get(19),
         txts["command"].get(20): txts["emoji"].get(20),
-        txts["message"].get(11): txts["en"].get(32),
         txts["command"].get(21): txts["emoji"].get(21)
 
     },
@@ -354,6 +371,9 @@ translation = {
         txts["message"].get(8): txts["fr"].get(8),
         txts["message"].get(9): txts["fr"].get(9),
         txts["message"].get(10): txts["fr"].get(10),
+
+        txts["message"].get(11): txts["fr"].get(32),
+
         txts["command"].get(0): txts["fr"].get(11),
         txts["command"].get(1): txts["fr"].get(12),
         txts["command"].get(2): txts["fr"].get(13),
@@ -375,7 +395,6 @@ translation = {
         txts["command"].get(18): txts["fr"].get(29),
         txts["command"].get(19): txts["fr"].get(30),
         txts["command"].get(20): txts["fr"].get(31),
-        txts["message"].get(11): txts["fr"].get(32),
         txts["command"].get(21): txts["fr"].get(33)
     }
 }
