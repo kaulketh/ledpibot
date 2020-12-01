@@ -16,7 +16,7 @@ Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[i
 <br><br>
 ### Apart from default packages following is required additionally
 * gcc , make, build-essential, python-dev, git, scons, swig
-* from https://github.com/jgarff/rpi_ws281x clone, compile/build/install neopixel package 
+* rpi_ws281x from https://github.com/rpi-ws281x/rpi-ws281x-python
 * Python frameworks for Telegram Bot API:
     * telepot, https://telepot.readthedocs.io/en/latest/reference.html
     * telegram, https://python-telegram-bot.org
