@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # based on NeoPixel-60-Ring-Clock of Andy Doro
-# https://github.com/andydoro/NeoPixel-60-Ring-Clock/blob/master/neopixelringclock60/neopixelringclock60.ino
+# https://github.com/...
+# ...andydoro/NeoPixel-60-Ring-Clock/tree/master/neopixelringclock60
 
 __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
@@ -43,12 +44,12 @@ def run_clock4(strip):
             # arc mode
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                blue = (i + 1) * (intense / (
-                        second_value + 1)) if i <= second_value else 0
-                green = (i + 1) * (intense / (
-                        minute_value + 1)) if i <= minute_value else 0
                 red = (i + 1) * (intense / (
                         hour_value + 1)) if i <= hour_value else 0
+                green = (i + 1) * (intense / (
+                        minute_value + 1)) if i <= minute_value else 0
+                blue = (i + 1) * (intense / (
+                        second_value + 1)) if i <= second_value else 0
                 strip.setPixelColor((i + start_px) % 24,
                                     Color(int(red), int(green), int(blue)))
             strip.show()
