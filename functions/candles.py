@@ -9,7 +9,7 @@ __status__ = "Production"
 import time
 from random import randint
 
-from neopixel import Color
+from rpi_ws281x import *
 
 from functions.effects import clear
 from logger import LOGGER
@@ -29,7 +29,7 @@ def _percent():
 def candle(stripe, leds):
     for i in range(leds):
         p = _percent()
-        c = Color(int(green * p), int(red * p), int(blue * p))
+        c = Color(int(red * p), int(green * p), int(blue * p))
         stripe.setPixelColor(i, c)
     stripe.show()
     time.sleep(randint(13, 15) / 100)

@@ -9,7 +9,7 @@ __status__ = "Production"
 
 import time
 
-from neopixel import *
+from rpi_ws281x import *
 
 
 def clear(strip):
