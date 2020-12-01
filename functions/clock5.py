@@ -8,11 +8,16 @@ __status__ = "Production"
 
 import time
 
-from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR, CLOCK_SECOND_COLOR, \
-    LED_COUNT
+from rpi_ws281x import *
+
+from config import LED_COUNT
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
+
+CLOCK_HOUR_COLOR = (200, 0, 0)
+CLOCK_MINUTE_COLOR = (0, 0, 200)
+CLOCK_SECOND_COLOR = (92, 67, 6)
 
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]
@@ -53,38 +58,39 @@ def run_clock5(strip):
 
             # pendulum of second
             for i in range(len(pendulum)):
-                strip.setPixelColorRGB(pendulum[i], sG // 4, sR // 4, sB // 4)
+                strip.setPixelColor(pendulum[i],
+                                    Color(sR // 4, sG // 4, sB // 4))
             if p_left >= len(pendulum) - 1:
                 if p_right <= 0:
                     p_right = len(pendulum) - 1
                     p_left = 0
                 else:
-                    strip.setPixelColorRGB(pendulum[p_right], sG, sR, sB)
+                    strip.setPixelColor(pendulum[p_right], Color(sR, sG, sB))
                     p_right -= 1
             else:
-                strip.setPixelColorRGB(pendulum[p_left], sG, sR, sB)
+                strip.setPixelColor(pendulum[p_left], Color(sR, sG, sB))
                 p_left += 1
 
             # pointer
             # hour
             if 12 < minute <= 23:
-                strip.setPixelColorRGB(hour, hG, hR, hB)
-                strip.setPixelColorRGB(hour + 1, hG // 4, hR // 4, hB // 4)
+                strip.setPixelColor(hour, Color(hR, hG, hB))
+                strip.setPixelColor(hour + 1, Color(hR // 4, hG // 4, hB // 4))
             else:
-                strip.setPixelColorRGB(hour, hG, hR, hB)
+                strip.setPixelColor(hour, Color(hR, hG, hB))
             # minute
             if minute == hour:
                 if 12 < minute < strip.numPixels():
                     if hour <= 23:
-                        strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-                        strip.setPixelColorRGB(minute, mG, mR, mB)
+                        strip.setPixelColor(hour + 1, Color(hR, hG, hB))
+                        strip.setPixelColor(minute, Color(mR, mG, mB))
                     else:
-                        strip.setPixelColorRGB(0, hG, hR, hB)
-                        strip.setPixelColorRGB(minute - 1, mG, mR, mB)
+                        strip.setPixelColor(0, Color(hR, hG, hB))
+                        strip.setPixelColor(minute - 1, Color(mR, mG, mB))
                 else:
-                    strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                    strip.setPixelColor(minute + 1, Color(mR, mG, mB))
             else:
-                strip.setPixelColorRGB(minute, mG, mR, mB)
+                strip.setPixelColor(minute, Color(mR, mG, mB))
 
             strip.show()
             time.sleep(wait_ms)

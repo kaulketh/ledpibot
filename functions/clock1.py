@@ -8,10 +8,13 @@ __status__ = "Production"
 
 import time
 
-from config import CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR, CLOCK_SECOND_COLOR
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
+
+CLOCK_HOUR_COLOR = (200, 0, 0)
+CLOCK_MINUTE_COLOR = (0, 0, 200)
+CLOCK_SECOND_COLOR = (92, 67, 6)
 
 hR = CLOCK_HOUR_COLOR[0]
 hG = CLOCK_HOUR_COLOR[1]
@@ -39,25 +42,25 @@ def run_clock1(strip):
 
             for i in range(0, strip.numPixels(), 1):
                 # hour
-                strip.setPixelColorRGB(hour, hG, hR, hB)
+                strip.setPixelColorRGB(hour, hR, hG, hB)
 
                 # minute
                 if minute == hour:
                     if 12 < minute < strip.numPixels():
                         if hour <= 23:
-                            strip.setPixelColorRGB(hour + 1, hG, hR, hB)
-                            strip.setPixelColorRGB(minute, mG, mR, mB)
+                            strip.setPixelColorRGB(hour + 1, hR, hG, hB)
+                            strip.setPixelColorRGB(minute, mR, mG, mB)
                         else:
-                            strip.setPixelColorRGB(0, hG, hR, hB)
-                            strip.setPixelColorRGB(minute - 1, mG, mR, mB)
+                            strip.setPixelColorRGB(0, hR, hG, hB)
+                            strip.setPixelColorRGB(minute - 1, mR, mG, mB)
                     else:
-                        strip.setPixelColorRGB(minute + 1, mG, mR, mB)
+                        strip.setPixelColorRGB(minute + 1, mR, mG, mB)
                 else:
-                    strip.setPixelColorRGB(minute, mG, mR, mB)
+                    strip.setPixelColorRGB(minute, mR, mG, mB)
 
                 # second
                 if i == second:
-                    strip.setPixelColorRGB(i, sG, sR, sB)
+                    strip.setPixelColorRGB(i, sR, sG, sB)
                 else:
                     strip.setPixelColorRGB(i, 0, 0, 0)
 

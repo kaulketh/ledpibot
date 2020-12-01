@@ -10,7 +10,7 @@ __status__ = "Production"
 
 import time
 
-from neopixel import Color
+from rpi_ws281x import *
 
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
@@ -44,13 +44,13 @@ def run_clock4(strip):
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
                 blue = (i + 1) * (intense / (
-                            second_value + 1)) if i <= second_value else 0
+                        second_value + 1)) if i <= second_value else 0
                 green = (i + 1) * (intense / (
-                            minute_value + 1)) if i <= minute_value else 0
+                        minute_value + 1)) if i <= minute_value else 0
                 red = (i + 1) * (intense / (
-                            hour_value + 1)) if i <= hour_value else 0
+                        hour_value + 1)) if i <= hour_value else 0
                 strip.setPixelColor((i + start_px) % 24,
-                                    Color(int(green), int(red), int(blue)))
+                                    Color(int(red), int(green), int(blue)))
             strip.show()
             time.sleep(0.1)
 
