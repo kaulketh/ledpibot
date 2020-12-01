@@ -15,21 +15,11 @@ from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
 
-CLOCK_HOUR_COLOR = (200, 0, 0)
-CLOCK_MINUTE_COLOR = (0, 0, 200)
-CLOCK_SECOND_COLOR = (92, 67, 6)
-
-hR = CLOCK_HOUR_COLOR[0]
-hG = CLOCK_HOUR_COLOR[1]
-hB = CLOCK_HOUR_COLOR[2]
-
-mR = CLOCK_MINUTE_COLOR[0]
-mG = CLOCK_MINUTE_COLOR[1]
-mB = CLOCK_MINUTE_COLOR[2]
-
-sR = CLOCK_SECOND_COLOR[0]
-sG = CLOCK_SECOND_COLOR[1]
-sB = CLOCK_SECOND_COLOR[2]
+COLOR_HOUR = Color(200, 0, 0)
+COLOR_HOUR_DIMMED = Color(50, 0, 0)
+COLOR_MINUTE = Color(0, 0, 200)
+COLOR_SECOND_DIMMED = Color(92 // 4, 67 // 4, 6 // 4)
+COLOR_SECOND = Color(92, 67, 6)
 
 
 def _all_leds():
@@ -58,39 +48,38 @@ def run_clock5(strip):
 
             # pendulum of second
             for i in range(len(pendulum)):
-                strip.setPixelColor(pendulum[i],
-                                    Color(sR // 4, sG // 4, sB // 4))
+                strip.setPixelColor(pendulum[i], COLOR_SECOND_DIMMED)
             if p_left >= len(pendulum) - 1:
                 if p_right <= 0:
                     p_right = len(pendulum) - 1
                     p_left = 0
                 else:
-                    strip.setPixelColor(pendulum[p_right], Color(sR, sG, sB))
+                    strip.setPixelColor(pendulum[p_right], COLOR_SECOND)
                     p_right -= 1
             else:
-                strip.setPixelColor(pendulum[p_left], Color(sR, sG, sB))
+                strip.setPixelColor(pendulum[p_left], COLOR_SECOND)
                 p_left += 1
 
             # pointer
             # hour
             if 12 < minute <= 23:
-                strip.setPixelColor(hour, Color(hR, hG, hB))
-                strip.setPixelColor(hour + 1, Color(hR // 4, hG // 4, hB // 4))
+                strip.setPixelColor(hour, COLOR_HOUR)
+                strip.setPixelColor(hour + 1, COLOR_HOUR_DIMMED)
             else:
-                strip.setPixelColor(hour, Color(hR, hG, hB))
+                strip.setPixelColor(hour, COLOR_HOUR)
             # minute
             if minute == hour:
                 if 12 < minute < strip.numPixels():
                     if hour <= 23:
-                        strip.setPixelColor(hour + 1, Color(hR, hG, hB))
-                        strip.setPixelColor(minute, Color(mR, mG, mB))
+                        strip.setPixelColor(hour + 1, COLOR_HOUR)
+                        strip.setPixelColor(minute, COLOR_MINUTE)
                     else:
-                        strip.setPixelColor(0, Color(hR, hG, hB))
-                        strip.setPixelColor(minute - 1, Color(mR, mG, mB))
+                        strip.setPixelColor(0, COLOR_HOUR)
+                        strip.setPixelColor(minute - 1, COLOR_MINUTE)
                 else:
-                    strip.setPixelColor(minute + 1, Color(mR, mG, mB))
+                    strip.setPixelColor(minute + 1, COLOR_MINUTE)
             else:
-                strip.setPixelColor(minute, Color(mR, mG, mB))
+                strip.setPixelColor(minute, COLOR_MINUTE)
 
             strip.show()
             time.sleep(wait_ms)
