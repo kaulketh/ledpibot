@@ -19,8 +19,6 @@ def run_theater(strip):
     while not get_stop_flag():
         try:
             set_brightness_depending_on_daytime(strip)
-
-
             color_wipe_full(strip, Color(127, 0, 0))  # Red wipe
             if not get_stop_flag():
                 color_wipe_full(strip, Color(0, 127, 0))  # Green wipe
