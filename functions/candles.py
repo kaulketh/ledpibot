@@ -21,18 +21,17 @@ blue = 30
 
 
 def _percent():
-    scope = randint(5, 10)
+    scope = randint(7, 10)
     return scope / 100
 
 
 # candle lights from 0 to leds
 def candle(stripe, leds):
-    for turns in range(leds):
-        for i in range(leds):
-            p = _percent()
-            c = Color(int(green * p), int(red * p), int(blue * p))
-            stripe.setPixelColor(i, c)
-        stripe.show()
+    for i in range(leds):
+        p = _percent()
+        c = Color(int(green * p), int(red * p), int(blue * p))
+        stripe.setPixelColor(i, c)
+    stripe.show()
     time.sleep(randint(13, 15) / 100)
 
 
