@@ -10,7 +10,7 @@ import time
 from datetime import date, timedelta, datetime
 from random import randint
 
-from neopixel import Color
+from rpi_ws281x import *
 
 from functions.candles import candle
 from functions.effects import theater_chase, clear
@@ -63,15 +63,15 @@ def _december_cycle(stripe, month):
                 # set up different color and brightness per day
                 if (i + 1) in advent:
                     p = randint(5, 10) / 100
-                    c = Color(int(adv_green * p),
-                              int(adv_red * p),
+                    c = Color(int(adv_red * p),
+                              int(adv_green * p),
                               int(adv_blue * p))
                     stripe.setPixelColor(i, c)
 
                 else:
                     p = randint(5, 10) / 100
-                    c = Color(int(fav_green * p),
-                              int(fav_red * p),
+                    c = Color(int(fav_red * p),
+                              int(fav_green * p),
                               int(fav_blue * p))
                     stripe.setPixelColor(i, c)
                 stripe.show()
@@ -104,7 +104,7 @@ def run_advent(strip):
                 LOGGER.warn(
                     f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
-            theater_chase(strip, Color(0, 15, 0))
+            theater_chase(strip, Color(15, 0, 0))
     clear(strip)
 
 

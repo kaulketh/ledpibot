@@ -8,22 +8,16 @@ __status__ = "Production"
 
 import time
 
-from config import CLOCK_SECOND_COLOR_2, CLOCK_HOUR_COLOR, CLOCK_MINUTE_COLOR
+from rpi_ws281x import *
+
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
 
-hR = CLOCK_HOUR_COLOR[0]
-hG = CLOCK_HOUR_COLOR[1]
-hB = CLOCK_HOUR_COLOR[2]
-
-mR = CLOCK_MINUTE_COLOR[0]
-mG = CLOCK_MINUTE_COLOR[1]
-mB = CLOCK_MINUTE_COLOR[2]
-
-sR = CLOCK_SECOND_COLOR_2[0]
-sG = CLOCK_SECOND_COLOR_2[1]
-sB = CLOCK_SECOND_COLOR_2[2]
+COLOR_HOUR = Color(200, 0, 0)
+COLOR_MINUTE = Color(0, 0, 200)
+COLOR_MINUTE_DIMMED = Color(0, 0, 40)
+COLOR_SECOND = Color(6, 30, 10)
 
 
 def run_clock3(stripe):
@@ -61,9 +55,9 @@ def run_clock3(stripe):
 def _seconds(leds_per_2500ms, stripe):
     for led in range(0, leds_per_2500ms, 1):
         if 0 < (led + 1) < stripe.numPixels():
-            stripe.setPixelColorRGB(led + 1, sG, sR, sB)
+            stripe.setPixelColor(led + 1, COLOR_SECOND)
         if (led + 1) == stripe.numPixels():
-            stripe.setPixelColorRGB(0, sG, sR, sB)
+            stripe.setPixelColor(0, COLOR_SECOND)
 
 
 def _minute(led, led_hour, stripe):
@@ -71,31 +65,31 @@ def _minute(led, led_hour, stripe):
         if led == led_hour:
             _set_minute_led_before_and_after(stripe, led)
         else:
-            stripe.setPixelColorRGB(led, mG, mR, mB)
+            stripe.setPixelColor(led, COLOR_MINUTE)
     if led >= stripe.numPixels():
         if led == led_hour:
             _set_minute_led_before_and_after(stripe, led_hour)
-            stripe.setPixelColorRGB(0, mG, mR, mB)
+            stripe.setPixelColor(0, COLOR_MINUTE)
         else:
-            stripe.setPixelColorRGB(0, mG, mR, mB)
+            stripe.setPixelColor(0, COLOR_MINUTE)
     else:
-        stripe.setPixelColorRGB(led, mG, mR, mB)
+        stripe.setPixelColor(led, COLOR_MINUTE)
 
 
 def _set_minute_led_before_and_after(stripe, led):
-    stripe.setPixelColorRGB(led - 1, (mG // 5), (mR // 5), (mB // 5))
-    stripe.setPixelColorRGB(led + 1, (mG // 5), (mR // 5), (mB // 5))
+    stripe.setPixelColor(led - 1, COLOR_MINUTE_DIMMED)
+    stripe.setPixelColor(led + 1, COLOR_MINUTE_DIMMED)
 
 
 def _hour(led, stripe):
-    stripe.setPixelColorRGB(led, hG, hR, hB)
+    stripe.setPixelColor(led, COLOR_HOUR)
 
 
 def _dial(stripe):
     dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
     # dial = [0, 6, 12, 18]  # quarter only
     for led in dial:
-        stripe.setPixelColorRGB(led, 125 // 10, 195 // 10,
+        stripe.setPixelColorRGB(led, 195 // 10, 125 // 10,
                                 30 // 10)  # warm yellow
         # stripe.setPixelColorRGB(led, 15, 15, 15)  # white
 

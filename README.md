@@ -16,13 +16,13 @@ Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[i
 <br><br>
 ### Apart from default packages following is required additionally
 * gcc , make, build-essential, python-dev, git, scons, swig
-* from https://github.com/jgarff/rpi_ws281x clone, compile/build/install neopixel package 
+* rpi_ws281x from https://github.com/rpi-ws281x/rpi-ws281x-python
 * Python frameworks for Telegram Bot API:
     * telepot, https://telepot.readthedocs.io/en/latest/reference.html
     * telegram, https://python-telegram-bot.org
 * logrotate
 
-### Enable [run at bootup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#SYSTEMD)
+### Enable [run at bootup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#systemd)
 ... to use the _systemd_ files. _systemd_ provides a standard process for controlling what programs run when a Linux system boots up. Note that _systemd_ is available only from the Jessie versions of Raspbian OS.
 
 

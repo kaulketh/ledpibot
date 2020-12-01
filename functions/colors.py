@@ -9,7 +9,7 @@ __status__ = "Production"
 import time
 from random import uniform
 
-from neopixel import Color, Adafruit_NeoPixel
+from rpi_ws281x import *
 
 from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
@@ -29,23 +29,23 @@ class Colorizer:
         if color_key is not None:
             self.set_color(color_key)
 
-        # colors here defined in order G(reen) R(ed) B(lue)
+        # colors here defined in order R(ed) G(reen) B(lue)
         self.__colors = {
             0: Color(0, 0, 0),
             1: Color(255, 255, 255),
-            'red': Color(10 // self.__div, 165 // self.__div,
+            'red': Color(165 // self.__div, 10 // self.__div,
                          10 // self.__div),
-            'blue': Color(50 // self.__div, 0 // self.__div,
+            'blue': Color(0 // self.__div, 50 // self.__div,
                           135 // self.__div),
-            'green': Color(135 // self.__div, 0 // self.__div,
+            'green': Color(0 // self.__div, 135 // self.__div,
                            50 // self.__div),
-            'yellow': Color(165 // self.__div, 255 // self.__div,
+            'yellow': Color(255 // self.__div, 165 // self.__div,
                             0 // self.__div),
-            'orange': Color(70 // self.__div, 210 // self.__div,
+            'orange': Color(210 // self.__div, 70 // self.__div,
                             0 // self.__div),
             'white': Color(255 // (self.__div * 2), 255 // (self.__div * 2),
                            255 // (self.__div * 2)),
-            'violet': Color(18 // self.__div, 238 // self.__div,
+            'violet': Color(238 // self.__div, 18 // self.__div,
                             137 // self.__div)
         }
 
