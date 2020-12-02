@@ -12,14 +12,13 @@ from random import randint
 
 from rpi_ws281x import *
 
-from functions.candles import candle
+from functions.candles import candle, RED, BLUE, GREEN
 from functions.effects import theater_chase, clear
 from logger import LOGGER
 
-# any warm white / no bright yellow
-fav_red = 195
-fav_green = 125  # 150
-fav_blue = 30  # 50
+fav_red = RED
+fav_green = GREEN
+fav_blue = BLUE
 
 adv_red = 255
 adv_green = 30
