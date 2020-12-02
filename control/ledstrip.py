@@ -8,7 +8,6 @@ __status__ = "Production"
 
 import datetime
 
-# from neopixel import *
 from rpi_ws281x import *
 
 from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, \
