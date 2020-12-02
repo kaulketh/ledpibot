@@ -12,18 +12,17 @@ from random import randint
 
 from rpi_ws281x import *
 
-from functions.candles import candle
+from functions.candles import candle, RED, BLUE, GREEN
 from functions.effects import theater_chase, clear
 from logger import LOGGER
 
-# any warm white / no bright yellow
-fav_red = 195
-fav_green = 125  # 150
-fav_blue = 30  # 50
+candle_red = RED
+candle_green = GREEN
+candle_blue = BLUE
 
-adv_red = 255
-adv_green = 30
-adv_blue = 0
+A_RED = 255
+A_GREEN = 30
+A_BLUE = 0
 
 
 # noinspection PyShadowingNames
@@ -54,25 +53,25 @@ def _december_cycle(stripe, month):
             if d < xmas:
                 advent.append(d.day)
 
-        # advent = [2, 4, 6, 12, 14, 16]  # uncomment and/or adapt to test
+        # advent = [2, 4, 6, 12, 14, 16]  # for testing only
         day = datetime.now().day
-        # day = 22  # uncomment and adapt to test
+        # day = 22  # for testing only
         # ensure only the day related LEDs are set as candle
         if stripe.numPixels() > day:
             for i in range(day):
                 # set up different color and brightness per day
                 if (i + 1) in advent:
-                    p = randint(5, 10) / 100
-                    c = Color(int(adv_red * p),
-                              int(adv_green * p),
-                              int(adv_blue * p))
+                    p = randint(7, 10) / 100
+                    c = Color(int(A_RED * p),
+                              int(A_GREEN * p),
+                              int(A_BLUE * p))
                     stripe.setPixelColor(i, c)
 
                 else:
-                    p = randint(5, 10) / 100
-                    c = Color(int(fav_red * p),
-                              int(fav_green * p),
-                              int(fav_blue * p))
+                    p = randint(7, 10) / 100
+                    c = Color(int(candle_red * p),
+                              int(candle_green * p),
+                              int(candle_blue * p))
                     stripe.setPixelColor(i, c)
                 stripe.show()
             time.sleep(randint(13, 15) / 100)
@@ -95,7 +94,7 @@ def run_advent(strip):
     i = 1
     while not get_stop_flag():
         month = datetime.now().month
-        # month = 12  # uncomment to test
+        # month = 1  # for testing only
         if month == 12:
             _december_cycle(strip, month)
         else:
@@ -104,7 +103,7 @@ def run_advent(strip):
                 LOGGER.warn(
                     f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
-            theater_chase(strip, Color(15, 0, 0))
+            theater_chase(strip, Color(A_RED, A_GREEN, A_BLUE))
     clear(strip)
 
 

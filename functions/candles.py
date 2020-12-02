@@ -14,10 +14,9 @@ from rpi_ws281x import *
 from functions.effects import clear
 from logger import LOGGER
 
-# any warm white / no bright yellow
-red = 195
-green = 125
-blue = 30
+RED = 140
+GREEN = 110
+BLUE = 20
 
 
 def _percent():
@@ -29,7 +28,7 @@ def _percent():
 def candle(stripe, leds):
     for i in range(leds):
         p = _percent()
-        c = Color(int(red * p), int(green * p), int(blue * p))
+        c = Color(int(RED * p), int(GREEN * p), int(BLUE * p))
         stripe.setPixelColor(i, c)
     stripe.show()
     time.sleep(randint(13, 15) / 100)
