@@ -15,8 +15,8 @@ from functions.effects import clear
 from logger import LOGGER
 
 RED = 255
-GREEN = 180
-BLUE = 40
+GREEN = 150
+BLUE = 0
 
 
 def _percent():
