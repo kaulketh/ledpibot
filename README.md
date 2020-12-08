@@ -11,7 +11,7 @@
 ### Summary
 With this bot it is possible to control 24 artificial candles, in this case a wooden wreath is used and animated.
 More information can be found in **[manual](MANUAL.md)**. 
-Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[impressions](hardware/media)**.
+Also refer **[hardware description](hardware/HARDWARE.md)** or look at some **[impressions](hardware/IMPRESSIONS.md)**.
 <br><br>![wooden wreath](hardware/media/wreath2.jpg) 
 <br><br>
 ### Apart from default packages following is required additionally
