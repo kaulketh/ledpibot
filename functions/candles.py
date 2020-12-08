@@ -14,9 +14,9 @@ from rpi_ws281x import *
 from functions.effects import clear
 from logger import LOGGER
 
-RED = 140
-GREEN = 110
-BLUE = 20
+RED = 255
+GREEN = 180
+BLUE = 40
 
 
 def _percent():
