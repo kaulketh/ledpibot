@@ -16,7 +16,7 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, \
     ReplyKeyboardRemove
 
-from bots import Singleton
+from clss import Singleton
 from config import \
     token, access, \
     commands, \
@@ -31,7 +31,6 @@ from logger import LOGGER
 
 RUNNING = "Bot is running..."
 admins = [access.thk]
-# admins = [access.thk, access.annib]
 
 
 class TelepotBot(Singleton):
@@ -42,7 +41,7 @@ class TelepotBot(Singleton):
 
     def __init__(self, t, ids):
         """
-        :param t: bots token
+        :param t: bot token
         :param ids: allowed chat ids
 
         :type t: str

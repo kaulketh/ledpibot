@@ -5,10 +5,10 @@ __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
+__doc__ = "Call your preferred class here."
 
-from bots import *
+from clss import *
 
 if __name__ == '__main__':
-    # Call your preferred class here.
     # telegramBot.main()
     telepotBot.main()
