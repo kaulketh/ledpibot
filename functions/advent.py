@@ -16,17 +16,20 @@ from functions.candles import candle, RED, BLUE, GREEN
 from functions.effects import theater_chase, clear
 from logger import LOGGER
 
-candle_red = RED
-candle_green = GREEN
-candle_blue = BLUE
-
 A_RED = 255
 A_GREEN = 30
 A_BLUE = 0
 
 
-# noinspection PyShadowingNames
-def _allsundays(year):
+def __set_rand_brightness(led, red, green, blue, stripe):
+    p = randint(7, 10) / 100
+    c = Color(int(red * p),
+              int(green * p),
+              int(blue * p))
+    stripe.setPixelColor(led, c)
+
+
+def __allsundays(year):
     # noinspection LongLine
     """
     http://stackoverflow.com/questions/2003870/how-can-i-select-all-of-the-sundays-for-a-year-using-python
@@ -42,37 +45,26 @@ def _allsundays(year):
         d += timedelta(days=7)
 
 
-def _december_cycle(stripe, month):
+def __december_cycle(stripe):
     advent = []
     year = datetime.now().year
 
     try:
         # collect advent dates
-        xmas = date(year, month, 25)
-        for d in _allsundays(year):
+        xmas = date(year, 12, 25)
+        for d in __allsundays(year):
             if d < xmas:
                 advent.append(d.day)
 
-        # advent = [2, 4, 6, 12, 14, 16]  # for testing only
         day = datetime.now().day
-        # day = 22  # for testing only
         # ensure only the day related LEDs are set as candle
         if stripe.numPixels() > day:
             for i in range(day):
                 # set up different color and brightness per day
                 if (i + 1) in advent:
-                    p = randint(7, 10) / 100
-                    c = Color(int(A_RED * p),
-                              int(A_GREEN * p),
-                              int(A_BLUE * p))
-                    stripe.setPixelColor(i, c)
-
+                    __set_rand_brightness(i, A_RED, A_GREEN, A_BLUE, stripe)
                 else:
-                    p = randint(7, 10) / 100
-                    c = Color(int(candle_red * p),
-                              int(candle_green * p),
-                              int(candle_blue * p))
-                    stripe.setPixelColor(i, c)
+                    __set_rand_brightness(i, RED, GREEN, BLUE, stripe)
                 stripe.show()
             time.sleep(randint(13, 15) / 100)
         else:
@@ -87,24 +79,22 @@ def _december_cycle(stripe, month):
         exit()
 
 
-# noinspection PyShadowingNames
-def run_advent(strip):
+def run_advent(stripe):
     LOGGER.debug("running...")
     from control import get_stop_flag
     i = 1
     while not get_stop_flag():
         month = datetime.now().month
-        # month = 1  # for testing only
         if month == 12:
-            _december_cycle(strip, month)
+            __december_cycle(stripe)
         else:
             while i > 0:
                 m = time.strftime("%B")
                 LOGGER.warn(
                     f"Wrong month for xmas/advent animation, it\'s {m}!")
                 i -= 1
-            theater_chase(strip, Color(A_RED, A_GREEN, A_BLUE))
-    clear(strip)
+            theater_chase(stripe, Color(A_RED, A_GREEN, A_BLUE))
+    clear(stripe)
 
 
 if __name__ == '__main__':
