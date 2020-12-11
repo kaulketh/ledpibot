@@ -8,7 +8,7 @@ __status__ = "Production"
 
 from functions import dictionary_functions, clear
 from logger import LOGGER
-from .countdown import CountdownThread
+from .countdown import Countdown
 from .ledstrip import STRIP, set_brightness_depending_on_daytime
 
 ERROR = "An error occurs: "
@@ -38,7 +38,7 @@ def run_thread(func_name, request_id, bot):
     try:
         f = thread_function(dictionary_functions, func_name)
         LOGGER.debug(f"Init thread for function: {f}")
-        t = CountdownThread(
+        t = Countdown(
             function=f,
             stripe=STRIP,
             name=func_name,
@@ -53,7 +53,7 @@ def run_thread(func_name, request_id, bot):
 
 def stop_threads():
     try:
-        for t in CountdownThread.threads:
+        for t in Countdown.threads:
             if t is not None and t.is_running:
                 t.stop()
         set_stop_flag(True)
