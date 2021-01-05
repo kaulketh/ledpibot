@@ -9,10 +9,10 @@ __status__ = "Production"
 import datetime
 import time
 
-from control import CountdownThread
+from control import Countdown
 
 
-class AutoReboot(CountdownThread):
+class AutoReboot(Countdown):
     name = "Auto reboot"
 
     def __init__(self, hour: int = 0, bot=None):

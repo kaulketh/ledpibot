@@ -19,20 +19,20 @@ from functions import clear
 from logger import LOGGER
 
 
-class CountdownThread(Thread):
+class Countdown(Thread):
     threads = []
     name = "Countdown"
 
     def __init__(self, function, stripe, name=None, request_id=None, bot=None):
-        super(CountdownThread, self).__init__()
+        super(Countdown, self).__init__()
         self._logger = LOGGER
 
         self.__bot = bot
         self.__do_run = True
         self.__expired = "Runtime expired"
         self.__stopped = "Stop requested, stopped"
-        self.__countdown = CountdownThread.countdown_seconds()
-        self.__restart = CountdownThread.restart_seconds()
+        self.__countdown = Countdown.countdown_seconds()
+        self.__restart = Countdown.restart_seconds()
         self.__function = function
         self.__strip = stripe
         self.__f_name = function if name is None else name
@@ -78,7 +78,7 @@ class CountdownThread(Thread):
             f"process: {self.__function} "
             f"until {self.recalculated_time(seconds=self.__countdown)}")
         p = self.__process
-        self.threads.append(self)
+        Countdown.threads.append(self)
 
         # countdown
         start = self.__countdown
@@ -127,8 +127,8 @@ class CountdownThread(Thread):
                 self.__restart -= 1
             # self restart
             if self.__do_run and self.__restart <= 0:
-                self.__countdown = CountdownThread.countdown_seconds()
-                self.__restart = CountdownThread.restart_seconds()
+                self.__countdown = Countdown.countdown_seconds()
+                self.__restart = Countdown.restart_seconds()
                 self.__bot.external_request(
                     m_called.format(
                         self.__f_name,
@@ -141,11 +141,11 @@ class CountdownThread(Thread):
         p.terminate()
         clear(self.__strip)
         self.__strip.setBrightness(LED_BRIGHTNESS)
-        self.threads.remove(self)
+        Countdown.threads.remove(self)
 
     def force_standby(self):
         self.__countdown = 0
-        self.__restart += CountdownThread.countdown_seconds()
+        self.__restart += Countdown.countdown_seconds()
         self._logger.info(
             f"Standby forced for "
             f"{self.__restart // 60} minutes"

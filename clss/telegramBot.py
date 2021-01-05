@@ -14,7 +14,7 @@ from telegram import ReplyKeyboardRemove as telegram_ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, CallbackContext, \
     MessageHandler, Filters
 
-from bots import Singleton
+from clss import Singleton
 from config import \
     token, access, \
     commands, \
@@ -30,9 +30,6 @@ RUNNING = "Bot is running..."
 admins = [access.thk]
 
 
-# admins = [access.thk, access.annib]
-
-
 class TelegramBot(Singleton):
     """ Bot class using telegram framework
         (https://python-telegram-bot.org),
@@ -41,7 +38,7 @@ class TelegramBot(Singleton):
 
     def __init__(self, t, ids):
         """
-        :param t: bots token
+        :param t: bot token
         :param ids: allowed chat ids
 
         :type t: str
