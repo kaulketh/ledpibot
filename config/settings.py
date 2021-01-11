@@ -6,9 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-LANGUAGE = "de"
-# language keys: "de", "de_emoji", "en", "en_emoji", "fr"
-# refer dictionary.py"""
+LANGUAGE = "de"  # language keys: "de", "en", "fr"
 
 AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_CLOCK_TIME = 2
