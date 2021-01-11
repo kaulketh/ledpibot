@@ -6,7 +6,7 @@ __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
-__doc__ = "Translations dictionary for command/button labels and message texts."
+__doc__ = "Translations dictionary for labels and message texts."
 
 from logger import LOGGER
 
@@ -190,22 +190,22 @@ texts = {
 }
 
 
-def assign_texts(l: str):
+def assign_texts(lang: str):
     """
     Assignment of the texts to the messages/commands according to the language
 
-    :param l: language key
+    :param lang: language key
     :return: None
     """
 
     text_assignments = {}
     for i in range(0, 11):
-        text_assignments[texts[MSG].get(i)] = texts[l].get(i)
-    text_assignments[texts[MSG].get(11)] = texts[l].get(32)
+        text_assignments[texts[MSG].get(i)] = texts[lang].get(i)
+    text_assignments[texts[MSG].get(11)] = texts[lang].get(32)
     for i in range(0, 21):
-        text_assignments[texts[CMD].get(i)] = texts[l].get(i + 11)
-    text_assignments[texts[CMD].get(21)] = texts[l].get(33)
-    languages[l].update(text_assignments)
+        text_assignments[texts[CMD].get(i)] = texts[lang].get(i + 11)
+    text_assignments[texts[CMD].get(21)] = texts[lang].get(33)
+    languages[lang].update(text_assignments)
 
     global assignment
     assignment = languages
