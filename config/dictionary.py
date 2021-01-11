@@ -1,21 +1,34 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-"""
-Translations dictionary for command/button label and message texts.
-for emoji unicode refer https://unicode.org/emoji/charts/full-emoji-list.html
-"""
 
 __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
+__doc__ = "Translations dictionary for labels and message texts."
 
 from logger import LOGGER
 
+CMD = "command"
+MSG = "message"
+DE = "de"
+EN = "en"
+FR = "fr"
+NAME = "name"
+
+assignment = {}
+language: str = ""
+
+languages = {
+    DE: {NAME: "German"},
+    EN: {NAME: "English"},
+    FR: {NAME: "French"},
+}
+
 # noinspection SpellCheckingInspection
-txts = {
-    "message": {
+texts = {
+    MSG: {
         0: "m_wrong_id",
         1: "m_not_allowed",
         2: "m_pls_select",
@@ -29,7 +42,7 @@ txts = {
         10: "m_killed",
         11: "m_updated"
     },
-    "command": {
+    CMD: {
         0: "stop",
         1: "start",
         2: "advent",
@@ -53,7 +66,7 @@ txts = {
         20: "demo 2",
         21: "standby"
     },
-    "de": {
+    DE: {
         0: "`Hallo {1}, dies ist ein privater Bot!"
            "\nID {0}, {2} {3} wurde geblockt.\nDanke für den Besuch!`",
         1: "* Nicht erlaubt für diesen Bot\\! *",
@@ -93,31 +106,8 @@ txts = {
 
         33: "Standby"
     },
-    "emoji": {
-        0: u'\U000023F9',
-        1: u'\U000025B6',
-        2: u'\U0001F384',
-        3: u'\U0001F56F',
-        4: u'\U000023F0',
-        5: u'\U0001F55C',
-        6: u'\U0001F308',
-        7: u'\U0001F3AA',
-        8: u'\U0001F7E5',
-        9: u'\U0001F7E6',
-        10: u'\U0001F7E9',
-        11: u'\U0001F7E8',
-        12: u'\U0001F7E7',
-        13: u'\U00002B1C',
-        14: u'\U0001F7EA',
-        15: u'\U0001F500',
-        16: u'\U000026A1',
-        17: u'\U000023F1',
-        18: u'\U000023F2',
-        19: u'\U0001F570',
-        20: u'\U0001F501',
-        21: u'\U000023F3'
-    },
-    "en": {
+
+    EN: {
         0: "`Hello {1}, this is a private bot!"
            "\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
         1: "* Not allowed for this bot\\! *",
@@ -157,7 +147,7 @@ txts = {
 
         33: "Standby"
     },
-    "fr": {
+    FR: {
         0: "`Bonjour {1}, c'est un bot privé!"
            "\nL'Id {0}, {2} {3} a été bloqué.\nMerci de votre visite!`",
         1: "* Non autorisé pour ce bot\\! *",
@@ -199,228 +189,48 @@ txts = {
     }
 }
 
-translation = {
-    "de": {
-        "name": "German",
-        txts["message"].get(0): txts["de"].get(0),
-        txts["message"].get(1): txts["de"].get(1),
-        txts["message"].get(2): txts["de"].get(2),
-        txts["message"].get(3): txts["de"].get(3),
-        txts["message"].get(4): txts["de"].get(4),
-        txts["message"].get(5): txts["de"].get(5),
-        txts["message"].get(6): txts["de"].get(6),
-        txts["message"].get(7): txts["de"].get(7),
-        txts["message"].get(8): txts["de"].get(8),
-        txts["message"].get(9): txts["de"].get(9),
-        txts["message"].get(10): txts["de"].get(10),
 
-        txts["message"].get(11): txts["de"].get(32),
+def assign_texts(lang: str):
+    """
+    Assignment of the texts to the messages/commands according to the language
 
-        txts["command"].get(0): txts["de"].get(11),
-        txts["command"].get(1): txts["de"].get(12),
-        txts["command"].get(2): txts["de"].get(13),
-        txts["command"].get(3): txts["de"].get(14),
-        txts["command"].get(4): txts["de"].get(15),
-        txts["command"].get(5): txts["de"].get(16),
-        txts["command"].get(6): txts["de"].get(17),
-        txts["command"].get(7): txts["de"].get(18),
-        txts["command"].get(8): txts["de"].get(19),
-        txts["command"].get(9): txts["de"].get(20),
-        txts["command"].get(10): txts["de"].get(21),
-        txts["command"].get(11): txts["de"].get(22),
-        txts["command"].get(12): txts["de"].get(23),
-        txts["command"].get(13): txts["de"].get(24),
-        txts["command"].get(14): txts["de"].get(25),
-        txts["command"].get(15): txts["de"].get(26),
-        txts["command"].get(16): txts["de"].get(27),
-        txts["command"].get(17): txts["de"].get(28),
-        txts["command"].get(18): txts["de"].get(29),
-        txts["command"].get(19): txts["de"].get(30),
-        txts["command"].get(20): txts["de"].get(31),
-        txts["command"].get(21): txts["de"].get(33)
+    :param lang: language key
+    :return: None
+    """
 
-    },
-    "de_emoji": {
-        "name": "German with emoji",
-        txts["message"].get(0): txts["de"].get(0),
-        txts["message"].get(1): txts["de"].get(1),
-        txts["message"].get(2): txts["de"].get(2),
-        txts["message"].get(3): txts["de"].get(3),
-        txts["message"].get(4): txts["de"].get(4),
-        txts["message"].get(5): txts["de"].get(5),
-        txts["message"].get(6): txts["de"].get(6),
-        txts["message"].get(7): txts["de"].get(7),
-        txts["message"].get(8): txts["de"].get(8),
-        txts["message"].get(9): txts["de"].get(9),
-        txts["message"].get(10): txts["de"].get(10),
+    text_assignments = {}
+    for i in range(0, 11):
+        text_assignments[texts[MSG].get(i)] = texts[lang].get(i)
+    text_assignments[texts[MSG].get(11)] = texts[lang].get(32)
+    for i in range(0, 21):
+        text_assignments[texts[CMD].get(i)] = texts[lang].get(i + 11)
+    text_assignments[texts[CMD].get(21)] = texts[lang].get(33)
+    languages[lang].update(text_assignments)
 
-        txts["message"].get(11): txts["de"].get(32),
-
-        txts["command"].get(0): txts["emoji"].get(0),
-        txts["command"].get(1): txts["emoji"].get(1),
-        txts["command"].get(2): txts["emoji"].get(2),
-        txts["command"].get(3): txts["emoji"].get(3),
-        txts["command"].get(4): txts["emoji"].get(4),
-        txts["command"].get(5): txts["emoji"].get(5),
-        txts["command"].get(6): txts["emoji"].get(6),
-        txts["command"].get(7): txts["emoji"].get(7),
-        txts["command"].get(8): txts["emoji"].get(8),
-        txts["command"].get(9): txts["emoji"].get(9),
-        txts["command"].get(10): txts["emoji"].get(10),
-        txts["command"].get(11): txts["emoji"].get(11),
-        txts["command"].get(12): txts["emoji"].get(12),
-        txts["command"].get(13): txts["emoji"].get(13),
-        txts["command"].get(14): txts["emoji"].get(14),
-        txts["command"].get(15): txts["emoji"].get(15),
-        txts["command"].get(16): txts["emoji"].get(16),
-        txts["command"].get(17): txts["emoji"].get(17),
-        txts["command"].get(18): txts["emoji"].get(18),
-        txts["command"].get(19): txts["emoji"].get(19),
-        txts["command"].get(20): txts["emoji"].get(20),
-        txts["command"].get(21): txts["emoji"].get(21)
-    },
-    "en": {
-        "name": "English",
-        txts["message"].get(0): txts["en"].get(0),
-        txts["message"].get(1): txts["en"].get(1),
-        txts["message"].get(2): txts["en"].get(2),
-        txts["message"].get(3): txts["en"].get(3),
-        txts["message"].get(4): txts["en"].get(4),
-        txts["message"].get(5): txts["en"].get(5),
-        txts["message"].get(6): txts["en"].get(6),
-        txts["message"].get(7): txts["en"].get(7),
-        txts["message"].get(8): txts["en"].get(8),
-        txts["message"].get(9): txts["en"].get(9),
-        txts["message"].get(10): txts["en"].get(10),
-
-        txts["message"].get(11): txts["en"].get(32),
-
-        txts["command"].get(0): txts["en"].get(11),
-        txts["command"].get(1): txts["en"].get(12),
-        txts["command"].get(2): txts["en"].get(13),
-        txts["command"].get(3): txts["en"].get(14),
-        txts["command"].get(4): txts["en"].get(15),
-        txts["command"].get(5): txts["en"].get(16),
-        txts["command"].get(6): txts["en"].get(17),
-        txts["command"].get(7): txts["en"].get(18),
-        txts["command"].get(8): txts["en"].get(19),
-        txts["command"].get(9): txts["en"].get(20),
-        txts["command"].get(10): txts["en"].get(21),
-        txts["command"].get(11): txts["en"].get(22),
-        txts["command"].get(12): txts["en"].get(23),
-        txts["command"].get(13): txts["en"].get(24),
-        txts["command"].get(14): txts["en"].get(25),
-        txts["command"].get(15): txts["en"].get(26),
-        txts["command"].get(16): txts["en"].get(27),
-        txts["command"].get(17): txts["en"].get(28),
-        txts["command"].get(18): txts["en"].get(29),
-        txts["command"].get(19): txts["en"].get(30),
-        txts["command"].get(20): txts["en"].get(31),
-        txts["command"].get(21): txts["en"].get(33)
-    },
-    "en_emoji": {
-        "name": "English with emoji",
-        txts["message"].get(0): txts["en"].get(0),
-        txts["message"].get(1): txts["en"].get(1),
-        txts["message"].get(2): txts["en"].get(2),
-        txts["message"].get(3): txts["en"].get(3),
-        txts["message"].get(4): txts["en"].get(4),
-        txts["message"].get(5): txts["en"].get(5),
-        txts["message"].get(6): txts["en"].get(6),
-        txts["message"].get(7): txts["en"].get(7),
-        txts["message"].get(8): txts["en"].get(8),
-        txts["message"].get(9): txts["en"].get(9),
-        txts["message"].get(10): txts["en"].get(10),
-
-        txts["message"].get(11): txts["en"].get(32),
-
-        txts["command"].get(0): txts["emoji"].get(0),
-        txts["command"].get(1): txts["emoji"].get(1),
-        txts["command"].get(2): txts["emoji"].get(2),
-        txts["command"].get(3): txts["emoji"].get(3),
-        txts["command"].get(4): txts["emoji"].get(4),
-        txts["command"].get(5): txts["emoji"].get(5),
-        txts["command"].get(6): txts["emoji"].get(6),
-        txts["command"].get(7): txts["emoji"].get(7),
-        txts["command"].get(8): txts["emoji"].get(8),
-        txts["command"].get(9): txts["emoji"].get(9),
-        txts["command"].get(10): txts["emoji"].get(10),
-        txts["command"].get(11): txts["emoji"].get(11),
-        txts["command"].get(12): txts["emoji"].get(12),
-        txts["command"].get(13): txts["emoji"].get(13),
-        txts["command"].get(14): txts["emoji"].get(14),
-        txts["command"].get(15): txts["emoji"].get(15),
-        txts["command"].get(16): txts["emoji"].get(16),
-        txts["command"].get(17): txts["emoji"].get(17),
-        txts["command"].get(18): txts["emoji"].get(18),
-        txts["command"].get(19): txts["emoji"].get(19),
-        txts["command"].get(20): txts["emoji"].get(20),
-        txts["command"].get(21): txts["emoji"].get(21)
-
-    },
-    "fr": {
-        "name": "French",
-        txts["message"].get(0): txts["fr"].get(0),
-        txts["message"].get(1): txts["fr"].get(1),
-        txts["message"].get(2): txts["fr"].get(2),
-        txts["message"].get(3): txts["fr"].get(3),
-        txts["message"].get(4): txts["fr"].get(4),
-        txts["message"].get(5): txts["fr"].get(5),
-        txts["message"].get(6): txts["fr"].get(6),
-        txts["message"].get(7): txts["fr"].get(7),
-        txts["message"].get(8): txts["fr"].get(8),
-        txts["message"].get(9): txts["fr"].get(9),
-        txts["message"].get(10): txts["fr"].get(10),
-
-        txts["message"].get(11): txts["fr"].get(32),
-
-        txts["command"].get(0): txts["fr"].get(11),
-        txts["command"].get(1): txts["fr"].get(12),
-        txts["command"].get(2): txts["fr"].get(13),
-        txts["command"].get(3): txts["fr"].get(14),
-        txts["command"].get(4): txts["fr"].get(15),
-        txts["command"].get(5): txts["fr"].get(16),
-        txts["command"].get(6): txts["fr"].get(17),
-        txts["command"].get(7): txts["fr"].get(18),
-        txts["command"].get(8): txts["fr"].get(19),
-        txts["command"].get(9): txts["fr"].get(20),
-        txts["command"].get(10): txts["fr"].get(21),
-        txts["command"].get(11): txts["fr"].get(22),
-        txts["command"].get(12): txts["fr"].get(23),
-        txts["command"].get(13): txts["fr"].get(24),
-        txts["command"].get(14): txts["fr"].get(25),
-        txts["command"].get(15): txts["fr"].get(26),
-        txts["command"].get(16): txts["fr"].get(27),
-        txts["command"].get(17): txts["fr"].get(28),
-        txts["command"].get(18): txts["fr"].get(29),
-        txts["command"].get(19): txts["fr"].get(30),
-        txts["command"].get(20): txts["fr"].get(31),
-        txts["command"].get(21): txts["fr"].get(33)
-    }
-}
+    global assignment
+    assignment = languages
 
 
-# noinspection PyGlobalUndefined
-def set_language(lng='en'):
+def set_language(lng=EN):
     """
     Set chat language, default = English.
 
     :param lng: language key (i.e. 'de')
     :return: None (set global chat language)
     """
-    global language
-    if lng not in translation:
+
+    if lng not in assignment:
+        global language
         LOGGER.warning(
             f"Language key \'{lng}\' not found, set default chat language!")
-        language = 'en'
+        language = EN
     else:
         language = lng
     LOGGER.info(
-        f"Apart from service menu chat language is set to '"
-        f"{(translation[language].get('name'))}'.")
+        f"Apart from service menu chat language was set to '"
+        f"{(assignment[language].get(NAME))}'.")
 
 
-# noinspection PyGlobalUndefined
 def get_translations(text_index):
     """
     Load translations from dictionary.
@@ -428,21 +238,20 @@ def get_translations(text_index):
     :param text_index: messages, commands
     :return: list of texts
     """
-    global language, translations, text
+    global language, assignment
     translations = []
-    text = ""
 
-    # noinspection PyShadowingNames
-    def generated_texts(txt: str):
-        for k in txts[txt].keys():
-            text = translation[language].get(
-                txts[txt].get(k)).title() if txt == "command" \
-                else translation[language].get(txts[txt].get(k))
+    def generated_texts(key_type: str):
+        for key in texts[key_type].keys():
+            txt = assignment[language].get(
+                texts[key_type].get(key)).title() if key_type == CMD \
+                else assignment[language].get(texts[key_type].get(key))
             newline, space = ("\n", " ")
             LOGGER.debug(
-                f"Load {txt} ({k}:{txts[txt].get(k)}) "
-                f"{text.replace(newline, space)}")
-            yield text
+                f"Load {key_type} ({key}:{texts[key_type].get(key)}) "
+                f"{txt.replace(newline, space)}"
+            )
+            yield txt
 
     try:
         for t in generated_texts(text_index):
@@ -450,6 +259,13 @@ def get_translations(text_index):
         return translations
     except Exception as e:
         LOGGER.error(f"Error while import from translations: {e}")
+
+
+def build_dictionary():
+    LOGGER.debug("Build dictionary of required strings...")
+    for k in languages.keys():
+        LOGGER.debug(f"Update {languages[k].get(NAME)} texts.")
+        assign_texts(k)
 
 
 if __name__ == '__main__':
