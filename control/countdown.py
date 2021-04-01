@@ -49,8 +49,6 @@ class Countdown(Thread):
             if self.__is_clock else Countdown.countdown_seconds()
         self.__restart = 0 if self.__is_clock else Countdown.restart_seconds()
 
-        print("IS CLOCK :", self.__is_clock, self.__countdown, self.__restart)
-
     @staticmethod
     def recalculated_time(hours: float = 0, minutes: float = 0,
                           seconds: float = 0):
