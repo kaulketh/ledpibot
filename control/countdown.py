@@ -22,28 +22,43 @@ from logger import LOGGER
 class Countdown(Thread):
     threads = []
     name = "Countdown"
+    is_clock = False
+    SECONDS_PER_DAY = 86_400
 
     def __init__(self, function, stripe, name=None, request_id=None, bot=None):
         super(Countdown, self).__init__()
         self._logger = LOGGER
 
+        self.__function = function
+        self.__stripe = stripe
+        self.__f_name = \
+            function.__name__ if name is None else name
+        self.__chat_id = request_id
         self.__bot = bot
+
+        Countdown.is_clock = self.__is_clock = \
+            True if function.__name__.find("clock") > -1 else False
+
         self.__do_run = True
         self.__expired = "Runtime expired"
         self.__stopped = "Stop requested, stopped"
-        self.__countdown = Countdown.countdown_seconds()
-        self.__restart = Countdown.restart_seconds()
-        self.__function = function
-        self.__strip = stripe
-        self.__f_name = function if name is None else name
-        self.__chat_id = request_id
+
+        # disabled countdown for clock functions, should run forever
+        # 84_400 seconds per day
+        self.__countdown = Countdown.SECONDS_PER_DAY \
+            if self.__is_clock else Countdown.countdown_seconds()
+        self.__restart = 0 if self.__is_clock else Countdown.restart_seconds()
 
     @staticmethod
     def recalculated_time(hours: float = 0, minutes: float = 0,
                           seconds: float = 0):
         now = datetime.combine(datetime.today(), datetime.time(datetime.now()))
         now += timedelta(hours=hours, minutes=minutes, seconds=seconds)
-        return now.strftime('%H:%M:%S')
+        # Emoji unicode
+        # https://unicode.org/emoji/charts/full-emoji-list.html#1f609
+        # https://unicode.org/emoji/charts/full-emoji-list.html#1f937
+        return "\U0001F937 ?\n\U0001F609" \
+            if Countdown.is_clock else now.strftime('%H:%M:%S')
 
     @staticmethod
     def countdown_hours():
@@ -64,7 +79,7 @@ class Countdown(Thread):
     @property
     def __process(self):
         f_process = Process(target=self.__function, name=self.__f_name,
-                            args=(self.__strip,))
+                            args=(self.__stripe,))
         f_process.start()
         return f_process
 
@@ -116,7 +131,7 @@ class Countdown(Thread):
                 chat_id=self.__chat_id,
                 bot=self.__bot)
             p.terminate()
-            clear(self.__strip)
+            clear(self.__stripe)
             self._logger.info(
                 f"Standby, "
                 f"restart {self.__function} "
@@ -139,18 +154,27 @@ class Countdown(Thread):
                 self.run()
         # stop
         p.terminate()
-        clear(self.__strip)
-        self.__strip.setBrightness(LED_BRIGHTNESS)
+        clear(self.__stripe)
+        self.__stripe.setBrightness(LED_BRIGHTNESS)
         Countdown.threads.remove(self)
 
     def force_standby(self):
-        self.__countdown = 0
-        self.__restart += Countdown.countdown_seconds()
-        self._logger.info(
-            f"Standby forced for "
-            f"{self.__restart // 60} minutes"
-            f"({self.__restart // 60 // 60} hours)"
-            f", runtime = {self.__countdown}")
+        # disabled standby for clock functions
+        # Forced standby for the clock function means an immediate restart
+        if self.__is_clock:
+            self.__countdown = Countdown.SECONDS_PER_DAY
+            self.__restart += 0
+            self._logger.info(
+                f"Forced standby for the clock function "
+                f"means an immediate restart.")
+        else:
+            self.__countdown = 0
+            self.__restart += Countdown.countdown_seconds()
+            self._logger.info(
+                f"Standby forced for "
+                f"{self.__restart // 60} minutes"
+                f"({self.__restart // 60 // 60} hours)"
+                f", runtime = {self.__countdown}")
 
     def stop(self):
         self.__do_run = False
