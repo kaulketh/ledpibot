@@ -22,8 +22,7 @@ LED_NIGHT_BRIGHTNESS = 50  # Night brightness
 LED_MORNING_CUT_OFF = 8  # Hour to adjust to day brightness
 LED_NIGHT_CUT_OFF = 17  # Hour to adjust to night brightness
 
-__COUNTDOWN_HOURS = 24
-# 8  # Max runtime
+__COUNTDOWN_HOURS = 9  # Max runtime
 COUNTDOWN_MINUTES = (__COUNTDOWN_HOURS * 60)
 COUNTDOWN_RESTART_MINUTES = ((24 - __COUNTDOWN_HOURS) * 60)  # Standby
 COUNTDOWN_DISPLAY_REMAINING_RUNTIME = False
