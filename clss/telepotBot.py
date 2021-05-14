@@ -228,7 +228,7 @@ class TelepotBot(Singleton):
                     {'chat': self.__handle}).run_as_thread()
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
-        self.__log.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
+        self.__log.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
         self.__log.info(f"Countdown display remaining time enabled = "
                         f"{COUNTDOWN_DISPLAY_REMAINING_RUNTIME}")
         while True:
