@@ -20,10 +20,9 @@ from clss import Singleton
 from config import \
     token, access, \
     commands, \
-    m_wrong_id, m_pls_select, m_not_allowed, m_called, \
-    m_started, m_rebooted, m_stopped, m_updated, \
-    AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME, \
-    COUNTDOWN_DISPLAY_REMAINING_RUNTIME
+    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
+    m_stopped, m_updated, \
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -76,16 +75,6 @@ class TelepotBot(Singleton):
         r = ReplyKeyboardMarkup(
             keyboard=[[self.__button(commands[0])]])
         self.__log.debug(f"Stop keyboard markup: {r}")
-        return r
-
-    @property
-    def kb_stop_standby(self):
-        r = ReplyKeyboardMarkup(
-            keyboard=[
-                [self.__button(commands[0])],
-                [self.__button(commands[21])]
-            ])
-        self.__log.debug(f"Stop/Standby keyboard markup: {r}")
         return r
 
     @classmethod
@@ -177,9 +166,6 @@ class TelepotBot(Singleton):
                     self.__send(chat_id,
                                 m_pls_select.format(msg['from']['first_name']),
                                 reply_markup=self.kb_markup)
-            # force standby
-            elif command == commands[21]:
-                self.__func_thread.force_standby()
 
             # /service
             elif command == ('/' + service.NAME.lower()):
@@ -207,14 +193,8 @@ class TelepotBot(Singleton):
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):
                     self.__func_thread = run_thread(command, chat_id, self)
-                    self.__send(
-                        chat_id,
-                        m_called.format(
-                            command,
-                            self.__func_thread.recalculated_time(
-                                self.__func_thread.countdown_hours())),
-                        reply_markup=self.kb_stop_standby,
-                        parse_mode='MarkdownV2')
+                    self.__send(chat_id, text=command,
+                                reply_markup=self.kb_stop)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:
@@ -228,9 +208,8 @@ class TelepotBot(Singleton):
                     {'chat': self.__handle}).run_as_thread()
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
-        self.__log.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
-        self.__log.info(f"Countdown display remaining time enabled = "
-                        f"{COUNTDOWN_DISPLAY_REMAINING_RUNTIME}")
+        self.__log.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
+
         while True:
             try:
                 signal.pause()

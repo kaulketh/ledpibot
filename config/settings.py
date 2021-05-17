@@ -17,16 +17,10 @@ LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
-LED_DAY_BRIGHTNESS = 170  # Daytime brightness
-LED_NIGHT_BRIGHTNESS = 50  # Night brightness
-LED_MORNING_CUT_OFF = 8  # Hour to adjust to day brightness
-LED_NIGHT_CUT_OFF = 17  # Hour to adjust to night brightness
-
-__COUNTDOWN_HOURS = 9  # Max runtime
-COUNTDOWN_MINUTES = (__COUNTDOWN_HOURS * 60)
-COUNTDOWN_RESTART_MINUTES = ((24 - __COUNTDOWN_HOURS) * 60)  # Standby
-COUNTDOWN_DISPLAY_REMAINING_RUNTIME = False
-COUNTDOWN_MIN_TIME_DISPLAY_REMAINING_RUNTIME = 300
+LED_DAY_BRIGHTNESS = 200  # Daytime brightness
+LED_NIGHT_BRIGHTNESS = 70  # Night brightness
+LED_MORNING_CUT_OFF = 7  # Hour to adjust to day brightness
+LED_NIGHT_CUT_OFF = 18  # Hour to adjust to night brightness
 
 if __name__ == '__main__':
     pass
