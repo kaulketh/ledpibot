@@ -22,11 +22,9 @@ HELP_TEXT: str = """
 - Use in-app command /start to start
 - Bot welcomes the user
 - Select any function/color to run
-- Bot messages about run and the clock time of auto-standby
-- Keyboard changes to 2-button keyboard (stop/standby)
-- User is able to stop the running function or to force standby
-- Bot messages the clock time of restart
-- When standby mode is reached only one stop button is displayed. User is able to break the running standby.
+- Bot answers with called function
+- Keyboard changes to stop-button keyboard
+- User is able to stop the running function
 
 It is possible to call in-app commands at any time!
 *Call of any in-app command will break running function!*
