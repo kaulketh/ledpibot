@@ -18,9 +18,9 @@ from clss import Singleton
 from config import \
     token, access, \
     commands, \
-    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, m_stopped, \
-    m_updated, AUTO_REBOOT_ENABLED, \
-    AUTO_REBOOT_CLOCK_TIME
+    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
+    m_stopped, m_updated, \
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot

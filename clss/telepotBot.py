@@ -20,8 +20,8 @@ from clss import Singleton
 from config import \
     token, access, \
     commands, \
-    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, m_stopped, \
-    m_updated, \
+    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
+    m_stopped, m_updated, \
     AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
@@ -193,7 +193,8 @@ class TelepotBot(Singleton):
             elif any(c for c in commands if (command == c)):
                 if self.__stop_function(chat_id, msg=None):
                     self.__func_thread = run_thread(command, chat_id, self)
-                    self.__send(chat_id, text=command, reply_markup=self.kb_stop)
+                    self.__send(chat_id, text=command,
+                                reply_markup=self.kb_stop)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:
