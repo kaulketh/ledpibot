@@ -10,5 +10,5 @@ __doc__ = "Call your preferred class here."
 from clss import *
 
 if __name__ == '__main__':
-    # telegramBot.main()
-    telepotBot.main()
+    telegramBot.main()
+    # telepotBot.main()
