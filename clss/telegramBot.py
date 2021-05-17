@@ -18,9 +18,9 @@ from clss import Singleton
 from config import \
     token, access, \
     commands, \
-    m_wrong_id, m_pls_select, m_not_allowed, m_called, \
-    m_started, m_rebooted, m_stopped, m_updated, AUTO_REBOOT_ENABLED, \
-    AUTO_REBOOT_CLOCK_TIME, COUNTDOWN_DISPLAY_REMAINING_RUNTIME
+    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
+    m_stopped, m_updated, \
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -88,11 +88,11 @@ class TelegramBot(Singleton):
         self.__dispatcher.add_handler(self.__stop_handler)
         self.__dispatcher.add_handler(self.__service_handler)
         self.__dispatcher.add_handler(self.__commands_handler)
+
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self.__bot).start()
         self.__logger.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
-        self.__logger.info(f"Countdown display remaining time enabled = "
-                           f"{COUNTDOWN_DISPLAY_REMAINING_RUNTIME}")
+
         self.__updater.start_polling()
         self.__logger.info(RUNNING)
         for a in self.__admins:
@@ -114,17 +114,6 @@ class TelegramBot(Singleton):
     def kb_stop(self):
         r = telegram_ReplyKeyboardMarkup([[commands[0]]])
         self.__logger.debug(f"Stop keyboard markup: {r}")
-        return r
-
-    @property
-    def kb_stop_standby(self):
-        r = telegram_ReplyKeyboardMarkup(
-            [
-                [commands[0]],
-                [commands[21]
-                 ]
-            ])
-        self.__logger.debug(f"Stop/Standby keyboard markup: {r}")
         return r
 
     @classmethod
@@ -239,9 +228,6 @@ class TelegramBot(Singleton):
                              m_pls_select.format(
                                  update.message.from_user.first_name),
                              markup=self.kb_markup)
-        # force standby
-        elif command == commands[21]:
-            self.__func_thread.force_standby()
 
         # all other commands
         elif any(c for c in commands if (command == c)):
@@ -249,10 +235,8 @@ class TelegramBot(Singleton):
                 self.__func_thread = run_thread(command,
                                                 update.message.from_user.id,
                                                 self)
-                self.__reply(update, m_called.format(
-                    command, self.__func_thread.recalculated_time(
-                        self.__func_thread.countdown_hours())),
-                             markup=self.kb_stop_standby)
+                self.__reply(update, text=command, markup=self.kb_stop)
+
         else:
             return
 

@@ -9,10 +9,10 @@ __status__ = "Production"
 import datetime
 import time
 
-from control import Countdown
+from control import LightFunction
 
 
-class AutoReboot(Countdown):
+class AutoReboot(LightFunction):
     name = "Auto reboot"
 
     def __init__(self, hour: int = 0, bot=None):
@@ -20,26 +20,6 @@ class AutoReboot(Countdown):
         self.__bot = bot
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
-
-    def recalculated_time(self, hours: float = 0,
-                          minutes: float = 0,
-                          seconds: float = 0):
-        pass
-
-    def restart_hours(self):
-        pass
-
-    def countdown_hours(self):
-        pass
-
-    def restart_seconds(self):
-        pass
-
-    def countdown_seconds(self):
-        pass
-
-    def __process(self):
-        pass
 
     def __reboot(self):
         from config import m_rebooted
