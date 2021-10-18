@@ -6,7 +6,6 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-import time
 from multiprocessing import Process
 from threading import Thread
 
@@ -53,10 +52,13 @@ class LightFunction(Thread):
 
         p = self.__process
         LightFunction.threads.append(self)
+        import control
+        control.open_the_eyes()
         while self.__do_run:
-            time.sleep(1)
+            pass
 
         # stop
+        control.close_the_eyes()
         p.terminate()
         clear(self.__stripe)
         self.__stripe.setBrightness(LED_BRIGHTNESS)

@@ -91,7 +91,7 @@ class TelegramBot(Singleton):
 
         if AUTO_REBOOT_ENABLED:
             AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self.__bot).start()
-        self.__logger.info(f"Autoreboot enabled = {AUTO_REBOOT_ENABLED}")
+        self.__logger.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
 
         self.__updater.start_polling()
         self.__logger.info(RUNNING)

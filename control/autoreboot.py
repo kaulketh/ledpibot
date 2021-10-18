@@ -7,7 +7,6 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import datetime
-import time
 
 from control import LightFunction
 
@@ -36,7 +35,7 @@ class AutoReboot(LightFunction):
         try:
             self._logger.info(f"{self.name} initialized for {self.__hour}:00.")
             while not self.__hour_reached:
-                time.sleep(2)
+                pass
             self.__reboot()
         except Exception as e:
             self._logger.error(f"{e}")
