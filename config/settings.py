@@ -9,7 +9,7 @@ __status__ = "Production"
 LANGUAGE = "de"  # language keys: "de", "en", "fr"
 
 AUTO_REBOOT_ENABLED = True
-AUTO_REBOOT_CLOCK_TIME = 0
+AUTO_REBOOT_CLOCK_TIME = 1
 
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).

@@ -33,7 +33,7 @@ class AutoReboot(LightFunction):
 
     def run(self):
         try:
-            self._logger.info(f"{self.name} initialized for {self.__hour}:00.")
+            self._logger.info(f"Initialized {self.name} at {self.__hour}:00 h.")
             while not self.__hour_reached:
                 pass
             self.__reboot()
