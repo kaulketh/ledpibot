@@ -6,6 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import time
 from multiprocessing import Process
 from threading import Thread
 
@@ -55,8 +56,7 @@ class LightFunction(Thread):
         import control
         control.open_the_eyes()
         while self.__do_run:
-            pass
-
+            time.sleep(1)
         # stop
         control.close_the_eyes()
         p.terminate()
