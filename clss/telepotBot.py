@@ -22,7 +22,7 @@ from config import \
     commands, \
     m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
     m_stopped, m_updated, \
-    AUTO_REBOOT_ENABLED, AUTO_REBOOT_CLOCK_TIME
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_HOUR
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -210,7 +210,7 @@ class TelepotBot(Singleton):
 
         self.__log.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
-            AutoReboot(hour=AUTO_REBOOT_CLOCK_TIME, bot=self).start()
+            AutoReboot(hour=AUTO_REBOOT_HOUR, bot=self).start()
 
         while True:
             try:

@@ -6,10 +6,10 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
     ````python script
     LANGUAGE = "de"
     ````    
-    Auto Reboot: Reboot every day at given time (here 2:00 AM) if TRUE    
+    Auto Reboot: Reboot approximately at the specified hour (e.g. if 2nd hour is reached) if enabled    
     ````python script
     AUTO_REBOOT_ENABLED = False
-    AUTO_REBOOT_CLOCK_TIME = 2
+    AUTO_REBOOT_HOUR = 2
     ````
     Auto brightness: Settings to reduce brighness of the LEDs due given period
     ````python script

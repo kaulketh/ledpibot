@@ -7,6 +7,7 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import datetime
+import time
 
 from control import LightFunction
 
@@ -14,9 +15,10 @@ from control import LightFunction
 class AutoReboot(LightFunction):
     name = "Auto reboot"
 
-    def __init__(self, hour: int = 0, bot=None):
+    def __init__(self, hour: int = 0, bot=None, check_interval=120):
         self.__hour = hour
         self.__bot = bot
+        self.__check_interval = check_interval
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
 
@@ -29,13 +31,14 @@ class AutoReboot(LightFunction):
     @property
     def __hour_reached(self):
         now = datetime.datetime.now()
-        return now.hour == self.__hour and now.minute == 0 and now.second <= 5
+        return now.hour == self.__hour and now.minute >= 0 and now.second >= 0
 
     def run(self):
         try:
-            self._logger.info(f"Initialized {self.name} at {self.__hour}:00 h.")
+            self._logger.info(
+                f"Initialized {self.name} at {self.__hour}:00 h.")
             while not self.__hour_reached:
-                pass
+                time.sleep(self.__check_interval)
             self.__reboot()
         except Exception as e:
             self._logger.error(f"{e}")
