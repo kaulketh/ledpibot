@@ -15,12 +15,16 @@ from control import LightFunction
 class AutoReboot(LightFunction):
     name = "Auto reboot"
 
-    def __init__(self, hour: int = 0, bot=None, check_interval=120):
+    def __init__(self, hour: int = 0, bot=None, check_interval=60):
         self.__hour = hour
         self.__bot = bot
         self.__check_interval = check_interval
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
+
+    @staticmethod
+    def __time_has_been_reached(hour_to_be_reached):
+        return datetime.datetime.now().hour == hour_to_be_reached
 
     def __reboot(self):
         from config import m_rebooted
@@ -28,16 +32,11 @@ class AutoReboot(LightFunction):
         self.__bot.external_request(msg=m_rebooted, bot=self.__bot)
         reboot_device(self.name)
 
-    @property
-    def __hour_reached(self):
-        now = datetime.datetime.now()
-        return now.hour == self.__hour and now.minute >= 0 and now.second >= 0
-
     def run(self):
         try:
             self._logger.info(
                 f"Initialized {self.name} at {self.__hour}:00 h.")
-            while not self.__hour_reached:
+            while not self.__time_has_been_reached(self.__hour):
                 time.sleep(self.__check_interval)
             self.__reboot()
         except Exception as e:
