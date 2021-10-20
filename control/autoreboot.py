@@ -6,9 +6,8 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-import time
-
 import datetime
+import time
 
 from config import m_rebooted
 from control import LightFunction
