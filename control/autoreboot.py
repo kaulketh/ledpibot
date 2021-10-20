@@ -6,14 +6,16 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-import datetime
 import time
 
+import datetime
+
+from config import m_rebooted
 from control import LightFunction
 
 
 class AutoReboot(LightFunction):
-    name = "Auto reboot"
+    name = "Auto Reboot"
 
     def __init__(self, hour: int = 0, bot=None, check_interval=60):
         self.__hour = hour
@@ -22,14 +24,17 @@ class AutoReboot(LightFunction):
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
 
+        self.start()
+
     @staticmethod
     def __time_has_been_reached(hour_to_be_reached):
         return datetime.datetime.now().hour == hour_to_be_reached
 
     def __reboot(self):
-        from config import m_rebooted
         from control.service import reboot_device
-        self.__bot.external_request(msg=m_rebooted, bot=self.__bot)
+        self.__bot.external_request(msg=f"{self.name}:\n"
+                                        f"{m_rebooted}",
+                                    bot=self.__bot)
         reboot_device(self.name)
 
     def run(self):
