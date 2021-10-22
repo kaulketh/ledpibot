@@ -20,7 +20,7 @@ from config import \
     commands, \
     m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
     m_stopped, m_updated, \
-    AUTO_REBOOT_ENABLED, AUTO_REBOOT_HOUR
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -91,7 +91,7 @@ class TelegramBot(Singleton):
 
         self.__logger.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
-            AutoReboot(hour=AUTO_REBOOT_HOUR, bot=self.__bot)
+            AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
         self.__updater.start_polling()
         self.__logger.info(RUNNING)

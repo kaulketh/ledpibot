@@ -79,9 +79,10 @@ class Service:
     def execute_os_command(self):
         if self.__command is not None:
             try:
-                self.__logger.info(
-                    self.__log_msg) \
-                    if self.__log_msg is not None else self.__command
+                if self.__log_msg is not None:
+                    self.__logger.info(self.__log_msg)
+                else:
+                    self.__logger.info(self.__command)
                 os.system(self.__command)
             except Exception as e:
                 self.__logger.error(f"{e}")
@@ -157,7 +158,7 @@ class Service:
 
 
 def reboot_device(log_msg: str = None):
-    Service("shutdown -r now", log_msg).execute_os_command()
+    Service("sudo reboot", log_msg).execute_os_command()
 
 
 def system_info():
