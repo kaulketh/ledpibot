@@ -54,6 +54,7 @@ class AutoReboot(LightFunction):
                                         bot=self.__bot)
             reboot_device(self.name)
         except Exception as e:
+            # FIXME: throws ConnectionError... see log file
             self._logger.error(f"{e}")
 
 
