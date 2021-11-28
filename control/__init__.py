@@ -7,11 +7,11 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 from functions import dictionary_functions, clear
-from logger import LOGGER
-from .lightfunction import LightFunction
+from .iron_man import *
 from .ledstrip import STRIP, set_brightness_depending_on_daytime
+from .lightfunction import LightFunction
 
-ERROR = "An error occurs: "
+ERROR = "An error occurred: "
 
 stop_flag = None
 

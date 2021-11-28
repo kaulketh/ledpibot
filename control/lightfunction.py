@@ -53,10 +53,12 @@ class LightFunction(Thread):
 
         p = self.__process
         LightFunction.threads.append(self)
+        import control
+        control.open_the_eyes()
         while self.__do_run:
             time.sleep(1)
-
         # stop
+        control.close_the_eyes()
         p.terminate()
         clear(self.__stripe)
         self.__stripe.setBrightness(LED_BRIGHTNESS)

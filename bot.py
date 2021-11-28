@@ -7,8 +7,22 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 __doc__ = "Call your preferred class here."
 
+from urllib3.exceptions import HTTPError
+
 from clss import *
+from control import wink_w_eyes
+from logger import LOGGER
+
+
+def run():
+    # telegramBot.main()
+    telepotBot.main()
+
 
 if __name__ == '__main__':
-    telegramBot.main()
-    # telepotBot.main()
+    wink_w_eyes()
+    try:
+        run()
+    except HTTPError as e:
+        LOGGER.error("HTTP Error occurs!", e)
+        exit()

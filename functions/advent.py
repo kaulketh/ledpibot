@@ -6,19 +6,25 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import datetime
 import time
-from datetime import date, timedelta, datetime
 from random import randint
 
 from rpi_ws281x import *
 
-from functions.candles import candle, RED, BLUE, GREEN
-from functions.effects import theater_chase, clear
+from functions.candles import BLUE, GREEN, RED, candle
+from functions.effects import clear, theater_chase
 from logger import LOGGER
 
 A_RED = 255
 A_GREEN = 30
 A_BLUE = 0
+
+YEAR = datetime.datetime.now().year
+XMAS = datetime.date(YEAR, 12, 25)
+FIRST_POSSIBLE_ADVENT = datetime.date(YEAR, 11, 27)
+NOW = datetime.datetime.now().date()
+IS_ADVENT_PERIOD = NOW >= FIRST_POSSIBLE_ADVENT
 
 
 def __set_rand_brightness(led, red, green, blue, stripe):
@@ -30,33 +36,30 @@ def __set_rand_brightness(led, red, green, blue, stripe):
 
 
 def __allsundays(year):
-    # noinspection LongLine
+    # noinspection LongLine,HttpUrlsUsage
     """
     http://stackoverflow.com/questions/2003870/how-can-i-select-all-of-the-sundays-for-a-year-using-python
     """
     # start with Nov-27 which is the first possible day of Advent
     # 4 advents == 4 weeks == 28 days -> 25th Dec - 28 day = 27th Nov ;-)
 
-    d = date(year, 11, 27)
+    d = FIRST_POSSIBLE_ADVENT
     # find the next Sunday after the above date
-    d += timedelta(days=6 - d.weekday())
+    d += datetime.timedelta(days=6 - d.weekday())
     while d.year == year:
         yield d
-        d += timedelta(days=7)
+        d += datetime.timedelta(days=7)
 
 
-def __december_cycle(stripe):
+def __advent_cycle(stripe):
     advent = []
-    year = datetime.now().year
-
     try:
         # collect advent dates
-        xmas = date(year, 12, 25)
-        for d in __allsundays(year):
-            if d < xmas:
+        for d in __allsundays(YEAR):
+            if d < XMAS:
                 advent.append(d.day)
 
-        day = datetime.now().day
+        day = datetime.datetime.now().day
         # ensure only the day related LEDs are set as candle
         if stripe.numPixels() > day:
             for i in range(day):
@@ -71,7 +74,7 @@ def __december_cycle(stripe):
             candle(stripe, stripe.numPixels())
 
     except KeyboardInterrupt:
-        LOGGER.warn("KeyboardInterrupt")
+        LOGGER.warning("KeyboardInterrupt")
         exit()
 
     except Exception as e:
@@ -84,14 +87,13 @@ def run_advent(stripe):
     from control import get_stop_flag
     i = 1
     while not get_stop_flag():
-        month = datetime.now().month
-        if month == 12:
-            __december_cycle(stripe)
+        if IS_ADVENT_PERIOD:
+            __advent_cycle(stripe)
         else:
             while i > 0:
-                m = time.strftime("%B")
-                LOGGER.warn(
-                    f"Wrong month for xmas/advent animation, it\'s {m}!")
+                LOGGER.warning(
+                    f"Wrong period to show xmas/advent animation, "
+                    f"it\'s {time.strftime('%A, %d.%B %Y')}!")
                 i -= 1
             theater_chase(stripe, Color(A_RED, A_GREEN, A_BLUE))
     clear(stripe)
