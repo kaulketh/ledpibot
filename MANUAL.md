@@ -11,7 +11,7 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
     AUTO_REBOOT_ENABLED = False
     AUTO_REBOOT_HOUR = 2
     ````
-    Auto brightness: Settings to reduce brighness of the LEDs due given period
+    Auto brightness: Settings to reduce brightness of the LEDs due given period
     ````python script
     LED_DAY_BRIGHTNESS = 150
     LED_NIGHT_BRIGHTNESS = 70
@@ -37,27 +37,27 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
             * **/stop**
             * **/service**
             * **/help**
-        * **Call of an built-in command will break any running function!**
+        * **Call of a built-in command will break any running function!**
 * **Functions/Animations:**
     * _**Clocks**_
         * **Clock 1** One LED per "pointer", red hours "pointer", blue minutes "pointer", warm yellow running seconds "pointer" every 2.5 seconds
         * **Clock 2** One LED per "pointer", red hours "pointer", blue minutes "pointer", a blue running light every 2.5 minutes from the current "minute" to the "12" 
-        * **Clock 3** One LED per "pointer", red hours "pointer", blue minutes "pointer", green seconds "scale" will extends every 2.5 seconds, there is also a "dial", a subtly warm yellow LED on each "number".
-        * **Clock 4** Colorful, full color "scale" for minute, hour, second, "scales" will overridden and colors mixed/changed thus 
+        * **Clock 3** One LED per "pointer", red hours "pointer", blue minutes "pointer", green seconds "scale" will extend every 2.5 seconds, there is also a "dial", a subtly warm yellow LED on each "number".
+        * **Clock 4** Colorful, full color "scale" for minute, hour, second, "scales" will be overridden and colors mixed/changed thus 
         * **Clock 5** Red hours "pointer", blue minutes "pointer" and a warm yellow 1 second "pendulum" over all LEDs
-    * **Advent**: Advent calendar, works in December only! For every day of December one LED flickers like a candle light. If it is Advent Sunday it flickers red. If month is other than December all LEDs are flickering in red as warning  
-    * **Candles**: Each LED simulates candle light
+    * **Advent**: Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candlelight. If it is other than Advent time all LEDs will be animated in red as warning!  
+    * **Candles**: Each LED simulates candlelight
     * **Rainbow**: Rainbow animation with circular fading effect
     * **Theater**: Extremely colorful animation with chaser, spinning, wiping effects
     * **Strobe**: Emitting brief and rapid flashes of white light in random frequency
     * _**Colors**_
         * **Colors**: Switching simple colors in random time periods
         * **Colors 2**: Fading over simple colors in random time periods
-        * All LEDs at once can switched to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
-* **Service menu** no app-in menu, will build due runtime but will handled like a app-in command because of the slash in front 
+        * All LEDs at once can switch to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
+* **Service menu** no app-in menu, will build due runtime but will be handled like an app-in command because of the slash in front 
     * **/Reboot** - What should I write here?
-    * **/Info** - Information about latest commit/release verions on Github, host name, IP, memory usage, disk usage, cpu load
-    * **/Update** - Force update from Github to the latest version in master branch
+    * **/Info** - Information about the latest commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load
+    * **/Update** - Force update from GitHub to the latest version in master branch
     * **/Help** - Short version of this manual
 * **Logging:**
     * Folder _**logs**_ in project root (if not exists will be created)

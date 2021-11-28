@@ -32,11 +32,11 @@ It is possible to call in-app commands at any time!
 - *Functions/Animations:*
     Clock 1:    One LED per 'pointer', red hours 'pointer', blue minutes 'pointer', warm yellow running seconds 'pointer' every 2.5 seconds.
     Clock 2:    One LED per 'pointer', red hour, blue minute, lue running light every 2.5 minutes from the current 'minute' to the '12'.
-    Clock 3:    One LED per 'pointer', red hour, blue minute, green seconds 'scale' will extends every 2.5 seconds. There is also a 'dial', subtly warm yellow for each 'number'.
-    Clock 4:    Colorful, full color 'scale' for minute, hour, second, 'scales' will overridden and colors mixed/changed thus.
+    Clock 3:    One LED per 'pointer', red hour, blue minute, green seconds 'scale' will extend every 2.5 seconds. There is also a 'dial', subtly warm yellow for each 'number'.
+    Clock 4:    Colorful, full color 'scale' for minute, hour, second, 'scales' will be overridden and colors mixed/changed thus.
     Clock 5:    Red hours 'pointer', blue minutes 'pointer' and warm yellow second 'pendulum' over all LEDs.
-    Advent:     Advent calendar, works in December only! For every day of December will one LED flicker like a candle light. If it is Advent Sunday it flickers red. If it is other than December all LEDs will be flickering in red as warning!
-    Candles:    Each LED simulates candle light.
+    Advent:     Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candle light. If it is other than Advent time all LEDs will be animated in red as warning!
+    Candles:    Each LED simulates candlelight.
     Rainbow:    Rainbow animation with circular fading effect.
     Theater:    Extremely colorful animation with chaser, spinning and wiping effects.
     Strobe:     Emitting brief and rapid flashes of white light in random frequency.
@@ -46,8 +46,8 @@ It is possible to call in-app commands at any time!
 
 - *Service menu:*
     /Reboot ...
-    /Info   Information commit/release verions on Github, host name, IP, memory usage, disk usage, cpu load.
-    /Update Force update from Github to latest version of master branch.
+    /Info   Information commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load.
+    /Update Force update from GitHub to the latest version of master branch.
     /Help   This menu"""
 
 
