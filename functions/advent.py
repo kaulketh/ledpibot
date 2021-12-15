@@ -16,6 +16,7 @@ from functions.candles import BLUE, GREEN, RED, candle
 from functions.effects import clear, theater_chase
 from logger import LOGGER
 
+# advent color
 A_RED = 255
 A_GREEN = 30
 A_BLUE = 0
@@ -63,10 +64,16 @@ def __advent_cycle(stripe):
         # ensure only the day related LEDs are set as candle
         if stripe.numPixels() > day:
             for i in range(day):
-                # set up different color and brightness per day
+                # different color and brightness per day
+                # set up first LED as advent because it's before 1st December
+                if advent[0] in [27, 28, 29, 30]:
+                    __set_rand_brightness(0,
+                                          210, 70, 0, stripe)
+                # set up other advents in december
                 if (i + 1) in advent:
                     __set_rand_brightness(i, A_RED, A_GREEN, A_BLUE, stripe)
                 else:
+                    # set up other days
                     __set_rand_brightness(i, RED, GREEN, BLUE, stripe)
                 stripe.show()
             time.sleep(randint(13, 15) / 100)
