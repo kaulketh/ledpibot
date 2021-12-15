@@ -5,8 +5,6 @@ __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
-__doc__ = "To make sure that only one bot instance is running, " \
-          "bot class is subclass of Singleton!"
 
 import codecs
 import signal
@@ -16,7 +14,6 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, \
     ReplyKeyboardRemove
 
-from clss import Singleton
 from config import \
     token, access, \
     commands, \
@@ -32,7 +29,7 @@ RUNNING = "Bot is running..."
 admins = [access.thk]
 
 
-class TelepotBot(Singleton):
+class TelepotBot:
     """ Bot class using telepot framework
         (https://telepot.readthedocs.io),
         Python >= 3

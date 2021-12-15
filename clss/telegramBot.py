@@ -5,8 +5,6 @@ __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
-__doc__ = "To make sure that only one bot instance is running, " \
-          "bot class is subclass of Singleton!"
 
 from telegram import ParseMode, Update
 from telegram import ReplyKeyboardMarkup as telegram_ReplyKeyboardMarkup
@@ -14,7 +12,6 @@ from telegram import ReplyKeyboardRemove as telegram_ReplyKeyboardRemove
 from telegram.ext import Updater, CommandHandler, CallbackContext, \
     MessageHandler, Filters
 
-from clss import Singleton
 from config import \
     token, access, \
     commands, \
@@ -30,7 +27,7 @@ RUNNING = "Bot is running..."
 admins = [access.thk]
 
 
-class TelegramBot(Singleton):
+class TelegramBot:
     """ Bot class using telegram framework
         (https://python-telegram-bot.org),
         Python >= 3
