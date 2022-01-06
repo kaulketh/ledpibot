@@ -10,6 +10,8 @@ __doc__ = "Translations dictionary for labels and message texts."
 
 from logger import LOGGER
 
+RUNNING = "Bot is running..."
+
 CMD = "command"
 MSG = "message"
 DE = "de"

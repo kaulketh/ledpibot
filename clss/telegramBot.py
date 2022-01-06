@@ -13,18 +13,17 @@ from telegram.ext import Updater, CommandHandler, CallbackContext, \
     MessageHandler, Filters
 
 from config import \
-    token, access, \
+    TELEGRAM_BOT_TOKEN, THK, \
     commands, \
     m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
     m_stopped, m_updated, \
-    AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME
+    AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, RUNNING
 from control import run_thread, stop_threads, service
 from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
 
-RUNNING = "Bot is running..."
-admins = [access.thk]
+admins = [THK]
 
 
 class TelegramBot:
@@ -252,7 +251,7 @@ class TelegramBot:
 
 
 def main():
-    TelegramBot(token, admins).start()
+    TelegramBot(TELEGRAM_BOT_TOKEN, admins).start()
 
 
 if __name__ == '__main__':

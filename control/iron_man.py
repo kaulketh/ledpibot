@@ -10,9 +10,10 @@ import os
 import time
 
 from logger import LOGGER
+from config import MASK_IP, MASK_PORT
 
-WEB_SERVER_IP = "192.168.0.99"
-WEB_SERVER_PORT = 80
+WEB_SERVER_IP = MASK_IP
+WEB_SERVER_PORT = MASK_PORT
 # noinspection HttpUrlsUsage
 CURL = f"curl --silent --output nul " \
        f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}" \
@@ -22,12 +23,12 @@ ON = "1 &"
 
 
 def close_the_eyes():
-    LOGGER.info("Try to close Iron Man's eyes...")
+    LOGGER.info("Close Iron Man's eyes.")
     os.system(f"{CURL}{OFF}")
 
 
 def open_the_eyes():
-    LOGGER.info("Try to open Iron Man's eyes...")
+    LOGGER.info("Open Iron Man's eyes.")
     os.system(f"{CURL}{ON}")
 
 
