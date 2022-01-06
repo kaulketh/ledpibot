@@ -23,17 +23,17 @@ ON = "1 &"
 
 
 def close_the_eyes():
-    LOGGER.info("Close Iron Man's eyes.")
+    LOGGER.info("Iron Man closes the eyes.")
     os.system(f"{CURL}{OFF}")
 
 
 def open_the_eyes():
-    LOGGER.info("Open Iron Man's eyes.")
+    LOGGER.info("Iron Man opens the eyes.")
     os.system(f"{CURL}{ON}")
 
 
 def wink_w_eyes(wink=5, opened=0.3, closed=0.15):
-    LOGGER.info("Try to wink with Iron Man's eyes...")
+    LOGGER.info(f"Iron Man {wink} times winks with eyes.")
     while wink > 0:
         os.system(f"{CURL}1 &")
         time.sleep(opened)
