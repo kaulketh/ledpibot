@@ -17,15 +17,8 @@ from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
 
-intense = 120
-start_px = 0
-
-
-def _wipe(color, strip):
-    for i in range(strip.numPixels()):
-        strip.setPixelColor((i + start_px) % 24, color)
-        strip.show()
-        time.sleep(0.05)
+INTENSE = 120
+START_PX = 0
 
 
 def run_clock4(strip):
@@ -37,20 +30,19 @@ def run_clock4(strip):
             second_value = int(now.second / 2.5)
             minute_value = int(now.minute / 2.5)
             hour_value = int(now.hour)
-
             hour_value = hour_value % 12 * 2
             hour_value = int((hour_value * 24 + minute_value) / 24)
 
             # arc mode
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                red = (i + 1) * (intense / (
+                red = (i + 1) * (INTENSE / (
                         hour_value + 1)) if i <= hour_value else 0
-                green = (i + 1) * (intense / (
+                green = (i + 1) * (INTENSE / (
                         minute_value + 1)) if i <= minute_value else 0
-                blue = (i + 1) * (intense / (
+                blue = (i + 1) * (INTENSE / (
                         second_value + 1)) if i <= second_value else 0
-                strip.setPixelColor((i + start_px) % 24,
+                strip.setPixelColor((i + START_PX) % 24,
                                     Color(int(red), int(green), int(blue)))
             strip.show()
             time.sleep(0.1)
