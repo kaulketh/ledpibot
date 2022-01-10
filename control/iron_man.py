@@ -32,7 +32,7 @@ def open_the_eyes():
     os.system(f"{CURL}{ON}")
 
 
-def wink_w_eyes(wink=5, opened=0.3, closed=0.15):
+def wink_w_eyes(wink=5, opened=.2, closed=.1):
     LOGGER.info(f"Iron Man {wink} times winks with eyes.")
     while wink > 0:
         os.system(f"{CURL}1 &")
