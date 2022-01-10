@@ -52,7 +52,7 @@ class TelegramBot:
             [commands[2], commands[3], commands[6], commands[7],
              commands[16]],
             [commands[4], commands[5], commands[17], commands[18],
-             commands[19]],
+             commands[19], commands[21]],
             [commands[15], commands[20]],
             [commands[8], commands[9], commands[10], commands[13],
              commands[11], commands[12], commands[14]]]
@@ -168,6 +168,7 @@ class TelegramBot:
             exit()
 
     def __stop(self, update: Update, context: CallbackContext):
+
         if self.__stop_function(update, context):
             self.__reply(update, m_stopped, markup=self.rm_kb)
         self.__logger.info("Bot stopped,  got '/stop'!")

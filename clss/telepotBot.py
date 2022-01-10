@@ -52,7 +52,7 @@ class TelepotBot:
         self._remove_keyboard = ReplyKeyboardRemove()
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__buttons([2, 3, 6, 7, 16]),
-            self.__buttons([4, 5, 17, 18, 19]),
+            self.__buttons([4, 5, 17, 18, 19, 21]),
             self.__buttons([15, 20]),
             self.__buttons([8, 9, 10, 13, 11, 12, 14])
         ])
