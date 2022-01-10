@@ -11,7 +11,7 @@ from clss import Singleton
 
 
 class _LoggerMeta(type, Singleton):
-    NAME = "Logger"
+    NAME = "LedPi"
     FOLDER_PATH = "../logs"
     ADDITIONAL_DEBUG_LOG = False
 
@@ -29,12 +29,12 @@ class _LoggerMeta(type, Singleton):
     BACK_COUNT = 5
 
     DAT_FMT = "%Y-%m-%d %H:%M:%S"
-    INF_FMT = "%(asctime)s %(levelname)s %(name)s " \
+    INF_FMT = "%(asctime)s %(name)s %(levelname)s " \
               "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] %(message)s"
-    ERR_FMT = "%(asctime)s %(levelname)s %(name)s " \
+    ERR_FMT = "%(asctime)s %(name)s %(levelname)s " \
               "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] " \
               "[thread: %(threadName)s] %(message)s"
-    DEB_FMT = "%(asctime)s %(levelname)s %(name)s " \
+    DEB_FMT = "%(asctime)s %(name)s %(levelname)s " \
                 "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
 
     def __init__(cls, *args, **kwargs):
