@@ -13,9 +13,8 @@ from .candles import run_candles
 from .clock1 import run_clock1
 from .clock2 import run_clock2
 from .clock3 import run_clock3
-from .clock4 import run_clock4
 from .clock5 import run_clock5
-from .clock6 import run_clock6
+from .clock_4_6 import run_clock4, run_clock6
 from .colors import \
     run_red, run_blue, run_green, run_orange, run_yellow, run_white, \
     run_violet, run_demo, run_stroboscope, run_demo2
