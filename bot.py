@@ -9,7 +9,7 @@ __doc__ = "Call your preferred class here."
 
 from urllib3.exceptions import HTTPError
 
-from clss import *
+from bots import *
 from control import wink_w_eyes
 from logger import LOGGER
 

@@ -7,7 +7,20 @@ import logging.handlers
 import os
 import sys
 
-from clss import Singleton
+
+class _Singleton(type):
+    """ A metaclass that creates a Singleton base class when called. """
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(_Singleton, cls).__call__(*args,
+                                                                  **kwargs)
+        return cls._instances[cls]
+
+
+class Singleton(_Singleton('SingletonMeta', (object,), {})):
+    pass
 
 
 class _LoggerMeta(type, Singleton):
@@ -35,7 +48,7 @@ class _LoggerMeta(type, Singleton):
               "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] " \
               "[thread: %(threadName)s] %(message)s"
     DEB_FMT = "%(asctime)s %(name)s %(levelname)s " \
-                "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
+              "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
 
     def __init__(cls, *args, **kwargs):
         super(_LoggerMeta, cls).__init__(*args, **kwargs)
