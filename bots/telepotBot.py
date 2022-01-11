@@ -46,7 +46,7 @@ class TelepotBot:
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
 
-        self.__log.debug(f"Building keyboards....")
+        self.__log.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = ReplyKeyboardRemove()
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__buttons([2, 3, 6, 7, 16]),

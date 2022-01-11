@@ -46,7 +46,7 @@ class TelegramBot:
         self.__logger.debug(
             f"Initialize instance of {self.__class__.__name__}")
 
-        self.__logger.debug(f"Building keyboards....")
+        self.__logger.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = telegram_ReplyKeyboardRemove()
         self.__buttons = [
             [commands[2], commands[3], commands[6], commands[7],
