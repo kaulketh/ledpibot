@@ -10,17 +10,17 @@ __doc__ = "Translations dictionary for labels and message texts."
 
 from logger import LOGGER
 
-RUNNING = "Bot is running..."
+assignment = {}
+language: str = ""
 
+# text type constants
+RUNNING = "Bot is running..."
 CMD = "command"
 MSG = "message"
 DE = "de"
 EN = "en"
 FR = "fr"
 NAME = "name"
-
-assignment = {}
-language: str = ""
 
 languages = {
     DE: {NAME: "German"},
@@ -79,7 +79,7 @@ texts = {
         4: "Bot ist einsatzbereit.",
         5: "Gerät wird neu gestartet.",
         6: "Logrotate manuell ausgeführt.",
-        7: "Bot angehalten!",
+        7: "Bot pausiert!",
         8: "Standby: {0}\nNeustart um {1}",
         9: "{0} gestoppt.",
         10: "Kompletten Bot-Prozess abgebrochen!",
@@ -109,9 +109,7 @@ texts = {
         33: "Bot-Update, Reboot folgt.",
         34: "Standby"
 
-
     },
-
     EN: {
         0: "`Hello {1}, this is a private bot!"
            "\nID {0}, {2} {3} has been blocked.\nThanks for visit!`",
@@ -121,7 +119,7 @@ texts = {
         4: "Bot ready for use.",
         5: "Device rebooted.",
         6: "Logrotate executed manually.",
-        7: "Bot stopped.",
+        7: "Bot paused.",
         8: "Standby: {0}\nRestart at {1}",
         9: "{0} stopped.",
         10: "Bot process killed!",
@@ -161,7 +159,7 @@ texts = {
         4: "Le bot est prêt à l'emploi.",
         5: "L'appareil est redémarré.",
         6: "Logrotate exécuté manuellement.",
-        7: "Bot arrêté!",
+        7: "Bot en pause!",
         8: "Veille: {0}\nRedémarrez à {1}",
         9: "{0} arrêté.",
         10: "Processus de bot complet annulé!",
@@ -195,29 +193,42 @@ texts = {
 }
 
 
-def assign_texts(lang: str):
-    """
-    Assignment of the texts to the messages/commands according to the language
+def build_text_libraries():
+    LOGGER.debug("Initialize text libraries of possible languages.")
+    for k in languages.keys():
+        assign_texts(k)
 
-    :param lang: language key
-    :return: None
+
+def assign_texts(lng_key: str):
+    """
+    Assignment of the texts to the messages/commands according to language
+
+    :param lng_key: language key
+    :return: None (setup global assignment of texts)
     """
 
     text_assignments = {}
-    # all messages
-    for i in range(0, 11):
-        text_assignments[texts[MSG].get(i)] = texts[lang].get(i)
-    # message update
-    text_assignments[texts[MSG].get(11)] = texts[lang].get(33)
-    # all commands
-    for i in range(0, 22):
-        text_assignments[texts[CMD].get(i)] = texts[lang].get(i + 11)
-    # command standby
-    text_assignments[texts[CMD].get(22)] = texts[lang].get(34)
-    languages[lang].update(text_assignments)
+    LOGGER.debug(
+        f"Assign {languages[lng_key].get(NAME)} texts "
+        f"to messages and commands.")
+
+    # Messages
+    for i in range(0, len(texts[MSG]) - 1):
+        text_assignments[texts[MSG].get(i)] = texts[lng_key].get(i)
+    # Commands
+    for i in range(0, len(texts[CMD]) - 1):
+        text_assignments[texts[CMD].get(i)] = \
+            texts[lng_key].get(i + len(texts[MSG]) - 1)
+    # Message 'Update'
+    text_assignments[texts[MSG].get(11)] = texts[lng_key].get(33)
+    # Command 'Standby'
+    text_assignments[texts[CMD].get(22)] = texts[lng_key].get(34)
+
+    languages[lng_key].update(text_assignments)
 
     global assignment
     assignment = languages
+    LOGGER.debug(f"{languages[lng_key].get(NAME)} text library built.")
 
 
 def set_language(lng=EN):
@@ -225,7 +236,7 @@ def set_language(lng=EN):
     Set chat language, default = English.
 
     :param lng: language key (i.e. 'de')
-    :return: None (set global chat language)
+    :return: None (set up global chat language)
     """
 
     if lng not in assignment:
@@ -239,41 +250,35 @@ def set_language(lng=EN):
         f"Chat language was set to '{(assignment[language].get(NAME))}'.")
 
 
-def get_translations(text_index):
+def get_texts(text_type):
     """
-    Load translations from dictionary.
+    Get text translations.
 
-    :param text_index: messages, commands
+    :param text_type: messages, commands
     :return: list of texts
     """
     global language, assignment
     translations = []
 
-    def text_generator(key_type: str):
-        for key in texts[key_type].keys():
+    def text_generator(_type: str):
+        for key in texts[_type].keys():
             txt = assignment[language].get(
-                texts[key_type].get(key)).title() if key_type == CMD \
-                else assignment[language].get(texts[key_type].get(key))
+                texts[_type].get(key)).title() if _type == CMD \
+                else assignment[language].get(texts[_type].get(key))
             newline, space = ("\n", " ")
             LOGGER.debug(
-                f"Load {key_type} ({key}:{texts[key_type].get(key)}) "
+                f"{key}: {texts[_type].get(key)} = "
                 f"{txt.replace(newline, space)}"
+
             )
             yield txt
 
     try:
-        for t in text_generator(text_index):
+        for t in text_generator(text_type):
             translations.append(t)
         return translations
     except Exception as e:
         LOGGER.error(f"Error while import from translations: {e}")
-
-
-def build_dictionary():
-    LOGGER.debug("Initialize dictionaries of the possible languages...")
-    for k in languages.keys():
-        LOGGER.debug(f"Update {languages[k].get(NAME)} texts.")
-        assign_texts(k)
 
 
 if __name__ == '__main__':

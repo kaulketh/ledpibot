@@ -38,11 +38,11 @@ def build_dictionary():
                      run_yellow, run_orange, run_white, run_violet, run_demo,
                      run_stroboscope, run_clock3, run_clock4, run_clock5,
                      run_demo2, run_clock6, None]
-        LOGGER.debug("Build dictionary of required functions")
+        LOGGER.debug("Build functions dictionary.")
         for i in range(len(commands)):
             f = functions[i]
             dictionary[commands[i]] = f
-            LOGGER.debug(f'Added {i} : {f}')
+            LOGGER.debug(f'Add {i}: {f}')
         return dictionary
     except Exception as ex:
         LOGGER.error(f"{ex}")
