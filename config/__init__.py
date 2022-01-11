@@ -6,9 +6,8 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from .access import *
 from .dictionary import *
-from .secret import *
+from .secret import *  # no public deployment!
 from .settings import *
 
 build_dictionary()

@@ -7,11 +7,24 @@ import logging.handlers
 import os
 import sys
 
-from clss import Singleton
+
+class _Singleton(type):
+    """ A metaclass that creates a Singleton base class when called. """
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(_Singleton, cls).__call__(*args,
+                                                                  **kwargs)
+        return cls._instances[cls]
+
+
+class Singleton(_Singleton('SingletonMeta', (object,), {})):
+    pass
 
 
 class _LoggerMeta(type, Singleton):
-    NAME = "Logger"
+    NAME = "LedPi"
     FOLDER_PATH = "../logs"
     ADDITIONAL_DEBUG_LOG = False
 
@@ -28,14 +41,14 @@ class _LoggerMeta(type, Singleton):
     MAX_BYTE = 1024 * 1024  # 1MB
     BACK_COUNT = 5
 
-    DATE_FMT = "%Y-%m-%d %H:%M:%S"
-    INF_FMT = "%(asctime)s %(levelname)s %(name)s " \
+    DAT_FMT = "%Y-%m-%d %H:%M:%S"
+    INF_FMT = "%(asctime)s %(name)s %(levelname)s " \
               "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] %(message)s"
-    ERR_FMT = "%(asctime)s %(levelname)s %(name)s " \
+    ERR_FMT = "%(asctime)s %(name)s %(levelname)s " \
               "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] " \
               "[thread: %(threadName)s] %(message)s"
-    DEBUG_FMT = "%(asctime)s %(levelname)s %(name)s " \
-                "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
+    DEB_FMT = "%(asctime)s %(name)s %(levelname)s " \
+              "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
 
     def __init__(cls, *args, **kwargs):
         super(_LoggerMeta, cls).__init__(*args, **kwargs)
@@ -64,8 +77,8 @@ class _LoggerMeta(type, Singleton):
         logging.basicConfig(
             level=logging.DEBUG,
             stream=sys.stdout,
-            datefmt=_LoggerMeta.DATE_FMT,
-            format=_LoggerMeta.DEBUG_FMT)
+            datefmt=_LoggerMeta.DAT_FMT,
+            format=_LoggerMeta.DEB_FMT)
         # create file handlers
         cls.__handler_info = logging.handlers.RotatingFileHandler(
             os.path.join(cls.__this_folder, cls.__inf_log_file),
@@ -81,10 +94,10 @@ class _LoggerMeta(type, Singleton):
         # create formatters and setup handlers
         cls.__format_info = \
             logging.Formatter(_LoggerMeta.INF_FMT,
-                              datefmt=_LoggerMeta.DATE_FMT)
+                              datefmt=_LoggerMeta.DAT_FMT)
         cls.__format_error = \
             logging.Formatter(_LoggerMeta.ERR_FMT,
-                              datefmt=_LoggerMeta.DATE_FMT)
+                              datefmt=_LoggerMeta.DAT_FMT)
 
         cls.__handler_info.setFormatter(cls.__format_info)
         cls.__handler_error.setFormatter(cls.__format_error)
@@ -103,8 +116,8 @@ class _LoggerMeta(type, Singleton):
                 backupCount=_LoggerMeta.BACK_COUNT)
             cls.__handler_debug.setLevel(logging.DEBUG)
             cls.__format_debug = \
-                logging.Formatter(_LoggerMeta.DEBUG_FMT,
-                                  datefmt=_LoggerMeta.DATE_FMT)
+                logging.Formatter(_LoggerMeta.DEB_FMT,
+                                  datefmt=_LoggerMeta.DAT_FMT)
             cls.__handler_debug.setFormatter(cls.__format_debug)
             cls.__log_instance.addHandler(cls.__handler_debug)
 
