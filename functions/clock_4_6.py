@@ -17,9 +17,6 @@ from control.ledstrip import set_brightness_depending_on_daytime
 from functions.effects import clear
 from logger import LOGGER
 
-INTENSE = 120
-START_PX = 0
-
 
 def _get_pointer(strip):
     now = set_brightness_depending_on_daytime(strip)[0]
@@ -31,8 +28,8 @@ def _get_pointer(strip):
     return hour_value, minute_value, second_value
 
 
-def _get_color_value(px, value, intense=INTENSE):
-    return (px + 1) * (intense / (value + 1)) if px <= value else 0
+def _get_color_value(px, pointer, intensity) -> int:
+    return int((px + 1) * (intensity / (pointer + 1)) if px <= pointer else 0)
 
 
 def run_clock4(strip):
@@ -41,15 +38,15 @@ def run_clock4(strip):
     while not get_stop_flag():
         try:
             hour_value, minute_value, second_value = _get_pointer(strip)
-
             # arc mode
+            intensity = 120
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                red = _get_color_value(i, hour_value)
-                green = _get_color_value(i, minute_value)
-                blue = _get_color_value(i, second_value)
-                strip.setPixelColor((i + START_PX) % 24,
-                                    Color(int(red), int(green), int(blue)))
+                red = _get_color_value(i, hour_value, intensity=intensity)
+                green = _get_color_value(i, minute_value, intensity=intensity)
+                blue = _get_color_value(i, second_value, intensity=intensity)
+                strip.setPixelColor(i % 24,
+                                    Color(red, green, blue))
             strip.show()
             time.sleep(0.1)
 
@@ -69,19 +66,18 @@ def run_clock6(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-
             hour_value, minute_value = _get_pointer(strip)[:2]
-
             # arc mode
+            intensity = 200
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                red = _get_color_value(i, hour_value)
-                green = _get_color_value(i, minute_value)
-                r = min(int(red), int(green))
-                g = max(int(red), int(green))
+                red = _get_color_value(i, hour_value, intensity=intensity)
+                green = _get_color_value(i, minute_value, intensity=intensity)
+                r = min(red, green)
+                g = max(red, green)
                 b = (r + g) // 2
                 color = Color(r, g, b)
-                strip.setPixelColor((i + START_PX) % 24, color)
+                strip.setPixelColor(i % 24, color)
             strip.show()
             time.sleep(0.1)
 
