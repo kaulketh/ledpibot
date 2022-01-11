@@ -208,7 +208,7 @@ def assign_texts(lang: str):
     for i in range(0, 11):
         text_assignments[texts[MSG].get(i)] = texts[lang].get(i)
     # message update
-    text_assignments[texts[MSG].get(11)] = texts[lang].get(32)
+    text_assignments[texts[MSG].get(11)] = texts[lang].get(33)
     # all commands
     for i in range(0, 22):
         text_assignments[texts[CMD].get(i)] = texts[lang].get(i + 11)
