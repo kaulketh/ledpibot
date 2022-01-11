@@ -7,6 +7,8 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 __doc__ = "Call your preferred class here."
 
+from concurrent.futures import ThreadPoolExecutor
+
 from urllib3.exceptions import HTTPError
 
 from bots import *
@@ -20,9 +22,11 @@ def run():
 
 
 if __name__ == '__main__':
-    wink_w_eyes()
     try:
-        run()
+        go_on = ThreadPoolExecutor()
+        go_on.submit(run)
+        go_on.submit(wink_w_eyes)
+        go_on.shutdown()
     except HTTPError as e:
         LOGGER.error("HTTP Error occurs!", e)
         exit()

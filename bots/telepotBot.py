@@ -11,16 +11,14 @@ import signal
 
 import telepot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton, \
+from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
-from config import \
-    TELEGRAM_BOT_TOKEN, THK, \
-    commands, \
-    m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
-    m_stopped, m_updated, \
-    AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, RUNNING
-from control import run_thread, stop_threads, service
+from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, RUNNING, \
+    TELEGRAM_BOT_TOKEN, THK, commands, \
+    m_not_allowed, m_pls_select, m_rebooted, m_started, m_stopped, \
+    m_updated, m_wrong_id
+from control import run_thread, service, stop_threads
 from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
@@ -81,17 +79,15 @@ class TelepotBot:
         else:
             bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
+    # noinspection PyMethodMayBeStatic
     def __button(self, text) -> KeyboardButton:
-        self.__log.debug(f"Build button: {text}")
         return KeyboardButton(text=text)
 
-    def __buttons(self, indices: list, command_list: list = commands) -> list:
+    # noinspection PyMethodMayBeStatic
+    def __buttons(self, choices: list, command_list: list = commands) -> list:
         btn_list = []
-        for i in indices:
-            self.__log.debug(
-                f"Build and append button to list: {command_list[i]}")
+        for i in choices:
             btn_list.append(KeyboardButton(text=command_list[i]))
-        self.__log.debug(f"Button list: {btn_list}")
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):

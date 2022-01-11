@@ -236,8 +236,7 @@ def set_language(lng=EN):
     else:
         language = lng
     LOGGER.info(
-        f"Apart from service menu chat language was set to '"
-        f"{(assignment[language].get(NAME))}'.")
+        f"Chat language was set to '{(assignment[language].get(NAME))}'.")
 
 
 def get_translations(text_index):
@@ -250,7 +249,7 @@ def get_translations(text_index):
     global language, assignment
     translations = []
 
-    def generated_texts(key_type: str):
+    def text_generator(key_type: str):
         for key in texts[key_type].keys():
             txt = assignment[language].get(
                 texts[key_type].get(key)).title() if key_type == CMD \
@@ -263,7 +262,7 @@ def get_translations(text_index):
             yield txt
 
     try:
-        for t in generated_texts(text_index):
+        for t in text_generator(text_index):
             translations.append(t)
         return translations
     except Exception as e:
@@ -271,7 +270,7 @@ def get_translations(text_index):
 
 
 def build_dictionary():
-    LOGGER.debug("Build dictionary of required strings...")
+    LOGGER.debug("Initialize dictionaries of the possible languages...")
     for k in languages.keys():
         LOGGER.debug(f"Update {languages[k].get(NAME)} texts.")
         assign_texts(k)
