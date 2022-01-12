@@ -68,18 +68,17 @@ def run_clock6(strip):
         try:
             hour_value, minute_value = _get_pointer(strip)[:2]
             # arc mode
-            intensity = 200
+            intensity = 100
             for i in range(strip.numPixels()):
                 # calculates a faded arc from low to maximum brightness
-                red = _get_color_value(i, hour_value, intensity=intensity)
-                green = _get_color_value(i, minute_value, intensity=intensity)
-                r = min(red, green)
-                g = max(red, green)
-                b = (r + g) // 2
-                color = Color(r, g, b)
+                h = _get_color_value(i, hour_value, intensity=intensity)
+                m = _get_color_value(i, minute_value, intensity=intensity)
+                red, green, blue = 0, m, h
+                color = Color(red, green, blue)
                 strip.setPixelColor(i % 24, color)
             strip.show()
             time.sleep(0.1)
+
 
         except KeyboardInterrupt:
             LOGGER.warn("KeyboardInterrupt.")
