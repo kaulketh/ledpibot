@@ -11,9 +11,9 @@ import datetime
 from rpi_ws281x import *
 
 from config import LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_BRIGHTNESS, \
-    LED_INVERT, LED_NIGHT_CUT_OFF, \
-    LED_MORNING_CUT_OFF, LED_DAY_BRIGHTNESS, \
-    LED_NIGHT_BRIGHTNESS
+    LED_INVERT, LED_CUT_OFF_NIGHT, \
+    LED_CUT_OFF_MORNING, LED_BRIGHTNESS_DAY, \
+    LED_BRIGHTNESS_NIGHT
 from logger import LOGGER
 
 
@@ -57,10 +57,10 @@ class Strip:
         :return: Datetime, Brightness
         """
         now = datetime.datetime.now()
-        if LED_MORNING_CUT_OFF < int(now.hour) < LED_NIGHT_CUT_OFF:
-            s.setBrightness(LED_DAY_BRIGHTNESS)
+        if LED_CUT_OFF_MORNING < int(now.hour) < LED_CUT_OFF_NIGHT:
+            s.setBrightness(LED_BRIGHTNESS_DAY)
         else:
-            s.setBrightness(LED_NIGHT_BRIGHTNESS)
+            s.setBrightness(LED_BRIGHTNESS_NIGHT)
         b = s.getBrightness()
         return now, b
 
