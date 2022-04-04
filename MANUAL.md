@@ -6,7 +6,7 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
     ````python script
     LANGUAGE = "de"
     ````    
-    Auto Reboot at the specified time if enabled    
+    Auto reboot 1 minute after specified time if enabled    
     ````python script
     AUTO_REBOOT_ENABLED = False
     AUTO_REBOOT_TIME = "00:30"
