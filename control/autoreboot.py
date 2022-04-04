@@ -43,17 +43,17 @@ class AutoReboot(LightFunction):
         try:
             self._logger.info(
                 f"{self.name} scheduled: "
-                f"{self.__hour}:{self.__minute}")
+                f"{self.__hour}:{self.__minute} + 1")
             while not self.__time_to_reboot()[0]:
                 self._logger.debug(
                     f"reboot time not yet reached, "
                     f"recheck in {self.__ONE_MINUTE} seconds")
                 time.sleep(self.__ONE_MINUTE)
-            self._logger.debug(f"Wait again {self.__ONE_MINUTE} seconds "
+            self._logger.debug(f"wait again {self.__ONE_MINUTE} seconds "
                                f"to ensure next minute "
-                               f"after specified reboot time.")
+                               f"after specified reboot time")
             time.sleep(self.__ONE_MINUTE)
-            self._logger.debug("FORCE device reboot")
+            self._logger.debug("force device reboot")
             self.__bot.external_request(msg=f"{self.name}\n{m_rebooted}",
                                         bot=self.__bot)
             reboot_device(self.name)
