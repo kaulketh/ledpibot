@@ -15,7 +15,7 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, RUNNING, \
-    TELEGRAM_BOT_TOKEN, THK, commands, \
+    TOKEN_TELEGRAM_BOT, ID_CHAT_THK, commands, \
     m_not_allowed, m_pls_select, m_rebooted, m_started, m_stopped, \
     m_updated, m_wrong_id
 from control import run_thread, service, stop_threads
@@ -23,7 +23,7 @@ from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
 
-admins = [THK]
+admins = [ID_CHAT_THK]
 
 
 class TelepotBot:
@@ -216,7 +216,7 @@ class TelepotBot:
 
 
 def main():
-    TelepotBot(TELEGRAM_BOT_TOKEN, admins).start()
+    TelepotBot(TOKEN_TELEGRAM_BOT, admins).start()
 
 
 if __name__ == '__main__':

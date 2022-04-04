@@ -10,10 +10,10 @@ import os
 import time
 
 from logger import LOGGER
-from config import MASK_IP, MASK_PORT
+from config import IP_MASK_IRONMAN, PORT_MASK_IRONMAN
 
-WEB_SERVER_IP = MASK_IP
-WEB_SERVER_PORT = MASK_PORT
+WEB_SERVER_IP = IP_MASK_IRONMAN
+WEB_SERVER_PORT = PORT_MASK_IRONMAN
 # noinspection HttpUrlsUsage
 CURL = f"curl --silent --output nul " \
        f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}" \

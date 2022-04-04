@@ -13,7 +13,7 @@ from telegram.ext import Updater, CommandHandler, CallbackContext, \
     MessageHandler, Filters
 
 from config import \
-    TELEGRAM_BOT_TOKEN, THK, \
+    TOKEN_TELEGRAM_BOT, ID_CHAT_THK, \
     commands, \
     m_wrong_id, m_pls_select, m_not_allowed, m_started, m_rebooted, \
     m_stopped, m_updated, \
@@ -23,7 +23,7 @@ from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
 
-admins = [THK]
+admins = [ID_CHAT_THK]
 
 
 class TelegramBot:
@@ -252,7 +252,7 @@ class TelegramBot:
 
 
 def main():
-    TelegramBot(TELEGRAM_BOT_TOKEN, admins).start()
+    TelegramBot(TOKEN_TELEGRAM_BOT, admins).start()
 
 
 if __name__ == '__main__':

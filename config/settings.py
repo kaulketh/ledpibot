@@ -8,8 +8,8 @@ __status__ = "Production"
 
 LANGUAGE = "de"  # language keys: "de", "en", "fr"
 
-AUTO_REBOOT_ENABLED = False
-AUTO_REBOOT_TIME = "01:30"
+AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_TIME = "00:30"
 
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).
@@ -17,10 +17,10 @@ LED_FREQ_HZ = 800_000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
-LED_DAY_BRIGHTNESS = 200  # Daytime brightness
-LED_NIGHT_BRIGHTNESS = 70  # Night brightness
-LED_MORNING_CUT_OFF = 7  # Hour to adjust to day brightness
-LED_NIGHT_CUT_OFF = 18  # Hour to adjust to night brightness
+LED_BRIGHTNESS_DAY = 200  # Daytime brightness
+LED_BRIGHTNESS_NIGHT = 70  # Night brightness
+LED_CUT_OFF_MORNING = 7  # Hour to adjust to day brightness
+LED_CUT_OFF_NIGHT = 18  # Hour to adjust to night brightness
 
 if __name__ == '__main__':
     pass
