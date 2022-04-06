@@ -43,8 +43,10 @@ class AutoReboot(LightFunction):
         try:
             self._logger.info(
                 f"{self.name} scheduled: "
-                f"{self.__hour}:{self.__minute}, "
-                f"seconds will be ignored")
+                f"{self.__hour}:"
+                f"{self.__minute}:"
+                f"{datetime.datetime.now().second}")
+
             while not self.__time_to_reboot()[0]:
                 self._logger.debug(
                     f"reboot time not yet reached, "
