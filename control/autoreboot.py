@@ -50,16 +50,18 @@ class AutoReboot(LightFunction):
                     f"reboot time not yet reached, "
                     f"recheck in {self.__ONE_MINUTE} seconds")
                 time.sleep(self.__ONE_MINUTE)
-            self._logger.debug(f"{self.__ONE_MINUTE} seconds "
-                               f"before specified reboot time")
+            self._logger.debug(f"reboot takes place in 1 minute")
             time.sleep(self.__ONE_MINUTE)
-            self._logger.debug("force device reboot")
+            # self._logger.debug("force device reboot")
             self.__bot.external_request(msg=f"{self.name}\n{m_rebooted}",
                                         bot=self.__bot)
-            reboot_device(self.name)
+            # reboot_device(self.name)
         except Exception as e:
             # FIXME: throws ConnectionResetError... see log file
-            self._logger.error(f"{e}")
+            self._logger.error(f"{e.__cause__}{e}")
+        finally:
+            self._logger.debug("force device reboot")
+            reboot_device(self.name)
 
 
 if __name__ == '__main__':
