@@ -40,29 +40,27 @@ class AutoReboot(LightFunction):
         return hr and mr, c
 
     def run(self):
-        try:
-            self._logger.info(
-                f"{self.name} scheduled: "
-                f"{self.__hour}:"
-                f"{self.__minute}:"
-                f"{datetime.datetime.now().second}")
+        self._logger.info(
+            f"{self.name} scheduled: "
+            f"{self.__hour}:"
+            f"{self.__minute}:"
+            f"{datetime.datetime.now().second}")
 
-            while not self.__time_to_reboot()[0]:
-                self._logger.debug(
-                    f"reboot time not yet reached, "
-                    f"recheck in {self.__ONE_MINUTE} seconds")
-                time.sleep(self.__ONE_MINUTE)
-            self._logger.debug(f"reboot takes place in 1 minute")
+        while not self.__time_to_reboot()[0]:
+            self._logger.debug(
+                f"reboot time not yet reached, "
+                f"recheck in {self.__ONE_MINUTE} seconds")
             time.sleep(self.__ONE_MINUTE)
-            # self._logger.debug("force device reboot")
+        self._logger.debug(f"reboot takes place in 1 minute")
+        time.sleep(self.__ONE_MINUTE)
+        self._logger.info("try to force reboot device")
+
+        try:
             self.__bot.external_request(msg=f"{self.name}\n{m_rebooted}",
                                         bot=self.__bot)
-            # reboot_device(self.name)
-        except Exception as e:
-            # FIXME: throws ConnectionResetError... see log file
-            self._logger.error(f"{e.__cause__}{e}")
+        except ConnectionResetError as cre:
+            self._logger.error(f"{cre}")
         finally:
-            self._logger.debug("force device reboot")
             reboot_device(self.name)
 
 
