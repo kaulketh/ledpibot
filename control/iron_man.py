@@ -32,8 +32,8 @@ def open_the_eyes():
     os.system(f"{CURL}{ON}")
 
 
-def wink_ten_times():
-    wink_w_eyes(10, .15, .5)
+def wink_more_often():
+    wink_w_eyes(20, .07, .15)
 
 
 def wink_w_eyes(wink=5, opened=.5, closed=.25):
