@@ -9,8 +9,8 @@ __status__ = "Production"
 import os
 import time
 
-from logger import LOGGER
 from config import IP_MASK_IRONMAN, PORT_MASK_IRONMAN
+from logger import LOGGER
 
 WEB_SERVER_IP = IP_MASK_IRONMAN
 WEB_SERVER_PORT = PORT_MASK_IRONMAN
@@ -30,6 +30,10 @@ def close_the_eyes():
 def open_the_eyes():
     LOGGER.info("Iron Man opens the eyes.")
     os.system(f"{CURL}{ON}")
+
+
+def wink_ten_times():
+    wink_w_eyes(10, .15, .5)
 
 
 def wink_w_eyes(wink=5, opened=.5, closed=.25):

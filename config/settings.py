@@ -20,7 +20,7 @@ LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
 LED_BRIGHTNESS_DAY = 200  # Daytime brightness
 LED_BRIGHTNESS_NIGHT = 70  # Night brightness
 LED_CUT_OFF_MORNING = 7  # Hour to adjust to day brightness
-LED_CUT_OFF_NIGHT = 18  # Hour to adjust to night brightness
+LED_CUT_OFF_NIGHT = 17  # Hour to adjust to night brightness
 
 if __name__ == '__main__':
     pass
