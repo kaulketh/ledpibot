@@ -40,12 +40,12 @@ Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden fi
         * **Call of a built-in command will break any running function!**
 * **Functions/Animations:**
     * _**Clocks**_
-        * **Clock 1** One LED per "pointer", red hours "pointer", blue minutes "pointer", warm yellow running seconds "pointer" every 2.5 seconds
-        * **Clock 2** One LED per "pointer", red hours "pointer", blue minutes "pointer", a blue running light every 2.5 minutes from the current "minute" to the "12" 
-        * **Clock 3** One LED per "pointer", red hours "pointer", blue minutes "pointer", green seconds "scale" will extend every 2.5 seconds, there is also a "dial", a subtly warm yellow LED on each "number".
-        * **Clock 4** Colorful, full color "scale" for minute, hour, second, "scales" will be overridden and colors mixed/changed thus 
-        * **Clock 5** Red hours "pointer", blue minutes "pointer" and a warm yellow 1 second "pendulum" over all LEDs
-        * **Clock 6** Similar Clock 4, but w/o seconds and Green and Blue as major colors
+        * **Clock 1** One LED per 'watch hand', red hour hand, blue minute hand, warm yellow running second hand every 2.5 seconds.One LED per 'watch hand', red hour hand, blue minute hand, warm yellow running second hand every 2.5 seconds.
+        * **Clock 2** One LED per 'watch hand', red hour, blue minute, blue running light every 2.5 minutes from the current 'minute' to the '12'. 
+        * **Clock 3** One LED per 'watch hand', red hour, blue minute, green seconds 'scale' will extend every 2.5 seconds. There is also a 'dial', subtly warm yellow for each 'number'.
+        * **Clock 4** Colorful, full color 'watch face' for minute, hour, second, 'scales' will be overridden and colors mixed/changed thus. 
+        * **Clock 5** Red hour hand, blue minute hand and warm yellow second 'pendulum' over all LEDs.
+        * **Clock 6** Similar Clock 4, but w/o seconds and Green and Blue as major colors.
     * **Advent**: Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candlelight. If it is other than Advent time LEDs will circle in orange as warning!  
     * **Candles**: Each LED simulates candlelight
     * **Rainbow**: Rainbow animation with circular fading effect
