@@ -31,7 +31,7 @@ It is possible to call in-app commands at any time!
 
 - *Functions/Animations:*
     Clock 1:    One LED per 'watch hand', red hour hand, blue minute hand, warm yellow running second hand every 2.5 seconds.
-    Clock 2:    One LED per 'watch hand', red hour, blue minute, lue running light every 2.5 minutes from the current 'minute' to the '12'.
+    Clock 2:    One LED per 'watch hand', red hour, blue minute, blue running light every 2.5 minutes from the current 'minute' to the '12'.
     Clock 3:    One LED per 'watch hand', red hour, blue minute, green seconds 'scale' will extend every 2.5 seconds. There is also a 'dial', subtly warm yellow for each 'number'.
     Clock 4:    Colorful, full color 'scale' for minute, hour, second, 'scales' will be overridden and colors mixed/changed thus.
     Clock 5:    Red hour hand, blue minute hand and warm yellow second 'pendulum' over all LEDs.
