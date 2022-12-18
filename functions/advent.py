@@ -33,7 +33,7 @@ def __is_advent_period(year):
     return datetime.datetime.now().date() >= datetime.date(year, 11, 27)
 
 
-def __set_rand_brightness(led, stripe, *color):
+def __set_rand_brightness(led, stripe, color):
     p = randint(7, 10) / 100
     c = Color(int(color[0] * p),  # red
               int(color[1] * p),  # green
