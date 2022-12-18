@@ -17,24 +17,27 @@ from functions.effects import clear, theater_chase
 from logger import LOGGER
 
 # colors
+CANDLE = RED, GREEN, BLUE
+
 # advent
 A_RED = 255
 A_GREEN = 30
 A_BLUE = 0
+ADVENT = A_RED, A_GREEN, A_BLUE
 
 # first LED
-ZERO = (210, 70, 0)
+ZERO = 210, 70, 0
 
 
 def __is_advent_period(year):
     return datetime.datetime.now().date() >= datetime.date(year, 11, 27)
 
 
-def __set_rand_brightness(led, red, green, blue, stripe):
+def __set_rand_brightness(led, stripe, *color):
     p = randint(7, 10) / 100
-    c = Color(int(red * p),
-              int(green * p),
-              int(blue * p))
+    c = Color(int(color[0] * p),  # red
+              int(color[1] * p),  # green
+              int(color[2] * p))  # blue
     stripe.setPixelColor(led, c)
 
 
@@ -70,13 +73,13 @@ def __advent_cycle(stripe):
                 # different color and brightness per day
                 # set up first LED as advent because it's before 1st December
                 if advent[0] in [27, 28, 29, 30]:
-                    __set_rand_brightness(0, ZERO[0], ZERO[1], ZERO[2], stripe)
+                    __set_rand_brightness(0, stripe, ZERO)
                 # set up other advents in december
                 if (i + 1) in advent:
-                    __set_rand_brightness(i, A_RED, A_GREEN, A_BLUE, stripe)
+                    __set_rand_brightness(i, stripe, ADVENT)
                 else:
                     # set up other days
-                    __set_rand_brightness(i, RED, GREEN, BLUE, stripe)
+                    __set_rand_brightness(i, stripe, CANDLE)
                 stripe.show()
             time.sleep(randint(13, 15) / 100)
         else:
