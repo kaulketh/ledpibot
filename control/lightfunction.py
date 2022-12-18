@@ -54,6 +54,7 @@ class LightFunction(Thread):
         p = self.__process
         LightFunction.threads.append(self)
         import control
+        control.close_the_eyes()
         control.open_the_eyes()
         while self.__do_run:
             time.sleep(1)
