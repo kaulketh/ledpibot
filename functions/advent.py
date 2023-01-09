@@ -12,7 +12,7 @@ from random import randint
 
 from rpi_ws281x import *
 
-from functions.candles import BLUE, GREEN, RED, candle
+from functions.candles import BLUE, GREEN, RED
 from functions.effects import clear, theater_chase
 from logger import LOGGER
 
@@ -57,33 +57,18 @@ def __allsundays(year):
 
 
 def __advent_cycle(stripe):
-    advent = []
+    advents = []
 
     try:
         # collect advent dates
         year = datetime.datetime.now().year
         for sunday in __allsundays(year):
             if sunday < datetime.date(year, 12, 25):
-                advent.append(sunday.day)
+                advents.append(sunday.day)
 
         day = datetime.datetime.now().day
         # ensure only the day related LEDs are set as candle
-        if stripe.numPixels() > day:
-            for i in range(day):
-                # different color and brightness per day
-                # set up first LED as advent because it's before 1st December
-                if advent[0] in [27, 28, 29, 30]:
-                    __set_rand_brightness(0, stripe, ZERO)
-                # set up other advents in december
-                if (i + 1) in advent:
-                    __set_rand_brightness(i, stripe, ADVENT)
-                else:
-                    # set up other days
-                    __set_rand_brightness(i, stripe, CANDLE)
-                stripe.show()
-            time.sleep(randint(13, 15) / 100)
-        else:
-            candle(stripe, stripe.numPixels())
+        __show_advent_candles(advents, day, stripe)
 
     except KeyboardInterrupt:
         LOGGER.warning("KeyboardInterrupt")
@@ -92,6 +77,23 @@ def __advent_cycle(stripe):
     except Exception as e:
         LOGGER.error(f"Any error occurs: {e}")
         exit()
+    # LOGGER.debug(f"advents: {advents}")
+
+
+def __show_advent_candles(advent_dates, current_day, led_stripe):
+    for i in range(current_day):
+        # different color and brightness per day
+        # set up first LED as advent because it's before 1st December
+        if advent_dates[0] in [27, 28, 29, 30]:
+            __set_rand_brightness(0, led_stripe, ZERO)
+        # set up other advents in december
+        if (i + 1) in advent_dates:
+            __set_rand_brightness(i, led_stripe, ADVENT)
+        else:
+            # set up other days
+            __set_rand_brightness(i, led_stripe, CANDLE)
+        led_stripe.show()
+    time.sleep(randint(13, 15) / 100)
 
 
 def run_advent(stripe):
