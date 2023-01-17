@@ -6,10 +6,10 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-LANGUAGE = "de"  # language keys: "de", "en", "fr"
+LANGUAGE = "en"  # language keys: "de", "en", "fr"
 
-AUTO_REBOOT_ENABLED = False
-AUTO_REBOOT_TIME = "00:30"
+AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_TIME = "01:30"
 
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).
@@ -19,7 +19,7 @@ LED_BRIGHTNESS = 200  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (NPN transistor level shift)
 LED_BRIGHTNESS_DAY = 200  # Daytime brightness
 LED_BRIGHTNESS_NIGHT = 70  # Night brightness
-LED_CUT_OFF_MORNING = 7  # Hour to adjust to day brightness
+LED_CUT_OFF_MORNING = 8  # Hour to adjust to day brightness
 LED_CUT_OFF_NIGHT = 17  # Hour to adjust to night brightness
 
 if __name__ == '__main__':

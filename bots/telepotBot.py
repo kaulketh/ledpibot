@@ -200,8 +200,12 @@ class TelepotBot:
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
 
-        self.__log.info(f"Auto reboot enabled = {AUTO_REBOOT_ENABLED}")
+        auto_reboot=f"Auto reboot enabled"
+        self.__log.info(f"auto_reboot = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
+            for a in self.__admins:
+                self.__send(a, f"{auto_reboot} at {AUTO_REBOOT_TIME} CET",
+                            reply_markup=self.rm_kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
         while True:
