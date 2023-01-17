@@ -28,6 +28,9 @@ ADVENT = A_RED, A_GREEN, A_BLUE
 # first LED
 ZERO = 210, 70, 0
 
+# November advent days
+NAD = [27, 28, 29, 30]
+
 
 def __is_advent_period(year):
     return datetime.datetime.now().date() >= datetime.date(year, 11, 27)
@@ -84,7 +87,7 @@ def __show_advent_candles(advent_dates, current_day, led_stripe):
     for i in range(current_day):
         # different color and brightness per day
         # set up first LED as advent because it's before 1st December
-        if advent_dates[0] in [27, 28, 29, 30]:
+        if advent_dates[0] in NAD:
             __set_rand_brightness(0, led_stripe, ZERO)
         # set up other advents in december
         if (i + 1) in advent_dates:
