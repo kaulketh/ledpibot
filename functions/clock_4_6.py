@@ -18,7 +18,7 @@ from functions.effects import clear
 from logger import LOGGER
 
 
-def _get_pointer(strip):
+def _get_watch_hand(strip):
     now = set_brightness_depending_on_daytime(strip)[0]
     second_value = int(now.second / 2.5)
     minute_value = int(now.minute / 2.5)
@@ -37,7 +37,7 @@ def run_clock4(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            hour_value, minute_value, second_value = _get_pointer(strip)
+            hour_value, minute_value, second_value = _get_watch_hand(strip)
             # arc mode
             intensity = 120
             for i in range(strip.numPixels()):
@@ -66,7 +66,7 @@ def run_clock6(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            hour_value, minute_value = _get_pointer(strip)[:2]
+            hour_value, minute_value = _get_watch_hand(strip)[:2]
             # arc mode
             intensity = 100
             for i in range(strip.numPixels()):
@@ -78,7 +78,6 @@ def run_clock6(strip):
                 strip.setPixelColor(i % 24, color)
             strip.show()
             time.sleep(0.1)
-
 
         except KeyboardInterrupt:
             LOGGER.warn("KeyboardInterrupt.")

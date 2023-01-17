@@ -25,7 +25,7 @@ def run_clock2(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            hour, minute, next_minute = _get_pointer(strip)
+            hour, minute, next_minute = _get_watch_hand(strip)
             while not minute == next_minute:
                 # hour
                 if 12 < minute <= 23:
@@ -49,7 +49,7 @@ def run_clock2(strip):
                     strip.setPixelColor(minute, COLOR_MINUTE)
                 strip.show()
                 time.sleep(0.2)
-                minute = _get_pointer(strip)[1]
+                minute = _get_watch_hand(strip)[1]
             _wipe_second(strip, COLOR_MINUTE_DIMMED, minute - 1,
                          backward=True)
             clear(strip)
@@ -63,7 +63,7 @@ def run_clock2(strip):
     clear(strip)
 
 
-def _get_pointer(strip):
+def _get_watch_hand(strip):
     now = set_brightness_depending_on_daytime(strip)[0]
     hour = int(int(now.hour) % 12 * 2)
     minute = int(now.minute // 2.5)
