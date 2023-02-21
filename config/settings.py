@@ -8,7 +8,7 @@ __status__ = "Production"
 
 LANGUAGE = "en"  # language keys: "de", "en", "fr"
 
-AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "01:30"
 
 LED_COUNT = 24  # Number of LED pixels.
