@@ -28,14 +28,15 @@ def _get_watch_hand(strip):
     return hour_value, minute_value, second_value
 
 
-def _get_color_value(px, pointer, intensity) -> int:
-    return int((px + 1) * (intensity / (pointer + 1)) if px <= pointer else 0)
+def _get_color_value(px, watch_hand, intensity) -> int:
+    return int(
+        (px + 1) * (intensity / (watch_hand + 1)) if px <= watch_hand else 0)
 
 
 def _clock4(strip):
     hour_value, minute_value, second_value = _get_watch_hand(strip)
     # arc mode
-    intensity = 120
+    intensity = 100
     for i in range(strip.numPixels()):
         # calculates a faded arc from low to maximum brightness
         red = _get_color_value(i, hour_value, intensity=intensity)
@@ -63,7 +64,23 @@ def _clock6(strip):
 
 
 def _clock7(strip):
-    pass
+    hour, minute = _get_watch_hand(strip)[:2]
+    hour_value, minute_value = hour / 2, minute / 2
+
+    intensity = 100
+    for i in range(0, 12):
+        m = _get_color_value(i, minute_value, intensity=intensity)
+        red, green, blue = m, m, m
+        color = Color(red, green, blue)
+        strip.setPixelColor(i % 24, color)
+
+    for i in range(12, strip.numPixels()):
+        h = _get_color_value(i - 12, hour_value, intensity=intensity)
+        red, green, blue = 0, h, h
+        color = Color(red, green, blue)
+        strip.setPixelColor(i % 24, color)
+    strip.show()
+    time.sleep(0.1)
 
 
 def _run(strip, clock):
@@ -72,8 +89,7 @@ def _run(strip, clock):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            # function
-            clocks.get(clock)
+            clocks.get(clock)(strip)
         except KeyboardInterrupt:
             LOGGER.warn("KeyboardInterrupt.")
             exit()
@@ -91,6 +107,10 @@ def run_clock4(strip):
 
 def run_clock6(strip):
     _run(strip, 6)
+
+
+def run_clock7(strip):
+    _run(strip, 7)
 
 
 if __name__ == '__main__':
