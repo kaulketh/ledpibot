@@ -60,7 +60,7 @@ def run_clock5(strip):
                 strip.setPixelColor(pendulum[p_left], COLOR_SECOND)
                 p_left += 1
 
-            # pointer
+            # watch hand
             # hour
             if 12 < minute <= 23:
                 strip.setPixelColor(hour, COLOR_HOUR)
