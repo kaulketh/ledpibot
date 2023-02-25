@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # based on NeoPixel-60-Ring-Clock of Andy Doro
-# https://github.com/...
-# ...andydoro/NeoPixel-60-Ring-Clock/tree/master/neopixelringclock60
+# https://github.com/andydoro/NeoPixel-60-Ring-Clock
+
 
 __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
