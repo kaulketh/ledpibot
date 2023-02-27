@@ -41,6 +41,18 @@ class Colorizer:
         Colorizer.log.debug(f"Init instance of {self.__class__.__name__}.")
         if color_key is not None:
             self.run(color_key, None)
+            Colorizer.log.debug(f"Setup '{color_key}'.")
+
+    @property
+    def all_colors(self):
+        return list(self.__colors.keys())
+
+    def __function_loop(self, function):
+        Colorizer.log.debug(f"Running {function}")
+        from control import get_stop_flag
+        while not get_stop_flag():
+            function()
+        clear(self.__strip)
 
     def __start(self, color, brightness=None):
         try:
@@ -58,13 +70,42 @@ class Colorizer:
             Colorizer.log.error(f"An error occurs: {e}")
             exit()
 
-    @property
-    def all_colors(self):
-        return list(self.__colors.keys())
-
     def run(self, key, brightness):
         self.__color = self.__colors.get(key)
         self.__start(self.__color, brightness)
+
+    def fade(self):
+        def __fade():
+            for c in self.all_colors[2:]:
+                for i in range(
+                        set_brightness_depending_on_daytime(self.__strip)[1]):
+                    self.run(c, brightness=i)
+                    time.sleep(uniform(0.001, 0.05))
+                for i in range(
+                        set_brightness_depending_on_daytime(self.__strip)[1]):
+                    b = set_brightness_depending_on_daytime(self.__strip)[
+                            1] - i
+                    self.run(c, brightness=b)
+                    time.sleep(uniform(0.001, 0.05))
+
+        self.__function_loop(__fade)
+
+    def switch(self):
+        def __switch():
+            for c in self.all_colors[2:]:
+                self.run(c, None)
+                time.sleep(uniform(0.25, 1))
+
+        self.__function_loop(__switch)
+
+    def strobe(self):
+        def __strobe():
+            self.run('on', 255)
+            time.sleep(uniform(0.005, 0.05))
+            self.run('off', 0)
+            time.sleep(uniform(0.5, 3))
+
+        self.__function_loop(__strobe)
 
 
 def run_red(stripe):
@@ -96,45 +137,15 @@ def run_violet(stripe):
 
 
 def run_stroboscope(stripe):
-    from control import get_stop_flag
-    strobe = Colorizer(stripe)
-    while not get_stop_flag():
-        strobe.run('on', 255)
-        t = uniform(0.005, 0.05)
-        if get_stop_flag():
-            break
-        time.sleep(t)
-        strobe.run('off', 0)
-        t = uniform(0.5, 3)
-        if get_stop_flag():
-            break
-        time.sleep(t)
-    clear(stripe)
+    Colorizer(stripe).strobe()
 
 
 def run_demo(stripe):
-    from control import get_stop_flag
-    demo = Colorizer(stripe)
-    while not get_stop_flag():
-        for c in demo.all_colors[2:]:
-            demo.run(c, None)
-            time.sleep(uniform(0.25, 1))
-    clear(stripe)
+    Colorizer(stripe).switch()
 
 
 def run_demo2(stripe):
-    from control import get_stop_flag
-    demo2 = Colorizer(stripe)
-    while not get_stop_flag():
-        for c in demo2.all_colors[2:]:
-            for i in range(set_brightness_depending_on_daytime(stripe)[1]):
-                demo2.run(c, brightness=i)
-                time.sleep(uniform(0.001, 0.05))
-            for i in range(set_brightness_depending_on_daytime(stripe)[1]):
-                b = set_brightness_depending_on_daytime(stripe)[1] - i
-                demo2.run(c, brightness=b)
-                time.sleep(uniform(0.001, 0.05))
-    clear(stripe)
+    Colorizer(stripe).fade()
 
 
 if __name__ == '__main__':
