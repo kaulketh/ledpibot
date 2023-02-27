@@ -16,6 +16,7 @@ from logger import LOGGER
 
 
 class LightFunction(Thread):
+    log = LOGGER
     threads = []
     name = "LightFunction"
     is_clock = False
@@ -23,8 +24,6 @@ class LightFunction(Thread):
 
     def __init__(self, function, stripe, name=None, request_id=None, bot=None):
         super(LightFunction, self).__init__()
-        self._logger = LOGGER
-
         self.__function = function
         self.__stripe = stripe
         self.__f_name = \
@@ -47,7 +46,7 @@ class LightFunction(Thread):
         return self.__do_run
 
     def run(self):
-        self._logger.info(
+        LightFunction.log.info(
             f"Initialized '{self.__f_name}' from ID:{self.__chat_id}, "
             f"process: {self.__function}")
 
@@ -67,7 +66,7 @@ class LightFunction(Thread):
 
     def stop(self):
         self.__do_run = False
-        self._logger.info(
+        LightFunction.log.info(
             f"{self.__f_name}: {self.__stopped}: {self.__function}")
         self.__bot.external_request(m_stop_f.format(self.__f_name),
                                     reply_markup=None,
