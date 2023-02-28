@@ -87,14 +87,20 @@ class Clock:
         self.__show_hands()
 
     def __seven(self):
-        h = self.__h_hand / 2
-        m = self.__m_hand / 2
-        # right side, minutes, downwards
-        self.__color_hands(red=m, green=m, blue=m,
-                           hand_range=(0, 12))
+        if self.__h_hand / 2 == 0:
+            hour_hand_values = 1, 13
+        else:
+             hour_hand_values = self.__h_hand / 2, self.__strip.numPixels()
+        if self.__m_hand / 2 == 0:
+            minute_hand_values = 1, 1
+        else:
+            minute_hand_values = self.__m_hand / 2, 12
         # left side, hours, upwards
-        self.__color_hands(red=0, green=h, blue=h,
-                           hand_range=(12, self.__strip.numPixels()))
+        h, max_h = hour_hand_values
+        self.__color_hands(red=0, green=h, blue=h, hand_range=(12, max_h))
+        # right side, minutes, downwards
+        m, max_m = minute_hand_values
+        self.__color_hands(red=m, green=m, blue=m, hand_range=(0, max_m))
         self.__show_hands()
 
 
