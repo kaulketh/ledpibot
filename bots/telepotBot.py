@@ -14,11 +14,10 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
-from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, RUNNING, \
-    TOKEN_TELEGRAM_BOT, ID_CHAT_THK, commands, \
-    m_not_allowed, m_pls_select, m_rebooted, m_started, m_stopped, \
-    m_updated, m_wrong_id
-from control import run_thread, service, stop_threads
+from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, RUNNING, \
+    TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, m_rebooted, \
+    m_started, m_stopped, m_updated, m_wrong_id
+from control import peripheral_functions, run_thread, service, stop_threads
 from control.autoreboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER
@@ -200,7 +199,7 @@ class TelepotBot:
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
 
-        auto_reboot=f"Auto reboot enabled"
+        auto_reboot = f"Auto reboot enabled"
         self.__log.info(f"auto_reboot = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
@@ -213,9 +212,11 @@ class TelepotBot:
                 signal.pause()
             except KeyboardInterrupt:
                 self.__log.warning('Program interrupted')
+                peripheral_functions.get(3)()
                 exit()
             except Exception as e:
                 self.__log.error(f"Any error occurs: {e}")
+                peripheral_functions.get(3)()
                 exit()
 
 
@@ -224,4 +225,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    pass

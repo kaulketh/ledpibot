@@ -12,7 +12,7 @@ import threading
 from urllib3.exceptions import HTTPError
 
 from bots import *
-from control import wink_more_often
+from control import peripheral_functions
 from logger import LOGGER
 
 
@@ -24,7 +24,7 @@ def run():
 if __name__ == '__main__':
 
     try:
-        threading.Thread(target=wink_more_often).start()
+        threading.Thread(target=peripheral_functions.get(2)).start()
         run()
 
     except HTTPError as e:

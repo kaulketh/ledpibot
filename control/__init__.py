@@ -6,7 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import dictionary_functions, clear
+from functions import clear, dictionary_functions
 from .iron_man import *
 from .ledstrip import STRIP, set_brightness_depending_on_daytime
 from .lightfunction import LightFunction
@@ -69,3 +69,14 @@ def thread_function(dictionary, key):
         return dictionary[key]
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
+
+
+def off():
+    peripheral_functions.get(0)()
+    clear(STRIP)
+
+
+peripheral_functions = {0: iron_man.close_the_eyes,
+                        1: iron_man.open_the_eyes,
+                        2: iron_man.blink_more_often,
+                        3: off}
