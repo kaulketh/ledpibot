@@ -10,6 +10,7 @@ import codecs
 import signal
 
 import telepot
+from telegram.vendor.ptb_urllib3 import urllib3
 from telepot.loop import MessageLoop
 from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
@@ -210,14 +211,18 @@ class TelepotBot:
         while True:
             try:
                 signal.pause()
+            except (
+            ConnectionResetError, urllib3.exceptions.ProtocolError) as e:
+                self.__log.error(f"Connection error occurs: {e}")
+                exit()
             except KeyboardInterrupt:
                 self.__log.warning('Program interrupted')
-                peripheral_functions.get(3)()
                 exit()
             except Exception as e:
                 self.__log.error(f"Any error occurs: {e}")
-                peripheral_functions.get(3)()
                 exit()
+            finally:
+                peripheral_functions.get(3)()
 
 
 def main():
