@@ -11,7 +11,7 @@ import time
 from rpi_ws281x import *
 
 from config import LED_COUNT
-from control.ledstrip import set_brightness_depending_on_daytime
+from control.ledstrip import strip_setup
 from functions.effects import clear
 from logger import LOGGER
 
@@ -42,7 +42,7 @@ def run_clock5(strip):
     while not get_stop_flag():
         try:
             clear(strip)
-            now = set_brightness_depending_on_daytime(strip)[0]
+            now = strip_setup(strip)[0]
             hour = int(int(now.hour) % 12 * 2)
             minute = int(now.minute // 2.5)
 

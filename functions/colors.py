@@ -11,7 +11,7 @@ from random import uniform
 
 from rpi_ws281x import *
 
-from control.ledstrip import set_brightness_depending_on_daytime
+from control.ledstrip import strip_setup
 from functions.effects import clear
 from logger import LOGGER
 
@@ -57,7 +57,7 @@ class Colorizer:
     def __start(self, color, brightness=None):
         try:
             if brightness is None:
-                set_brightness_depending_on_daytime(self.__strip)
+                strip_setup(self.__strip)
             else:
                 self.__strip.setBrightness(brightness)
             for i in range(self.__strip.numPixels()):
@@ -78,12 +78,12 @@ class Colorizer:
         def __fade():
             for c in self.all_colors[2:]:
                 for i in range(
-                        set_brightness_depending_on_daytime(self.__strip)[1]):
+                        strip_setup(self.__strip)[1]):
                     self.run(c, brightness=i)
                     time.sleep(uniform(0.001, 0.05))
                 for i in range(
-                        set_brightness_depending_on_daytime(self.__strip)[1]):
-                    b = set_brightness_depending_on_daytime(self.__strip)[
+                        strip_setup(self.__strip)[1]):
+                    b = strip_setup(self.__strip)[
                             1] - i
                     self.run(c, brightness=b)
                     time.sleep(uniform(0.001, 0.05))

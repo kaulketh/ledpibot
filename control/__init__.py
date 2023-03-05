@@ -8,7 +8,7 @@ __status__ = "Production"
 
 from functions import clear, dictionary_functions
 from .iron_man import *
-from .ledstrip import STRIP, set_brightness_depending_on_daytime
+from .ledstrip import STRIP, strip_setup
 from .lightfunction import LightFunction
 
 ERROR = "An error occurred: "

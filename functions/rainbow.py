@@ -8,7 +8,7 @@ __status__ = "Production"
 
 import time
 
-from control.ledstrip import set_brightness_depending_on_daytime
+from control.ledstrip import strip_setup
 from functions.effects import wheel, clear
 from logger import LOGGER
 
@@ -18,7 +18,7 @@ def run_rainbow(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            set_brightness_depending_on_daytime(strip)
+            strip_setup(strip)
             for j in range(256 * 5):
                 if not get_stop_flag():
                     for i in range(strip.numPixels()):

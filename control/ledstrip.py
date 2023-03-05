@@ -65,7 +65,7 @@ class Strip:
         return self.__strip
 
 
-def set_brightness_depending_on_daytime(s: Adafruit_NeoPixel):
+def strip_setup(s: Adafruit_NeoPixel):
     return Strip.setup(s)
 
 
