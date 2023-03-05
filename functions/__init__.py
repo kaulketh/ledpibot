@@ -10,9 +10,9 @@ from config import commands
 from logger import LOGGER
 from .advent import run_advent
 from .candles import run_candles
-from .clock3 import run_clock3
 from .clock5 import run_clock5
-from .clocks import run_clock1, run_clock2, run_clock4, run_clock6, run_clock7
+from .clocks import run_clock1, run_clock2, run_clock3, run_clock4, \
+    run_clock6, run_clock7
 from .colors import run_blue, run_demo, run_demo2, run_green, run_orange, \
     run_red, run_stroboscope, run_violet, run_white, run_yellow
 from .effects import clear
