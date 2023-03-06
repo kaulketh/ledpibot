@@ -55,10 +55,9 @@ class Clock:
                 time.sleep(wait_ms)
 
     @classmethod
-    def gradually_increased_color(cls, intensity, pixel, red=.0, green=.0,
-                                  blue=.0):
+    def gradually_increased_color(cls, ints, pixel, red=.0, green=.0, blue=.0):
 
-        def gradually_increase(pxl, clr, i=intensity):
+        def gradually_increase(pxl, clr, i=ints):
             ret = int((pxl + 1) * (i / (clr + 1)))
             return ret if pxl <= clr else 0
 
@@ -193,7 +192,6 @@ class Clock:
         Clock.wipe_second(self.__strip,
                           Clock.COLORS.get(2).get("minute_dimmed"),
                           self.__m_hand - 1, backward=True)
-        clear(self.__strip)
 
     def _three(self):
         c_h_3 = Clock.COLORS.get(3).get("hour")
@@ -268,7 +266,6 @@ class Clock:
         c_m_5 = Clock.COLORS.get(5).get("minute")
         c_h_5 = Clock.COLORS.get(5).get("hour")
         c_h_5_dimmed = Clock.COLORS.get(5).get("hour_dimmed")
-        clear(self.__strip)
         global __pendulum, __p_right, __p_left
         for i in range(len(__pendulum)):
             self.__strip.setPixelColor(__pendulum[i], c_s_5_dimmed)
