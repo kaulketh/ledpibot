@@ -17,23 +17,25 @@ from functions.effects import clear
 from logger import LOGGER
 
 
+class _AttribDict(dict):
+    __slots__ = ()
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
+
+
 # noinspection PyGlobalUndefined
 class Clock:
     log = LOGGER
     REFRESH = .1
-    COLORS = {
-        1: {"hour": Color(200, 0, 0), "minute": Color(0, 0, 200),
-            "second": Color(92, 67, 6)},
-        2: {"hour": Color(200, 0, 0), "minute": Color(0, 0, 200),
-            "hour_dimmed": Color(50, 0, 0),
-            "minute_dimmed": Color(0, 0, 40)},
-        3: {"hour": Color(200, 0, 0), "minute": Color(0, 0, 200),
-            "second": Color(6, 30, 10),
-            "minute_dimmed": Color(0, 0, 40)},
-        5: {"hour": Color(200, 0, 0), "minute": Color(0, 0, 200),
-            "second": Color(92, 67, 6), "hour_dimmed": Color(50, 0, 0),
-            "second_dimmed": Color(92 // 4, 67 // 4, 6 // 4)}
-    }
+    COLORS = _AttribDict({
+        "red": Color(200, 0, 0),  # hour
+        "blue": Color(0, 0, 200),  # minute
+        "yellow": Color(92, 67, 6),  # second
+        "less_intense_red": Color(50, 0, 0),
+        "less_intense_blue": Color(0, 0, 40),
+        "less_intense_green_second": Color(6, 30, 10),
+        "less_intense_yellow": Color(92 // 4, 67 // 4, 6 // 4)
+    })
 
     @classmethod
     def wipe_second(cls, stripe, color: Color, begin=0, backward=False):
@@ -88,7 +90,7 @@ class Clock:
         __p_right = len(__pendulum) - 1
 
         Clock.log.debug(f"Initialize instance of {self.__class__.__name__}"
-                        f": Clock {self.__clock_type} is now running.")
+                        f", type {self.__clock_type} should run.")
         from control import get_stop_flag
         while not get_stop_flag():
             try:
@@ -103,20 +105,11 @@ class Clock:
         clear(self.__strip)
 
     @property
-    def __hands(self, test=False):
-        if test:
-            import datetime
-            datetime_str = "2023-03-05 12:01:30"
-            now = datetime.datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-            Clock.log.warning(f"Test-datetime: {now}")
-        else:
-            now = strip_setup(self.__strip)[0]
+    def __hands(self):
+        now = strip_setup(self.__strip)[0]
         second_value = int(round(now.second / 2.5))
         minute_value = int(now.minute // 2.5)
         hour_value = int(int(now.hour) % 12 * 2)
-        if test:
-            Clock.log.warning(
-                f"Test-values: {second_value}, {minute_value}, {hour_value}")
         return hour_value, minute_value, second_value
 
     def __gic(self, red, green, blue, hand_range, intensity):
@@ -156,48 +149,39 @@ class Clock:
         else:
             self.__strip.setPixelColor(self.__m_hand, minute_color)
 
-    def __show_strip_btwn_6nd12(self, hour_color, minute_color,
-                                hour_color_dimmed):
+    def __show_strip_btwn_6nd12(self, hour_color, minute_color, hour_dimmed):
         if 12 < self.__m_hand <= 23:
             self.__strip.setPixelColor(self.__h_hand, hour_color)
-            self.__strip.setPixelColor(self.__h_hand + 1, hour_color_dimmed)
+            self.__strip.setPixelColor(self.__h_hand + 1, hour_dimmed)
         else:
             self.__strip.setPixelColor(self.__h_hand, hour_color)
         self.__expanded_minute_hand(hour_color, minute_color)
         self.__strip.show()
 
     def _one(self):
-        c_h_1 = Clock.COLORS.get(1).get("hour")
-        c_m_1 = Clock.COLORS.get(1).get("minute")
-        c_s_1 = Clock.COLORS.get(1).get("second")
         for i in range(0, self.__strip.numPixels(), 1):
-            self.__strip.setPixelColor(self.__h_hand, c_h_1)
-            self.__expanded_minute_hand(c_h_1, c_m_1)
+            self.__strip.setPixelColor(self.__h_hand, Clock.COLORS.red)
+            self.__expanded_minute_hand(Clock.COLORS.red, Clock.COLORS.blue)
             if i == self.__s_hand:
-                self.__strip.setPixelColor(i, c_s_1)
+                self.__strip.setPixelColor(i, Clock.COLORS.yellow)
             else:
                 self.__strip.setPixelColor(i, Color(0, 0, 0))
         self.__strip.show()
         time.sleep(Clock.REFRESH)
 
     def _two(self):
-        c_h_2 = Clock.COLORS.get(2).get("hour")
-        c_m_2 = Clock.COLORS.get(2).get("minute")
-        c_h_2_dimmed = Clock.COLORS.get(2).get("hour_dimmed")
         next_minute = self.__m_hand + 1 if self.__m_hand <= 22 else 0
         while not self.__m_hand == next_minute:
-            self.__show_strip_btwn_6nd12(c_h_2, c_m_2, c_h_2_dimmed)
+            self.__show_strip_btwn_6nd12(Clock.COLORS.red,
+                                         Clock.COLORS.blue,
+                                         Clock.COLORS.less_intense_red)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
         Clock.wipe_second(self.__strip,
-                          Clock.COLORS.get(2).get("minute_dimmed"),
+                          Clock.COLORS.less_intense_blue,
                           self.__m_hand - 1, backward=True)
 
     def _three(self):
-        c_h_3 = Clock.COLORS.get(3).get("hour")
-        c_m_3 = Clock.COLORS.get(3).get("minute")
-        c_m_3_dimmed = Clock.COLORS.get(3).get("minute_dimmed")
-        c_s_3 = Clock.COLORS.get(3).get("second")
 
         def dial(stripe):
             _dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
@@ -209,33 +193,35 @@ class Clock:
                 stripe.setPixelColorRGB(_l, r // div, g // div, b // div)
 
         def hour(led, stripe):
-            stripe.setPixelColor(led, c_h_3)
+            stripe.setPixelColor(led, Clock.COLORS.red)
 
         def set_minute_led_before_and_after(stripe, led):
-            stripe.setPixelColor(led - 1, c_m_3_dimmed)
-            stripe.setPixelColor(led + 1, c_m_3_dimmed)
+            stripe.setPixelColor(led - 1, Clock.COLORS.less_intense_blue)
+            stripe.setPixelColor(led + 1, Clock.COLORS.less_intense_blue)
 
         def minute(led, led_hour, stripe):
             if led < stripe.numPixels():
                 if led == led_hour:
                     set_minute_led_before_and_after(stripe, led)
                 else:
-                    stripe.setPixelColor(led, c_m_3)
+                    stripe.setPixelColor(led, Clock.COLORS.blue)
             if led >= stripe.numPixels():
                 if led == led_hour:
                     set_minute_led_before_and_after(stripe, led_hour)
-                    stripe.setPixelColor(0, c_m_3)
+                    stripe.setPixelColor(0, Clock.COLORS.blue)
                 else:
-                    stripe.setPixelColor(0, c_m_3)
+                    stripe.setPixelColor(0, Clock.COLORS.blue)
             else:
-                stripe.setPixelColor(led, c_m_3)
+                stripe.setPixelColor(led, Clock.COLORS.blue)
 
         def seconds(leds_per_2500ms, stripe):
             for led in range(0, leds_per_2500ms, 1):
                 if 0 < (led + 1) < stripe.numPixels():
-                    stripe.setPixelColor(led + 1, c_s_3)
+                    stripe.setPixelColor(
+                        led + 1, Clock.COLORS.less_intense_green_second)
                 if (led + 1) == stripe.numPixels():
-                    stripe.setPixelColor(0, c_s_3)
+                    stripe.setPixelColor(
+                        0, Clock.COLORS.less_intense_green_second)
 
         dial(self.__strip)
         seconds(self.__s_hand, self.__strip)
@@ -261,25 +247,25 @@ class Clock:
         time.sleep(Clock.REFRESH)
 
     def _five(self):
-        c_s_5 = Clock.COLORS.get(5).get("second")
-        c_s_5_dimmed = Clock.COLORS.get(5).get("second_dimmed")
-        c_m_5 = Clock.COLORS.get(5).get("minute")
-        c_h_5 = Clock.COLORS.get(5).get("hour")
-        c_h_5_dimmed = Clock.COLORS.get(5).get("hour_dimmed")
         global __pendulum, __p_right, __p_left
         for i in range(len(__pendulum)):
-            self.__strip.setPixelColor(__pendulum[i], c_s_5_dimmed)
+            self.__strip.setPixelColor(
+                __pendulum[i], Clock.COLORS.less_intense_yellow)
         if __p_left >= len(__pendulum) - 1:
             if __p_right <= 0:
                 __p_right = len(__pendulum) - 1
                 __p_left = 0
             else:
-                self.__strip.setPixelColor(__pendulum[__p_right], c_s_5)
+                self.__strip.setPixelColor(
+                    __pendulum[__p_right], Clock.COLORS.yellow)
                 __p_right -= 1
         else:
-            self.__strip.setPixelColor(__pendulum[__p_left], c_s_5)
+            self.__strip.setPixelColor(
+                __pendulum[__p_left], Clock.COLORS.yellow)
             __p_left += 1
-        self.__show_strip_btwn_6nd12(c_h_5, c_m_5, c_h_5_dimmed)
+        self.__show_strip_btwn_6nd12(Clock.COLORS.red,
+                                     Clock.COLORS.blue,
+                                     Clock.COLORS.less_intense_red)
         global __wait_ms
         time.sleep(__wait_ms)
 
@@ -302,8 +288,12 @@ class Clock:
             hour_hand_values = self.__h_hand / 2, self.__strip.numPixels()
         if self.__m_hand / 2 == 0:
             minute_hand_values = 1, 1
+
         else:
             minute_hand_values = self.__m_hand / 2, 12
+        self.__gic(red=0, green=0, blue=0,
+                   hand_range=(0, self.__strip.numPixels()),
+                   intensity=100)
         m, max_m = minute_hand_values
         self.__gic(red=m, green=m, blue=m,
                    hand_range=(0, max_m),
