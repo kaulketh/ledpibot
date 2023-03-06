@@ -17,6 +17,7 @@ from functions.effects import clear
 from logger import LOGGER
 
 
+# noinspection PyGlobalUndefined
 class Clock:
     log = LOGGER
     REFRESH = .1
@@ -67,6 +68,11 @@ class Clock:
         return Color(r, g, b)
 
     def __init__(self, strip: Adafruit_NeoPixel, clock: int):
+        self.__strip = strip
+        self.__clock_type = clock
+        self.__h_hand = None
+        self.__m_hand = None
+        self.__s_hand = None
         self.__clock_types = {1: self._one,
                               2: self._two,
                               3: self._three,
@@ -74,11 +80,14 @@ class Clock:
                               5: self._five,
                               6: self._six,
                               7: self._seven}
-        self.__strip = strip
-        self.__clock_type = clock
-        self.__h_hand = None
-        self.__m_hand = None
-        self.__s_hand = None
+
+        global __pendulum, __wait_ms, __p_right, __p_left
+        __pendulum = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                      13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0]
+        __wait_ms = 1 / len(__pendulum)
+        __p_left = 0
+        __p_right = len(__pendulum) - 1
+
         Clock.log.debug(f"Initialize instance of {self.__class__.__name__}"
                         f": Clock {self.__clock_type} is now running.")
         from control import get_stop_flag
@@ -95,14 +104,20 @@ class Clock:
         clear(self.__strip)
 
     @property
-    def __hands(self):
-        now = strip_setup(self.__strip)[0]
+    def __hands(self, test=False):
+        if test:
+            import datetime
+            datetime_str = "2023-03-05 12:01:30"
+            now = datetime.datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+            Clock.log.warning(f"Test-datetime: {now}")
+        else:
+            now = strip_setup(self.__strip)[0]
         second_value = int(round(now.second / 2.5))
         minute_value = int(now.minute // 2.5)
-        # hour_value = int(now.hour)
-        # hour_value = hour_value % 12 * 2
-        # hour_value = int((hour_value * 24 + minute_value) / 24)
         hour_value = int(int(now.hour) % 12 * 2)
+        if test:
+            Clock.log.warning(
+                f"Test-values: {second_value}, {minute_value}, {hour_value}")
         return hour_value, minute_value, second_value
 
     def __gic(self, red, green, blue, hand_range, intensity):
@@ -142,14 +157,24 @@ class Clock:
         else:
             self.__strip.setPixelColor(self.__m_hand, minute_color)
 
+    def __show_strip_btwn_6nd12(self, hour_color, minute_color,
+                                hour_color_dimmed):
+        if 12 < self.__m_hand <= 23:
+            self.__strip.setPixelColor(self.__h_hand, hour_color)
+            self.__strip.setPixelColor(self.__h_hand + 1, hour_color_dimmed)
+        else:
+            self.__strip.setPixelColor(self.__h_hand, hour_color)
+        self.__expanded_minute_hand(hour_color, minute_color)
+        self.__strip.show()
+
     def _one(self):
         c_h_1 = Clock.COLORS.get(1).get("hour")
         c_m_1 = Clock.COLORS.get(1).get("minute")
         c_s_1 = Clock.COLORS.get(1).get("second")
         for i in range(0, self.__strip.numPixels(), 1):
-            self.__strip.setPixelColor(self.__h_hand, c_h_1)  # hour
-            self.__expanded_minute_hand(c_h_1, c_m_1)  # minute
-            if i == self.__s_hand:  # second
+            self.__strip.setPixelColor(self.__h_hand, c_h_1)
+            self.__expanded_minute_hand(c_h_1, c_m_1)
+            if i == self.__s_hand:
                 self.__strip.setPixelColor(i, c_s_1)
             else:
                 self.__strip.setPixelColor(i, Color(0, 0, 0))
@@ -162,14 +187,7 @@ class Clock:
         c_h_2_dimmed = Clock.COLORS.get(2).get("hour_dimmed")
         next_minute = self.__m_hand + 1 if self.__m_hand <= 22 else 0
         while not self.__m_hand == next_minute:
-            # hour
-            if 12 < self.__m_hand <= 23:
-                self.__strip.setPixelColor(self.__h_hand, c_h_2)
-                self.__strip.setPixelColor(self.__h_hand + 1, c_h_2_dimmed)
-            else:
-                self.__strip.setPixelColor(self.__h_hand, c_h_2)
-            self.__expanded_minute_hand(c_h_2, c_m_2)  # minute
-            self.__strip.show()
+            self.__show_strip_btwn_6nd12(c_h_2, c_m_2, c_h_2_dimmed)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
         Clock.wipe_second(self.__strip,
@@ -187,7 +205,7 @@ class Clock:
             _dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
             # _dial = [0, 6, 12, 18]  # quarter only
             for _l in _dial:
-                # warm yellow (
+                # warm yellow
                 r, g, b = 195, 125, 30
                 div = 10
                 stripe.setPixelColorRGB(_l, r // div, g // div, b // div)
@@ -245,7 +263,28 @@ class Clock:
         time.sleep(Clock.REFRESH)
 
     def _five(self):
-        pass
+        c_s_5 = Clock.COLORS.get(5).get("second")
+        c_s_5_dimmed = Clock.COLORS.get(5).get("second_dimmed")
+        c_m_5 = Clock.COLORS.get(5).get("minute")
+        c_h_5 = Clock.COLORS.get(5).get("hour")
+        c_h_5_dimmed = Clock.COLORS.get(5).get("hour_dimmed")
+        clear(self.__strip)
+        global __pendulum, __p_right, __p_left
+        for i in range(len(__pendulum)):
+            self.__strip.setPixelColor(__pendulum[i], c_s_5_dimmed)
+        if __p_left >= len(__pendulum) - 1:
+            if __p_right <= 0:
+                __p_right = len(__pendulum) - 1
+                __p_left = 0
+            else:
+                self.__strip.setPixelColor(__pendulum[__p_right], c_s_5)
+                __p_right -= 1
+        else:
+            self.__strip.setPixelColor(__pendulum[__p_left], c_s_5)
+            __p_left += 1
+        self.__show_strip_btwn_6nd12(c_h_5, c_m_5, c_h_5_dimmed)
+        global __wait_ms
+        time.sleep(__wait_ms)
 
     def _six(self):
         if self.__h_hand == 0:
@@ -268,12 +307,10 @@ class Clock:
             minute_hand_values = 1, 1
         else:
             minute_hand_values = self.__m_hand / 2, 12
-        # right side, minutes, downwards
         m, max_m = minute_hand_values
         self.__gic(red=m, green=m, blue=m,
                    hand_range=(0, max_m),
                    intensity=100)
-        # left side, hours, upwards
         h, max_h = hour_hand_values
         self.__gic(red=0, green=h, blue=h,
                    hand_range=(12, max_h),
@@ -297,6 +334,10 @@ def run_clock3(strip):
 
 def run_clock4(strip):
     Clock(strip, 4)
+
+
+def run_clock5(strip):
+    Clock(strip, 5)
 
 
 def run_clock6(strip):
