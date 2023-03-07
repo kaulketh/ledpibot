@@ -6,5 +6,4 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from .telegramBot import *
-from .telepotBot import *
+from .telepot_bot import *
