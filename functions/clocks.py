@@ -14,7 +14,7 @@ import time
 from rpi_ws281x import *
 
 from control.ledstrip import strip_setup
-from functions.effects import clear
+from functions.effects import clear, wipe_second
 from logger import LOGGER
 
 
@@ -37,37 +37,6 @@ class Clock:
         "less_intense_green_second": Color(6, 30, 10),
         "less_intense_yellow": Color(92 // 4, 67 // 4, 6 // 4)
     })
-
-    @classmethod
-    def wipe_second(cls, stripe, color: Color, begin=0, backward=False):
-        wait_ms = ((1_000.0 // stripe.numPixels()) // 2) / 1_000.0 \
-            if backward else (1_000.0 // stripe.numPixels()) / 1_000.0
-
-        for i in range(begin + 1, stripe.numPixels() + begin):
-            if i >= stripe.numPixels():
-                i -= stripe.numPixels()
-            stripe.setPixelColor(i, color)
-            stripe.show()
-            time.sleep(wait_ms)
-        if backward:
-            for i in range(stripe.numPixels() + begin - 1, begin, -1):
-                if i >= stripe.numPixels():
-                    i -= stripe.numPixels()
-                stripe.setPixelColor(i, Color(0, 0, 0))
-                stripe.show()
-                time.sleep(wait_ms)
-
-    @classmethod
-    def gradually_increased_color(cls, ints, pixel, red=.0, green=.0, blue=.0):
-
-        def gradually_increase(pxl, clr, i=ints):
-            ret = int((pxl + 1) * (i / (clr + 1)))
-            return ret if pxl <= clr else 0
-
-        r = gradually_increase(pixel, red) if red > 0 else 0
-        g = gradually_increase(pixel, green) if green > 0 else 0
-        b = gradually_increase(pixel, blue) if blue > 0 else 0
-        return Color(r, g, b)
 
     def __init__(self, strip: Adafruit_NeoPixel, clock: int):
         self.__strip = strip
@@ -109,7 +78,7 @@ class Clock:
     def __hands(self):
         now = strip_setup(self.__strip)[0]
         second_value = int(round(now.second / 2.5))
-        minute_value = int(now.minute // 2.5)
+        minute_value = int(now.minute / 2.5)
         hour_value = int(int(now.hour) % 12 * 2)
         return hour_value, minute_value, second_value
 
@@ -117,10 +86,18 @@ class Clock:
         """
         gradually increased color hands
         """
+
+        def __color(ints, pixel, r=.0, g=.0, b=.0):
+            def color_part(pxl, clr):
+                ret = int((pxl + 1) * (ints / (clr + 1)))
+                return ret if pxl <= clr else 0
+
+            return color_part(pixel, r) if r > 0 else 0, \
+                   color_part(pixel, g) if g > 0 else 0, \
+                   color_part(pixel, b) if b > 0 else 0
+
         for i in range(hand_range[0], hand_range[1]):
-            c = Clock.gradually_increased_color(intensity,
-                                                i - hand_range[0],
-                                                red, green, blue)
+            c = __color(intensity, i - hand_range[0], red, green, blue)
             self.__strip.setPixelColor(i % 24, c)
 
     def __twelfth_hour(self, red, green, blue, *color_of_twelve):
@@ -178,9 +155,9 @@ class Clock:
                                          Clock.COLORS.less_intense_red)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
-        Clock.wipe_second(self.__strip,
-                          Clock.COLORS.less_intense_blue,
-                          self.__m_hand - 1, backward=True)
+        wipe_second(self.__strip, Clock.COLORS.less_intense_blue,
+                    self.__m_hand - 1, backward=True)
+        clear(self.__strip)
 
     def _three(self):
 
