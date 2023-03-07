@@ -8,6 +8,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import inspect
 import time
 
 from rpi_ws281x import *
@@ -89,8 +90,8 @@ class Clock:
         __p_left = 0
         __p_right = len(__pendulum) - 1
 
-        Clock.log.debug(f"Initialize instance of {self.__class__.__name__}"
-                        f", type {self.__clock_type} should run.")
+        Clock.log.debug(f"Initialize instance of {self.__class__.__name__}")
+        Clock.log.debug(f"Call: {inspect.stack()[1].function}")
         from control import get_stop_flag
         while not get_stop_flag():
             try:

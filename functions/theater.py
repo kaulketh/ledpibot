@@ -6,15 +6,17 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import inspect
+
 from rpi_ws281x import *
 
 from control.ledstrip import strip_setup
-from functions.effects import color_wipe_full, theater_chase, clear
+from functions.effects import clear, color_wipe_full, theater_chase
 from logger import LOGGER
 
 
 def run_theater(strip):
-    LOGGER.debug("running...")
+    LOGGER.debug(f"Call: {inspect.stack()[0].function}")
     from control import get_stop_flag
     while not get_stop_flag():
         try:

@@ -10,14 +10,13 @@ import codecs
 import signal
 
 import telepot
-from telegram.vendor.ptb_urllib3 import urllib3
 from telepot.loop import MessageLoop
 from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
-from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, RUNNING, \
-    TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, m_rebooted, \
-    m_started, m_stopped, m_updated, m_wrong_id
+from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
+    RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
+    m_rebooted, m_started, m_stopped, m_updated, m_wrong_id
 from control import peripheral_functions, run_thread, service, stop_threads
 from control.autoreboot import AutoReboot
 from control.update import update_bot
@@ -211,10 +210,6 @@ class TelepotBot:
         while True:
             try:
                 signal.pause()
-            except (
-            ConnectionResetError, urllib3.exceptions.ProtocolError) as e:
-                self.__log.error(f"Connection error occurs: {e}")
-                exit()
             except KeyboardInterrupt:
                 self.__log.warning('Program interrupted')
                 exit()

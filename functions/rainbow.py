@@ -6,6 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import inspect
 import time
 
 from control.ledstrip import strip_setup
@@ -14,7 +15,7 @@ from logger import LOGGER
 
 
 def run_rainbow(strip):
-    LOGGER.debug("running...")
+    LOGGER.debug(f"Call: {inspect.stack()[0].function}")
     from control import get_stop_flag
     while not get_stop_flag():
         try:

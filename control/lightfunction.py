@@ -19,7 +19,6 @@ class LightFunction(Thread):
     log = LOGGER
     threads = []
     name = "LightFunction"
-    is_clock = False
     SECONDS_PER_DAY = 86_400
 
     def __init__(self, function, stripe, name=None, request_id=None, bot=None):
@@ -30,7 +29,6 @@ class LightFunction(Thread):
             function.__name__ if name is None else name
         self.__chat_id = request_id
         self.__bot = bot
-
         self.__do_run = True
         self.__stopped = "Stop requested, stopped"
 

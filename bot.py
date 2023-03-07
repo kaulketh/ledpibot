@@ -9,7 +9,7 @@ __doc__ = "Call your preferred class here."
 
 import threading
 
-from urllib3.exceptions import HTTPError
+from urllib3.exceptions import HTTPError, ProtocolError
 
 from bots import *
 from control import peripheral_functions
@@ -26,7 +26,8 @@ if __name__ == '__main__':
     try:
         threading.Thread(target=peripheral_functions.get(2)).start()
         run()
-
-    except HTTPError as e:
-        LOGGER.error("HTTP Error occurs!", e)
+    except (ConnectionResetError, ProtocolError, HTTPError) as e:
+        LOGGER.error(f"Connection error occurs: {e}")
         exit()
+    finally:
+        peripheral_functions.get(3)()

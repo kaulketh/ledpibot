@@ -6,6 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import inspect
 import time
 from random import uniform
 
@@ -39,16 +40,16 @@ class Colorizer:
         }
         self.__color = None
         Colorizer.log.debug(f"Init instance of {self.__class__.__name__}.")
+        Colorizer.log.debug(f"Call: {inspect.stack()[1].function}")
         if color_key is not None:
             self.run(color_key, None)
-            Colorizer.log.debug(f"Setup '{color_key}'.")
 
     @property
     def all_colors(self):
         return list(self.__colors.keys())
 
     def __function_loop(self, function):
-        Colorizer.log.debug(f"Running {function}")
+        Colorizer.log.debug(f"Running loop: {inspect.stack()[1].function}")
         from control import get_stop_flag
         while not get_stop_flag():
             function()

@@ -26,7 +26,7 @@ class Singleton(_Singleton('SingletonMeta', (object,), {})):
 class _LoggerMeta(type, Singleton):
     NAME = "LedPi"
     FOLDER_PATH = "../logs"
-    ADDITIONAL_DEBUG_LOG = True
+    ADDITIONAL_DEBUG_LOG = False
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     """Runtime location"""

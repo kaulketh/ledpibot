@@ -21,7 +21,7 @@ class Advent:
     logger = LOGGER
     CANDLE = Candle.RED, Candle.GREEN, Candle.BLUE
     ADVENT = 255, 30, 0  # advent RGB
-    ZERO = 210, 70, 0  # first LED
+    ZERO = (210, 70, 0)  # first LED
     NAD = [27, 28, 29, 30]  # November advent days
     WRONG = f"Wrong period to show xmas/advent animation, " \
             f"it\'s {time.strftime('%A, %d.%B %Y')}!"
@@ -57,9 +57,7 @@ class Advent:
                 while count > 0:
                     Advent.logger.warning(Advent.WRONG)
                     count -= 1
-                theater_chase(self.__strip, Color(Advent.ZERO[0],
-                                                  Advent.ZERO[1],
-                                                  Advent.ZERO[2]))
+                theater_chase(self.__strip, Color(*Advent.ZERO))
         peripheral_functions.get(3)
 
     def __calendar(self):
