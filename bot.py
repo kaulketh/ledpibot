@@ -5,7 +5,7 @@ __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
-__doc__ = "Call instance of bot bot_framework class."
+__doc__ = "Call instance of framework class."
 
 import threading
 
