@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-# took over from NeoPixel library strandtest example
+# taken over from NeoPixel library strandtest example
+# origin by Tony DiCola
 
-__author___ = "Tony DiCola"
-__email__ = "tony@tonydicola.com"
-__maintainer__ = "Thomas Kaulke, kaulketh@gmail.com"
+__author__ = "Thomas Kaulke"
+__maintainer__ = "Thomas Kaulke"
+__email__ = "kaulketh@gmail.com"
 __status__ = "Production"
 
 import time
@@ -88,6 +89,24 @@ def theater_chase_rainbow(strip, wait_ms=50):
             time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
+
+
+def wipe_second(strip, color: Color, begin=0, backward=False):
+    wait_ms = ((1_000.0 // strip.numPixels()) // 2) / 1_000.0 \
+        if backward else (1_000.0 // strip.numPixels()) / 1_000.0
+    for i in range(begin + 1, strip.numPixels() + begin):
+        if i >= strip.numPixels():
+            i -= strip.numPixels()
+        strip.setPixelColor(i, color)
+        strip.show()
+        time.sleep(wait_ms)
+    if backward:
+        for i in range(strip.numPixels() + begin - 1, begin, -1):
+            if i >= strip.numPixels():
+                i -= strip.numPixels()
+            strip.setPixelColor(i, Color(0, 0, 0))
+            strip.show()
+            time.sleep(wait_ms)
 
 
 if __name__ == '__main__':

@@ -12,38 +12,57 @@ import time
 from config import IP_MASK_IRONMAN, PORT_MASK_IRONMAN
 from logger import LOGGER
 
-WEB_SERVER_IP = IP_MASK_IRONMAN
-WEB_SERVER_PORT = PORT_MASK_IRONMAN
-# noinspection HttpUrlsUsage
-CURL = f"curl --silent --output nul " \
-       f"http://{WEB_SERVER_IP}:{WEB_SERVER_PORT}" \
-       f"/?mode="
-OFF = "0 &"
-ON = "1 &"
+
+class IronMan:
+    logger = LOGGER
+    IP = IP_MASK_IRONMAN
+    PORT = PORT_MASK_IRONMAN
+
+    def __init__(self):
+        self.__ip = IronMan.IP
+        self.__port = IronMan.PORT
+        # noinspection HttpUrlsUsage
+        self.__curl = f"curl --silent --output nul " \
+                      f"http://{self.__ip}:{self.__port}" \
+                      f"/?mode="
+        self.__on = "1 &"
+        self.__off = "0 &"
+        IronMan.logger.debug(
+            f"Initialize instance of {self.__class__.__name__}")
+
+    def open(self):
+        IronMan.logger.debug("Iron Man opens the eyes.")
+        os.system(f"{self.__curl}{self.__on}")
+
+    def close(self):
+        IronMan.logger.debug("Iron Man closes the eyes.")
+        os.system(f"{self.__curl}{self.__off}")
+
+    def blink(self, times: int, opened: float, closed: float):
+        count = times
+        IronMan.logger.debug(f"Iron Man {count} times blinks with eyes.")
+        while count > 0:
+            os.system(f"{self.__curl}{self.__on}")
+            time.sleep(opened)
+            os.system(f"{self.__curl}{self.__off}")
+            time.sleep(closed)
+            count -= 1
 
 
 def close_the_eyes():
-    LOGGER.info("Iron Man closes the eyes.")
-    os.system(f"{CURL}{OFF}")
+    IronMan().close()
 
 
 def open_the_eyes():
-    LOGGER.info("Iron Man opens the eyes.")
-    os.system(f"{CURL}{ON}")
+    IronMan().open()
 
 
-def wink_more_often():
-    wink_w_eyes(20, .07, .15)
+def blink_more_often():
+    IronMan().blink(20, .07, .15)
 
 
-def wink_w_eyes(wink=5, opened=.5, closed=.25):
-    LOGGER.info(f"Iron Man {wink} times winks with eyes.")
-    while wink > 0:
-        os.system(f"{CURL}1 &")
-        time.sleep(opened)
-        os.system(f"{CURL}0 &")
-        time.sleep(closed)
-        wink -= 1
+def blink_w_eyes(times=5, opened=.5, closed=.25):
+    IronMan().blink(times, opened, closed)
 
 
 if __name__ == '__main__':

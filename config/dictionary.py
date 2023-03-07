@@ -197,13 +197,7 @@ texts = {
 }
 
 
-def build_text_libraries():
-    LOGGER.debug("Initialize text libraries of possible languages.")
-    for k in languages.keys():
-        assign_texts(k)
-
-
-def assign_texts(lng_key: str):
+def __assign_texts(lng_key: str):
     """
     Assignment of the texts to the messages/commands according to language
 
@@ -233,6 +227,12 @@ def assign_texts(lng_key: str):
     global assignment
     assignment = languages
     LOGGER.debug(f"{languages[lng_key].get(NAME)} text library built.")
+
+
+def build_text_libraries():
+    LOGGER.debug("Initialize text libraries of possible languages.")
+    for k in languages.keys():
+        __assign_texts(k)
 
 
 def set_language(lng=EN):

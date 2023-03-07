@@ -16,6 +16,7 @@ from control.service import reboot_device
 
 class AutoReboot(LightFunction):
     name = "Auto Reboot"
+    log = LightFunction.log
 
     def __init__(self, reboot_time: str, bot):
         self.__hour = reboot_time[:2]
@@ -25,7 +26,7 @@ class AutoReboot(LightFunction):
         self.__ONE_MINUTE = 60  # check interval
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
-        self._logger.debug(f"Initialized {self}")
+        AutoReboot.log.debug(f"Initialized {self}")
 
     def __time_to_reboot(self):
         h = datetime.datetime.now().hour
@@ -40,26 +41,26 @@ class AutoReboot(LightFunction):
         return hr and mr, c
 
     def run(self):
-        self._logger.info(
+        AutoReboot.log.info(
             f"{self.name} scheduled: "
             f"{self.__hour}:"
             f"{self.__minute}:"
             f"{datetime.datetime.now().second}")
 
         while not self.__time_to_reboot()[0]:
-            self._logger.debug(
+            AutoReboot.log.debug(
                 f"reboot time not yet reached, "
                 f"recheck in {self.__ONE_MINUTE} seconds")
             time.sleep(self.__ONE_MINUTE)
-        self._logger.debug(f"reboot takes place in 1 minute")
+        AutoReboot.log.debug(f"reboot takes place in 1 minute")
         time.sleep(self.__ONE_MINUTE)
-        self._logger.info("try to force reboot device")
+        AutoReboot.log.info("try to force reboot device")
 
         try:
             self.__bot.external_request(msg=f"{self.name}\n{m_rebooted}",
                                         bot=self.__bot)
         except ConnectionResetError as cre:
-            self._logger.error(f"{cre}")
+            AutoReboot.log.error(f"{cre}")
         finally:
             reboot_device(self.name)
 
