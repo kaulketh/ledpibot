@@ -26,7 +26,7 @@ admins = [ID_CHAT_THK]
 
 
 class TelepotBot:
-    """ Bot class using telepot bot_framework
+    """ Bot class using telepot framework
         (https://telepot.readthedocs.io),
         Python >= 3
     """
