@@ -84,20 +84,20 @@ class Clock:
 
     def __gic(self, red, green, blue, hand_range, intensity):
         """
-        gradually increased color hands
+        Gradual increase of color intensity of clock hands
         """
 
-        def __color(ints, pixel, r=.0, g=.0, b=.0):
+        def _color(ints, pixel, r=.0, g=.0, b=.0):
             def color_part(pxl, clr):
                 ret = int((pxl + 1) * (ints / (clr + 1)))
                 return ret if pxl <= clr else 0
 
-            return color_part(pixel, r) if r > 0 else 0, \
-                   color_part(pixel, g) if g > 0 else 0, \
-                   color_part(pixel, b) if b > 0 else 0
+            return Color(color_part(pixel, r) if r > 0 else 0,
+                         color_part(pixel, g) if g > 0 else 0,
+                         color_part(pixel, b) if b > 0 else 0)
 
         for i in range(hand_range[0], hand_range[1]):
-            c = __color(intensity, i - hand_range[0], red, green, blue)
+            c = _color(intensity, i - hand_range[0], red, green, blue)
             self.__strip.setPixelColor(i % 24, c)
 
     def __twelfth_hour(self, red, green, blue, *color_of_twelve):
