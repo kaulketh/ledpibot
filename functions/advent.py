@@ -13,7 +13,7 @@ from random import randint
 from rpi_ws281x import *
 
 from functions.candles import Candle
-from functions.effects import theater_chase
+from functions.effects import theater_chaser
 from logger import LOGGER
 
 
@@ -57,7 +57,7 @@ class Advent:
                 while count > 0:
                     Advent.logger.warning(Advent.WRONG)
                     count -= 1
-                theater_chase(self.__light_wreath, Color(*Advent.ZERO))
+                theater_chaser(self.__light_wreath, Color(*Advent.ZERO))
         peripheral_functions.get(3)
 
     def __calendar(self):

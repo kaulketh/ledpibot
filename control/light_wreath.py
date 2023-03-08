@@ -21,7 +21,7 @@ class LightWreath:
     log = LOGGER
 
     @classmethod
-    def setup(cls, s: Adafruit_NeoPixel):
+    def setup(cls, w: Adafruit_NeoPixel):
         """
         Low light during given period.
 
@@ -30,10 +30,10 @@ class LightWreath:
         """
         now = datetime.datetime.now()
         if LED_CUT_OFF_MORNING < int(now.hour) < LED_CUT_OFF_NIGHT:
-            s.setBrightness(LED_BRIGHTNESS_DAY)
+            w.setBrightness(LED_BRIGHTNESS_DAY)
         else:
-            s.setBrightness(LED_BRIGHTNESS_NIGHT)
-        b = s.getBrightness()
+            w.setBrightness(LED_BRIGHTNESS_NIGHT)
+        b = w.getBrightness()
         return now, b
 
     def __init__(self, count, pin, hz, dma, invert, brightness):

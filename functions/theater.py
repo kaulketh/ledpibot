@@ -11,7 +11,7 @@ import inspect
 from rpi_ws281x import *
 
 from control.light_wreath import wreath_setup
-from functions.effects import clear, color_wipe_full, theater_chase
+from functions.effects import clear, color_wipe_full, theater_chaser
 from logger import LOGGER
 
 
@@ -29,14 +29,14 @@ def run_theater(fairy_lights):
             if not get_stop_flag():
                 color_wipe_full(fairy_lights, Color(127, 127, 127))  # White wipe
             if not get_stop_flag():
-                theater_chase(fairy_lights,
-                              Color(127, 127, 127))  # White theater chase
+                theater_chaser(fairy_lights,
+                               Color(127, 127, 127))  # White theater chase
             if not get_stop_flag():
-                theater_chase(fairy_lights, Color(0, 0, 127))  # Blue theater chase
+                theater_chaser(fairy_lights, Color(0, 0, 127))  # Blue theater chase
             if not get_stop_flag():
-                theater_chase(fairy_lights, Color(0, 127, 0))  # Green theater chase
+                theater_chaser(fairy_lights, Color(0, 127, 0))  # Green theater chase
             if not get_stop_flag():
-                theater_chase(fairy_lights, Color(127, 0, 0))  # Red theater chase
+                theater_chaser(fairy_lights, Color(127, 0, 0))  # Red theater chase
 
         except KeyboardInterrupt:
             LOGGER.warn("KeyboardInterrupt")

@@ -36,7 +36,7 @@ def color_wipe(fairy_lights, color, r, wait_ms=50):
         time.sleep(wait_ms / 1000.0)
 
 
-def theater_chase(fairy_lights, color, wait_ms=50, iterations=10):
+def theater_chaser(fairy_lights, color, wait_ms=50, iterations=10):
     """Movie theater light style chaser animation."""
     for j in range(iterations):
         for q in range(3):
