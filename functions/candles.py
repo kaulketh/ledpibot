@@ -20,8 +20,8 @@ class Candle:
     GREEN = 150
     BLUE = 0
 
-    def __init__(self, led_stripe, led_numbers):
-        self.__strip = led_stripe
+    def __init__(self, fairy_lights, led_numbers):
+        self.__fairy_lights = fairy_lights
         self.__leds = led_numbers
 
         Candle.logger.debug(
@@ -34,8 +34,8 @@ class Candle:
                     color = Color(int(Candle.RED * percent),
                                   int(Candle.GREEN * percent),
                                   int(Candle.BLUE * percent))
-                    self.__strip.setPixelColor(i, color)
-                self.__strip.show()
+                    self.__fairy_lights.setPixelColor(i, color)
+                self.__fairy_lights.show()
                 time.sleep(randint(13, 15) / 100)
 
             except KeyboardInterrupt:
@@ -49,8 +49,8 @@ class Candle:
                 control.peripheral_functions.get(3)
 
 
-def run_candles(strip):
-    Candle(strip, strip.numPixels())
+def run_candles(light_wreath):
+    Candle(light_wreath, light_wreath.numPixels())
 
 
 if __name__ == '__main__':

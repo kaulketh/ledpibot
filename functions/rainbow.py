@@ -9,7 +9,7 @@ __status__ = "Production"
 import inspect
 import time
 
-from control.ledstrip import strip_setup
+from control.light_wreath import wreath_setup
 from functions.effects import wheel, clear
 from logger import LOGGER
 
@@ -19,7 +19,7 @@ def run_rainbow(strip):
     from control import get_stop_flag
     while not get_stop_flag():
         try:
-            strip_setup(strip)
+            wreath_setup(strip)
             for j in range(256 * 5):
                 if not get_stop_flag():
                     for i in range(strip.numPixels()):

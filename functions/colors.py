@@ -12,7 +12,7 @@ from random import uniform
 
 from rpi_ws281x import *
 
-from control.ledstrip import strip_setup
+from control.light_wreath import wreath_setup
 from functions.effects import clear
 from logger import LOGGER
 
@@ -25,8 +25,8 @@ class Colorizer:
         # bir => brightness/intense reducer
         return Color(r // bir, g // bir, b // bir)
 
-    def __init__(self, strip: Adafruit_NeoPixel, color_key=None):
-        self.__strip = strip
+    def __init__(self, fairy_lights: Adafruit_NeoPixel, color_key=None):
+        self.__fairy_lights = fairy_lights
         self.__colors = {
             'off': Colorizer.color(0, 0, 0),
             'on': Colorizer.color(255, 255, 255),
@@ -53,17 +53,17 @@ class Colorizer:
         from control import get_stop_flag
         while not get_stop_flag():
             function()
-        clear(self.__strip)
+        clear(self.__fairy_lights)
 
     def __start(self, color, brightness=None):
         try:
             if brightness is None:
-                strip_setup(self.__strip)
+                wreath_setup(self.__fairy_lights)
             else:
-                self.__strip.setBrightness(brightness)
-            for i in range(self.__strip.numPixels()):
-                self.__strip.setPixelColor(i, color)
-            self.__strip.show()
+                self.__fairy_lights.setBrightness(brightness)
+            for i in range(self.__fairy_lights.numPixels()):
+                self.__fairy_lights.setPixelColor(i, color)
+            self.__fairy_lights.show()
         except KeyboardInterrupt:
             Colorizer.log.warn("KeyboardInterrupt")
             exit()
@@ -79,12 +79,12 @@ class Colorizer:
         def __fade():
             for c in self.all_colors[2:]:
                 for i in range(
-                        strip_setup(self.__strip)[1]):
+                        wreath_setup(self.__fairy_lights)[1]):
                     self.run(c, brightness=i)
                     time.sleep(uniform(0.001, 0.05))
                 for i in range(
-                        strip_setup(self.__strip)[1]):
-                    b = strip_setup(self.__strip)[
+                        wreath_setup(self.__fairy_lights)[1]):
+                    b = wreath_setup(self.__fairy_lights)[
                             1] - i
                     self.run(c, brightness=b)
                     time.sleep(uniform(0.001, 0.05))
@@ -109,44 +109,44 @@ class Colorizer:
         self.__function_loop(__strobe)
 
 
-def run_red(stripe):
-    Colorizer(stripe, 'red')
+def run_red(fairy_lights):
+    Colorizer(fairy_lights, 'red')
 
 
-def run_blue(stripe):
-    Colorizer(stripe, 'blue')
+def run_blue(fairy_lights):
+    Colorizer(fairy_lights, 'blue')
 
 
-def run_green(stripe):
-    Colorizer(stripe, 'green')
+def run_green(fairy_lights):
+    Colorizer(fairy_lights, 'green')
 
 
-def run_yellow(stripe):
-    Colorizer(stripe, 'yellow')
+def run_yellow(fairy_lights):
+    Colorizer(fairy_lights, 'yellow')
 
 
-def run_orange(stripe):
-    Colorizer(stripe, 'orange')
+def run_orange(fairy_lights):
+    Colorizer(fairy_lights, 'orange')
 
 
-def run_white(stripe):
-    Colorizer(stripe, 'white')
+def run_white(fairy_lights):
+    Colorizer(fairy_lights, 'white')
 
 
-def run_violet(stripe):
-    Colorizer(stripe, 'violet')
+def run_violet(fairy_lights):
+    Colorizer(fairy_lights, 'violet')
 
 
-def run_stroboscope(stripe):
-    Colorizer(stripe).strobe()
+def run_stroboscope(fairy_lights):
+    Colorizer(fairy_lights).strobe()
 
 
-def run_demo(stripe):
-    Colorizer(stripe).switch()
+def run_demo(fairy_lights):
+    Colorizer(fairy_lights).switch()
 
 
-def run_demo2(stripe):
-    Colorizer(stripe).fade()
+def run_demo2(fairy_lights):
+    Colorizer(fairy_lights).fade()
 
 
 if __name__ == '__main__':

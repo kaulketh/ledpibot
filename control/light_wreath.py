@@ -16,8 +16,8 @@ from config import LED_BRIGHTNESS, LED_BRIGHTNESS_DAY, LED_BRIGHTNESS_NIGHT, \
 from logger import LOGGER
 
 
-class Strip:
-    name = "LED Strip"
+class LightWreath:
+    name = "LED-Light Wreath"
     log = LOGGER
 
     @classmethod
@@ -43,11 +43,11 @@ class Strip:
         self.__dma = dma
         self.__invert = invert
         self.__brightness = brightness
-        Strip.log.debug(f"Create {self}")
+        LightWreath.log.debug(f"Create {self}")
         self.__strip = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz,
                                          self.__dma, self.__invert,
                                          self.__brightness)
-        Strip.log.debug(f"Initialized: {self.__strip}")
+        LightWreath.log.debug(f"Initialized: {self.__strip}")
         self.__strip.begin()
 
     def __repr__(self):
@@ -61,16 +61,16 @@ class Strip:
             f"BRIGHTN.:{self.__brightness}")
 
     @property
-    def strip(self):
+    def wreath(self):
         return self.__strip
 
 
-def strip_setup(s: Adafruit_NeoPixel):
-    return Strip.setup(s)
+def wreath_setup(s: Adafruit_NeoPixel):
+    return LightWreath.setup(s)
 
 
-STRIP = Strip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT,
-              LED_BRIGHTNESS).strip
+WREATH = LightWreath(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT,
+                     LED_BRIGHTNESS).wreath
 
 if __name__ == '__main__':
     pass

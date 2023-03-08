@@ -13,7 +13,7 @@ import time
 
 from rpi_ws281x import *
 
-from control.ledstrip import strip_setup
+from control.light_wreath import wreath_setup
 from functions.effects import clear, wipe_second
 from logger import LOGGER
 
@@ -38,8 +38,8 @@ class Clock:
         "less_intense_yellow": Color(92 // 4, 67 // 4, 6 // 4)
     })
 
-    def __init__(self, strip: Adafruit_NeoPixel, clock: int):
-        self.__strip = strip
+    def __init__(self, fairy_lights: Adafruit_NeoPixel, clock: int):
+        self.__fairy_lights = fairy_lights
         self.__clock_type = clock
         self.__h_hand = None
         self.__m_hand = None
@@ -72,11 +72,11 @@ class Clock:
             except Exception as e:
                 Clock.log.error(f"Any error occurs: {e}")
                 exit()
-        clear(self.__strip)
+        clear(self.__fairy_lights)
 
     @property
     def __hands(self):
-        now = strip_setup(self.__strip)[0]
+        now = wreath_setup(self.__fairy_lights)[0]
         second_value = int(round(now.second / 2.5))
         minute_value = int(now.minute / 2.5)
         hour_value = int(int(now.hour) % 12 * 2)
@@ -98,14 +98,14 @@ class Clock:
 
         for i in range(hand_range[0], hand_range[1]):
             c = _color(intensity, i - hand_range[0], red, green, blue)
-            self.__strip.setPixelColor(i % 24, c)
+            self.__fairy_lights.setPixelColor(i % 24, c)
 
     def __twelfth_hour(self, red, green, blue, *color_of_twelve):
         """
         consider noon or midnight
         """
         self.__gic(red=red, green=green, blue=blue,
-                   hand_range=(0, self.__strip.numPixels()),
+                   hand_range=(0, self.__fairy_lights.numPixels()),
                    intensity=100)
         self.__gic(red=color_of_twelve[0],
                    green=color_of_twelve[1],
@@ -115,36 +115,40 @@ class Clock:
 
     def __expanded_minute_hand(self, hour_color, minute_color):
         if self.__m_hand == self.__h_hand:
-            if 12 < self.__m_hand < self.__strip.numPixels():
+            if 12 < self.__m_hand < self.__fairy_lights.numPixels():
                 if self.__h_hand <= 23:
-                    self.__strip.setPixelColor(self.__h_hand + 1, hour_color)
-                    self.__strip.setPixelColor(self.__m_hand, minute_color)
+                    self.__fairy_lights.setPixelColor(self.__h_hand + 1,
+                                                      hour_color)
+                    self.__fairy_lights.setPixelColor(self.__m_hand,
+                                                      minute_color)
                 else:
-                    self.__strip.setPixelColor(0, hour_color)
-                    self.__strip.setPixelColor(self.__m_hand - 1, minute_color)
+                    self.__fairy_lights.setPixelColor(0, hour_color)
+                    self.__fairy_lights.setPixelColor(self.__m_hand - 1,
+                                                      minute_color)
             else:
-                self.__strip.setPixelColor(self.__m_hand + 1, minute_color)
+                self.__fairy_lights.setPixelColor(self.__m_hand + 1,
+                                                  minute_color)
         else:
-            self.__strip.setPixelColor(self.__m_hand, minute_color)
+            self.__fairy_lights.setPixelColor(self.__m_hand, minute_color)
 
     def __show_strip_btwn_6nd12(self, hour_color, minute_color, hour_dimmed):
         if 12 < self.__m_hand <= 23:
-            self.__strip.setPixelColor(self.__h_hand, hour_color)
-            self.__strip.setPixelColor(self.__h_hand + 1, hour_dimmed)
+            self.__fairy_lights.setPixelColor(self.__h_hand, hour_color)
+            self.__fairy_lights.setPixelColor(self.__h_hand + 1, hour_dimmed)
         else:
-            self.__strip.setPixelColor(self.__h_hand, hour_color)
+            self.__fairy_lights.setPixelColor(self.__h_hand, hour_color)
         self.__expanded_minute_hand(hour_color, minute_color)
-        self.__strip.show()
+        self.__fairy_lights.show()
 
     def _one(self):
-        for i in range(0, self.__strip.numPixels(), 1):
-            self.__strip.setPixelColor(self.__h_hand, Clock.COLORS.red)
+        for i in range(0, self.__fairy_lights.numPixels(), 1):
+            self.__fairy_lights.setPixelColor(self.__h_hand, Clock.COLORS.red)
             self.__expanded_minute_hand(Clock.COLORS.red, Clock.COLORS.blue)
             if i == self.__s_hand:
-                self.__strip.setPixelColor(i, Clock.COLORS.yellow)
+                self.__fairy_lights.setPixelColor(i, Clock.COLORS.yellow)
             else:
-                self.__strip.setPixelColor(i, Color(0, 0, 0))
-        self.__strip.show()
+                self.__fairy_lights.setPixelColor(i, Color(0, 0, 0))
+        self.__fairy_lights.show()
         time.sleep(Clock.REFRESH)
 
     def _two(self):
@@ -155,62 +159,62 @@ class Clock:
                                          Clock.COLORS.less_intense_red)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
-        wipe_second(self.__strip, Clock.COLORS.less_intense_blue,
+        wipe_second(self.__fairy_lights, Clock.COLORS.less_intense_blue,
                     self.__m_hand - 1, backward=True)
-        clear(self.__strip)
+        clear(self.__fairy_lights)
 
     def _three(self):
 
-        def dial(stripe):
+        def dial(led_wreath):
             _dial = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]  # hours
             # _dial = [0, 6, 12, 18]  # quarter only
             for _l in _dial:
                 # warm yellow
                 r, g, b = 195, 125, 30
                 div = 10
-                stripe.setPixelColorRGB(_l, r // div, g // div, b // div)
+                led_wreath.setPixelColorRGB(_l, r // div, g // div, b // div)
 
-        def hour(led, stripe):
-            stripe.setPixelColor(led, Clock.COLORS.red)
+        def hour(led, led_wreath):
+            led_wreath.setPixelColor(led, Clock.COLORS.red)
 
-        def set_minute_led_before_and_after(stripe, led):
-            stripe.setPixelColor(led - 1, Clock.COLORS.less_intense_blue)
-            stripe.setPixelColor(led + 1, Clock.COLORS.less_intense_blue)
+        def set_minute_led_before_and_after(led_wreath, led):
+            led_wreath.setPixelColor(led - 1, Clock.COLORS.less_intense_blue)
+            led_wreath.setPixelColor(led + 1, Clock.COLORS.less_intense_blue)
 
-        def minute(led, led_hour, stripe):
-            if led < stripe.numPixels():
+        def minute(led, led_hour, led_wreath):
+            if led < led_wreath.numPixels():
                 if led == led_hour:
-                    set_minute_led_before_and_after(stripe, led)
+                    set_minute_led_before_and_after(led_wreath, led)
                 else:
-                    stripe.setPixelColor(led, Clock.COLORS.blue)
-            if led >= stripe.numPixels():
+                    led_wreath.setPixelColor(led, Clock.COLORS.blue)
+            if led >= led_wreath.numPixels():
                 if led == led_hour:
-                    set_minute_led_before_and_after(stripe, led_hour)
-                    stripe.setPixelColor(0, Clock.COLORS.blue)
+                    set_minute_led_before_and_after(led_wreath, led_hour)
+                    led_wreath.setPixelColor(0, Clock.COLORS.blue)
                 else:
-                    stripe.setPixelColor(0, Clock.COLORS.blue)
+                    led_wreath.setPixelColor(0, Clock.COLORS.blue)
             else:
-                stripe.setPixelColor(led, Clock.COLORS.blue)
+                led_wreath.setPixelColor(led, Clock.COLORS.blue)
 
-        def seconds(leds_per_2500ms, stripe):
+        def seconds(leds_per_2500ms, led_wreath):
             for led in range(0, leds_per_2500ms, 1):
-                if 0 < (led + 1) < stripe.numPixels():
-                    stripe.setPixelColor(
+                if 0 < (led + 1) < led_wreath.numPixels():
+                    led_wreath.setPixelColor(
                         led + 1, Clock.COLORS.less_intense_green_second)
-                if (led + 1) == stripe.numPixels():
-                    stripe.setPixelColor(
+                if (led + 1) == led_wreath.numPixels():
+                    led_wreath.setPixelColor(
                         0, Clock.COLORS.less_intense_green_second)
 
-        dial(self.__strip)
-        seconds(self.__s_hand, self.__strip)
-        minute(self.__m_hand, self.__h_hand, self.__strip)
-        hour(self.__h_hand, self.__strip)
+        dial(self.__fairy_lights)
+        seconds(self.__s_hand, self.__fairy_lights)
+        minute(self.__m_hand, self.__h_hand, self.__fairy_lights)
+        hour(self.__h_hand, self.__fairy_lights)
 
-        self.__strip.show()
+        self.__fairy_lights.show()
         time.sleep(2 * Clock.REFRESH)
-        if self.__s_hand == self.__strip.numPixels():
+        if self.__s_hand == self.__fairy_lights.numPixels():
             time.sleep(13 * Clock.REFRESH)
-            clear(self.__strip)
+            clear(self.__fairy_lights)
 
     def _four(self):
         if self.__h_hand == 0:
@@ -219,26 +223,26 @@ class Clock:
             self.__gic(red=self.__h_hand,
                        green=self.__m_hand,
                        blue=self.__s_hand,
-                       hand_range=(0, self.__strip.numPixels()),
+                       hand_range=(0, self.__fairy_lights.numPixels()),
                        intensity=100)
-        self.__strip.show()
+        self.__fairy_lights.show()
         time.sleep(Clock.REFRESH)
 
     def _five(self):
         global __pendulum, __p_right, __p_left
         for i in range(len(__pendulum)):
-            self.__strip.setPixelColor(
+            self.__fairy_lights.setPixelColor(
                 __pendulum[i], Clock.COLORS.less_intense_yellow)
         if __p_left >= len(__pendulum) - 1:
             if __p_right <= 0:
                 __p_right = len(__pendulum) - 1
                 __p_left = 0
             else:
-                self.__strip.setPixelColor(
+                self.__fairy_lights.setPixelColor(
                     __pendulum[__p_right], Clock.COLORS.yellow)
                 __p_right -= 1
         else:
-            self.__strip.setPixelColor(
+            self.__fairy_lights.setPixelColor(
                 __pendulum[__p_left], Clock.COLORS.yellow)
             __p_left += 1
         self.__show_strip_btwn_6nd12(Clock.COLORS.red,
@@ -254,23 +258,23 @@ class Clock:
             self.__gic(red=0,
                        green=self.__m_hand,
                        blue=self.__h_hand,
-                       hand_range=(0, self.__strip.numPixels()),
+                       hand_range=(0, self.__fairy_lights.numPixels()),
                        intensity=100)
-        self.__strip.show()
+        self.__fairy_lights.show()
         time.sleep(Clock.REFRESH)
 
     def _seven(self):
         if self.__h_hand / 2 == 0:
             hour_hand_values = 1, 13
         else:
-            hour_hand_values = self.__h_hand / 2, self.__strip.numPixels()
+            hour_hand_values = self.__h_hand / 2, self.__fairy_lights.numPixels()
         if self.__m_hand / 2 == 0:
             minute_hand_values = 1, 1
 
         else:
             minute_hand_values = self.__m_hand / 2, 12
         self.__gic(red=0, green=0, blue=0,
-                   hand_range=(0, self.__strip.numPixels()),
+                   hand_range=(0, self.__fairy_lights.numPixels()),
                    intensity=100)
         m, max_m = minute_hand_values
         self.__gic(red=m, green=m, blue=m,
@@ -280,37 +284,37 @@ class Clock:
         self.__gic(red=0, green=h, blue=h,
                    hand_range=(12, max_h),
                    intensity=100)
-        self.__strip.show()
+        self.__fairy_lights.show()
         time.sleep(Clock.REFRESH)
 
 
 # functions to call the different types of clocks
-def run_clock1(strip):
-    Clock(strip, 1)
+def run_clock1(led_wreath):
+    Clock(led_wreath, 1)
 
 
-def run_clock2(strip):
-    Clock(strip, 2)
+def run_clock2(led_wreath):
+    Clock(led_wreath, 2)
 
 
-def run_clock3(strip):
-    Clock(strip, 3)
+def run_clock3(led_wreath):
+    Clock(led_wreath, 3)
 
 
-def run_clock4(strip):
-    Clock(strip, 4)
+def run_clock4(led_wreath):
+    Clock(led_wreath, 4)
 
 
-def run_clock5(strip):
-    Clock(strip, 5)
+def run_clock5(led_wreath):
+    Clock(led_wreath, 5)
 
 
-def run_clock6(strip):
-    Clock(strip, 6)
+def run_clock6(led_wreath):
+    Clock(led_wreath, 6)
 
 
-def run_clock7(strip):
-    Clock(strip, 7)
+def run_clock7(led_wreath):
+    Clock(led_wreath, 7)
 
 
 if __name__ == '__main__':

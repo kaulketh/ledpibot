@@ -43,8 +43,8 @@ class Advent:
             yield d
             d += datetime.timedelta(days=7)
 
-    def __init__(self, led_stripe):
-        self.__strip = led_stripe
+    def __init__(self, light_wreath):
+        self.__light_wreath = light_wreath
         Advent.logger.debug(
             f"Initialize instance of {self.__class__.__name__}")
         from control import get_stop_flag, peripheral_functions
@@ -57,7 +57,7 @@ class Advent:
                 while count > 0:
                     Advent.logger.warning(Advent.WRONG)
                     count -= 1
-                theater_chase(self.__strip, Color(*Advent.ZERO))
+                theater_chase(self.__light_wreath, Color(*Advent.ZERO))
         peripheral_functions.get(3)
 
     def __calendar(self):
@@ -81,7 +81,7 @@ class Advent:
                 else:
                     # set up other days
                     self.__randomize(i, Advent.CANDLE)
-                self.__strip.show()
+                self.__light_wreath.show()
             time.sleep(randint(13, 15) / 100)
         except KeyboardInterrupt:
             Advent.logger.warning("KeyboardInterrupt")
@@ -95,11 +95,11 @@ class Advent:
         c = Color(int(color[0] * p),  # red
                   int(color[1] * p),  # green
                   int(color[2] * p))  # blue
-        self.__strip.setPixelColor(led, c)
+        self.__light_wreath.setPixelColor(led, c)
 
 
-def run_advent(stripe):
-    Advent(stripe)
+def run_advent(wreath):
+    Advent(wreath)
 
 
 if __name__ == '__main__':
