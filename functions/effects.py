@@ -30,7 +30,7 @@ def color_wipe_full(fairy_lights, color, wait_ms=50):
 
 def color_wipe(fairy_lights, color, r, wait_ms=50):
     """Wipe color across display a pixel at a time."""
-    for i in range(r):  # light_wreath.numPixels()):
+    for i in range(r):
         fairy_lights.setPixelColor(i, color)
         fairy_lights.show()
         time.sleep(wait_ms / 1000.0)
@@ -79,7 +79,7 @@ def rainbow_cycle(light_wreath, wait_ms=20, iterations=5):
         time.sleep(wait_ms / 1000.0)
 
 
-def theater_chase_rainbow(fairy_lights, wait_ms=50):
+def rainbow_chaser(fairy_lights, wait_ms=50):
     """Rainbow movie theater light style chaser animation."""
     for j in range(256):
         for q in range(3):
