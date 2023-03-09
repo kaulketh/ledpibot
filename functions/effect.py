@@ -24,8 +24,9 @@ class Effect:
     def __init__(self, fairy_lights: Adafruit_NeoPixel):
         self.__leds = fairy_lights
         self.__spectrum = Effect.__spectrum
-        Effect.log.debug(f"Init instance of {self.__class__.__name__}.")
-        Effect.log.debug(f"Call: {inspect.stack()[1].function}")
+        Effect.log.debug(f"Initialize instance of {self.__class__.__name__} "
+                         f"for {self.__leds}.")
+        Effect.log.debug(f"Call effect: {inspect.stack()[1].function}")
 
     @classmethod
     def __wheel(cls, pos):

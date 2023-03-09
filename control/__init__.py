@@ -12,7 +12,7 @@ from .iron_man import *
 from .light_function import LightFunction
 from .light_wreath import WREATH, wreath_setup
 
-ERROR = "An error occurred: "
+ERROR = "Any error occurred: "
 
 stop_flag = None
 
@@ -37,7 +37,7 @@ def set_stop_flag(flag):
 
 def run_thread(func_name, request_id, bot):
     try:
-        f = thread_function(dictionary_functions, func_name)
+        f = dictionary_functions.get(func_name)
         LOGGER.debug(f"Init thread for function: {f}")
         t = LightFunction(
             function=f,
@@ -63,13 +63,6 @@ def stop_threads():
         set_stop_flag(False)
 
     return stop_flag
-
-
-def thread_function(dictionary, key):
-    try:
-        return dictionary[key]
-    except Exception as e:
-        LOGGER.error(f"{ERROR}{e}")
 
 
 def off():
