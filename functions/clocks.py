@@ -14,7 +14,7 @@ import time
 from rpi_ws281x import *
 
 from control.light_wreath import wreath_setup
-from functions.effects import clear, wipe_second
+from functions.effect import clear, wipe_second
 from logger import LOGGER
 
 
@@ -160,7 +160,7 @@ class Clock:
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
         wipe_second(self.__fairy_lights, Clock.COLORS.less_intense_blue,
-                    self.__m_hand - 1, backward=True)
+                    self.__m_hand - 1)
         clear(self.__fairy_lights)
 
     def _three(self):
@@ -267,7 +267,8 @@ class Clock:
         if self.__h_hand / 2 == 0:
             hour_hand_values = 1, 13
         else:
-            hour_hand_values = self.__h_hand / 2, self.__fairy_lights.numPixels()
+            hour_hand_values = \
+                self.__h_hand / 2, self.__fairy_lights.numPixels()
         if self.__m_hand / 2 == 0:
             minute_hand_values = 1, 1
 

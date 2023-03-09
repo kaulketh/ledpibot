@@ -11,7 +11,7 @@ from multiprocessing import Process
 from threading import Thread
 
 from config import LED_BRIGHTNESS, m_stop_f
-from functions import clear
+from functions.effect import clear
 from logger import LOGGER
 
 

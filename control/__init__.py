@@ -6,10 +6,11 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import clear, dictionary_functions
+from functions import dictionary_functions
+from functions.effect import clear
 from .iron_man import *
-from .light_wreath import WREATH, wreath_setup
 from .light_function import LightFunction
+from .light_wreath import WREATH, wreath_setup
 
 ERROR = "An error occurred: "
 

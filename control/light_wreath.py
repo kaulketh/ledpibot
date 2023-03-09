@@ -41,11 +41,11 @@ class LightWreath:
         self.__invert = invert
         self.__brightness = brightness
         LightWreath.log.debug(f"Create {self}")
-        self.__strip = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz,
-                                         self.__dma, self.__invert,
-                                         self.__brightness)
-        LightWreath.log.debug(f"Initialized: {self.__strip}")
-        self.__strip.begin()
+        self.__leds = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz,
+                                        self.__dma, self.__invert,
+                                        self.__brightness)
+        LightWreath.log.debug(f"Initialized: {self.__leds}")
+        self.__leds.begin()
 
     def __repr__(self):
         return (
@@ -59,7 +59,7 @@ class LightWreath:
 
     @property
     def wreath(self):
-        return self.__strip
+        return self.__leds
 
 
 def wreath_setup(light_wreath):
