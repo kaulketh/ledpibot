@@ -6,16 +6,17 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import clear, dictionary_functions
+from functions import dictionary_functions
+from functions.effect import clear
 from .iron_man import *
-from .ledstrip import STRIP, strip_setup
-from .lightfunction import LightFunction
+from .light_function import LightFunction
+from .light_wreath import WREATH, wreath_setup
 
 ERROR = "An error occurred: "
 
 stop_flag = None
 
-clear(STRIP)
+clear(WREATH)
 
 
 def get_stop_flag():
@@ -40,7 +41,7 @@ def run_thread(func_name, request_id, bot):
         LOGGER.debug(f"Init thread for function: {f}")
         t = LightFunction(
             function=f,
-            stripe=STRIP,
+            wreath=WREATH,
             name=func_name,
             request_id=request_id,
             bot=bot)
@@ -73,7 +74,7 @@ def thread_function(dictionary, key):
 
 def off():
     peripheral_functions.get(0)()
-    clear(STRIP)
+    clear(WREATH)
 
 
 peripheral_functions = {0: iron_man.close_the_eyes,

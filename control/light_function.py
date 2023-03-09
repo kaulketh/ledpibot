@@ -11,7 +11,7 @@ from multiprocessing import Process
 from threading import Thread
 
 from config import LED_BRIGHTNESS, m_stop_f
-from functions import clear
+from functions.effect import clear
 from logger import LOGGER
 
 
@@ -21,10 +21,10 @@ class LightFunction(Thread):
     name = "LightFunction"
     SECONDS_PER_DAY = 86_400
 
-    def __init__(self, function, stripe, name=None, request_id=None, bot=None):
+    def __init__(self, function, wreath, name=None, request_id=None, bot=None):
         super(LightFunction, self).__init__()
         self.__function = function
-        self.__stripe = stripe
+        self.__wreath = wreath
         self.__f_name = \
             function.__name__ if name is None else name
         self.__chat_id = request_id
@@ -35,7 +35,7 @@ class LightFunction(Thread):
     @property
     def __process(self):
         f_process = Process(target=self.__function, name=self.__f_name,
-                            args=(self.__stripe,))
+                            args=(self.__wreath,))
         f_process.start()
         return f_process
 
@@ -58,8 +58,8 @@ class LightFunction(Thread):
         # stop
         control.peripheral_functions.get(0)()
         p.terminate()
-        clear(self.__stripe)
-        self.__stripe.setBrightness(LED_BRIGHTNESS)
+        clear(self.__wreath)
+        self.__wreath.setBrightness(LED_BRIGHTNESS)
         LightFunction.threads.remove(self)
 
     def stop(self):
