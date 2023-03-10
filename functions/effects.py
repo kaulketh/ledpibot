@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # -----------------------------------------------------------
-# effect.py
+# effects.py
 # created 08.03.2023
 # Thomas Kaulke, kaulketh@gmail.com
 # https://github.com/kaulketh

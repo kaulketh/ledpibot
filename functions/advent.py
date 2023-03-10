@@ -13,7 +13,7 @@ from random import randint
 from rpi_ws281x import *
 
 from functions.candles import Candle
-from functions.effect import Effect
+from functions.effects import Effect
 from logger import LOGGER
 
 

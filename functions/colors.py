@@ -13,7 +13,7 @@ from random import uniform
 from rpi_ws281x import *
 
 from control.light_wreath import wreath_setup
-from functions.effect import clear
+from functions.effects import clear
 from logger import LOGGER
 
 

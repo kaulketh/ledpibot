@@ -7,7 +7,7 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 from functions import dictionary_functions
-from functions.effect import clear
+from functions.effects import clear
 from .iron_man import *
 from .light_function import LightFunction
 from .light_wreath import WREATH, wreath_setup
