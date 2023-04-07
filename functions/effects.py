@@ -19,11 +19,11 @@ from logger import LOGGER
 
 class Effect:
     log = LOGGER
-    __spectrum = 255
+    __spectr = 255
 
     def __init__(self, fairy_lights: Adafruit_NeoPixel):
         self.__leds = fairy_lights
-        self.__spectrum = Effect.__spectrum
+        self.__spectr = Effect.__spectr
         Effect.log.debug(f"Initialize instance of {self.__class__.__name__} "
                          f"for {self.__leds}.")
         Effect.log.debug(f"Call effect: {inspect.stack()[1].function}")
@@ -34,13 +34,13 @@ class Effect:
         Generate rainbow colors across 0-255 positions.
         """
         if pos < 85:
-            return Color(pos * 3, cls.__spectrum - pos * 3, 0)
+            return Color(pos * 3, cls.__spectr - pos * 3, 0)
         elif pos < 170:
             pos -= 85
-            return Color(cls.__spectrum - pos * 3, 0, pos * 3)
+            return Color(cls.__spectr - pos * 3, 0, pos * 3)
         else:
             pos -= 170
-            return Color(0, pos * 3, cls.__spectrum - pos * 3)
+            return Color(0, pos * 3, cls.__spectr - pos * 3)
 
     def clear(self):
         """
@@ -83,10 +83,10 @@ class Effect:
         """
         Draw rainbow that fades across all pixels at once.
         """
-        for j in range((self.__spectrum + 1) * iterations):
+        for j in range((self.__spectr + 1) * iterations):
             for i in range(self.__leds.numPixels()):
                 self.__leds.setPixelColor(i, Effect.__wheel(
-                    (i + j) & self.__spectrum))
+                    (i + j) & self.__spectr))
             self.__leds.show()
             time.sleep(wait_ms / 1_000.0)
 
@@ -94,12 +94,12 @@ class Effect:
         """
         Draw rainbow that uniformly distributes itself across all pixels.
         """
-        for j in range((self.__spectrum + 1) * iterations):
+        for j in range((self.__spectr + 1) * iterations):
             for i in range(self.__leds.numPixels()):
                 self.__leds.setPixelColor(
                     i, Effect.__wheel(
                         (int(i * 256 / self.__leds.numPixels()) + j)
-                        & self.__spectrum))
+                        & self.__spectr))
             self.__leds.show()
             time.sleep(wait_ms / 1_000.0)
 
@@ -107,11 +107,11 @@ class Effect:
         """
         Rainbow movie theater light style chaser animation.
         """
-        for j in range((self.__spectrum + 1) * iterations):
+        for j in range((self.__spectr + 1) * iterations):
             for led in range(3):
                 for i in range(0, self.__leds.numPixels(), 3):
                     self.__leds.setPixelColor(
-                        i + led, Effect.__wheel((i + j) % self.__spectrum))
+                        i + led, Effect.__wheel((i + j) % self.__spectr))
                 self.__leds.show()
                 time.sleep(wait_ms / 1_000.0)
                 for i in range(0, self.__leds.numPixels(), 3):

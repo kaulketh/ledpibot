@@ -16,6 +16,7 @@ NAME = "Service"
 
 # [skip pep8] ignore=E501
 # noinspection LongLine
+# noinspection PyPep8
 HELP_TEXT: str = """
 *Manual*
 - After boot bot will inform user that it is ready to use via message
@@ -65,9 +66,7 @@ class Service:
         self.__log_msg = log_msg
         self.__command = command
         self.__help_txt = HELP_TEXT
-
         self.__menu_header = f"{NAME} functions:"
-
         self.__menu_dictionary = {
             0: self.c_reboot,
             1: self.c_info,
