@@ -74,3 +74,8 @@ peripheral_functions = {0: iron_man.close_the_eyes,
                         1: iron_man.open_the_eyes,
                         2: iron_man.blink_more_often,
                         3: off}
+"""dictionary of some functions:\n
+0 - to close Iron Man's eyes,\n 
+1 - to open Iron Man's eyes,\n 
+2 - to let Iron Man blink with eyes,\n 
+3 - to turn off all LEDs"""
