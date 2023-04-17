@@ -1,5 +1,5 @@
 ## Operation Manual
-Note: Authorized Telegram Chat ID(s) and the bot token are stored in a hidden file(secret.py) which is not deployed and thence will be imported to access.py to import or use due runtime
+Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden file (secret.py) that is not provided here, but is imported or used at runtime.
     
 * **Important Settings (_config/settings.py_):**
     Set chat language, possible language keys: "de", "en", "fr" <br>Only the chat language can set, logging and service functionality and related messages are hard coded in English.
