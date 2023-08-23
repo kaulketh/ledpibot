@@ -13,7 +13,7 @@ import time
 
 from rpi_ws281x import *
 
-from control.light_wreath import wreath_setup
+from control.wreath import wreath_setup
 from logger import LOGGER
 
 

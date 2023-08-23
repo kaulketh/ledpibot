@@ -8,9 +8,9 @@ __status__ = "Production"
 
 from functions import dictionary_functions
 from functions.effects import clear
-from .iron_man import *
-from .light_function import LightFunction
-from .light_wreath import WREATH, wreath_setup
+from .iron import *
+from .light import LightFunction
+from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
 
