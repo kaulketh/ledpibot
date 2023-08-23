@@ -70,9 +70,9 @@ def off():
     clear(WREATH)
 
 
-peripheral_functions = {0: iron_man.close_the_eyes,
-                        1: iron_man.open_the_eyes,
-                        2: iron_man.blink_more_often,
+peripheral_functions = {0: iron.close_the_eyes,
+                        1: iron.open_the_eyes,
+                        2: iron.blink_more_often,
                         3: off}
 """dictionary of some functions:\n
 0 - to close Iron Man's eyes,\n 
