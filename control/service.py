@@ -16,6 +16,7 @@ NAME = "Service"
 
 # [skip pep8] ignore=E501
 # noinspection LongLine
+# noinspection PyPep8
 HELP_TEXT: str = """
 *Manual*
 - After boot bot will inform user that it is ready to use via message
@@ -65,9 +66,7 @@ class Service:
         self.__log_msg = log_msg
         self.__command = command
         self.__help_txt = HELP_TEXT
-
         self.__menu_header = f"{NAME} functions:"
-
         self.__menu_dictionary = {
             0: self.c_reboot,
             1: self.c_info,
@@ -91,7 +90,8 @@ class Service:
         else:
             raise Exception("No executable command found!")
 
-    def build_menu(self):
+    @property
+    def menu(self):
         try:
             m = f"{self.__menu_header}{self.__new_line}"
             self.__logger.debug(
@@ -109,9 +109,11 @@ class Service:
         except Exception as e:
             self.__logger.error(f"{e}")
 
-    def build_help_text(self):
+    @property
+    def help_text(self):
         return f"\n{self.__help_txt}"
 
+    @property
     def system_info(self):
         try:
             host = subprocess.check_output("hostname", shell=True).upper()
@@ -164,18 +166,15 @@ def reboot_device(log_msg: str = None):
 
 
 def system_info():
-    s = Service()
-    return s.system_info()
+    return Service().system_info
 
 
 def get_help_text():
-    s = Service()
-    return s.build_help_text()
+    return Service().help_text
 
 
 def service_menu():
-    s = Service()
-    return s.build_menu()
+    return Service().menu
 
 
 menu = service_menu()

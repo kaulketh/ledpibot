@@ -13,22 +13,21 @@ import time
 
 from rpi_ws281x import *
 
-from control.light_wreath import wreath_setup
-from functions.effect import clear, wipe_second
+from control.wreath import wreath_setup
+from functions.effects import clear, wipe_second
 from logger import LOGGER
-
-
-class _AttribDict(dict):
-    __slots__ = ()
-    __getattr__ = dict.__getitem__
-    __setattr__ = dict.__setitem__
 
 
 # noinspection PyGlobalUndefined
 class Clock:
+    class __AttribDict(dict):
+        __slots__ = ()
+        __getattr__ = dict.__getitem__
+        __setattr__ = dict.__setitem__
+
     log = LOGGER
     REFRESH = .1
-    COLORS = _AttribDict({
+    COLORS = __AttribDict({
         "red": Color(200, 0, 0),  # hour
         "blue": Color(0, 0, 200),  # minute
         "yellow": Color(92, 67, 6),  # second

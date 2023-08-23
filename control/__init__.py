@@ -7,12 +7,12 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 from functions import dictionary_functions
-from functions.effect import clear
-from .iron_man import *
-from .light_function import LightFunction
-from .light_wreath import WREATH, wreath_setup
+from functions.effects import clear
+from .iron import *
+from .light import LightFunction
+from .wreath import WREATH, wreath_setup
 
-ERROR = "An error occurred: "
+ERROR = "Any error occurred: "
 
 stop_flag = None
 
@@ -37,7 +37,7 @@ def set_stop_flag(flag):
 
 def run_thread(func_name, request_id, bot):
     try:
-        f = thread_function(dictionary_functions, func_name)
+        f = dictionary_functions.get(func_name)
         LOGGER.debug(f"Init thread for function: {f}")
         t = LightFunction(
             function=f,
@@ -65,13 +65,6 @@ def stop_threads():
     return stop_flag
 
 
-def thread_function(dictionary, key):
-    try:
-        return dictionary[key]
-    except Exception as e:
-        LOGGER.error(f"{ERROR}{e}")
-
-
 def off():
     peripheral_functions.get(0)()
     clear(WREATH)
@@ -81,3 +74,8 @@ peripheral_functions = {0: iron_man.close_the_eyes,
                         1: iron_man.open_the_eyes,
                         2: iron_man.blink_more_often,
                         3: off}
+"""dictionary of some functions:\n
+0 - to close Iron Man's eyes,\n 
+1 - to open Iron Man's eyes,\n 
+2 - to let Iron Man blink with eyes,\n 
+3 - to turn off all LEDs"""

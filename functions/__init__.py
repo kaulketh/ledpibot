@@ -15,7 +15,7 @@ from .clocks import \
     run_clock4, run_clock5, run_clock6, run_clock7
 from .colors import run_blue, run_demo, run_demo2, run_green, run_orange, \
     run_red, run_stroboscope, run_violet, run_white, run_yellow
-from .effect import run_rainbow, run_theater
+from .effects import run_rainbow, run_theater
 
 
 def build_dictionary():
