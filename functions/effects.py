@@ -194,7 +194,7 @@ def run_theater(wreath):
 
 def wipe_second(wreath, color, pivot, back_again=True):
     try:
-        Effect.wipe_second(wreath, color, pivot, back_again)
+        Effect(wreath).wipe_second(color, pivot, back_again)
     except KeyboardInterrupt:
         Effect.log.warning("KeyboardInterrupt")
         exit()
