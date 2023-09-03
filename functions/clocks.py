@@ -75,10 +75,11 @@ class Clock:
 
     @property
     def __hands(self):
+        _div = 60 / self.__fairy_lights.numPixels()
         now = wreath_setup(self.__fairy_lights)[0]
-        second_value = int(round(now.second / 2.5))
-        minute_value = int(now.minute / 2.5)
-        hour_value = int(int(now.hour) % 12 * 2)
+        second_value = int(now.second / _div)
+        minute_value = int(now.minute / _div)
+        hour_value = now.hour % 12 * 2
         return hour_value, minute_value, second_value
 
     def __gic(self, red, green, blue, hand_range, intensity):
