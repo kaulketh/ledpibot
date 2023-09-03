@@ -14,25 +14,25 @@ from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
 
-stop_flag = None
+flag = None
 
 clear(WREATH)
 
 
-def get_stop_flag():
-    global stop_flag
-    return stop_flag
+def stopped():
+    global flag
+    return flag
 
 
-def set_stop_flag(flag):
+def init_stop(_flag):
     """
-    Set a global stop_flag for stopping while loops.
+    Set a global stop flag for stopping while loops.
 
-    :type flag: bool
+    :type _flag: bool
     """
-    global stop_flag
-    stop_flag = flag
-    LOGGER.debug(f"Stop flag set to {stop_flag}")
+    global flag
+    flag = _flag
+    LOGGER.debug(f"Stop flag: {flag}")
 
 
 def run_thread(func_name, request_id, bot):
@@ -46,7 +46,7 @@ def run_thread(func_name, request_id, bot):
             request_id=request_id,
             bot=bot)
         t.start()
-        set_stop_flag(False)
+        init_stop(False)
         return t
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
@@ -57,12 +57,12 @@ def stop_threads():
         for t in LightFunction.threads:
             if t is not None and t.is_running:
                 t.stop()
-        set_stop_flag(True)
+        init_stop(True)
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
-        set_stop_flag(False)
+        init_stop(False)
 
-    return stop_flag
+    return flag
 
 
 def off():

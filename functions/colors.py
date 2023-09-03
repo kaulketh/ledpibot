@@ -50,8 +50,8 @@ class Colorizer:
 
     def __function_loop(self, function):
         Colorizer.log.debug(f"Running loop: {inspect.stack()[1].function}")
-        from control import get_stop_flag
-        while not get_stop_flag():
+        from control import stopped
+        while not stopped():
             function()
         clear(self.__fairy_lights)
 

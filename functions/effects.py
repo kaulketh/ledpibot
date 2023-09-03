@@ -145,8 +145,8 @@ class Effect:
 
 def __loop(wreath, effect):
     Effect.log.debug(inspect.stack()[1].code_context)
-    from control import get_stop_flag
-    while not get_stop_flag():
+    from control import stopped
+    while not stopped():
         try:
             wreath_setup(wreath)
             return effect
@@ -170,8 +170,14 @@ def clear(wreath):
         exit()
 
 
-def run_rainbow(wreath):
-    __loop(wreath, Effect(wreath).rainbow_cycle(iterations=100))
+def run_rainbow_cycle(wreath):
+    while True:
+        __loop(wreath, Effect(wreath).rainbow_cycle(iterations=1))
+
+
+def run_rainbow_chaser(wreath):
+    while True:
+        __loop(wreath, Effect(wreath).rainbow_chaser(iterations=1))
 
 
 def run_theater(wreath):

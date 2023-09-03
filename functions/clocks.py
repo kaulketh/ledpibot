@@ -60,8 +60,8 @@ class Clock:
 
         Clock.log.debug(f"Initialize instance of {self.__class__.__name__}")
         Clock.log.debug(f"Call: {inspect.stack()[1].function}")
-        from control import get_stop_flag
-        while not get_stop_flag():
+        from control import stopped
+        while not stopped():
             try:
                 self.__h_hand, self.__m_hand, self.__s_hand = self.__hands
                 self.__clock_types.get(self.__clock_type)()
