@@ -24,7 +24,7 @@ def stopped():
     return flag
 
 
-def init_stop(_flag):
+def set_stop_flag(_flag):
     """
     Set a global stop flag for stopping while loops.
 
@@ -46,7 +46,7 @@ def run_thread(func_name, request_id, bot):
             request_id=request_id,
             bot=bot)
         t.start()
-        init_stop(False)
+        set_stop_flag(False)
         return t
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
@@ -57,10 +57,10 @@ def stop_threads():
         for t in LightFunction.threads:
             if t is not None and t.is_running:
                 t.stop()
-        init_stop(True)
+        set_stop_flag(True)
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
-        init_stop(False)
+        set_stop_flag(False)
 
     return flag
 
