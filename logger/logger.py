@@ -38,7 +38,7 @@ class _LoggerMeta(type, Singleton):
     DEB_LOG = f"{LOG_FOLDER}/debug.log"
     INF_LOG = f"{LOG_FOLDER}/info.log"
     ERR_LOG = f"{LOG_FOLDER}/error.log"
-    MAX_BYTE = 1024 * 1024  # 1MB
+    MAX_BYTE = 1024 * 1024 * 3 # 3MB
     BACK_COUNT = 5
 
     DAT_FMT = "%Y-%m-%d %H:%M:%S"
