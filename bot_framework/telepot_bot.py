@@ -17,7 +17,8 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
     RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_started, m_stopped, m_updated, m_wrong_id
-from control import peripheral_functions, run_thread, service, stop_threads
+from control import peripheral_functions, run_thread, service, \
+    stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
 from logger import LOGGER

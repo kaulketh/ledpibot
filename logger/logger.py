@@ -38,6 +38,7 @@ class _LoggerMeta(type, Singleton):
     DEB_LOG = f"{LOG_FOLDER}/debug.log"
     INF_LOG = f"{LOG_FOLDER}/info.log"
     ERR_LOG = f"{LOG_FOLDER}/error.log"
+    HIS_LOG = f"{LOG_FOLDER}/history.log"
     MAX_BYTE = 1024 * 1024 * 3  # 3MB
     BACK_COUNT = 5
 
@@ -49,7 +50,10 @@ class _LoggerMeta(type, Singleton):
               "[thread: %(threadName)s] %(message)s"
     DEB_FMT = "%(asctime)s %(name)s %(levelname)s " \
               "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
+    HIS_FMT = "%(asctime)s %(name)s %(levelname)s %(message)s"
+    HISTORY = 39  # before error level
 
+    # noinspection PyProtectedMember
     def __init__(cls, *args, **kwargs):
         super(_LoggerMeta, cls).__init__(*args, **kwargs)
         cls.__name = _LoggerMeta.NAME
@@ -59,6 +63,7 @@ class _LoggerMeta(type, Singleton):
         cls.__deb_log_file = _LoggerMeta.DEB_LOG
         cls.__inf_log_file = _LoggerMeta.INF_LOG
         cls.__err_log_file = _LoggerMeta.ERR_LOG
+        cls.__his_log_file = _LoggerMeta.HIS_LOG
 
         # check if exists or create log folder
         try:
@@ -86,10 +91,16 @@ class _LoggerMeta(type, Singleton):
         cls.__handler_error = logging.handlers.RotatingFileHandler(
             os.path.join(cls.__this_folder, cls.__err_log_file),
             maxBytes=_LoggerMeta.MAX_BYTE, backupCount=_LoggerMeta.BACK_COUNT)
+        cls.__handler_history = logging.handlers.RotatingFileHandler(
+            os.path.join(cls.__this_folder, cls.__his_log_file),
+            maxBytes=_LoggerMeta.MAX_BYTE, backupCount=_LoggerMeta.BACK_COUNT)
 
         # set handler log levels
         cls.__handler_info.setLevel(logging.INFO)
         cls.__handler_error.setLevel(logging.ERROR)
+        # add custom log level
+        logging.addLevelName(_LoggerMeta.HISTORY, 'HISTORY')
+        cls.__handler_history.setLevel(_LoggerMeta.HISTORY)
 
         # create formatters and setup handlers
         cls.__format_info = \
@@ -98,15 +109,20 @@ class _LoggerMeta(type, Singleton):
         cls.__format_error = \
             logging.Formatter(_LoggerMeta.ERR_FMT,
                               datefmt=_LoggerMeta.DAT_FMT)
+        cls.__format_history = \
+            logging.Formatter(_LoggerMeta.HIS_FMT,
+                              datefmt=_LoggerMeta.DAT_FMT)
 
         cls.__handler_info.setFormatter(cls.__format_info)
         cls.__handler_error.setFormatter(cls.__format_error)
+        cls.__handler_history.setFormatter(cls.__format_history)
 
         # instantiate logger and add handler
         cls.__log_instance = logging.getLogger(cls.__name)
 
         cls.__log_instance.addHandler(cls.__handler_info)
         cls.__log_instance.addHandler(cls.__handler_error)
+        cls.__log_instance.addHandler(cls.__handler_history)
 
         # if debug.log enabled
         if cls.__debug_log:
@@ -120,6 +136,10 @@ class _LoggerMeta(type, Singleton):
                                   datefmt=_LoggerMeta.DAT_FMT)
             cls.__handler_debug.setFormatter(cls.__format_debug)
             cls.__log_instance.addHandler(cls.__handler_debug)
+
+        # set custom log level
+        cls.__log_instance.history = \
+            lambda msg, *ars: cls.__log_instance._log(cls.HISTORY, msg, ars)
 
     @property
     def instance(cls):
