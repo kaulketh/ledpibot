@@ -8,13 +8,16 @@ __status__ = "Production"
 
 from functions import dictionary_functions
 from functions.effects import clear
+from logger import LOGS
 from .iron import *
 from .light import LightFunction
+from .retain import Retainer
 from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
-
+RETAIN = f"{LOGS}/history.dat"
 flag = None
+history = Retainer(RETAIN, ts_required=False)
 
 clear(WREATH)
 
@@ -45,6 +48,7 @@ def run_thread(func_name, request_id, bot):
             name=func_name,
             request_id=request_id,
             bot=bot)
+        history.persist(func_name)
         t.start()
         set_stop_flag(False)
         return t
