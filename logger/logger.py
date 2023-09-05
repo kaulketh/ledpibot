@@ -38,7 +38,7 @@ class _LoggerMeta(type, Singleton):
     DEB_LOG = f"{LOG_FOLDER}/debug.log"
     INF_LOG = f"{LOG_FOLDER}/info.log"
     ERR_LOG = f"{LOG_FOLDER}/error.log"
-    MAX_BYTE = 1024 * 1024 * 3 # 3MB
+    MAX_BYTE = 1024 * 1024 * 3  # 3MB
     BACK_COUNT = 5
 
     DAT_FMT = "%Y-%m-%d %H:%M:%S"
@@ -124,6 +124,10 @@ class _LoggerMeta(type, Singleton):
     @property
     def instance(cls):
         return cls.__log_instance
+
+    @property
+    def log_folder(cls):
+        return cls.__log_folder
 
 
 class PreconfiguredLogger(metaclass=_LoggerMeta):
