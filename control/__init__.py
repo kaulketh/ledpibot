@@ -8,16 +8,12 @@ __status__ = "Production"
 
 from functions import dictionary_functions
 from functions.effects import clear
-from logger import LOGS
 from .iron import *
 from .light import LightFunction
-from .retain import Retainer
 from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
-RETAIN = f"{LOGS}/history.log"
 flag = None
-history = Retainer(RETAIN, ts_required=False)
 
 clear(WREATH)
 
