@@ -203,24 +203,26 @@ class TelepotBot:
 
         # TODO: extract strings/texts as constants I
         # w/ translations
-        as_nfo = f"Auto start last executed function"
+        as_nfo = f"Auto start"
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         if AUTO_START:
             with open(HISTORY, "r") as f:
                 line = f.readlines()[-1]
                 cmd = line.partition(" HISTORY ")[2].replace("\n", "")
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
+                peripheral_functions.get(1)()
             for a in self.__admins:
                 self.__send(a, f"{as_nfo}: {cmd}", reply_markup=self.kb_stop)
 
         # TODO: extract strings/texts as constants II
         # w/ translations
-        ar_nfo = f"Auto reboot enabled"
+        ar_nfo = f"Auto reboot"
         self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
-                self.__send(a, f"{ar_nfo} at {AUTO_REBOOT_TIME} CET",
-                            reply_markup=self.rm_kb)
+                kb = self.kb_stop if AUTO_START else self.rm_kb
+                self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
+                            reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
         while True:
