@@ -201,21 +201,7 @@ class TelepotBot:
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
 
-        # TODO: extract strings/texts as constants I
-        # w/ translations
-        as_nfo = f"Auto start"
-        self.__log.info(f"{as_nfo} = {AUTO_START}")
-        if AUTO_START:
-            with open(HISTORY, "r") as f:
-                line = f.readlines()[-1]
-                cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
-                peripheral_functions.get(1)()
-            for a in self.__admins:
-                self.__send(a, f"{as_nfo}: {cmd}", reply_markup=self.kb_stop)
-
-        # TODO: extract strings/texts as constants II
-        # w/ translations
+        # TODO: extract strings/texts as constants w/ translations (I)
         ar_nfo = f"Auto reboot"
         self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
@@ -225,6 +211,18 @@ class TelepotBot:
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
+        # TODO: extract strings/texts as constants w/ translations (II)
+        as_nfo = f"Auto start"
+        self.__log.info(f"{as_nfo} = {AUTO_START}")
+        if AUTO_START:
+            with open(HISTORY, "r") as f:
+                line = f.readlines()[-1]
+                cmd = line.partition(" HISTORY ")[2].replace("\n", "")
+                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
+                peripheral_functions.get(1)()
+            for a in self.__admins:
+                self.__send(a, f"{as_nfo}: {cmd}",
+                            reply_markup=self.kb_stop)
         while True:
             try:
                 signal.pause()
