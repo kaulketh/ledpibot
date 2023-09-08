@@ -16,11 +16,12 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
 
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
     RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
-    m_rebooted, m_started, m_stopped, m_updated, m_wrong_id
-from control import peripheral_functions, run_thread, service, stop_threads
+    m_rebooted, m_started, m_stopped, m_updated, m_wrong_id, AUTO_START
+from control import peripheral_functions, run_thread, service, \
+    stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
-from logger import LOGGER
+from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
 
@@ -200,12 +201,28 @@ class TelepotBot:
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
 
-        auto_reboot = f"Auto reboot enabled"
-        self.__log.info(f"auto_reboot = {AUTO_REBOOT_ENABLED}")
+        # TODO: extract strings/texts as constants I
+        # w/ translations
+        as_nfo = f"Auto start"
+        self.__log.info(f"{as_nfo} = {AUTO_START}")
+        if AUTO_START:
+            with open(HISTORY, "r") as f:
+                line = f.readlines()[-1]
+                cmd = line.partition(" HISTORY ")[2].replace("\n", "")
+                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
+                peripheral_functions.get(1)()
+            for a in self.__admins:
+                self.__send(a, f"{as_nfo}: {cmd}", reply_markup=self.kb_stop)
+
+        # TODO: extract strings/texts as constants II
+        # w/ translations
+        ar_nfo = f"Auto reboot"
+        self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
-                self.__send(a, f"{auto_reboot} at {AUTO_REBOOT_TIME} CET",
-                            reply_markup=self.rm_kb)
+                kb = self.kb_stop if AUTO_START else self.rm_kb
+                self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
+                            reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
         while True:

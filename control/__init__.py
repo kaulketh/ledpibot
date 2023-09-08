@@ -13,7 +13,6 @@ from .light import LightFunction
 from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
-
 flag = None
 
 clear(WREATH)
@@ -45,6 +44,7 @@ def run_thread(func_name, request_id, bot):
             name=func_name,
             request_id=request_id,
             bot=bot)
+        LOGGER.history(func_name)
         t.start()
         set_stop_flag(False)
         return t

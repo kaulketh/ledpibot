@@ -17,7 +17,7 @@ from logger import LOGGER
 if __name__ == '__main__':
 
     try:
-        threading.Thread(target=peripheral_functions.get(2)).start()
+        # threading.Thread(target=peripheral_functions.get(2)).start()
         telepot_bot.main()
     except (ConnectionResetError, ProtocolError, HTTPError) as e:
         LOGGER.error(f"Connection error occurs: {e}")
