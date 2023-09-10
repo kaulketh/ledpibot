@@ -6,7 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import dictionary_functions
+from functions import dictionary_of_functions
 from functions.effects import clear
 from .iron import *
 from .light import LightFunction
@@ -36,7 +36,7 @@ def set_stop_flag(_flag):
 
 def run_thread(func_name, request_id, bot):
     try:
-        f = dictionary_functions.get(func_name)
+        f = dictionary_of_functions.get(func_name)
         LOGGER.debug(f"Init thread for function: {f}")
         t = LightFunction(
             function=f,

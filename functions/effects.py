@@ -140,7 +140,8 @@ class Effect:
                 self.__leds.show()
                 time.sleep(wait_ms)
 
-    # TODO: create new wipe effects (wandering empty pixel) and implement
+
+# TODO: create new wipe effects (wandering empty pixel) and implement
 
 
 def __loop(wreath, effect):
@@ -168,6 +169,11 @@ def clear(wreath):
     except Exception as e:
         Effect.log.error(f"Any error occurs: {e}")
         exit()
+
+
+def run_rainbow(wreath):
+    while True:
+        __loop(wreath, Effect(wreath).rainbow(iterations=1))
 
 
 def run_rainbow_cycle(wreath):
