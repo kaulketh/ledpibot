@@ -55,6 +55,7 @@ It is possible to call in-app commands at any time!
     /Help   This menu"""
 
 
+# TODO: update help text (new animations) and MANUAL.MD
 class Service:
     c_prefix = "- "
     c_info = "/Info"
