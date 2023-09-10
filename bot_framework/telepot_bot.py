@@ -51,9 +51,9 @@ class TelepotBot:
         # keys order (config/dictionary.py texts)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__buttons([4, 5, 17, 18, 19, 21, 22]),
-            self.__buttons([15, 20, 6, 23, 7]),
-            self.__buttons([2, 3, 16]),
-            self.__buttons([8, 9, 10, 13, 11, 12, 14])
+            self.__buttons([8, 9, 10, 13, 11, 12, 14]),
+            self.__buttons([15, 20, 6, 23, 7, 24]),
+            self.__buttons([2, 3, 16])
         ])
         self.__func_thread = None
 

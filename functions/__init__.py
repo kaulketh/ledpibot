@@ -33,7 +33,7 @@ def light_animations():
                      run_green, run_yellow, run_orange, run_white, run_violet,
                      run_demo, run_stroboscope, run_clock3, run_clock4,
                      run_clock5, run_demo2, run_clock6, run_clock7,
-                     run_rainbow,
+                     run_rainbow, run_rainbow_chaser,
                      None]
         LOGGER.debug("Build functions dictionary.")
         for i in range(len(commands)):

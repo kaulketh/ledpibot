@@ -69,7 +69,8 @@ texts = {
         21: "clock 6",
         22: "clock 7",
         23: "rainbow 2",
-        24: "standby"
+        24: "theater 2",
+        25: "standby"
 
     },
     DE: {
@@ -110,8 +111,9 @@ texts = {
         32: "uhr 6",
         33: "uhr 7",
         34: "regenbogn 2",
-        35: "Bot-Update, Reboot folgt.",
-        36: "Standby"
+        35: "theater 2",
+        36: "Bot-Update, Reboot folgt.",
+        37: "Standby"
 
     },
     EN: {
@@ -152,8 +154,9 @@ texts = {
         32: "clock 6",
         33: "clock 7",
         34: "rainbow 2",
-        35: "Bot update, reboot shortly.",
-        36: "Standby"
+        35: "theater 2",
+        36: "Bot update, reboot shortly.",
+        37: "Standby"
 
     },
     FR: {
@@ -194,8 +197,9 @@ texts = {
         32: "montre 6",
         33: "montre 7",
         34: "arc en ciel 2",
-        35: "Mise à jour, le bot est redémarré.",
-        36: "Etre prêt"
+        35: "théâtre 2",
+        36: "Mise à jour, le bot est redémarré.",
+        37: "Etre prêt"
 
     }
 }
@@ -222,9 +226,9 @@ def __assign_texts(lng_key: str):
         text_assignments[texts[CMD].get(i)] = \
             texts[lng_key].get(i + len(texts[MSG]) - 1)
     # Message 'Update'
-    text_assignments[texts[MSG].get(11)] = texts[lng_key].get(35)
+    text_assignments[texts[MSG].get(11)] = texts[lng_key].get(36)
     # Command 'Standby'
-    text_assignments[texts[CMD].get(24)] = texts[lng_key].get(36)
+    text_assignments[texts[CMD].get(25)] = texts[lng_key].get(37)
 
     languages[lng_key].update(text_assignments)
 
