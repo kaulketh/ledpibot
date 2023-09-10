@@ -219,7 +219,6 @@ class TelepotBot:
                 line = f.readlines()[-1]
                 cmd = line.partition(" HISTORY ")[2].replace("\n", "")
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
-                peripheral_functions.get(1)()
             for a in self.__admins:
                 self.__send(a, f"{as_nfo}: {cmd}",
                             reply_markup=self.kb_stop)

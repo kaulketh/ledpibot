@@ -8,7 +8,7 @@ __status__ = "Production"
 
 from functions import dictionary_of_functions
 from functions.effects import clear
-from .iron import *
+from logger import LOGGER
 from .light import LightFunction
 from .wreath import WREATH, wreath_setup
 
@@ -66,16 +66,19 @@ def stop_threads():
 
 
 def off():
-    peripheral_functions.get(0)()
     clear(WREATH)
 
 
-peripheral_functions = {0: iron.close_the_eyes,
-                        1: iron.open_the_eyes,
-                        2: iron.blink_more_often,
+def _pass():
+    pass
+
+
+peripheral_functions = {0: _pass,
+                        1: _pass,
+                        2: _pass,
                         3: off}
-"""dictionary of some functions:\n
-0 - to close Iron Man's eyes,\n 
-1 - to open Iron Man's eyes,\n 
-2 - to let Iron Man blink with eyes,\n 
+"""dictionary of peripheral functions:\n
+0 - pass,\n 
+1 - pass,\n 
+2 - pass,\n 
 3 - to turn off all LEDs"""

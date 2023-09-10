@@ -50,13 +50,9 @@ class LightFunction(Thread):
 
         p = self.__process
         LightFunction.threads.append(self)
-        import control
-        control.peripheral_functions.get(0)()
-        control.peripheral_functions.get(1)()
         while self.__do_run:
             time.sleep(1)
         # stop
-        control.peripheral_functions.get(0)()
         p.terminate()
         clear(self.__wreath)
         self.__wreath.setBrightness(LED_BRIGHTNESS)
