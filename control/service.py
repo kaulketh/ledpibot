@@ -49,7 +49,8 @@ It is possible to call in-app commands at any time!
     Red, blue, green, white, yellow, orange, violet:    All LEDs at once can switched to same color.
 
 - *Service menu:*
-    /Reboot ...
+    /Reboot device
+    /Restart bot application (running as service)
     /Info   Information commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load.
     /Update Force update from GitHub to the latest version of master branch.
     /Help   This menu"""
@@ -60,6 +61,7 @@ class Service:
     c_prefix = "- "
     c_info = "/Info"
     c_reboot = "/Reboot"
+    c_restart = "/Restart"
     c_update = "/Update"
     c_help = "/Help"
 
@@ -71,9 +73,10 @@ class Service:
         self.__menu_header = f"{NAME} functions:"
         self.__menu_dictionary = {
             0: self.c_reboot,
-            1: self.c_info,
-            2: self.c_update,
-            3: self.c_help
+            1: self.c_restart,
+            2: self.c_info,
+            3: self.c_update,
+            4: self.c_help
         }
 
         self.__new_line = "\n"
@@ -165,6 +168,11 @@ class Service:
 
 def reboot_device(log_msg: str = None):
     Service("sudo reboot", log_msg).execute_os_command()
+
+
+def restart_service(log_msg: str = None):
+    Service("sudo systemctl restart ledpibot.service",
+            log_msg).execute_os_command()
 
 
 def system_info():

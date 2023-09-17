@@ -167,6 +167,10 @@ class TelepotBot:
             elif command == service.Service.c_reboot:
                 self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(m_rebooted)
+            elif command == service.Service.c_restart:
+                # TODO: message text as constant
+                self.__send(chat_id, "Bot restart", reply_markup=self.rm_kb)
+                service.restart_service("Bot restart")
             elif command == service.Service.c_info:
                 if self.__stop_function(chat_id, msg=None):
                     info = service.system_info()
