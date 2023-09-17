@@ -16,7 +16,8 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
 
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
     RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
-    m_rebooted, m_started, m_stopped, m_updated, m_wrong_id, AUTO_START
+    m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
+    AUTO_START
 from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
@@ -169,8 +170,8 @@ class TelepotBot:
                 service.reboot_device(m_rebooted)
             elif command == service.Service.c_restart:
                 # TODO: message text as constant
-                self.__send(chat_id, "Bot restart", reply_markup=self.rm_kb)
-                service.restart_service("Bot restart")
+                self.__send(chat_id, m_restarted, reply_markup=self.rm_kb)
+                service.restart_service(m_restarted)
             elif command == service.Service.c_info:
                 if self.__stop_function(chat_id, msg=None):
                     info = service.system_info()
@@ -205,8 +206,8 @@ class TelepotBot:
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
 
-        # TODO: extract strings/texts as constants w/ translations (I)
-        ar_nfo = f"Auto reboot"
+        # TODO: nfo string/text as constant w/ translations (I)
+        ar_nfo = f"Auto-Reboot"
         self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
@@ -215,12 +216,15 @@ class TelepotBot:
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
-        # TODO: extract strings/texts as constants w/ translations (II)
-        as_nfo = f"Auto start"
+        # TODO: nfo string/text as constant w/ translations (II)
+        as_nfo = f"Autostart"
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         if AUTO_START:
             with open(HISTORY, "r") as f:
                 line = f.readlines()[-1]
+                # TODO: implement considering of translation of stored command after language change
+                # hint: search key of value/stored string and gather translations with this key
+                # hint: depending of set language execute/set command text
                 cmd = line.partition(" HISTORY ")[2].replace("\n", "")
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
             for a in self.__admins:

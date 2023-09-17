@@ -37,7 +37,7 @@ texts = {
         3: "m_called",
         4: "m_started",
         5: "m_rebooted",
-        6: "m_rotated",
+        6: "m_restarted",
         7: "m_stopped",
         8: "m_standby",
         9: "m_stop_f",
@@ -81,7 +81,7 @@ texts = {
         3: "*{0}* läuft bis {1}",
         4: "Bot ist einsatzbereit.",
         5: "Gerät wird neu gestartet.",
-        6: "Logrotate manuell ausgeführt.",
+        6: "Bot neu gestartet.",
         7: "Bot pausiert!",
         8: "Standby: {0}\nNeustart um {1}",
         9: "{0} gestoppt.",
@@ -124,7 +124,7 @@ texts = {
         3: "*{0}* runs until {1}",
         4: "Bot ready for use.",
         5: "Device rebooted.",
-        6: "Logrotate executed manually.",
+        6: "Service restarted.",
         7: "Bot paused.",
         8: "Standby: {0}\nRestart at {1}",
         9: "{0} stopped.",
@@ -167,7 +167,7 @@ texts = {
         3: "*{0}* s'exécute jusqu'à {1}",
         4: "Le bot est prêt à l'emploi.",
         5: "L'appareil est redémarré.",
-        6: "Logrotate exécuté manuellement.",
+        6: "Service redémarré.",
         7: "Bot en pause!",
         8: "Veille: {0}\nRedémarrez à {1}",
         9: "{0} arrêté.",
@@ -266,7 +266,7 @@ def get_texts(text_type):
     """
     Get text translations.
 
-    :param text_type: messages, commands
+    :param text_type: message or command
     :return: list of texts
     """
     global language, assignment
