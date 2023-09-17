@@ -169,7 +169,6 @@ class TelepotBot:
                 self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(m_rebooted)
             elif command == service.Service.c_restart:
-                # TODO: message text as constant
                 self.__send(chat_id, m_restarted, reply_markup=self.rm_kb)
                 service.restart_service(m_restarted)
             elif command == service.Service.c_info:
@@ -223,8 +222,8 @@ class TelepotBot:
             with open(HISTORY, "r") as f:
                 line = f.readlines()[-1]
                 # TODO: implement considering of translation of stored command after language change
-                # hint: search key of value/stored string and gather translations with this key
-                # hint: depending of set language execute/set command text
+                #  - search key of value/stored string and gather translations with this key
+                #  - depending of set language execute/set command text
                 cmd = line.partition(" HISTORY ")[2].replace("\n", "")
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
             for a in self.__admins:
