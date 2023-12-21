@@ -215,7 +215,7 @@ class TelepotBot:
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         with open(HISTORY, "r") as f:
             line = f.readlines()[-1]
-            self.__log.warning(line)
+            self.__log.warning(line.replace("\n", ""))
             # TODO: implement considering of translation of stored command after language change
             #  - search key of value/stored string and gather translations with this key
             #  - depending of set language execute/set command text
