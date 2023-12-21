@@ -47,16 +47,17 @@ Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden fi
         * **Clock 5** Red hour hand, blue minute hand and warm yellow second 'pendulum' over all LEDs.
         * **Clock 6** Similar Clock 4, but w/o seconds and Green and Blue as major colors.
         * **Clock 7** white minute hand from LED 1 to 12 in 5 min steps (right half of circle), blue hour hand from LED 12 to 24 (left half of circle)
+    * _**Colorful animations**_
+        * All LEDs at once can switch to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
+        * **Colors**: Switching simple colors in random time periods
+        * **Colors II**: Fading over simple colors in random time periods
+        * **Rainbow**: Rainbow animation with circular fading effect
+        * **Rainbow II**: Rainbow animation with chaser, included fading effect.
+        * **Theater**: Extremely colorful animation with spinning and wiping effects
+        * **Theater II**: Another colorful animation with spinning effects
     * **Advent**: Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candlelight. If it is other than Advent time LEDs will circle in orange as warning!  
     * **Candles**: Each LED simulates candlelight
-    * **Rainbow**: Rainbow animation with circular fading effect
-    * **Rainbow 2**: Rainbow animation with chaser, included fading effect.
-    * **Theater**: Extremely colorful animation with chaser, spinning, wiping effects
     * **Strobe**: Emitting brief and rapid flashes of white light in random frequency
-    * _**Colors**_
-        * **Colors**: Switching simple colors in random time periods
-        * **Colors 2**: Fading over simple colors in random time periods
-        * All LEDs at once can switch to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
 * **Service menu** no app-in menu, will build due runtime but will be handled like an app-in command because of the slash in front 
     * **/Reboot** - What should I write here?
     * **/Info** - Information about the latest commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load

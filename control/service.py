@@ -38,15 +38,16 @@ It is possible to call in-app commands at any time!
     Clock 5:    Red hour hand, blue minute hand and warm yellow second 'pendulum' over all LEDs.
     Clock 6:    Similar Clock 4, but w/o seconds and Green and Blue as major colors.
     Clock 7:    White minute hand from LED 1 to 12 in 5 min steps (right half of circle), blue hour hand from LED 12 to 24 (left half of circle)
+    Red, blue, green, white, yellow, orange, violet:    All LEDs at once can switched to same color.
+    Colors:     Switching simple colors in random time periods.
+    Colors II:  Fading over simple colors in random time periods.
+    Rainbow:    Rainbow animation with circular fading effect.
+    Rainbow II: Rainbow animation with chaser, included fading effect.
+    Theater:    Extremely colorful animation with spinning and wiping effects.
+    Theater II: Another colorful animation with spinning effects.
     Advent:     Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candle light. If it is other than Advent time LEDs will circle in orange as warning!
     Candles:    Each LED simulates candlelight.
-    Rainbow:    Rainbow animation with circular fading effect.
-    Rainbow 2:  Rainbow animation with chaser, included fading effect.
-    Theater:    Extremely colorful animation with chaser, spinning and wiping effects.
     Strobe:     Emitting brief and rapid flashes of white light in random frequency.
-    Colors:     Switching simple colors in random time periods.
-    Colors 2:   Fading over simple colors in random time periods.
-    Red, blue, green, white, yellow, orange, violet:    All LEDs at once can switched to same color.
 
 - *Service menu:*
     /Reboot device
@@ -56,7 +57,6 @@ It is possible to call in-app commands at any time!
     /Help   This menu"""
 
 
-# TODO: update help text (new animations) and MANUAL.MD
 class Service:
     c_prefix = "- "
     c_info = "/Info"
