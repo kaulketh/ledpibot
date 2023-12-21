@@ -10,12 +10,9 @@ import json
 import os
 
 from logger import LOGGER
-from .app_settings import *
-from .hw_settings import *
+from .settings import *
 from .secret import *  # no public deployment!
 
-RUNNING = "Bot is running..."
-TRANSLATIONS = 'dictionary.json'
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 with open(os.path.join(HERE, TRANSLATIONS), 'r', encoding='utf-8') as file:
@@ -27,13 +24,16 @@ commands = []
  m_restarted, m_stopped, m_standby, m_stop_f, m_killed, m_updated) \
     = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-# dynamically creating variables
+LOGGER.debug(f"Dynamically creating variables")
 for item in translations.items():
     _type = item[1].get('type')
     _name = item[1].get('name')
-    _value = item[1].get(LANGUAGE).capitalize()
-    LOGGER.debug(f"Set translation, {_type} {_name}:{_value}")
+    _value = item[1].get(LANGUAGE)
+    _n = item[0]
     globals()[_name] = _value
     if _type == "function":
         # commands
-        commands.append(globals().get(_name))
+        _n = len(commands)
+        commands.append(globals().get(_name).title())
+    _value_r = _value.replace("\n", "")
+    LOGGER.debug(f"{_type} {_n} '{_name}': '{_value_r}'")
