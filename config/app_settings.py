@@ -7,7 +7,7 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 # language keys: "German", "English", "French"
-LANGUAGE = "English"
+LANGUAGE = "German"
 
 AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "00:30"
