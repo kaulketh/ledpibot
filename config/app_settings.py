@@ -6,11 +6,11 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-LANGUAGE = "en"  # language keys: "de", "en", "fr"
+LANGUAGE = "german"  # language keys: "german", "english", "french"
 
-AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "00:30"
-AUTO_START = True
+AUTO_START = False
 
 if __name__ == '__main__':
     pass

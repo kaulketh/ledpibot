@@ -13,20 +13,26 @@ from logger import LOGGER
 assignment = {}
 language: str = ""
 
-# text type constants
+# constants
 RUNNING = "Bot is running..."
+NAME = "name"
+# text types
 CMD = "command"
 MSG = "message"
-DE = "de"
-EN = "en"
-FR = "fr"
-NAME = "name"
+# languages
+DE = "german"
+EN = "english"
+FR = "french"
 
 languages = {
     DE: {NAME: "German"},
     EN: {NAME: "English"},
     FR: {NAME: "French"},
 }
+
+# TODO:  restructuring of dictionary and its application
+# {key(int): {type(str): {name(str), german(str), english(str), french(str)}}
+# see dictionary.json
 
 # noinspection SpellCheckingInspection
 texts = {
@@ -110,7 +116,7 @@ texts = {
         31: "farben 2",
         32: "uhr 6",
         33: "uhr 7",
-        34: "regenbogn 2",
+        34: "regenbogen 2",
         35: "theater 2",
         36: "Bot-Update, Reboot folgt.",
         37: "Standby"
@@ -279,9 +285,7 @@ def get_texts(text_type):
                 else assignment[language].get(texts[_type].get(key))
             newline, space = ("\n", " ")
             LOGGER.debug(
-                f"{key}: {texts[_type].get(key)} = "
-                f"{txt.replace(newline, space)}"
-
+                f"{key}:{texts[_type].get(key)}={txt.replace(newline, space)}"
             )
             yield txt
 

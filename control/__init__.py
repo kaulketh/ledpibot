@@ -6,7 +6,7 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import dictionary_of_functions
+from functions import dictionary_of_functions, STOP_CMD
 from functions.effects import clear
 from logger import LOGGER
 from .light import LightFunction
@@ -58,6 +58,7 @@ def stop_threads():
             if t is not None and t.is_running:
                 t.stop()
         set_stop_flag(True)
+        LOGGER.history(STOP_CMD)
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
         set_stop_flag(False)

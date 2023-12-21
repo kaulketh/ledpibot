@@ -8,6 +8,7 @@ __status__ = "Production"
 
 import codecs
 import signal
+import traceback
 
 import telepot
 from telepot.loop import MessageLoop
@@ -22,6 +23,7 @@ from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
+from functions import STOP_CMD
 from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
@@ -127,7 +129,8 @@ class TelepotBot:
     def __stop_function(self, ch_id, msg):
         if msg is not None:
             self.__send(ch_id, msg, reply_markup=self.rm_kb)
-        return True if stop_threads() else False
+        # return True if stop_threads() else False
+        return stop_threads()
 
     def __handle(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -204,6 +207,27 @@ class TelepotBot:
 
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
+        # TODO: nfo string/text as constant w/ translations (II)
+        as_nfo = f"Autostart"
+        self.__log.info(f"{as_nfo} = {AUTO_START}")
+        with open(HISTORY, "r") as f:
+            line = f.readlines()[-1]
+            self.__log.warning(line)
+            # TODO: implement considering of translation of stored command after language change
+            #  - search key of value/stored string and gather translations with this key
+            #  - depending of set language execute/set command text
+            cmd = line.partition(" HISTORY ")[2].replace("\n", "")
+            _stop = (cmd == STOP_CMD)
+            self.__log.warning(_stop)
+        if AUTO_START:
+            if not _stop:
+                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
+                for a in self.__admins:
+                    self.__send(a, f"{as_nfo}: {cmd}",
+                                reply_markup=self.kb_stop)
+            else:
+                open(HISTORY, "w").close()
+                self.__stop_function(ID_CHAT_THK, msg=None)
 
         # TODO: nfo string/text as constant w/ translations (I)
         ar_nfo = f"Auto-Reboot"
@@ -215,20 +239,6 @@ class TelepotBot:
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
-        # TODO: nfo string/text as constant w/ translations (II)
-        as_nfo = f"Autostart"
-        self.__log.info(f"{as_nfo} = {AUTO_START}")
-        if AUTO_START:
-            with open(HISTORY, "r") as f:
-                line = f.readlines()[-1]
-                # TODO: implement considering of translation of stored command after language change
-                #  - search key of value/stored string and gather translations with this key
-                #  - depending of set language execute/set command text
-                cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
-            for a in self.__admins:
-                self.__send(a, f"{as_nfo}: {cmd}",
-                            reply_markup=self.kb_stop)
         while True:
             try:
                 signal.pause()
@@ -236,7 +246,8 @@ class TelepotBot:
                 self.__log.warning('Program interrupted')
                 exit()
             except Exception as e:
-                self.__log.error(f"Any error occurs: {e}")
+                self.__log.error(f"Any error occurs: {traceback.format_exc()}")
+                self.__log.exception(e)
                 exit()
             finally:
                 peripheral_functions.get(3)()
