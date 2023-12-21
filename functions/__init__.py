@@ -26,7 +26,7 @@ def light_animations():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in ~.config.dictionary.py !!!!
+        in ~.config
         """
         dic = {}
         funcs = [None, None,

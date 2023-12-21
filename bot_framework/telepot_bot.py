@@ -51,7 +51,7 @@ class TelepotBot:
 
         self.__log.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = ReplyKeyboardRemove()
-        # keys order (config/dictionary.py texts)
+        # keys order (config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__buttons([4, 5, 17, 18, 19, 21, 22]),
             self.__buttons([8, 9, 10, 13, 11, 12, 14]),
