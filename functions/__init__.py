@@ -26,7 +26,7 @@ def light_animations():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in ~.config
+        in config/dictionary.json
         """
         dic = {}
         funcs = [None, None,
@@ -38,11 +38,10 @@ def light_animations():
                  run_clock5, run_demo2, run_clock6, run_clock7,
                  run_rainbow, run_rainbow_chaser,
                  None]
-        LOGGER.debug("Build functions dictionary.")
         for i in range(len(commands)):
             f = funcs[i]
             dic[commands[i]] = f
-            LOGGER.debug(f'Add {i}: {f}')
+            LOGGER.debug(f"Dictionary function{[i]} {commands[i]}: {f}")
         return dic
     except Exception as ex:
         LOGGER.error(f"{ex}")

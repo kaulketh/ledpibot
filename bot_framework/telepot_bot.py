@@ -49,15 +49,15 @@ class TelepotBot:
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
 
-        self.__log.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = ReplyKeyboardRemove()
-        # keys order (config)
+        # keys order (refer config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__buttons([4, 5, 17, 18, 19, 21, 22]),
             self.__buttons([8, 9, 10, 13, 11, 12, 14]),
             self.__buttons([15, 20, 6, 23, 7, 24]),
             self.__buttons([2, 3, 16])
         ])
+        self.__log.debug(f"Done, keyboards and buttons built.")
         self.__func_thread = None
 
     @property
@@ -85,13 +85,16 @@ class TelepotBot:
 
     # noinspection PyMethodMayBeStatic
     def __button(self, text) -> KeyboardButton:
+        self.__log.debug(text)
         return KeyboardButton(text=text)
 
     # noinspection PyMethodMayBeStatic
-    def __buttons(self, choices: list, command_list: list = commands) -> list:
-        btn_list = []
+    def __buttons(self, choices: list) -> list:
+        btn_list, il = [], []
         for i in choices:
-            btn_list.append(KeyboardButton(text=command_list[i]))
+            btn_list.append(self.__button(text=commands[i]))
+            il.append(i)
+        self.__log.debug(il)
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):

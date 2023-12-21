@@ -99,17 +99,13 @@ class Service:
     def menu(self):
         try:
             m = f"{self.__menu_header}{self.__new_line}"
-            self.__logger.debug(
-                f"Build menu: "
-                f"{m.replace(self.__new_line, self.__empty)}")
             for key in self.__menu_dictionary.keys():
                 line = f"{self.c_prefix}" \
                        f"{self.__menu_dictionary.get(key)}" \
                        f"{self.__new_line}"
                 m += line
                 self.__logger.debug(
-                    f"Add line: "
-                    f"{line.replace(self.__new_line, self.__empty)}")
+                    f"add {line.replace(self.__new_line, self.__empty)}")
             return m
         except Exception as e:
             self.__logger.error(f"{e}")

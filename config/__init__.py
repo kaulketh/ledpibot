@@ -10,8 +10,8 @@ import json
 import os
 
 from logger import LOGGER
-from .settings import *
 from .secret import *  # no public deployment!
+from .settings import *
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,16 +24,16 @@ commands = []
  m_restarted, m_stopped, m_standby, m_stop_f, m_killed, m_updated) \
     = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-LOGGER.debug(f"Dynamically creating variables")
 for item in translations.items():
     _type = item[1].get('type')
     _name = item[1].get('name')
     _value = item[1].get(LANGUAGE)
     _n = item[0]
     globals()[_name] = _value
-    if _type == "function":
+    _value_hr = _value.replace("\n", "")
+    if _type == "btn_txt":
         # commands
         _n = len(commands)
-        commands.append(globals().get(_name).title())
-    _value_r = _value.replace("\n", "")
-    LOGGER.debug(f"{_type} {_n} '{_name}': '{_value_r}'")
+        _value_hr = globals().get(_name).title()
+        commands.append(_value_hr)
+    LOGGER.debug(f"{_type}[{_n}] {_name} = {_value_hr}")
