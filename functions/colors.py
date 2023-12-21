@@ -40,9 +40,12 @@ class Colorizer:
         }
         self.__color = None
         Colorizer.log.debug(f"Init instance of {self.__class__.__name__}.")
-        Colorizer.log.debug(f"Call: {inspect.stack()[1].function}")
         if color_key is not None:
+            Colorizer.log.debug(f"Run color '{color_key}'")
             self.run(color_key, None)
+        else:
+            Colorizer.log.debug(
+                f"Call function '{inspect.stack()[1].function}'")
 
     @property
     def all_colors(self):
@@ -50,8 +53,8 @@ class Colorizer:
 
     def __function_loop(self, function):
         Colorizer.log.debug(f"Running loop: {inspect.stack()[1].function}")
-        from control import get_stop_flag
-        while not get_stop_flag():
+        from control import stopped
+        while not stopped():
             function()
         clear(self.__fairy_lights)
 

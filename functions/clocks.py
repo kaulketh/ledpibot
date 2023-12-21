@@ -60,8 +60,8 @@ class Clock:
 
         Clock.log.debug(f"Initialize instance of {self.__class__.__name__}")
         Clock.log.debug(f"Call: {inspect.stack()[1].function}")
-        from control import get_stop_flag
-        while not get_stop_flag():
+        from control import stopped
+        while not stopped():
             try:
                 self.__h_hand, self.__m_hand, self.__s_hand = self.__hands
                 self.__clock_types.get(self.__clock_type)()
@@ -75,10 +75,11 @@ class Clock:
 
     @property
     def __hands(self):
+        _div = 60 / self.__fairy_lights.numPixels()
         now = wreath_setup(self.__fairy_lights)[0]
-        second_value = int(round(now.second / 2.5))
-        minute_value = int(now.minute / 2.5)
-        hour_value = int(int(now.hour) % 12 * 2)
+        second_value = int(now.second / _div)
+        minute_value = int(now.minute / _div)
+        hour_value = now.hour % 12 * 2
         return hour_value, minute_value, second_value
 
     def __gic(self, red, green, blue, hand_range, intensity):

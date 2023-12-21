@@ -140,13 +140,14 @@ class Effect:
                 self.__leds.show()
                 time.sleep(wait_ms)
 
-    # TODO: create new wipe effects (wandering empty pixel) and implement
+
+# TODO: create new wipe effects (wandering empty pixel) and implement
 
 
 def __loop(wreath, effect):
     Effect.log.debug(inspect.stack()[1].code_context)
-    from control import get_stop_flag
-    while not get_stop_flag():
+    from control import stopped
+    while not stopped():
         try:
             wreath_setup(wreath)
             return effect
@@ -171,7 +172,18 @@ def clear(wreath):
 
 
 def run_rainbow(wreath):
-    __loop(wreath, Effect(wreath).rainbow_cycle(iterations=100))
+    while True:
+        __loop(wreath, Effect(wreath).rainbow(iterations=1))
+
+
+def run_rainbow_cycle(wreath):
+    while True:
+        __loop(wreath, Effect(wreath).rainbow_cycle(iterations=1))
+
+
+def run_rainbow_chaser(wreath):
+    while True:
+        __loop(wreath, Effect(wreath).rainbow_chaser(iterations=1))
 
 
 def run_theater(wreath):
@@ -188,7 +200,7 @@ def run_theater(wreath):
 
 def wipe_second(wreath, color, pivot, back_again=True):
     try:
-        Effect.wipe_second(wreath, color, pivot, back_again)
+        Effect(wreath).wipe_second(color, pivot, back_again)
     except KeyboardInterrupt:
         Effect.log.warning("KeyboardInterrupt")
         exit()

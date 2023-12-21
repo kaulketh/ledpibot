@@ -48,9 +48,9 @@ class AutoReboot(LightFunction):
             f"{datetime.datetime.now().second}")
 
         while not self.__time_to_reboot()[0]:
-            AutoReboot.log.debug(
-                f"reboot time not yet reached, "
-                f"recheck in {self.__ONE_MINUTE} seconds")
+            # AutoReboot.log.debug(
+            # f"reboot time not yet reached, "
+            # f"recheck in {self.__ONE_MINUTE} seconds")
             time.sleep(self.__ONE_MINUTE)
         AutoReboot.log.debug(f"reboot takes place in 1 minute")
         time.sleep(self.__ONE_MINUTE)

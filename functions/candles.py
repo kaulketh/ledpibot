@@ -14,7 +14,7 @@ from rpi_ws281x import *
 from logger import LOGGER
 
 
-class Candle:
+class Candles:
     logger = LOGGER
     RED = 255
     GREEN = 150
@@ -24,25 +24,25 @@ class Candle:
         self.__fairy_lights = fairy_lights
         self.__leds = led_numbers
 
-        Candle.logger.debug(
+        Candles.logger.debug(
             f"Initialize instance of {self.__class__.__name__}")
-        from control import get_stop_flag
-        while not get_stop_flag():
+        from control import stopped
+        while not stopped():
             try:
                 for i in range(self.__leds):
                     percent = randint(7, 10) / 100
-                    color = Color(int(Candle.RED * percent),
-                                  int(Candle.GREEN * percent),
-                                  int(Candle.BLUE * percent))
+                    color = Color(int(Candles.RED * percent),
+                                  int(Candles.GREEN * percent),
+                                  int(Candles.BLUE * percent))
                     self.__fairy_lights.setPixelColor(i, color)
                 self.__fairy_lights.show()
                 time.sleep(randint(13, 15) / 100)
 
             except KeyboardInterrupt:
-                Candle.logger.warning("KeyboardInterrupt")
+                Candles.logger.warning("KeyboardInterrupt")
                 exit()
             except Exception as e:
-                Candle.logger.error(f"Any error occurs: {e}")
+                Candles.logger.error(f"Any error occurs: {e}")
                 exit()
             finally:
                 import control
@@ -50,7 +50,7 @@ class Candle:
 
 
 def run_candles(light_wreath):
-    Candle(light_wreath, light_wreath.numPixels())
+    Candles(light_wreath, light_wreath.numPixels())
 
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ __status__ = "Production"
 
 import codecs
 import signal
+import traceback
 
 import telepot
 from telepot.loop import MessageLoop
@@ -16,11 +17,14 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
 
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
     RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
-    m_rebooted, m_started, m_stopped, m_updated, m_wrong_id
-from control import peripheral_functions, run_thread, service, stop_threads
+    m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
+    AUTO_START
+from control import peripheral_functions, run_thread, service, \
+    stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
-from logger import LOGGER
+from functions import STOP_CMD
+from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
 
@@ -47,11 +51,12 @@ class TelepotBot:
 
         self.__log.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = ReplyKeyboardRemove()
+        # keys order (config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
-            self.__buttons([2, 3, 6, 7, 16]),
             self.__buttons([4, 5, 17, 18, 19, 21, 22]),
-            self.__buttons([15, 20]),
-            self.__buttons([8, 9, 10, 13, 11, 12, 14])
+            self.__buttons([8, 9, 10, 13, 11, 12, 14]),
+            self.__buttons([15, 20, 6, 23, 7, 24]),
+            self.__buttons([2, 3, 16])
         ])
         self.__func_thread = None
 
@@ -124,7 +129,8 @@ class TelepotBot:
     def __stop_function(self, ch_id, msg):
         if msg is not None:
             self.__send(ch_id, msg, reply_markup=self.rm_kb)
-        return True if stop_threads() else False
+        # return True if stop_threads() else False
+        return stop_threads()
 
     def __handle(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -165,6 +171,9 @@ class TelepotBot:
             elif command == service.Service.c_reboot:
                 self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
                 service.reboot_device(m_rebooted)
+            elif command == service.Service.c_restart:
+                self.__send(chat_id, m_restarted, reply_markup=self.rm_kb)
+                service.restart_service(m_restarted)
             elif command == service.Service.c_info:
                 if self.__stop_function(chat_id, msg=None):
                     info = service.system_info()
@@ -198,13 +207,36 @@ class TelepotBot:
 
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
+        # TODO: nfo string/text as constant w/ translations (II)
+        as_nfo = f"Autostart"
+        self.__log.info(f"{as_nfo} = {AUTO_START}")
+        with open(HISTORY, "r") as f:
+            line = f.readlines()[-1]
+            self.__log.warning(line)
+            # TODO: implement considering of translation of stored command after language change
+            #  - search key of value/stored string and gather translations with this key
+            #  - depending of set language execute/set command text
+            cmd = line.partition(" HISTORY ")[2].replace("\n", "")
+            _stop = (cmd == STOP_CMD)
+            self.__log.warning(_stop)
+        if AUTO_START:
+            if not _stop:
+                self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
+                for a in self.__admins:
+                    self.__send(a, f"{as_nfo}: {cmd}",
+                                reply_markup=self.kb_stop)
+            else:
+                open(HISTORY, "w").close()
+                self.__stop_function(ID_CHAT_THK, msg=None)
 
-        auto_reboot = f"Auto reboot enabled"
-        self.__log.info(f"auto_reboot = {AUTO_REBOOT_ENABLED}")
+        # TODO: nfo string/text as constant w/ translations (I)
+        ar_nfo = f"Auto-Reboot"
+        self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
-                self.__send(a, f"{auto_reboot} at {AUTO_REBOOT_TIME} CET",
-                            reply_markup=self.rm_kb)
+                kb = self.kb_stop if AUTO_START else self.rm_kb
+                self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
+                            reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
 
         while True:
@@ -214,7 +246,8 @@ class TelepotBot:
                 self.__log.warning('Program interrupted')
                 exit()
             except Exception as e:
-                self.__log.error(f"Any error occurs: {e}")
+                self.__log.error(f"Any error occurs: {traceback.format_exc()}")
+                self.__log.exception(e)
                 exit()
             finally:
                 peripheral_functions.get(3)()

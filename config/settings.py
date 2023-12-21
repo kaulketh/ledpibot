@@ -6,11 +6,6 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-LANGUAGE = "en"  # language keys: "de", "en", "fr"
-
-AUTO_REBOOT_ENABLED = False
-AUTO_REBOOT_TIME = "01:30"
-
 LED_COUNT = 24  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (must support PWM!).
 LED_FREQ_HZ = 800_000  # LED signal frequency in hertz (usually 800khz)
@@ -21,6 +16,13 @@ LED_BRIGHTNESS_DAY = 200  # Daytime brightness
 LED_BRIGHTNESS_NIGHT = 100  # Night brightness
 LED_CUT_OFF_MORNING = 7  # Hour to adjust to day brightness
 LED_CUT_OFF_NIGHT = 18  # Hour to adjust to night brightness
+
+AUTO_REBOOT_ENABLED = False
+AUTO_REBOOT_TIME = "00:30"
+AUTO_START = False
+LANGUAGE = "German"  # language keys: "German", "English", "French"
+RUNNING = "Bot is running..."
+TRANSLATIONS = 'dictionary.json'
 
 if __name__ == '__main__':
     pass

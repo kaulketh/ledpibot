@@ -12,14 +12,14 @@ from random import randint
 
 from rpi_ws281x import *
 
-from functions.candles import Candle
+from functions.candles import Candles
 from functions.effects import Effect
 from logger import LOGGER
 
 
 class Advent:
     logger = LOGGER
-    CANDLE = Candle.RED, Candle.GREEN, Candle.BLUE
+    CANDLE = Candles.RED, Candles.GREEN, Candles.BLUE
     ADVENT = 255, 30, 0  # advent RGB
     ZERO = (210, 70, 0)  # first LED
     NAD = [27, 28, 29, 30]  # November advent days
@@ -47,9 +47,9 @@ class Advent:
         self.__light_wreath = light_wreath
         Advent.logger.debug(
             f"Initialize instance of {self.__class__.__name__}")
-        from control import get_stop_flag, peripheral_functions
+        from control import stopped, peripheral_functions
         count = 1
-        while not get_stop_flag():
+        while not stopped():
             year = datetime.datetime.now().year
             if Advent.advent_period(year):
                 self.__calendar()
