@@ -6,16 +6,31 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
+import json
+
+from logger import LOGGER
 from .app_settings import *
-from .dictionary import *
 from .hw_settings import *
 from .secret import *  # no public deployment!
 
-build_text_libraries()
-set_language(LANGUAGE)
+RUNNING = "Bot is running..."
+dictionary_file = '/home/pi/bot/config/dictionary.json'
+with open(dictionary_file, 'r', encoding='utf-8') as file:
+    translations = json.load(file)
 
-m_wrong_id, m_not_allowed, m_pls_select, m_called, m_started, m_rebooted, \
-    m_restarted, m_stopped, m_standby, m_stop_f, m_killed, \
-    m_updated = get_texts(MSG)
+commands = []
+# not required but set to 0 to avoid IDE error
+(m_wrong_id, m_not_allowed, m_pls_select, m_called, m_started, m_rebooted,
+ m_restarted, m_stopped, m_standby, m_stop_f, m_killed, m_updated) \
+    = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-commands = get_texts(CMD)
+# dynamically creating variables
+for item in translations.items():
+    _type = item[1].get('type')
+    _name = item[1].get('name')
+    _value = item[1].get(LANGUAGE).title()
+    LOGGER.debug(f"Setup translation, {_type} '{_name}' = {_value}")
+    globals()[_name] = _value
+    if _type == "function":
+        # commands
+        commands.append(globals().get(_name))

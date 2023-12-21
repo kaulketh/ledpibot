@@ -6,7 +6,8 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-LANGUAGE = "german"  # language keys: "german", "english", "french"
+# language keys: "German", "English", "French"
+LANGUAGE = "English"
 
 AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "00:30"
