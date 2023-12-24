@@ -21,7 +21,7 @@ from .effects import run_rainbow, run_rainbow_chaser, run_rainbow_cycle, \
 STOP_CMD = commands[0]
 
 
-def light_animations():
+def get_dictionary():
     try:
         """
         Ensure right order of functions, 
@@ -41,10 +41,10 @@ def light_animations():
         for i in range(len(commands)):
             f = funcs[i]
             dic[commands[i]] = f
-            LOGGER.debug(f"Dictionary function[{i:02d}] {commands[i]}: {f}")
+            LOGGER.debug(f"function[{i:02d}] {commands[i]}: {f}")
         return dic
     except Exception as ex:
         LOGGER.error(f"{ex}")
 
 
-dictionary_of_functions = light_animations()
+dictionary_of_functions = get_dictionary()

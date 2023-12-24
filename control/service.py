@@ -49,7 +49,7 @@ It is possible to call in-app commands at any time!
     Candles:    Each LED simulates candlelight.
     Strobe:     Emitting brief and rapid flashes of white light in random frequency.
 
-- *Service menu:*
+- *Service* menu:
     /Reboot device
     /Restart bot application (running as service)
     /Info   Information commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load.
@@ -70,7 +70,7 @@ class Service:
         self.__log_msg = log_msg
         self.__command = command
         self.__help_txt = HELP_TEXT
-        self.__menu_header = f"{NAME} functions:"
+        self.__menu_header = f"*{NAME}*:"
         self.__menu_dictionary = {
             0: self.c_reboot,
             1: self.c_restart,

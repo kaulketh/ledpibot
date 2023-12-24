@@ -52,10 +52,10 @@ class TelepotBot:
         self._remove_keyboard = ReplyKeyboardRemove()
         # keys order (refer config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
-            self.__button_group([4, 5, 17, 18, 19, 21, 22]),
-            self.__button_group([8, 9, 10, 13, 11, 12, 14]),
-            self.__button_group([15, 20, 6, 23, 7, 24]),
-            self.__button_group([2, 3, 16])
+            self.__btn_grp([4, 5, 17, 18, 19, 21, 22]),
+            self.__btn_grp([8, 9, 10, 13, 11, 12, 14]),
+            self.__btn_grp([15, 20, 6, 23, 7, 24]),
+            self.__btn_grp([2, 3, 16])
         ])
         self.__log.debug(f"Done, keyboards and buttons built.")
         self.__func_thread = None
@@ -89,12 +89,12 @@ class TelepotBot:
         return KeyboardButton(text=text)
 
     # noinspection PyMethodMayBeStatic
-    def __button_group(self, choices: list) -> list:
+    def __btn_grp(self, choices: list) -> list:
         btn_list, il = [], []
         for i in choices:
             btn_list.append(self.__button(commands[i], i))
             il.append(i)
-        self.__log.debug(f"arranged {il}")
+        self.__log.debug(f"{il} arranged")
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
