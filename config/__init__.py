@@ -28,7 +28,7 @@ for item in translations.items():
     _type = item[1].get('type')
     _name = item[1].get('name')
     _value = item[1].get(LANGUAGE)
-    _n = item[0]
+    _n = int(item[0])
     globals()[_name] = _value
     _value_hr = _value.replace("\n", "")
     if _type == "btn_txt":
@@ -36,4 +36,4 @@ for item in translations.items():
         _n = len(commands)
         _value_hr = globals().get(_name).title()
         commands.append(_value_hr)
-    LOGGER.debug(f"{_type}[{_n}] {_name} = {_value_hr}")
+    LOGGER.debug(f"{_type}[{_n:02d}] {_name} = {_value_hr}")

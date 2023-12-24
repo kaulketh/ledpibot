@@ -17,9 +17,9 @@ LED_BRIGHTNESS_NIGHT = 100  # Night brightness
 LED_CUT_OFF_MORNING = 7  # Hour to adjust to day brightness
 LED_CUT_OFF_NIGHT = 18  # Hour to adjust to night brightness
 
-AUTO_REBOOT_ENABLED = True
+AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "00:30"
-AUTO_START = True
+AUTO_START = False
 LANGUAGE = "German"  # language keys: "German", "English", "French"
 RUNNING = "Bot is running..."
 TRANSLATIONS = 'dictionary.json'

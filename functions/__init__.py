@@ -41,7 +41,7 @@ def light_animations():
         for i in range(len(commands)):
             f = funcs[i]
             dic[commands[i]] = f
-            LOGGER.debug(f"Dictionary function{[i]} {commands[i]}: {f}")
+            LOGGER.debug(f"Dictionary function[{i:02d}] {commands[i]}: {f}")
         return dic
     except Exception as ex:
         LOGGER.error(f"{ex}")
