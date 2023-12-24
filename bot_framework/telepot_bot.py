@@ -49,15 +49,15 @@ class TelepotBot:
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
 
-        self.__log.debug(f"Build app keyboards and buttons.")
         self._remove_keyboard = ReplyKeyboardRemove()
-        # keys order (config)
+        # keys order (refer config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
-            self.__buttons([4, 5, 17, 18, 19, 21, 22]),
-            self.__buttons([8, 9, 10, 13, 11, 12, 14]),
-            self.__buttons([15, 20, 6, 23, 7, 24]),
-            self.__buttons([2, 3, 16])
+            self.__button_group([4, 5, 17, 18, 19, 21, 22]),
+            self.__button_group([8, 9, 10, 13, 11, 12, 14]),
+            self.__button_group([15, 20, 6, 23, 7, 24]),
+            self.__button_group([2, 3, 16])
         ])
+        self.__log.debug(f"Done, keyboards and buttons built.")
         self.__func_thread = None
 
     @property
@@ -71,7 +71,7 @@ class TelepotBot:
     @property
     def kb_stop(self):
         r = ReplyKeyboardMarkup(
-            keyboard=[[self.__button(commands[0])]])
+            keyboard=[[self.__button(commands[0], 0)]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -84,14 +84,17 @@ class TelepotBot:
             bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
     # noinspection PyMethodMayBeStatic
-    def __button(self, text) -> KeyboardButton:
+    def __button(self, text, i) -> KeyboardButton:
+        self.__log.debug(f"[{i:02d}] {text}")
         return KeyboardButton(text=text)
 
     # noinspection PyMethodMayBeStatic
-    def __buttons(self, choices: list, command_list: list = commands) -> list:
-        btn_list = []
+    def __button_group(self, choices: list) -> list:
+        btn_list, il = [], []
         for i in choices:
-            btn_list.append(KeyboardButton(text=command_list[i]))
+            btn_list.append(self.__button(commands[i], i))
+            il.append(i)
+        self.__log.debug(f"arranged {il}")
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
@@ -212,7 +215,7 @@ class TelepotBot:
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         with open(HISTORY, "r") as f:
             line = f.readlines()[-1]
-            self.__log.warning(line)
+            self.__log.warning(line.replace("\n", ""))
             # TODO: implement considering of translation of stored command after language change
             #  - search key of value/stored string and gather translations with this key
             #  - depending of set language execute/set command text
