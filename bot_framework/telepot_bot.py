@@ -23,7 +23,7 @@ from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
-from functions import STOP_CMD
+from functions import STOP_CMD, indices_of_functions
 from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
@@ -51,12 +51,10 @@ class TelepotBot:
 
         self.__remove_keyboard = ReplyKeyboardRemove()
         # keys order (refer config)
-        self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
-            self.__btn_grp([4, 5, 17, 18, 19, 21, 22]),
-            self.__btn_grp([8, 9, 10, 13, 11, 12, 14]),
-            self.__btn_grp([15, 20, 6, 23, 7, 24]),
-            self.__btn_grp([2, 3, 16])
-        ])
+        self.__keyboard = []
+        for i in range(len(indices_of_functions)):
+            self.__keyboard.append(self.__btn_grp(indices_of_functions[i]))
+        self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=self.__keyboard)
         self.__log.debug(f"Done, keyboards and buttons built.")
         self.__func_thread = None
 

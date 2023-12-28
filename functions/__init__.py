@@ -21,7 +21,7 @@ from .effects import run_rainbow, run_rainbow_chaser, run_rainbow_cycle, \
 STOP_CMD = commands[0]
 
 
-def get_dictionary():
+def arranged():
     try:
         """
         Ensure right order of functions, 
@@ -38,13 +38,20 @@ def get_dictionary():
                  run_clock5, run_demo2, run_clock6, run_clock7,
                  run_rainbow, run_rainbow_chaser,
                  None]
+
+        i_clocks = 4, 5, 17, 18, 19, 21, 22
+        i_colors = 8, 9, 10, 13, 11, 12, 14
+        i_effects = 15, 20, 6, 23, 7, 24
+        i_specials = 2, 3, 16
+        indices = i_clocks, i_colors, i_effects, i_specials
+
         for i in range(len(commands)):
             f = funcs[i]
             dic[commands[i]] = f
             LOGGER.debug(f"function[{i:02d}] {commands[i]}: {f}")
-        return dic
+        return dic, indices
     except Exception as ex:
         LOGGER.error(f"{ex}")
 
 
-dictionary_of_functions = get_dictionary()
+dictionary_of_functions, indices_of_functions = arranged()
