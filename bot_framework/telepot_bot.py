@@ -49,7 +49,7 @@ class TelepotBot:
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
 
-        self._remove_keyboard = ReplyKeyboardRemove()
+        self.__remove_keyboard = ReplyKeyboardRemove()
         # keys order (refer config)
         self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
             self.__btn_grp([4, 5, 17, 18, 19, 21, 22]),
@@ -61,17 +61,8 @@ class TelepotBot:
         self.__func_thread = None
 
     @property
-    def rm_kb(self):
-        return self._remove_keyboard
-
-    @property
-    def kb_markup(self):
-        return self.__keyboard_markup
-
-    @property
     def kb_stop(self):
-        r = ReplyKeyboardMarkup(
-            keyboard=[[self.__button(commands[0], 0)]])
+        r = ReplyKeyboardMarkup(keyboard=[[self.__button(commands[0], 0)]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -114,7 +105,7 @@ class TelepotBot:
                       f"{ch_id} User:{username}, {first_name} {last_name}"
             self.__send(ch_id, m_wrong_id.format(user_id, username, first_name,
                                                  last_name),
-                        reply_markup=self.rm_kb)
+                        reply_markup=self.__remove_keyboard)
             raise Exception(log_msg)
         except Exception as ex:
             self.__log.warning(f"{ex}")
@@ -131,7 +122,7 @@ class TelepotBot:
 
     def __stop_function(self, ch_id, msg):
         if msg is not None:
-            self.__send(ch_id, msg, reply_markup=self.rm_kb)
+            self.__send(ch_id, msg, reply_markup=self.__remove_keyboard)
         # return True if stop_threads() else False
         return stop_threads()
 
@@ -140,7 +131,7 @@ class TelepotBot:
         self.__log.debug(msg)
 
         def answer(txt):
-            self.__send(chat_id, txt, reply_markup=self.rm_kb)
+            self.__send(chat_id, txt, reply_markup=self.__remove_keyboard)
 
         def execution_possible(txt):
             if command == txt:
@@ -150,7 +141,7 @@ class TelepotBot:
         def selection_request():
             self.__send(chat_id,
                         m_pls_select.format(msg['from']['first_name']),
-                        reply_markup=self.kb_markup)
+                        reply_markup=self.__keyboard_markup)
 
         def help_requested():
             return execution_possible(
@@ -211,7 +202,7 @@ class TelepotBot:
     def start(self):
         self.__log.info(RUNNING)
         for a in self.__admins:
-            self.__send(a, m_started, reply_markup=self.rm_kb)
+            self.__send(a, m_started, reply_markup=self.__remove_keyboard)
 
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
@@ -245,7 +236,7 @@ class TelepotBot:
         self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
-                kb = self.kb_stop if AUTO_START else self.rm_kb
+                kb = self.kb_stop if AUTO_START else self.__remove_keyboard
                 self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
