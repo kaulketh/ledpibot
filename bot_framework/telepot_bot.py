@@ -23,7 +23,7 @@ from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
-from functions import STOP_CMD, indices_of_functions
+from functions import indices_of_functions, STOP, START
 from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
@@ -59,8 +59,8 @@ class TelepotBot:
         self.__func_thread = None
 
     @property
-    def kb_stop(self):
-        r = ReplyKeyboardMarkup(keyboard=[[self.__button(commands[0], 0)]])
+    def kb_stop(self) -> ReplyKeyboardMarkup:
+        r = ReplyKeyboardMarkup(keyboard=[[self.__btn(STOP, 0)]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -73,7 +73,7 @@ class TelepotBot:
             bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
     # noinspection PyMethodMayBeStatic
-    def __button(self, text, i) -> KeyboardButton:
+    def __btn(self, text, i) -> KeyboardButton:
         self.__log.debug(f"[{i:02d}] {text}")
         return KeyboardButton(text=text)
 
@@ -81,7 +81,7 @@ class TelepotBot:
     def __btn_grp(self, choices: list) -> list:
         btn_list, il = [], []
         for i in choices:
-            btn_list.append(self.__button(commands[i], i))
+            btn_list.append(self.__btn(commands[i], i))
             il.append(i)
         self.__log.debug(f"{il} arranged")
         return btn_list
@@ -118,10 +118,9 @@ class TelepotBot:
             self.__log.warning(str(ex))
         return
 
-    def __stop_function(self, ch_id, msg):
+    def __stop_function(self, ch_id, msg) -> bool:
         if msg is not None:
             self.__send(ch_id, msg, reply_markup=self.__remove_keyboard)
-        # return True if stop_threads() else False
         return stop_threads()
 
     def __handle(self, msg):
@@ -131,7 +130,7 @@ class TelepotBot:
         def answer(txt):
             self.__send(chat_id, txt, reply_markup=self.__remove_keyboard)
 
-        def execution_possible(txt):
+        def execution_possible(txt) -> bool:
             if command == txt:
                 if self.__stop_function(chat_id, msg=None):
                     return True
@@ -146,12 +145,12 @@ class TelepotBot:
                 service.Service.c_help) or execution_possible(
                 service.Service.c_help.lower())
 
-        def sos():
+        def sos() -> bool:
             """start or stop w/o leading '/'"""
-            return (command.startswith(commands[0])) or (
-                command.startswith(commands[0].lower())) or (
-                command.startswith(commands[1])) or (
-                command.startswith(commands[1].lower()))
+            return (command.startswith(STOP)) or (
+                command.startswith(STOP.lower())) or (
+                command.startswith(START)) or (
+                command.startswith(START.lower()))
 
         # check user
         if chat_id not in self.__admins:
@@ -217,7 +216,7 @@ class TelepotBot:
             #  - search key of value/stored string and gather translations with this key
             #  - depending of set language execute/set command text
             cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-            _stop = (cmd == STOP_CMD)
+            _stop = (cmd == STOP)
             self.__log.warning(_stop)
         if AUTO_START:
             if not _stop:

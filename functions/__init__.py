@@ -18,10 +18,11 @@ from .colors import run_blue, run_demo, run_demo2, run_green, run_orange, \
 from .effects import run_rainbow, run_rainbow_chaser, run_rainbow_cycle, \
     run_theater
 
-STOP_CMD = commands[0]
+STOP = commands[0]
+START = commands[1]
 
 
-def arranged():
+def assigned():
     try:
         """
         Ensure right order of functions, 
@@ -54,4 +55,4 @@ def arranged():
         LOGGER.error(f"{ex}")
 
 
-dictionary_of_functions, indices_of_functions = arranged()
+dictionary_of_functions, indices_of_functions = assigned()
