@@ -19,28 +19,28 @@ from logger import LOGGER
 
 class Effect:
     log = LOGGER
-    __spectr = 255
+    spectrum = 255
 
     def __init__(self, fairy_lights: Adafruit_NeoPixel):
         self.__leds = fairy_lights
-        self.__spectr = Effect.__spectr
+        wreath_setup(self.__leds)
         Effect.log.debug(f"Initialize instance of {self.__class__.__name__} "
                          f"for {self.__leds}.")
-        Effect.log.debug(f"Call effect: {inspect.stack()[1].function}")
+        Effect.log.debug(str(inspect.stack()[1].code_context[0]).strip())
 
     @classmethod
     def __wheel(cls, pos):
         """
-        Generate rainbow colors across 0-255 positions.
+        color depends on position
         """
         if pos < 85:
-            return Color(pos * 3, cls.__spectr - pos * 3, 0)
+            return Color(pos * 3, cls.spectrum - pos * 3, 0)
         elif pos < 170:
             pos -= 85
-            return Color(cls.__spectr - pos * 3, 0, pos * 3)
+            return Color(cls.spectrum - pos * 3, 0, pos * 3)
         else:
             pos -= 170
-            return Color(0, pos * 3, cls.__spectr - pos * 3)
+            return Color(0, pos * 3, cls.spectrum - pos * 3)
 
     def clear(self):
         """
@@ -83,10 +83,10 @@ class Effect:
         """
         Draw rainbow that fades across all pixels at once.
         """
-        for j in range((self.__spectr + 1) * iterations):
+        for j in range((Effect.spectrum + 1) * iterations):
             for i in range(self.__leds.numPixels()):
                 self.__leds.setPixelColor(i, Effect.__wheel(
-                    (i + j) & self.__spectr))
+                    (i + j) & Effect.spectrum))
             self.__leds.show()
             time.sleep(wait_ms / 1_000.0)
 
@@ -94,12 +94,14 @@ class Effect:
         """
         Draw rainbow that uniformly distributes itself across all pixels.
         """
-        for j in range((self.__spectr + 1) * iterations):
+        for j in range((Effect.spectrum + 1) * iterations):
             for i in range(self.__leds.numPixels()):
                 self.__leds.setPixelColor(
                     i, Effect.__wheel(
-                        (int(i * 256 / self.__leds.numPixels()) + j)
-                        & self.__spectr))
+                        (int(i * (
+                                Effect.spectrum + 1)
+                             / self.__leds.numPixels()) + j)
+                        & Effect.spectrum))
             self.__leds.show()
             time.sleep(wait_ms / 1_000.0)
 
@@ -107,11 +109,11 @@ class Effect:
         """
         Rainbow movie theater light style chaser animation.
         """
-        for j in range((self.__spectr + 1) * iterations):
+        for j in range((Effect.spectrum + 1) * iterations):
             for led in range(3):
                 for i in range(0, self.__leds.numPixels(), 3):
                     self.__leds.setPixelColor(
-                        i + led, Effect.__wheel((i + j) % self.__spectr))
+                        i + led, Effect.__wheel((i + j) % Effect.spectrum))
                 self.__leds.show()
                 time.sleep(wait_ms / 1_000.0)
                 for i in range(0, self.__leds.numPixels(), 3):
@@ -144,22 +146,6 @@ class Effect:
 # TODO: create new wipe effects (wandering empty pixel) and implement
 
 
-def __loop(wreath, effect):
-    Effect.log.debug(inspect.stack()[1].code_context)
-    from control import stopped
-    while not stopped():
-        try:
-            wreath_setup(wreath)
-            return effect
-        except KeyboardInterrupt:
-            Effect.log.warning("KeyboardInterrupt")
-            exit()
-        except Exception as e:
-            Effect.log.error(f"Any error occurs: {e}")
-            exit()
-    Effect(wreath).clear()
-
-
 def clear(wreath):
     try:
         Effect(wreath).clear()
@@ -173,29 +159,29 @@ def clear(wreath):
 
 def run_rainbow(wreath):
     while True:
-        __loop(wreath, Effect(wreath).rainbow(iterations=1))
+        Effect(wreath).rainbow(iterations=1)
 
 
 def run_rainbow_cycle(wreath):
     while True:
-        __loop(wreath, Effect(wreath).rainbow_cycle(iterations=1))
+        Effect(wreath).rainbow_cycle(iterations=1)
 
 
 def run_rainbow_chaser(wreath):
     while True:
-        __loop(wreath, Effect(wreath).rainbow_chaser(iterations=1))
+        Effect(wreath).rainbow_chaser(iterations=1)
 
 
 def run_theater(wreath):
     while True:
-        __loop(wreath, Effect(wreath).full_wipe(Color(127, 0, 0)))
-        __loop(wreath, Effect(wreath).full_wipe(Color(0, 127, 0)))
-        __loop(wreath, Effect(wreath).full_wipe(Color(0, 0, 127)))
-        __loop(wreath, Effect(wreath).full_wipe(Color(127, 127, 127)))
-        __loop(wreath, Effect(wreath).chaser(Color(127, 127, 127)))
-        __loop(wreath, Effect(wreath).chaser(Color(0, 0, 127)))
-        __loop(wreath, Effect(wreath).chaser(Color(0, 127, 0)))
-        __loop(wreath, Effect(wreath).chaser(Color(127, 0, 0)))
+        Effect(wreath).full_wipe(Color(127, 0, 0))
+        Effect(wreath).full_wipe(Color(0, 127, 0))
+        Effect(wreath).full_wipe(Color(0, 0, 127))
+        Effect(wreath).full_wipe(Color(127, 127, 127))
+        Effect(wreath).chaser(Color(127, 127, 127))
+        Effect(wreath).chaser(Color(0, 0, 127))
+        Effect(wreath).chaser(Color(0, 127, 0))
+        Effect(wreath).chaser(Color(127, 0, 0))
 
 
 def wipe_second(wreath, color, pivot, back_again=True):
