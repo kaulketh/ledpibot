@@ -214,7 +214,10 @@ class TelepotBot:
         as_nfo = f"Autostart"
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         with open(HISTORY, "r") as f:
-            line = f.readlines()[-1]
+            # FIXME: if no HISTORY, impossible to find line in file
+            lines = f.readlines()
+            # if len(f.readlines()) > 0 else ["new file\n"]
+            line = lines[-1]
             self.__log.warning(line.replace("\n", ""))
             # TODO: implement considering of translation of stored command after language change
             #  - search key of value/stored string and gather translations with this key

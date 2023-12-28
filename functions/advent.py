@@ -20,9 +20,12 @@ from logger import LOGGER
 class Advent:
     logger = LOGGER
     CANDLE = Candles.RED, Candles.GREEN, Candles.BLUE
-    ADVENT = 255, 30, 0  # advent RGB
-    ZERO = (210, 70, 0)  # first LED
-    NAD = [27, 28, 29, 30]  # November advent days
+    ADVENT = 255, 30, 0
+    """Advent RGB"""
+    FIRST = (210, 70, 0)
+    """1st LED RGB"""
+    NAD = [27, 28, 29, 30]
+    """possible November advent days"""
     WRONG = f"Wrong period to show xmas/advent animation, " \
             f"it\'s {time.strftime('%A, %d.%B %Y')}!"
 
@@ -57,7 +60,7 @@ class Advent:
                 while count > 0:
                     Advent.logger.warning(Advent.WRONG)
                     count -= 1
-                Effect(self.__light_wreath).chaser(Color(*Advent.ZERO))
+                Effect(self.__light_wreath).chaser(Color(*Advent.FIRST))
         peripheral_functions.get(3)
 
     def __calendar(self):
@@ -74,7 +77,7 @@ class Advent:
                 # different color and brightness per day
                 # set up first LED as advent because it's before 1st December
                 if advents[0] in Advent.NAD:
-                    self.__randomize(0, Advent.ZERO)
+                    self.__randomize(0, Advent.FIRST)
                 # set up other advents in december
                 if (i + 1) in advents:
                     self.__randomize(i, Advent.ADVENT)

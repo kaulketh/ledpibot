@@ -22,7 +22,7 @@ AUTO_REBOOT_TIME = "00:30"
 AUTO_START = False
 LANGUAGE = "German"  # language keys: "German", "English", "French"
 RUNNING = "Bot is running..."
-TRANSLATIONS = 'dictionary.json'
+TRANSLATIONS = 'ui_translations.json'
 
 if __name__ == '__main__':
     pass

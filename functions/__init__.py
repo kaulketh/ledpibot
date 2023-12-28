@@ -26,7 +26,7 @@ def get_dictionary():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in config/dictionary.json
+        in config/ui_translations.json
         """
         dic = {}
         funcs = [None, None,
