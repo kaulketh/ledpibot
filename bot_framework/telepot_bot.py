@@ -139,6 +139,31 @@ class TelepotBot:
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.__log.debug(msg)
 
+        def answer(txt):
+            self.__send(chat_id, txt, reply_markup=self.rm_kb)
+
+        def execution_possible(txt):
+            if command == txt:
+                if self.__stop_function(chat_id, msg=None):
+                    return True
+
+        def selection_request():
+            self.__send(chat_id,
+                        m_pls_select.format(msg['from']['first_name']),
+                        reply_markup=self.kb_markup)
+
+        def help_requested():
+            return execution_possible(
+                service.Service.c_help) or execution_possible(
+                service.Service.c_help.lower())
+
+        def sos():
+            """start or stop w/o leading '/'"""
+            return (command.startswith(commands[0])) or (
+                command.startswith(commands[0].lower())) or (
+                command.startswith(commands[1])) or (
+                command.startswith(commands[1].lower()))
+
         # check user
         if chat_id not in self.__admins:
             self.__reply_wrong_id(chat_id, msg)
@@ -147,57 +172,37 @@ class TelepotBot:
         if content_type == 'text':
             command = msg['text']
             self.__log.info(f"Got command '{command}'")
-            # /start
-            if command == "/start":
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id,
-                                m_pls_select.format(msg['from']['first_name']),
-                                reply_markup=self.kb_markup)
 
-            # /stop
-            elif command == "/stop":
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, m_stopped, reply_markup=self.rm_kb)
-
-            # stop function
-            elif (command.startswith(commands[0])) \
-                    or (command.startswith(commands[0].lower())):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id,
-                                m_pls_select.format(msg['from']['first_name']),
-                                reply_markup=self.kb_markup)
-
-            # /service
-            elif command == ('/' + service.NAME.lower()):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, service.menu, reply_markup=self.rm_kb)
-            elif command == service.Service.c_reboot:
-                self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
+            # Bot menu respectively Telegram-in-app-commands
+            if execution_possible("/start"):
+                selection_request()
+            elif execution_possible("/stop"):
+                answer(m_stopped)
+            elif execution_possible('/' + service.NAME.lower()):
+                answer(service.menu)
+            elif execution_possible(service.Service.c_reboot):
+                answer(m_rebooted)
                 service.reboot_device(m_rebooted)
-            elif command == service.Service.c_restart:
-                self.__send(chat_id, m_restarted, reply_markup=self.rm_kb)
+            elif execution_possible(service.Service.c_restart):
+                answer(m_restarted)
                 service.restart_service(m_restarted)
-            elif command == service.Service.c_info:
+            elif execution_possible(service.Service.c_info):
+                info = service.system_info()
+                answer(info)
+                self.__log.info(info.replace("\n", "").replace(" ", ""))
+            elif execution_possible(service.Service.c_update):
+                answer(m_updated)
+                update_bot(m_updated)
+            elif help_requested():
+                answer(service.get_help_text())
+            # start or stop
+            elif sos():
                 if self.__stop_function(chat_id, msg=None):
-                    info = service.system_info()
-                    self.__send(chat_id, info, reply_markup=self.rm_kb)
-                    self.__log.info(info.replace("\n", "").replace(" ", ""))
-            elif command == service.Service.c_update:
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, m_updated, reply_markup=self.rm_kb)
-                    update_bot(m_updated)
-            elif command == service.Service.c_help \
-                    or command == service.Service.c_help.lower():
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, service.get_help_text(),
-                                reply_markup=self.rm_kb)
-
+                    selection_request()
             # all other commands
-            elif any(c for c in commands if (command == c)):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__func_thread = run_thread(command, chat_id, self)
-                    self.__send(chat_id, text=command,
-                                reply_markup=self.kb_stop)
+            elif any(c for c in commands if (execution_possible(c))):
+                self.__func_thread = run_thread(command, chat_id, self)
+                self.__send(chat_id, text=command, reply_markup=self.kb_stop)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:
