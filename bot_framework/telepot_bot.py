@@ -87,9 +87,7 @@ class TelepotBot:
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
-        self.__log.debug(
-            f"Message posted: "
-            f"{ch_id}|{text}|{reply_markup}|{parse_mode}".replace("\n", " "))
+        self.__log.info(text.split(sep='/n'))
         self.__bot.sendMessage(ch_id, text, reply_markup=reply_markup,
                                parse_mode=parse_mode)
 
@@ -159,7 +157,7 @@ class TelepotBot:
 
         if content_type == 'text':
             command = msg['text']
-            self.__log.info(f"Got command '{command}'")
+            self.__log.info(command)
 
             # Bot menu respectively Telegram-in-app-commands
             if execution_possible("/start"):
@@ -197,7 +195,7 @@ class TelepotBot:
             self.__reply_wrong_command(chat_id, content_type)
 
     def start(self):
-        self.__log.info(RUNNING)
+        self.__log.debug(RUNNING)
         for a in self.__admins:
             self.__send(a, m_started, reply_markup=self.__remove_keyboard)
 
@@ -205,19 +203,20 @@ class TelepotBot:
                     {'chat': self.__handle}).run_as_thread()
         # TODO: nfo string/text as constant w/ translations (II)
         as_nfo = f"Autostart"
-        self.__log.info(f"{as_nfo} = {AUTO_START}")
+        if AUTO_START:
+            self.__log.info(as_nfo)
         with open(HISTORY, "r") as f:
             # FIXME: if no HISTORY, impossible to find line in file
             lines = f.readlines()
             # if len(f.readlines()) > 0 else ["new file\n"]
             line = lines[-1]
-            self.__log.warning(line.replace("\n", ""))
+            self.__log.debug(line.replace("\n", ""))
             # TODO: implement considering of translation of stored command after language change
             #  - search key of value/stored string and gather translations with this key
             #  - depending of set language execute/set command text
             cmd = line.partition(" HISTORY ")[2].replace("\n", "")
             _stop = (cmd == STOP)
-            self.__log.warning(_stop)
+            # self.__log.warning(_stop)
         if AUTO_START:
             if not _stop:
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
@@ -230,7 +229,8 @@ class TelepotBot:
 
         # TODO: nfo string/text as constant w/ translations (I)
         ar_nfo = f"Auto-Reboot"
-        self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
+        if AUTO_REBOOT_ENABLED:
+            self.__log.info(ar_nfo)
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
                 kb = self.kb_stop if AUTO_START else self.__remove_keyboard
