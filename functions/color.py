@@ -22,9 +22,9 @@ class OwnColors:
         __setattr__ = dict.__setitem__
 
     color = _AttribDict({
+        "OFF": _get_color(0, 0, 0),
         "BLUE": _get_color(0, 0, 200),
         "GREEN": _get_color(0, 200, 0),
-        "OFF": _get_color(0, 0, 0),
         "RED": _get_color(200, 0, 0),
         "WHITE": _get_color(255, 255, 255),
         "YELLOW": _get_color(92, 67, 6),

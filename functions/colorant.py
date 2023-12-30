@@ -61,7 +61,7 @@ class Colorant:
 
     def fade(self):
         def __fade():
-            for c in OwnColors.color.keys():
+            for c in list(OwnColors.color.keys())[1:]:
                 for i in range(
                         wreath_setup(self.__fairy_lights)[1]):
                     self.run(c, brightness=i)
@@ -77,7 +77,7 @@ class Colorant:
 
     def switch(self):
         def __switch():
-            for c in OwnColors.color.keys():
+            for c in list(OwnColors.color.keys())[1:]:
                 self.run(c, None)
                 time.sleep(uniform(0.25, 1))
 
