@@ -10,7 +10,7 @@ import datetime
 import time
 from random import randint
 
-from rpi_ws281x import *
+from rpi_ws281x import Color
 
 from functions.candles import Candles
 from functions.effects import Effect

@@ -11,9 +11,10 @@
 import inspect
 import time
 
-from rpi_ws281x import *
+from rpi_ws281x import Adafruit_NeoPixel, Color
 
 from control.wreath import wreath_setup
+from functions.color import OwnColors
 from logger import LOGGER
 
 
@@ -47,7 +48,7 @@ class Effect:
         Set color with RGB parts = 0 (zero)
         """
         for i in range(self.__leds.numPixels()):
-            self.__leds.setPixelColor(i, Color(0, 0, 0))
+            self.__leds.setPixelColor(i, OwnColors.color.OFF)
         self.__leds.show()
 
     def wipe(self, color, length: int = None, wait_ms=50):
@@ -138,7 +139,7 @@ class Effect:
             for i in range(self.__leds.numPixels() + pivot - 1, pivot, -1):
                 if i >= self.__leds.numPixels():
                     i -= self.__leds.numPixels()
-                self.__leds.setPixelColor(i, Color(0, 0, 0))
+                self.__leds.setPixelColor(i, OwnColors.color.OFF)
                 self.__leds.show()
                 time.sleep(wait_ms)
 
@@ -174,14 +175,14 @@ def run_rainbow_chaser(wreath):
 
 def run_theater(wreath):
     while True:
-        Effect(wreath).full_wipe(Color(127, 0, 0))
-        Effect(wreath).full_wipe(Color(0, 127, 0))
-        Effect(wreath).full_wipe(Color(0, 0, 127))
-        Effect(wreath).full_wipe(Color(127, 127, 127))
-        Effect(wreath).chaser(Color(127, 127, 127))
-        Effect(wreath).chaser(Color(0, 0, 127))
-        Effect(wreath).chaser(Color(0, 127, 0))
-        Effect(wreath).chaser(Color(127, 0, 0))
+        Effect(wreath).full_wipe(OwnColors.color.RED)
+        Effect(wreath).full_wipe(OwnColors.color.GREEN)
+        Effect(wreath).full_wipe(OwnColors.color.BLUE)
+        Effect(wreath).full_wipe(OwnColors.color.WHITE)
+        Effect(wreath).chaser(OwnColors.color.WHITE)
+        Effect(wreath).chaser(OwnColors.color.BLUE)
+        Effect(wreath).chaser(OwnColors.color.GREEN)
+        Effect(wreath).chaser(OwnColors.color.RED)
 
 
 def wipe_second(wreath, color, pivot, back_again=True):
