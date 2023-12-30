@@ -8,7 +8,7 @@ __status__ = "Production"
 
 import datetime
 
-from rpi_ws281x import *
+from rpi_ws281x import Adafruit_NeoPixel
 
 from config import LED_BRIGHTNESS, LED_BRIGHTNESS_DAY, LED_BRIGHTNESS_NIGHT, \
     LED_COUNT, LED_CUT_OFF_MORNING, LED_CUT_OFF_NIGHT, LED_DMA, LED_FREQ_HZ, \

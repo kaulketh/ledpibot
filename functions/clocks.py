@@ -11,31 +11,18 @@ __status__ = "Production"
 import inspect
 import time
 
-from rpi_ws281x import *
+from rpi_ws281x import Color, Adafruit_NeoPixel
 
 from control.wreath import wreath_setup
+from functions.color import OwnColors
 from functions.effects import clear, wipe_second
 from logger import LOGGER
 
 
 # noinspection PyGlobalUndefined
 class Clock:
-    class __AttribDict(dict):
-        __slots__ = ()
-        __getattr__ = dict.__getitem__
-        __setattr__ = dict.__setitem__
-
     log = LOGGER
     REFRESH = .1
-    COLORS = __AttribDict({
-        "red": Color(200, 0, 0),  # hour
-        "blue": Color(0, 0, 200),  # minute
-        "yellow": Color(92, 67, 6),  # second
-        "less_intense_red": Color(50, 0, 0),
-        "less_intense_blue": Color(0, 0, 40),
-        "less_intense_green_second": Color(6, 30, 10),
-        "less_intense_yellow": Color(92 // 4, 67 // 4, 6 // 4)
-    })
 
     def __init__(self, fairy_lights: Adafruit_NeoPixel, clock: int):
         self.__fairy_lights = fairy_lights
@@ -142,24 +129,26 @@ class Clock:
 
     def _one(self):
         for i in range(0, self.__fairy_lights.numPixels(), 1):
-            self.__fairy_lights.setPixelColor(self.__h_hand, Clock.COLORS.red)
-            self.__expanded_minute_hand(Clock.COLORS.red, Clock.COLORS.blue)
+            self.__fairy_lights.setPixelColor(self.__h_hand,
+                                              OwnColors.color.RED)
+            self.__expanded_minute_hand(OwnColors.color.RED,
+                                        OwnColors.color.BLUE)
             if i == self.__s_hand:
-                self.__fairy_lights.setPixelColor(i, Clock.COLORS.yellow)
+                self.__fairy_lights.setPixelColor(i, OwnColors.color.YELLOW)
             else:
-                self.__fairy_lights.setPixelColor(i, Color(0, 0, 0))
+                self.__fairy_lights.setPixelColor(i, OwnColors.color.OFF)
         self.__fairy_lights.show()
         time.sleep(Clock.REFRESH)
 
     def _two(self):
         next_minute = self.__m_hand + 1 if self.__m_hand <= 22 else 0
         while not self.__m_hand == next_minute:
-            self.__show_strip_btwn_6nd12(Clock.COLORS.red,
-                                         Clock.COLORS.blue,
-                                         Clock.COLORS.less_intense_red)
+            self.__show_strip_btwn_6nd12(OwnColors.color.RED,
+                                         OwnColors.color.BLUE,
+                                         OwnColors.color.less_intense_red)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
-        wipe_second(self.__fairy_lights, Clock.COLORS.less_intense_blue,
+        wipe_second(self.__fairy_lights, OwnColors.color.less_intense_blue,
                     self.__m_hand - 1)
         clear(self.__fairy_lights)
 
@@ -175,35 +164,37 @@ class Clock:
                 led_wreath.setPixelColorRGB(_l, r // div, g // div, b // div)
 
         def hour(led, led_wreath):
-            led_wreath.setPixelColor(led, Clock.COLORS.red)
+            led_wreath.setPixelColor(led, OwnColors.color.RED)
 
         def set_minute_led_before_and_after(led_wreath, led):
-            led_wreath.setPixelColor(led - 1, Clock.COLORS.less_intense_blue)
-            led_wreath.setPixelColor(led + 1, Clock.COLORS.less_intense_blue)
+            led_wreath.setPixelColor(led - 1,
+                                     OwnColors.color.less_intense_blue)
+            led_wreath.setPixelColor(led + 1,
+                                     OwnColors.color.less_intense_blue)
 
         def minute(led, led_hour, led_wreath):
             if led < led_wreath.numPixels():
                 if led == led_hour:
                     set_minute_led_before_and_after(led_wreath, led)
                 else:
-                    led_wreath.setPixelColor(led, Clock.COLORS.blue)
+                    led_wreath.setPixelColor(led, OwnColors.color.BLUE)
             if led >= led_wreath.numPixels():
                 if led == led_hour:
                     set_minute_led_before_and_after(led_wreath, led_hour)
-                    led_wreath.setPixelColor(0, Clock.COLORS.blue)
+                    led_wreath.setPixelColor(0, OwnColors.color.BLUE)
                 else:
-                    led_wreath.setPixelColor(0, Clock.COLORS.blue)
+                    led_wreath.setPixelColor(0, OwnColors.color.BLUE)
             else:
-                led_wreath.setPixelColor(led, Clock.COLORS.blue)
+                led_wreath.setPixelColor(led, OwnColors.color.BLUE)
 
         def seconds(leds_per_2500ms, led_wreath):
             for led in range(0, leds_per_2500ms, 1):
                 if 0 < (led + 1) < led_wreath.numPixels():
                     led_wreath.setPixelColor(
-                        led + 1, Clock.COLORS.less_intense_green_second)
+                        led + 1, OwnColors.color.less_intense_green)
                 if (led + 1) == led_wreath.numPixels():
                     led_wreath.setPixelColor(
-                        0, Clock.COLORS.less_intense_green_second)
+                        0, OwnColors.color.less_intense_green)
 
         dial(self.__fairy_lights)
         seconds(self.__s_hand, self.__fairy_lights)
@@ -232,22 +223,22 @@ class Clock:
         global __pendulum, __p_right, __p_left
         for i in range(len(__pendulum)):
             self.__fairy_lights.setPixelColor(
-                __pendulum[i], Clock.COLORS.less_intense_yellow)
+                __pendulum[i], OwnColors.color.less_intense_yellow)
         if __p_left >= len(__pendulum) - 1:
             if __p_right <= 0:
                 __p_right = len(__pendulum) - 1
                 __p_left = 0
             else:
                 self.__fairy_lights.setPixelColor(
-                    __pendulum[__p_right], Clock.COLORS.yellow)
+                    __pendulum[__p_right], OwnColors.color.YELLOW)
                 __p_right -= 1
         else:
             self.__fairy_lights.setPixelColor(
-                __pendulum[__p_left], Clock.COLORS.yellow)
+                __pendulum[__p_left], OwnColors.color.YELLOW)
             __p_left += 1
-        self.__show_strip_btwn_6nd12(Clock.COLORS.red,
-                                     Clock.COLORS.blue,
-                                     Clock.COLORS.less_intense_red)
+        self.__show_strip_btwn_6nd12(OwnColors.color.RED,
+                                     OwnColors.color.BLUE,
+                                     OwnColors.color.less_intense_red)
         global __wait_ms
         time.sleep(__wait_ms)
 

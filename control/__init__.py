@@ -6,14 +6,14 @@ __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
-from functions import dictionary_of_functions, STOP_CMD
+from functions import dictionary_of_functions, STOP
 from functions.effects import clear
 from logger import LOGGER
 from .light import LightFunction
 from .wreath import WREATH, wreath_setup
 
 ERROR = "Any error occurred: "
-flag = None
+flag = False
 
 clear(WREATH)
 
@@ -52,13 +52,13 @@ def run_thread(func_name, request_id, bot):
         LOGGER.error(f"{ERROR}{e}")
 
 
-def stop_threads():
+def stop_threads() -> bool:
     try:
         for t in LightFunction.threads:
             if t is not None and t.is_running:
                 t.stop()
         set_stop_flag(True)
-        LOGGER.history(STOP_CMD)
+        LOGGER.history(STOP)
     except Exception as e:
         LOGGER.error(f"{ERROR}{e}")
         set_stop_flag(False)

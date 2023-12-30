@@ -23,7 +23,7 @@ from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
-from functions import STOP_CMD
+from functions import indices_of_functions, STOP, START
 from logger import LOGGER, HISTORY
 
 admins = [ID_CHAT_THK]
@@ -49,29 +49,18 @@ class TelepotBot:
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
 
-        self._remove_keyboard = ReplyKeyboardRemove()
+        self.__remove_keyboard = ReplyKeyboardRemove()
         # keys order (refer config)
-        self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=[
-            self.__button_group([4, 5, 17, 18, 19, 21, 22]),
-            self.__button_group([8, 9, 10, 13, 11, 12, 14]),
-            self.__button_group([15, 20, 6, 23, 7, 24]),
-            self.__button_group([2, 3, 16])
-        ])
+        self.__keyboard = []
+        for i in range(len(indices_of_functions)):
+            self.__keyboard.append(self.__btn_grp(indices_of_functions[i]))
+        self.__keyboard_markup = ReplyKeyboardMarkup(keyboard=self.__keyboard)
         self.__log.debug(f"Done, keyboards and buttons built.")
         self.__func_thread = None
 
     @property
-    def rm_kb(self):
-        return self._remove_keyboard
-
-    @property
-    def kb_markup(self):
-        return self.__keyboard_markup
-
-    @property
-    def kb_stop(self):
-        r = ReplyKeyboardMarkup(
-            keyboard=[[self.__button(commands[0], 0)]])
+    def kb_stop(self) -> ReplyKeyboardMarkup:
+        r = ReplyKeyboardMarkup(keyboard=[[self.__btn(STOP, 0)]])
         self.__log.debug(f"Stop keyboard markup: {r}")
         return r
 
@@ -84,17 +73,17 @@ class TelepotBot:
             bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
     # noinspection PyMethodMayBeStatic
-    def __button(self, text, i) -> KeyboardButton:
+    def __btn(self, text, i) -> KeyboardButton:
         self.__log.debug(f"[{i:02d}] {text}")
         return KeyboardButton(text=text)
 
     # noinspection PyMethodMayBeStatic
-    def __button_group(self, choices: list) -> list:
+    def __btn_grp(self, choices: list) -> list:
         btn_list, il = [], []
         for i in choices:
-            btn_list.append(self.__button(commands[i], i))
+            btn_list.append(self.__btn(commands[i], i))
             il.append(i)
-        self.__log.debug(f"arranged {il}")
+        self.__log.debug(f"{il} arranged")
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
@@ -114,7 +103,7 @@ class TelepotBot:
                       f"{ch_id} User:{username}, {first_name} {last_name}"
             self.__send(ch_id, m_wrong_id.format(user_id, username, first_name,
                                                  last_name),
-                        reply_markup=self.rm_kb)
+                        reply_markup=self.__remove_keyboard)
             raise Exception(log_msg)
         except Exception as ex:
             self.__log.warning(f"{ex}")
@@ -129,15 +118,39 @@ class TelepotBot:
             self.__log.warning(str(ex))
         return
 
-    def __stop_function(self, ch_id, msg):
+    def __stop_function(self, ch_id, msg) -> bool:
         if msg is not None:
-            self.__send(ch_id, msg, reply_markup=self.rm_kb)
-        # return True if stop_threads() else False
+            self.__send(ch_id, msg, reply_markup=self.__remove_keyboard)
         return stop_threads()
 
     def __handle(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.__log.debug(msg)
+
+        def answer(txt):
+            self.__send(chat_id, txt, reply_markup=self.__remove_keyboard)
+
+        def execution_possible(txt) -> bool:
+            if command == txt:
+                if self.__stop_function(chat_id, msg=None):
+                    return True
+
+        def selection_request():
+            self.__send(chat_id,
+                        m_pls_select.format(msg['from']['first_name']),
+                        reply_markup=self.__keyboard_markup)
+
+        def help_requested():
+            return execution_possible(
+                service.Service.c_help) or execution_possible(
+                service.Service.c_help.lower())
+
+        def sos() -> bool:
+            """start or stop w/o leading '/'"""
+            return (command.startswith(STOP)) or (
+                command.startswith(STOP.lower())) or (
+                command.startswith(START)) or (
+                command.startswith(START.lower()))
 
         # check user
         if chat_id not in self.__admins:
@@ -147,57 +160,37 @@ class TelepotBot:
         if content_type == 'text':
             command = msg['text']
             self.__log.info(f"Got command '{command}'")
-            # /start
-            if command == "/start":
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id,
-                                m_pls_select.format(msg['from']['first_name']),
-                                reply_markup=self.kb_markup)
 
-            # /stop
-            elif command == "/stop":
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, m_stopped, reply_markup=self.rm_kb)
-
-            # stop function
-            elif (command.startswith(commands[0])) \
-                    or (command.startswith(commands[0].lower())):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id,
-                                m_pls_select.format(msg['from']['first_name']),
-                                reply_markup=self.kb_markup)
-
-            # /service
-            elif command == ('/' + service.NAME.lower()):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, service.menu, reply_markup=self.rm_kb)
-            elif command == service.Service.c_reboot:
-                self.__send(chat_id, m_rebooted, reply_markup=self.rm_kb)
+            # Bot menu respectively Telegram-in-app-commands
+            if execution_possible("/start"):
+                selection_request()
+            elif execution_possible("/stop"):
+                answer(m_stopped)
+            elif execution_possible('/' + service.NAME.lower()):
+                answer(service.menu)
+            elif execution_possible(service.Service.c_reboot):
+                answer(m_rebooted)
                 service.reboot_device(m_rebooted)
-            elif command == service.Service.c_restart:
-                self.__send(chat_id, m_restarted, reply_markup=self.rm_kb)
+            elif execution_possible(service.Service.c_restart):
+                answer(m_restarted)
                 service.restart_service(m_restarted)
-            elif command == service.Service.c_info:
+            elif execution_possible(service.Service.c_info):
+                info = service.system_info()
+                answer(info)
+                self.__log.info(info.replace("\n", "").replace(" ", ""))
+            elif execution_possible(service.Service.c_update):
+                answer(m_updated)
+                update_bot(m_updated)
+            elif help_requested():
+                answer(service.get_help_text())
+            # start or stop
+            elif sos():
                 if self.__stop_function(chat_id, msg=None):
-                    info = service.system_info()
-                    self.__send(chat_id, info, reply_markup=self.rm_kb)
-                    self.__log.info(info.replace("\n", "").replace(" ", ""))
-            elif command == service.Service.c_update:
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, m_updated, reply_markup=self.rm_kb)
-                    update_bot(m_updated)
-            elif command == service.Service.c_help \
-                    or command == service.Service.c_help.lower():
-                if self.__stop_function(chat_id, msg=None):
-                    self.__send(chat_id, service.get_help_text(),
-                                reply_markup=self.rm_kb)
-
+                    selection_request()
             # all other commands
-            elif any(c for c in commands if (command == c)):
-                if self.__stop_function(chat_id, msg=None):
-                    self.__func_thread = run_thread(command, chat_id, self)
-                    self.__send(chat_id, text=command,
-                                reply_markup=self.kb_stop)
+            elif any(c for c in commands if (execution_possible(c))):
+                self.__func_thread = run_thread(command, chat_id, self)
+                self.__send(chat_id, text=command, reply_markup=self.kb_stop)
             else:
                 self.__reply_wrong_command(chat_id, command)
         else:
@@ -206,7 +199,7 @@ class TelepotBot:
     def start(self):
         self.__log.info(RUNNING)
         for a in self.__admins:
-            self.__send(a, m_started, reply_markup=self.rm_kb)
+            self.__send(a, m_started, reply_markup=self.__remove_keyboard)
 
         MessageLoop(self.__bot,
                     {'chat': self.__handle}).run_as_thread()
@@ -214,13 +207,16 @@ class TelepotBot:
         as_nfo = f"Autostart"
         self.__log.info(f"{as_nfo} = {AUTO_START}")
         with open(HISTORY, "r") as f:
-            line = f.readlines()[-1]
+            # FIXME: if no HISTORY, impossible to find line in file
+            lines = f.readlines()
+            # if len(f.readlines()) > 0 else ["new file\n"]
+            line = lines[-1]
             self.__log.warning(line.replace("\n", ""))
             # TODO: implement considering of translation of stored command after language change
             #  - search key of value/stored string and gather translations with this key
             #  - depending of set language execute/set command text
             cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-            _stop = (cmd == STOP_CMD)
+            _stop = (cmd == STOP)
             self.__log.warning(_stop)
         if AUTO_START:
             if not _stop:
@@ -237,7 +233,7 @@ class TelepotBot:
         self.__log.info(f"{ar_nfo} = {AUTO_REBOOT_ENABLED}")
         if AUTO_REBOOT_ENABLED:
             for a in self.__admins:
-                kb = self.kb_stop if AUTO_START else self.rm_kb
+                kb = self.kb_stop if AUTO_START else self.__remove_keyboard
                 self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()

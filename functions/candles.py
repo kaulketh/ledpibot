@@ -9,7 +9,7 @@ __status__ = "Production"
 import time
 from random import randint
 
-from rpi_ws281x import *
+from rpi_ws281x import Color
 
 from logger import LOGGER
 
