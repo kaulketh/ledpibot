@@ -13,7 +13,7 @@ from random import uniform
 from rpi_ws281x import Adafruit_NeoPixel
 
 from control.wreath import wreath_setup
-from functions import OwnColors
+from functions.color import OwnColors
 from functions.effects import clear
 from logger import LOGGER
 
@@ -23,17 +23,6 @@ class Colorant:
 
     def __init__(self, fairy_lights: Adafruit_NeoPixel, color_key=None):
         self.__fairy_lights = fairy_lights
-        self.__colors = {
-            'off': OwnColors.color.OFF,
-            'on': OwnColors.color.WHITE,
-            'red': OwnColors.color.red,
-            'blue': OwnColors.color.blue,
-            'green': OwnColors.color.green,
-            'yellow': OwnColors.color.yellow,
-            'orange': OwnColors.color.orange,
-            'white': OwnColors.color.white,
-            'violet': OwnColors.color.violet
-        }
         self.__color = None
         Colorant.log.debug(f"Init instance of {self.__class__.__name__}.")
         if color_key is not None:
@@ -42,10 +31,6 @@ class Colorant:
         else:
             Colorant.log.debug(
                 f"Call function '{inspect.stack()[1].function}'")
-
-    @property
-    def all_colors(self):
-        return list(self.__colors.keys())
 
     def __function_loop(self, function):
         Colorant.log.debug(f"Running loop: {inspect.stack()[1].function}")
@@ -71,12 +56,12 @@ class Colorant:
             exit()
 
     def run(self, key, brightness):
-        self.__color = self.__colors.get(key)
+        self.__color = OwnColors.color.get(key)
         self.__start(self.__color, brightness)
 
     def fade(self):
         def __fade():
-            for c in self.all_colors[2:]:
+            for c in OwnColors.color.keys():
                 for i in range(
                         wreath_setup(self.__fairy_lights)[1]):
                     self.run(c, brightness=i)
@@ -92,7 +77,7 @@ class Colorant:
 
     def switch(self):
         def __switch():
-            for c in self.all_colors[2:]:
+            for c in OwnColors.color.keys():
                 self.run(c, None)
                 time.sleep(uniform(0.25, 1))
 
