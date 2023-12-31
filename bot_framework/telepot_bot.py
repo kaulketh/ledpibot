@@ -205,18 +205,26 @@ class TelepotBot:
         as_nfo = f"Autostart"
         if AUTO_START:
             self.__log.info(as_nfo)
-        with open(HISTORY, "r") as f:
-            # FIXME: if no HISTORY, impossible to find line in file
-            lines = f.readlines()
-            # if len(f.readlines()) > 0 else ["new file\n"]
-            line = lines[-1]
-            self.__log.debug(line.replace("\n", ""))
-            # TODO: implement considering of translation of stored command after language change
-            #  - search key of value/stored string and gather translations with this key
-            #  - depending of set language execute/set command text
-            cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-            _stop = (cmd == STOP)
-            # self.__log.warning(_stop)
+        try:
+            with open(HISTORY, "r") as f:
+                lines = f.readlines()
+                if lines:
+                    line = lines[-1]
+                else:
+                    raise ValueError("Empty file")
+        except (FileNotFoundError, ValueError):
+            with open(HISTORY, "w") as f:
+                f.write("new file\n")
+            with open(HISTORY, "r") as f:
+                lines = f.readlines()
+        line = lines[-1]
+        self.__log.debug(line.replace("\n", ""))
+        # TODO: implement considering of translation of stored command after language change
+        #  - search key of value/stored string and gather translations with this key
+        #  - depending of set language execute/set command text
+        cmd = line.partition(" HISTORY ")[2].replace("\n", "")
+        _stop = (cmd == STOP)
+        # self.__log.warning(_stop)
         if AUTO_START:
             if not _stop:
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
