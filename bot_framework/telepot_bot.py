@@ -209,7 +209,7 @@ class TelepotBot:
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
                 if lines:
-                    line = lines[-1]
+                    pass
                 else:
                     raise ValueError("Empty file")
         except (FileNotFoundError, ValueError):
@@ -218,7 +218,7 @@ class TelepotBot:
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
         line = lines[-1]
-        self.__log.debug(line.replace("\n", ""))
+        self.__log.debug(f"History: {line.strip()}")
         # TODO: implement considering of translation of stored command after language change
         #  - search key of value/stored string and gather translations with this key
         #  - depending of set language execute/set command text
