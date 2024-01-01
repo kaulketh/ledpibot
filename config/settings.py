@@ -19,7 +19,9 @@ LED_CUT_OFF_NIGHT = 18  # Hour to adjust to night brightness
 
 AUTO_REBOOT_ENABLED = False
 AUTO_REBOOT_TIME = "00:30"
+AUTO_REBOOT_MSG = f"Auto-Reboot"
 AUTO_START = False
+AUTO_START_MSG = f"Autostart"
 LANGUAGE = "German"  # language keys: "German", "English", "French"
 RUNNING = "Bot is running..."
 TRANSLATIONS = 'ui_translations.json'

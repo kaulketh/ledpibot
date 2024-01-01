@@ -30,7 +30,6 @@ class LightFunction(Thread):
         self.__chat_id = request_id
         self.__bot = bot
         self.__do_run = True
-        self.__stopped = "Stop requested, stopped"
 
     @property
     def __process(self):
@@ -44,10 +43,7 @@ class LightFunction(Thread):
         return self.__do_run
 
     def run(self):
-        LightFunction.log.info(
-            f"Initialized '{self.__f_name}' from ID:{self.__chat_id}, "
-            f"process: {self.__function}")
-
+        LightFunction.log.info(f"{self.__f_name} {self.__function}")
         p = self.__process
         LightFunction.threads.append(self)
         while self.__do_run:
@@ -60,8 +56,7 @@ class LightFunction(Thread):
 
     def stop(self):
         self.__do_run = False
-        LightFunction.log.info(
-            f"{self.__f_name}: {self.__stopped}: {self.__function}")
+        LightFunction.log.debug(f"{self.__f_name} {self.__function}")
         self.__bot.external_request(m_stop_f.format(self.__f_name),
                                     reply_markup=None,
                                     chat_id=self.__chat_id, bot=self.__bot)

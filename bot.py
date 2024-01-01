@@ -9,13 +9,14 @@ __doc__ = "Call instance of framework class."
 
 from urllib3.exceptions import HTTPError, ProtocolError
 
-from bot_framework import *
+from app import *
+from control import peripheral_functions
 from logger import LOGGER
 
 if __name__ == '__main__':
 
     try:
-        telepot_bot.main()
+        framework.main()
     except (ConnectionResetError, ProtocolError, HTTPError) as e:
         LOGGER.error(f"Connection error occurs: {e}")
         exit()

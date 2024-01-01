@@ -7,6 +7,9 @@ import logging.handlers
 import os
 import sys
 
+from logger.logfiles import APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, DEBUG_FILE, \
+    INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG
+
 
 class _Singleton(type):
     """ A metaclass that creates a Singleton base class when called. """
@@ -24,33 +27,29 @@ class Singleton(_Singleton('SingletonMeta', (object,), {})):
 
 
 class _LoggerMeta(type, Singleton):
-    NAME = "LedPi"
-    FOLDER_PATH = "../logs"
-    ADDITIONAL_DEBUG_LOG = True
-
+    NAME = APP_NAME
+    FOLDER_PATH = f"../{DIRECTORY}"
+    ADDITIONAL_DEBUG_LOG = DEBUG_LOG
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     """Runtime location"""
-
     LOG_FOLDER = os.path.join(THIS_FOLDER, FOLDER_PATH)
     """Defined log folder related to location"""
-
-    # define log files, names, formats
-    DEB_LOG = f"{LOG_FOLDER}/debug.log"
-    INF_LOG = f"{LOG_FOLDER}/info.log"
-    ERR_LOG = f"{LOG_FOLDER}/error.log"
-    HIS_LOG = f"{LOG_FOLDER}/history.log"
-    MAX_BYTE = 1024 * 1024 * 3  # 3MB
-    BACK_COUNT = 5
-
+    # log files, names, formats
+    DEB_LOG = f"{LOG_FOLDER}/{DEBUG_FILE}"
+    INF_LOG = f"{LOG_FOLDER}/{INFO_FILE}"
+    ERR_LOG = f"{LOG_FOLDER}/{ERROR_FILE}"
+    HIS_LOG = f"{LOG_FOLDER}/{HISTORY_FILE}"
+    MAX_BYTE = FILE_SIZE
+    BACK_COUNT = FILE_COUNT
+    # log formats
     DAT_FMT = "%Y-%m-%d %H:%M:%S"
-    INF_FMT = "%(asctime)s %(name)s %(levelname)s " \
-              "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] %(message)s"
-    ERR_FMT = "%(asctime)s %(name)s %(levelname)s " \
-              "[%(pathname)s %(funcName)s(lnr.%(lineno)s)] " \
-              "[thread: %(threadName)s] %(message)s"
-    DEB_FMT = "%(asctime)s %(name)s %(levelname)s " \
-              "%(pathname)s %(funcName)s(lnr.%(lineno)s) %(message)s"
-    HIS_FMT = "%(asctime)s %(name)s %(levelname)s %(message)s"
+    __P1 = "%(asctime)s %(name)s %(levelname)s"
+    __P2 = "%(pathname)s %(funcName)s(lnr.%(lineno)s)"
+    __P3 = "%(message)s"
+    INF_FMT = f"{__P1} [{__P2}] {__P3}"
+    ERR_FMT = f"{__P1} [{__P2}] [thread: %(threadName)s] {__P3}"
+    DEB_FMT = f"{__P1} {__P2} {__P3}"
+    HIS_FMT = f"{__P1} {__P3}"
     HISTORY = 39  # before error level
 
     # noinspection PyProtectedMember

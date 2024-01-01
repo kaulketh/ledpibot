@@ -23,7 +23,8 @@ class Colorant:
 
     def __init__(self, fairy_lights: Adafruit_NeoPixel, color_key=None):
         self.__fairy_lights = fairy_lights
-        self.__color = None
+        self.__color_keys = [k for k in list(OwnColors.color.keys()) if
+                             k != "OFF"]
         Colorant.log.debug(f"Init instance of {self.__class__.__name__}.")
         if color_key is not None:
             Colorant.log.debug(f"Run color '{color_key}'")
@@ -32,7 +33,7 @@ class Colorant:
             Colorant.log.debug(
                 f"Call function '{inspect.stack()[1].function}'")
 
-    def __function_loop(self, function):
+    def __loop(self, function):
         Colorant.log.debug(f"Running loop: {inspect.stack()[1].function}")
         from control import stopped
         while not stopped():
@@ -56,12 +57,11 @@ class Colorant:
             exit()
 
     def run(self, key, brightness):
-        self.__color = OwnColors.color.get(key)
-        self.__start(self.__color, brightness)
+        self.__start(OwnColors.color.get(key), brightness)
 
     def fade(self):
         def __fade():
-            for c in list(OwnColors.color.keys())[1:]:
+            for c in self.__color_keys:
                 for i in range(
                         wreath_setup(self.__fairy_lights)[1]):
                     self.run(c, brightness=i)
@@ -73,15 +73,15 @@ class Colorant:
                     self.run(c, brightness=b)
                     time.sleep(uniform(0.001, 0.05))
 
-        self.__function_loop(__fade)
+        self.__loop(__fade)
 
     def switch(self):
         def __switch():
-            for c in list(OwnColors.color.keys())[1:]:
+            for c in self.__color_keys:
                 self.run(c, None)
                 time.sleep(uniform(0.25, 1))
 
-        self.__function_loop(__switch)
+        self.__loop(__switch)
 
     def strobe(self):
         def __strobe():
@@ -90,7 +90,7 @@ class Colorant:
             self.run('off', 0)
             time.sleep(uniform(0.5, 3))
 
-        self.__function_loop(__strobe)
+        self.__loop(__strobe)
 
 
 def run_red(fairy_lights):
