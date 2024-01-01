@@ -216,12 +216,10 @@ class TelepotBot:
         # TODO: implement considering of translation of stored command after language change
         #  - search key of value/stored string and gather translations with this key
         #  - depending of set language execute/set command text
-        cmd = line.partition(" HISTORY ")[2].replace("\n", "")
-        _stop = (cmd == STOP)
-        # self.__log.warning(_stop)
+        cmd = line.partition(" HISTORY ")[2].rstrip()
         if AUTO_START:
             self.__log.info(AUTO_START_MSG)
-            if not _stop:
+            if not (cmd == STOP):
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
                     self.__send(a, f"{AUTO_START_MSG}: {cmd}",
