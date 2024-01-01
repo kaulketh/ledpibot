@@ -18,7 +18,7 @@ from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
 from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
     RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
-    AUTO_START
+    AUTO_START, AUTO_REBOOT_MSG, AUTO_START_MSG
 from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
@@ -198,13 +198,7 @@ class TelepotBot:
         self.__log.debug(RUNNING)
         for a in self.__admins:
             self.__send(a, m_started, reply_markup=self.__remove_keyboard)
-
-        MessageLoop(self.__bot,
-                    {'chat': self.__handle}).run_as_thread()
-        # TODO: nfo string/text as constant w/ translations (II)
-        as_nfo = f"Autostart"
-        if AUTO_START:
-            self.__log.info(as_nfo)
+        MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
         try:
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
@@ -226,26 +220,22 @@ class TelepotBot:
         _stop = (cmd == STOP)
         # self.__log.warning(_stop)
         if AUTO_START:
+            self.__log.info(AUTO_START_MSG)
             if not _stop:
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
-                    self.__send(a, f"{as_nfo}: {cmd}",
+                    self.__send(a, f"{AUTO_START_MSG}: {cmd}",
                                 reply_markup=self.kb_stop)
             else:
                 open(HISTORY, "w").close()
                 self.__stop_function(ID_CHAT_THK, msg=None)
-
-        # TODO: nfo string/text as constant w/ translations (I)
-        ar_nfo = f"Auto-Reboot"
         if AUTO_REBOOT_ENABLED:
-            self.__log.info(ar_nfo)
-        if AUTO_REBOOT_ENABLED:
+            self.__log.info(AUTO_REBOOT_MSG)
             for a in self.__admins:
                 kb = self.kb_stop if AUTO_START else self.__remove_keyboard
-                self.__send(a, f"{ar_nfo}: {AUTO_REBOOT_TIME} CET",
+                self.__send(a, f"{AUTO_REBOOT_MSG}: {AUTO_REBOOT_TIME} CET",
                             reply_markup=kb)
             AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
-
         while True:
             try:
                 signal.pause()
