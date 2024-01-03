@@ -49,7 +49,7 @@ class Advent:
     def __init__(self, light_wreath):
         self.__light_wreath = light_wreath
         Advent.logger.debug(
-            f"Initialize instance of {self.__class__.__name__}")
+            f"Initialize instance of {self.__class__.__name__} {self}")
         from control import stopped, peripheral_functions
         count = 1
         while not stopped():

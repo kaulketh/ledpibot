@@ -25,8 +25,8 @@ class Effect:
     def __init__(self, fairy_lights: Adafruit_NeoPixel):
         self.__leds = fairy_lights
         wreath_setup(self.__leds)
-        Effect.log.debug(f"Initialize instance of {self.__class__.__name__} "
-                         f"for {self.__leds}.")
+        Effect.log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
         Effect.log.debug(str(inspect.stack()[1].code_context[0]).strip())
 
     @classmethod

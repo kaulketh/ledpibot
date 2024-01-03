@@ -25,7 +25,7 @@ class Candles:
         self.__leds = led_numbers
 
         Candles.logger.debug(
-            f"Initialize instance of {self.__class__.__name__}")
+            f"Initialize instance of {self.__class__.__name__} {self}")
         from control import stopped
         while not stopped():
             try:

@@ -45,7 +45,8 @@ class Clock:
         __p_left = 0
         __p_right = len(__pendulum) - 1
 
-        Clock.log.debug(f"Initialize instance of {self.__class__.__name__}")
+        Clock.log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
         Clock.log.debug(f"Call: {inspect.stack()[1].function}")
         from control import stopped
         while not stopped():
