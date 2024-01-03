@@ -1,0 +1,70 @@
+{
+  "led_count": {
+    "value": 24,
+    "comment": "Number of LED pixels."
+  },
+  "led_pin": {
+    "value": 18,
+    "comment": "GPIO pin connected to the pixels (must support PWM!)."
+  },
+  "led_freq_hz": {
+    "value": 800000,
+    "comment": "LED signal frequency in hertz (usually 800khz)"
+  },
+  "led_dma": {
+    "value": 10,
+    "comment": "DMA channel to use for generating signal (try 10)"
+  },
+  "led_brightness": {
+    "value": 200,
+    "comment": "Set to 0 for darkest and 255 for brightest"
+  },
+  "led_invert": {
+    "value": false,
+    "comment": "True to invert the signal (NPN transistor level shift)"
+  },
+  "led_brightness_day": {
+    "value": 200,
+    "comment": "Daytime brightness"
+  },
+  "led_brightness_night": {
+    "value": 100,
+    "comment": "Night brightness"
+  },
+  "led_cut_off_morning": {
+    "value": 7,
+    "comment": "Hour to adjust to day brightness"
+  },
+  "led_cut_off_night": {
+    "value": 18,
+    "comment": "Hour to adjust to night brightness"
+  },
+  "auto_reboot_enabled": {
+    "value": false,
+    "comment": null
+  },
+  "auto_reboot_time": {
+    "value": "00:30",
+    "comment": null
+  },
+  "auto_reboot_msg": {
+    "value": "Auto-Reboot",
+    "comment": null
+  },
+  "auto_start": {
+    "value": false,
+    "comment": null
+  },
+  "auto_start_msg": {
+    "value": "Autostart",
+    "comment": null
+  },
+  "language": {
+    "value": "English",
+    "comment": "language keys: German, English, French"
+  },
+  "running": {
+    "value": "Bot is running...",
+    "comment": null
+  }
+}

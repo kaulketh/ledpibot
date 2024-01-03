@@ -15,10 +15,10 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
-from config import AUTO_REBOOT_ENABLED, AUTO_REBOOT_TIME, ID_CHAT_THK, \
-    RUNNING, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
+from config import auto_reboot_enabled, auto_reboot_time, ID_CHAT_THK, \
+    running, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
-    AUTO_START, AUTO_REBOOT_MSG, AUTO_START_MSG
+    auto_start, auto_reboot_msg, auto_start_msg
 from control import peripheral_functions, run_thread, service, \
     stop_threads
 from control.reboot import AutoReboot
@@ -44,7 +44,8 @@ class TelepotBot:
         :type ids: list of int
         """
         self.__log = LOGGER
-        self.__log.debug(f"Initialize instance of {self.__class__.__name__}")
+        self.__log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
         self.__token = t
         self.__admins = ids
         self.__bot = telepot.Bot(self.__token)
@@ -195,7 +196,7 @@ class TelepotBot:
             self.__reply_wrong_command(chat_id, content_type)
 
     def start(self):
-        self.__log.debug(RUNNING)
+        self.__log.debug(running)
         for a in self.__admins:
             self.__send(a, m_started, reply_markup=self.__remove_keyboard)
         MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
@@ -217,23 +218,23 @@ class TelepotBot:
         #  - search key of value/stored string and gather translations with this key
         #  - depending of set language execute/set command text
         cmd = line.partition(" HISTORY ")[2].rstrip()
-        if AUTO_START:
-            self.__log.info(AUTO_START_MSG)
+        if auto_start:
+            self.__log.info(auto_start_msg)
             if not (cmd == STOP):
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
-                    self.__send(a, f"{AUTO_START_MSG}: {cmd}",
+                    self.__send(a, f"{auto_start_msg}: {cmd}",
                                 reply_markup=self.kb_stop)
             else:
                 open(HISTORY, "w").close()
                 self.__stop_function(ID_CHAT_THK, msg=None)
-        if AUTO_REBOOT_ENABLED:
-            self.__log.info(AUTO_REBOOT_MSG)
+        if auto_reboot_enabled:
+            self.__log.info(auto_reboot_msg)
             for a in self.__admins:
-                kb = self.kb_stop if AUTO_START else self.__remove_keyboard
-                self.__send(a, f"{AUTO_REBOOT_MSG}: {AUTO_REBOOT_TIME} CET",
+                kb = self.kb_stop if auto_start else self.__remove_keyboard
+                self.__send(a, f"{auto_reboot_msg}: {auto_reboot_time} CET",
                             reply_markup=kb)
-            AutoReboot(reboot_time=AUTO_REBOOT_TIME, bot=self).start()
+            AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
         while True:
             try:
                 signal.pause()

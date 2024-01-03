@@ -10,9 +10,9 @@ import datetime
 
 from rpi_ws281x import Adafruit_NeoPixel
 
-from config import LED_BRIGHTNESS, LED_BRIGHTNESS_DAY, LED_BRIGHTNESS_NIGHT, \
-    LED_COUNT, LED_CUT_OFF_MORNING, LED_CUT_OFF_NIGHT, LED_DMA, LED_FREQ_HZ, \
-    LED_INVERT, LED_PIN
+from config import led_brightness, led_brightness_day, led_brightness_night, \
+    led_count, led_cut_off_morning, led_cut_off_night, led_dma, led_freq_hz, \
+    led_invert, led_pin
 from logger import LOGGER
 
 
@@ -26,10 +26,10 @@ class LightWreath:
         Low light during given period.
         """
         now = datetime.datetime.now()
-        if LED_CUT_OFF_MORNING < int(now.hour) < LED_CUT_OFF_NIGHT:
-            light_wreath.setBrightness(LED_BRIGHTNESS_DAY)
+        if led_cut_off_morning < int(now.hour) < led_cut_off_night:
+            light_wreath.setBrightness(led_brightness_day)
         else:
-            light_wreath.setBrightness(LED_BRIGHTNESS_NIGHT)
+            light_wreath.setBrightness(led_brightness_night)
         b = light_wreath.getBrightness()
         return now, b
 
@@ -40,22 +40,17 @@ class LightWreath:
         self.__dma = dma
         self.__invert = invert
         self.__brightness = brightness
-        LightWreath.log.debug(f"Create {self}")
         self.__leds = Adafruit_NeoPixel(self.__count, self.__pin, self.__hz,
                                         self.__dma, self.__invert,
                                         self.__brightness)
-        LightWreath.log.debug(f"Initialized: {self.__leds}")
+        LightWreath.log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
         self.__leds.begin()
 
     def __repr__(self):
         return (
-            f"{self.name}: "
-            f"COUNT:{self.__count}, "
-            f"PIN:{self.__pin}, "
-            f"FREQ:{self.__hz}, "
-            f"DMA:{self.__dma}, "
-            f"INVERT:{self.__invert}, "
-            f"BRIGHTN.:{self.__brightness}")
+            f"{self.__count}, {self.__pin}, {self.__hz}, "
+            f"{self.__dma}, {self.__invert}, {self.__brightness}")
 
     @property
     def wreath(self):
@@ -66,8 +61,8 @@ def wreath_setup(light_wreath):
     return LightWreath.setup(light_wreath)
 
 
-WREATH = LightWreath(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT,
-                     LED_BRIGHTNESS).wreath
+WREATH = LightWreath(led_count, led_pin, led_freq_hz, led_dma, led_invert,
+                     led_brightness).wreath
 
 if __name__ == '__main__':
     pass
