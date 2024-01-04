@@ -81,6 +81,8 @@ class Service:
 
         self.__new_line = "\n"
         self.__empty = ""
+        self.__logger.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
 
     def execute_os_command(self):
         if self.__command is not None:

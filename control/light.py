@@ -10,7 +10,7 @@ import time
 from multiprocessing import Process
 from threading import Thread
 
-from config import LED_BRIGHTNESS, m_stop_f
+from config import led_brightness, m_stop_f
 from functions.effects import clear
 from logger import LOGGER
 
@@ -30,6 +30,8 @@ class LightFunction(Thread):
         self.__chat_id = request_id
         self.__bot = bot
         self.__do_run = True
+        LightFunction.log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
 
     @property
     def __process(self):
@@ -51,7 +53,7 @@ class LightFunction(Thread):
         # stop
         p.terminate()
         clear(self.__wreath)
-        self.__wreath.setBrightness(LED_BRIGHTNESS)
+        self.__wreath.setBrightness(led_brightness)
         LightFunction.threads.remove(self)
 
     def stop(self):

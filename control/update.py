@@ -19,11 +19,11 @@ SECRET = "secret.py"
 
 def ignored(f):
     return f.startswith('.') or \
-           f == 'hardware' or \
-           f.endswith('.md') or \
-           f.endswith('.MD') or \
-           f == 'UNLICENSE' or \
-           f == 'LICENSE'
+        f == 'hardware' or \
+        f.endswith('.md') or \
+        f.endswith('.MD') or \
+        f == 'UNLICENSE' or \
+        f == 'LICENSE'
 
 
 class Update:
@@ -51,6 +51,8 @@ class Update:
         self.__folder = os.path.dirname(os.path.abspath(__file__))
         self.__root_folder = os.path.join(self.__folder, '..')
         self.__subs = [f for f in os.listdir(self.__root_folder)]
+        self.__log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
 
     @property
     def run(self):

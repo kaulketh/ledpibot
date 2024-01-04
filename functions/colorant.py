@@ -25,7 +25,8 @@ class Colorant:
         self.__fairy_lights = fairy_lights
         self.__color_keys = [k for k in list(OwnColors.color.keys()) if
                              k != "OFF"]
-        Colorant.log.debug(f"Init instance of {self.__class__.__name__}.")
+        Colorant.log.debug(
+            f"Initialize instance of {self.__class__.__name__} {self}")
         if color_key is not None:
             Colorant.log.debug(f"Run color '{color_key}'")
             self.run(color_key, None)
