@@ -1,0 +1,11 @@
+APP_NAME: "LedPi"
+DEBUG_LOG: true
+DIRECTORY: "logs"
+
+DEBUG_FILE: "debug.log"
+ERROR_FILE: "error.log"
+HISTORY_FILE: "history.log"
+INFO_FILE: "info.log"
+
+FILE_COUNT: 5
+FILE_SIZE: 3145728

@@ -1,0 +1,243 @@
+'0':
+  type: message
+  name: m_wrong_id
+  English: |-
+    `Hello {1}, this is a private bot!
+    ID {0}, {2} {3} has been blocked.
+    Thanks for visit!`
+  German: |-
+    `Hallo {1}, dies ist ein privater Bot!
+    ID {0}, {2} {3} wurde geblockt.
+    Danke für den Besuch!`
+  French: |-
+    `Bonjour {1}, c'est un bot privé!
+    L'Id {0}, {2} {3} a été bloqué.
+    Merci de votre visite!`
+'1':
+  type: message
+  name: m_not_allowed
+  German: '* Nicht erlaubt für diesen Bot\! *'
+  English: '* Not allowed for this bot\! *'
+  French: '* Non autorisé pour ce bot\! *'
+'2':
+  type: message
+  name: m_pls_select
+  German: 'Bitte triff eine Auswahl, {0}.'
+  English: 'Please make a selection, {0}!'
+  French: 'Veuillez faire une sélection, {0}.'
+'3':
+  type: message
+  name: m_called
+  German: '*{0}* läuft bis {1}'
+  English: '*{0}* runs until {1}'
+  French: '*{0}* s''exécute jusqu''à {1}'
+'4':
+  type: message
+  name: m_started
+  German: Bot ist einsatzbereit.
+  English: Bot ready for use.
+  French: Le bot est prêt à l'emploi.
+'5':
+  type: message
+  name: m_rebooted
+  German: Gerät wird neu gestartet.
+  English: Device rebooted.
+  French: L'appareil est redémarré.
+'6':
+  type: message
+  name: m_restarted
+  German: Bot neu gestartet.
+  English: Service restarted.
+  French: Service redémarré.
+'7':
+  type: message
+  name: m_stopped
+  German: Bot pausiert!
+  English: Bot paused.
+  French: Bot en pause!
+'8':
+  type: message
+  name: m_standby
+  German: |-
+    Standby: {0}
+    Neustart um {1}
+  English: |-
+    Standby: {0}
+    Restart at {1}
+  French: |-
+    Veille: {0}
+    Redémarrez à {1}
+'9':
+  type: message
+  name: m_stop_f
+  German: '{0} gestoppt.'
+  English: '{0} stopped.'
+  French: '{0} arrêté.'
+'10':
+  type: message
+  name: m_killed
+  German: Kompletten Bot-Prozess abgebrochen!
+  English: Bot process killed!
+  French: Processus de bot complet annulé!
+'11':
+  type: message
+  name: m_updated
+  German: 'Bot-Update, Reboot folgt.'
+  English: 'Bot update, reboot shortly.'
+  French: 'Mise à jour, le bot est redémarré.'
+'12':
+  type: btn_txt
+  name: stop
+  German: stop
+  English: stop
+  French: stop
+'13':
+  type: btn_txt
+  name: start
+  German: start
+  English: start
+  French: start
+'14':
+  type: btn_txt
+  name: advent
+  German: advent
+  English: advent
+  French: advent
+'15':
+  type: btn_txt
+  name: candles
+  German: kerzen
+  English: candles
+  French: chandelles
+'16':
+  type: btn_txt
+  name: clock 1
+  German: uhr 1
+  English: clock 1
+  French: horloge 1
+'17':
+  type: btn_txt
+  name: clock 2
+  German: uhr 2
+  English: clock 2
+  French: horloge 2
+'18':
+  type: btn_txt
+  name: rainbow
+  German: regenbogen
+  English: rainbow
+  French: arc en ciel
+'19':
+  type: btn_txt
+  name: theater
+  German: theater
+  English: theater
+  French: théâtre
+'20':
+  type: btn_txt
+  name: red
+  German: rot
+  English: red
+  French: rouge
+'21':
+  type: btn_txt
+  name: blue
+  German: blau
+  English: blue
+  French: bleu
+'22':
+  type: btn_txt
+  name: green
+  German: grün
+  English: green
+  French: vert
+'23':
+  type: btn_txt
+  name: yellow
+  German: gelb
+  English: yellow
+  French: jaune
+'24':
+  type: btn_txt
+  name: orange
+  German: orange
+  English: orange
+  French: orange
+'25':
+  type: btn_txt
+  name: white
+  German: weiß
+  English: white
+  French: blanc
+'26':
+  type: btn_txt
+  name: violet
+  German: violett
+  English: violet
+  French: violet
+'27':
+  type: btn_txt
+  name: demo
+  German: farben
+  English: colors
+  French: couleurs
+'28':
+  type: btn_txt
+  name: strobe
+  German: strobo
+  English: strobe
+  French: strobe
+'29':
+  type: btn_txt
+  name: clock 3
+  German: uhr 3
+  English: clock 3
+  French: horloge 3
+'30':
+  type: btn_txt
+  name: clock 4
+  German: uhr 4
+  English: clock 4
+  French: horloge 4
+'31':
+  type: btn_txt
+  name: clock 5
+  German: uhr 5
+  English: clock 5
+  French: horloge 5
+'32':
+  type: btn_txt
+  name: demo 2
+  German: farben 2
+  English: colors 2
+  French: couleurs 2
+'33':
+  type: btn_txt
+  name: clock 6
+  German: uhr 6
+  English: clock 6
+  French: horloge 6
+'34':
+  type: btn_txt
+  name: clock 7
+  German: uhr 7
+  English: clock 7
+  French: horloge 7
+'35':
+  type: btn_txt
+  name: rainbow 2
+  German: regenbogen 2
+  English: rainbow 2
+  French: arc en ciel 2
+'36':
+  type: btn_txt
+  name: theater 2
+  German: theater 2
+  English: theater 2
+  French: théâtre 2
+'37':
+  type: btn_txt
+  name: standby
+  German: Standby
+  English: Standby
+  French: Etre prêt

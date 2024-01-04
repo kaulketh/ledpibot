@@ -7,8 +7,21 @@ import logging.handlers
 import os
 import sys
 
-from logger.logfiles import APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, \
-    DEBUG_FILE, INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG
+import yaml
+
+# Load settings
+FILE = "logger.yml"
+HERE = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(HERE, FILE), 'r', encoding='utf-8') as file:
+    logger_settings = yaml.safe_load(file)
+# Init empty constants
+APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, \
+    DEBUG_FILE, INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG = [None] * 9
+# Load values
+for item in logger_settings.items():
+    _name = item[0]
+    _value = item[1]
+    globals()[_name] = _value  # variables creation dynamically
 
 
 class _Singleton(type):
