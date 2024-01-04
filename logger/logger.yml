@@ -1,4 +1,4 @@
-APP_NAME: "LedPi"
+LOGGER_NAME: "LedPiBot"
 DEBUG_LOG: true
 DIRECTORY: "logs"
 

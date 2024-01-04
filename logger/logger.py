@@ -14,14 +14,11 @@ FILE = "logger.yml"
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, FILE), 'r', encoding='utf-8') as file:
     logger_settings = yaml.safe_load(file)
-# Init empty constants
-APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, \
-    DEBUG_FILE, INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG = [None] * 9
-# Load values
+# Load values into constants dynamically
 for item in logger_settings.items():
     _name = item[0]
     _value = item[1]
-    globals()[_name] = _value  # variables creation dynamically
+    globals()[_name] = _value
 
 
 class _Singleton(type):
@@ -39,8 +36,9 @@ class Singleton(_Singleton('SingletonMeta', (object,), {})):
     pass
 
 
+# noinspection PyUnresolvedReferences
 class _LoggerMeta(type, Singleton):
-    NAME = APP_NAME
+    NAME = LOGGER_NAME
     FOLDER_PATH = f"../{DIRECTORY}"
     ADDITIONAL_DEBUG_LOG = DEBUG_LOG
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
