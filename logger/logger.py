@@ -7,8 +7,8 @@ import logging.handlers
 import os
 import sys
 
-from logger.logfiles import APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, DEBUG_FILE, \
-    INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG
+from logger.logfiles import APP_NAME, DIRECTORY, FILE_SIZE, FILE_COUNT, \
+    DEBUG_FILE, INFO_FILE, ERROR_FILE, HISTORY_FILE, DEBUG_LOG
 
 
 class _Singleton(type):
@@ -117,11 +117,11 @@ class _LoggerMeta(type, Singleton):
         cls.__handler_history.setFormatter(cls.__format_history)
 
         # instantiate logger and add handler
-        cls.__log_instance = logging.getLogger(cls.__name)
+        cls.__instance = logging.getLogger(cls.__name)
 
-        cls.__log_instance.addHandler(cls.__handler_info)
-        cls.__log_instance.addHandler(cls.__handler_error)
-        cls.__log_instance.addHandler(cls.__handler_history)
+        cls.__instance.addHandler(cls.__handler_info)
+        cls.__instance.addHandler(cls.__handler_error)
+        cls.__instance.addHandler(cls.__handler_history)
 
         # if debug.log enabled
         if cls.__debug_log:
@@ -134,15 +134,18 @@ class _LoggerMeta(type, Singleton):
                 logging.Formatter(_LoggerMeta.DEB_FMT,
                                   datefmt=_LoggerMeta.DAT_FMT)
             cls.__handler_debug.setFormatter(cls.__format_debug)
-            cls.__log_instance.addHandler(cls.__handler_debug)
+            cls.__instance.addHandler(cls.__handler_debug)
 
         # set custom log level
-        cls.__log_instance.history = \
-            lambda msg, *ars: cls.__log_instance._log(cls.HISTORY, msg, ars)
+        cls.__instance.history = \
+            lambda msg, *ars: cls.__instance._log(cls.HISTORY, msg, ars)
+
+        cls.__instance.debug(
+            f"Initialize instance of {cls.__name__} {cls}")
 
     @property
     def instance(cls):
-        return cls.__log_instance
+        return cls.__instance
 
     @property
     def log_folder(cls):
