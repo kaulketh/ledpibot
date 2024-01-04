@@ -1,13 +1,10 @@
 from .logger import PreconfiguredLogger
 
+# instantiate logger
 LOGGER = PreconfiguredLogger.instance
 """
-preconfigured Singleton logger instance
-"LedPi", 
-../logs/debug.log (if enabled),  
-../logs/info.log, 
-../logs/error.log.
-../logs/history.log.  
+preconfigured Singleton logger instance, 
+for settings refer 'logger.yml'  
 """
 
 HISTORY = PreconfiguredLogger.HIS_LOG
