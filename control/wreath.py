@@ -10,6 +10,7 @@ import datetime
 
 from rpi_ws281x import Adafruit_NeoPixel
 
+# noinspection PyUnresolvedReferences
 from config import led_brightness, led_brightness_day, led_brightness_night, \
     led_count, led_cut_off_morning, led_cut_off_night, led_dma, led_freq_hz, \
     led_invert, led_pin

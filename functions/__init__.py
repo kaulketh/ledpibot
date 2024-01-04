@@ -28,7 +28,7 @@ def assigned():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in config/ui_translations.json
+        in config/ui_translations.yml
         """
         dic = {}
         funcs = [None, None,
