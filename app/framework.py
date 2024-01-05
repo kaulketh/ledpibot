@@ -15,6 +15,7 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import KeyboardButton, ReplyKeyboardMarkup, \
     ReplyKeyboardRemove
 
+# noinspection PyUnresolvedReferences
 from config import auto_reboot_enabled, auto_reboot_time, ID_CHAT_THK, \
     running, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \

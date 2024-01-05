@@ -14,7 +14,7 @@ from logger import LOGGER
 from .secret import *  # no public deployment!
 
 # load settings and UI contents
-FILES = "settings.yml", "ui_translations.yml"
+FILES = "settings.yaml", "contents.yaml"
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, FILES[0]), 'r', encoding='utf-8') as file:
     settings = yaml.safe_load(file)
