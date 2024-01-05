@@ -28,7 +28,7 @@ def assigned():
         """
         Ensure right order of functions, 
         depends on the command order 
-        in config/contents.yml
+        in config/contents.yaml
         """
         dic = {}
         funcs = [None, None,

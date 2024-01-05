@@ -10,7 +10,7 @@ import sys
 import yaml
 
 # Load settings
-FILE = "logger.yml"
+FILE = "logger.yaml"
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, FILE), 'r', encoding='utf-8') as file:
     logger_settings = yaml.safe_load(file)
