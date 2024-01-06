@@ -6,15 +6,17 @@ Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden fi
     ````yaml
     language:
       value: English
-    ````    
-    Auto reboot about at specified time if enabled    
+    ````
+      
+    **Auto reboot** about at specified time if enabled    
     ````yaml
     auto_reboot:
       value: false
     auto_reboot_time:
       value: '00:30'
     ````
-    Auto brightness: Settings to reduce brightness of the LEDs due given period
+  
+    **Auto brightness**: Settings to reduce brightness of the LEDs due given period
     ````yaml script
     led_brightness_day:
       value: 200
@@ -25,7 +27,12 @@ Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden fi
     led_cut_off_night:
       value: 18
     ````
-
+  
+    **Auto start**: Starts the last running function automatically, e.g. after power failure or reboot 
+    ````yaml script
+    auto_start:
+        value: false
+    ````
 
 * **Main mode (run script _bot.py_)**
     * All settings are read/created/imported and set
