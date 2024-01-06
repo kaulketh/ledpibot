@@ -88,7 +88,7 @@ class Service:
         if self.__command is not None:
             try:
                 if self.__log_msg is not None:
-                    self.__logger.info(f"{self.__command} {self.__log_msg}")
+                    self.__logger.info(f"{self.__log_msg} [{self.__command}]")
                 else:
                     self.__logger.info(self.__command)
                 os.system(self.__command)

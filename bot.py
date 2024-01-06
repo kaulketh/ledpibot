@@ -7,9 +7,10 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 __doc__ = "Call instance of framework class."
 
-from urllib3.exceptions import HTTPError, ProtocolError
+# from urllib3.exceptions import HTTPError, ProtocolError
+from urllib3 import exceptions
 
-from app import *
+from app import framework
 from control import peripheral_functions
 from logger import LOGGER
 
@@ -17,7 +18,7 @@ if __name__ == '__main__':
 
     try:
         framework.main()
-    except (ConnectionResetError, ProtocolError, HTTPError) as e:
+    except (ConnectionResetError, exceptions) as e:
         LOGGER.error(f"Connection error occurs: {e}")
         exit()
     finally:

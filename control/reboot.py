@@ -9,6 +9,7 @@ __status__ = "Production"
 import datetime
 import time
 
+# noinspection PyUnresolvedReferences
 from config import m_rebooted
 from control import LightFunction
 from control.service import reboot_device
