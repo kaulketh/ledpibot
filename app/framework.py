@@ -221,7 +221,7 @@ class TelepotBot:
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
         line = lines[-1]
-        self.__log.debug(f"History: {line.strip()}")
+        self.__log.debug(line.strip())
         # TODO: implement considering of translation of
         #  stored command after language change
         #  e.g. search key of value/stored string and gather
