@@ -10,6 +10,7 @@ import time
 from multiprocessing import Process
 from threading import Thread
 
+# noinspection PyUnresolvedReferences
 from config import led_brightness, m_stop_f
 from functions.effects import clear
 from logger import LOGGER
