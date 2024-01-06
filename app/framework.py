@@ -7,6 +7,7 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import codecs
+import datetime
 import signal
 import traceback
 
@@ -247,7 +248,10 @@ class TelepotBot:
             self.__log.info(auto_reboot_msg)
             for a in self.__admins:
                 kb = self.kb_stop if auto_start else self.__rm_kb
-                self.__send(a, f"{auto_reboot_msg}: {auto_reboot_time} CET",
+                self.__send(a, f"{auto_reboot_msg}: "
+                               f"{auto_reboot_time}"
+                               f":{datetime.datetime.now().second:02d} "
+                               f"CET",
                             reply_markup=kb)
             AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
 
