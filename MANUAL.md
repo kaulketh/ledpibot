@@ -1,29 +1,36 @@
 ## Operation Manual
 Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden file (secret.py) that is not provided here, but is imported or used at runtime.
     
-* **Important Settings (_config/settings.py_):**
-    Set chat language, possible language keys: "de", "en", "fr" <br>Only the chat language can set, logging and service functionality and related messages are hard coded in English.
-    ````python script
-    LANGUAGE = "de"
+* **Important Settings (_config/settings.yaml_):**
+    Set chat language, possible language keys: German, English, French <br>Only the chat language can set, logging and service functionality and related messages are hard coded in English.
+    ````yaml
+    language:
+      value: English
     ````    
-    Auto reboot 1 minute after specified time if enabled    
-    ````python script
-    AUTO_REBOOT_ENABLED = False
-    AUTO_REBOOT_TIME = "00:30"
+    Auto reboot about at specified time if enabled    
+    ````yaml
+    auto_reboot:
+      value: false
+    auto_reboot_time:
+      value: '00:30'
     ````
     Auto brightness: Settings to reduce brightness of the LEDs due given period
-    ````python script
-    LED_DAY_BRIGHTNESS = 150
-    LED_NIGHT_BRIGHTNESS = 70
-    LED_MORNING_CUT_OFF = 8
-    LED_NIGHT_CUT_OFF = 18
+    ````yaml script
+    led_brightness_day:
+      value: 200
+    led_brightness_night:
+      value: 100
+    led_cut_off_morning:
+      value: 7
+    led_cut_off_night:
+      value: 18
     ````
 
 
 * **Main mode (run script _bot.py_)**
-    * All settings are read/imported and set
+    * All settings are read/created/imported and set
     * Dictionaries are built (i.e. for functions to call)
-    * Labels for buttons and message texts are loaded
+    * Labels and message texts are loaded, buttons are arranged.
     * Bot will inform user that it is ready to use via message
     * Use in-app command **/start** to start
     * Bot welcomes the user
@@ -50,16 +57,17 @@ Note: The authorized Telegram chat ID(s) and bot token are stored in a hidden fi
     * _**Colorful animations**_
         * All LEDs at once can switch to: **red**, **blue**, **green**, **white**, **yellow**, **orange**, **violet**
         * **Colors**: Switching simple colors in random time periods
-        * **Colors II**: Fading over simple colors in random time periods
+        * **Colors 2**: Fading over simple colors in random time periods
         * **Rainbow**: Rainbow animation with circular fading effect
-        * **Rainbow II**: Rainbow animation with chaser, included fading effect.
+        * **Rainbow 2**: Rainbow animation with chaser, included fading effect.
         * **Theater**: Extremely colorful animation with spinning and wiping effects
-        * **Theater II**: Another colorful animation with spinning effects
+        * **Theater 2**: Another colorful animation with spinning effects
     * **Advent**: Advent calendar, works in Advent time only! For every day of December will one LED flicker like a candlelight. If it is Advent Sunday it flickers red. Should be time before December but in Advent period all LEDs are working as candlelight. If it is other than Advent time LEDs will circle in orange as warning!  
     * **Candles**: Each LED simulates candlelight
     * **Strobe**: Emitting brief and rapid flashes of white light in random frequency
 * **Service menu** no app-in menu, will build due runtime but will be handled like an app-in command because of the slash in front 
     * **/Reboot** - What should I write here?
+    * **/Restart** - Restart the service (bot.py) if it has been set up as such  
     * **/Info** - Information about the latest commit/release versions on GitHub, host name, IP, memory usage, disk usage, cpu load
     * **/Update** - Force update from GitHub to the latest version in master branch
     * **/Help** - Short version of this manual
