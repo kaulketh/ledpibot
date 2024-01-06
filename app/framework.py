@@ -208,7 +208,7 @@ class TelepotBot:
         MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
 
         # history check
-        try:
+        try:  # file check
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
                 if lines:
@@ -216,6 +216,7 @@ class TelepotBot:
                 else:
                     raise ValueError("Empty file")
         except (FileNotFoundError, ValueError):
+            # new empty file
             with open(HISTORY, "w") as f:
                 f.write("new file\n")
             with open(HISTORY, "r") as f:
@@ -226,17 +227,17 @@ class TelepotBot:
         #  stored command after language change
         #  e.g. search key of value/stored string and gather
         #  translations with this key, depending of set language
-        #  execute/set command text
+        #  and execute/set command text
         cmd = line.partition(" HISTORY ")[2].rstrip()
 
-        # auto start check and run stored function
+        # check autostart and run stored function
         if auto_start:
-            self.__log.info(auto_start_msg)
+            info = f"{auto_start_msg}: {cmd}"
+            self.__log.info(info)
             if not (cmd == STOP):
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
-                    self.__send(a, f"{auto_start_msg}: {cmd}",
-                                reply_markup=self.kb_stop)
+                    self.__send(a, info, reply_markup=self.kb_stop)
             else:
                 open(HISTORY, "w").close()
                 self.__stop_function(ID_CHAT_THK, msg=None)
