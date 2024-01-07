@@ -7,19 +7,23 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import os
-
 import yaml
-
 from logger import LOGGER
-from .secret import *  # no public deployment!
 
-# load settings and UI contents
-FILES = "settings.yaml", "contents.yaml"
+# load settings, UI contents and secrets
+FILES = "settings.yaml", "contents.yaml", "secrets.yaml"
 HERE = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(HERE, FILES[0]), 'r', encoding='utf-8') as file:
     settings = yaml.safe_load(file)
 with open(os.path.join(HERE, FILES[1]), 'r', encoding='utf-8') as file:
     translations = yaml.safe_load(file)
+with open(os.path.join(HERE, FILES[2]), 'r', encoding='utf-8') as file:
+    secrets = yaml.safe_load(file)
+
+# secrets
+ID_CHAT_THK = secrets.get("telegram").get("chat_ids").get("thk")
+TOKEN_TELEGRAM_BOT = secrets.get("telegram").get("bot").get("token")
+
 # define variables dynamically (settings first!)
 # settings
 for item in settings.items():

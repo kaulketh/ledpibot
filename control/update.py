@@ -8,13 +8,14 @@ __status__ = "Production"
 
 import os
 
+import config
 from control.service import reboot_device
 from logger import LOGGER
 
 GIT = "https://github.com/kaulketh/ledpibot.git"
 HOME_PI_BOT = "/home/pi/bot"
 PROJECT = "ledpibot"
-SECRET = "secret.py"
+SECRET = config.FILES[2]
 
 
 def ignored(f):
