@@ -236,14 +236,17 @@ class TelepotBot:
         # check autostart and run stored function
         new_file = lines[0].startswith(first_line)
         stop_stored = cmd == STOP
+        log = auto_start_msg
         if auto_start:
-            log = f"{auto_start_msg}: {cmd}"
             if stop_stored or new_file:
+                log += " ----"
                 kbm = self.__kbm if not auto_reboot else None
-                m = m_pls_select.replace(",", "").replace(" {0}", "")
+                m = (f"{log}\n"
+                     f"{m_pls_select.replace(',', '').replace(' {0}', '')}")
                 open(HISTORY, "w").close()
                 self.__send(ID_CHAT_THK, m, reply_markup=kbm)
             else:
+                log += f" {cmd}"
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
                     self.__send(a, log, reply_markup=self.kb_stop)
@@ -259,7 +262,7 @@ class TelepotBot:
                     m = self.kb_stop
                 else:
                     m = self.__rm_kb
-                self.__send(a, f"{auto_reboot_msg}: "
+                self.__send(a, f"{auto_reboot_msg} "
                                f"{auto_reboot_time}"
                                f":{datetime.datetime.now().second:02d} "
                                f"CET",

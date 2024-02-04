@@ -12,16 +12,26 @@ import yaml
 
 from logger import LOGGER
 
+
+class _AttribDict(dict):
+    __slots__ = ()
+    __getattr__ = dict.__getitem__
+    __setattr__ = dict.__setitem__
+
+
 # load settings, UI contents and secrets
-FILES = "settings.yaml", "contents.yaml", "secrets.yaml"
-HERE = os.path.dirname(os.path.abspath(__file__))
+CFG_FILES = _AttribDict({"settings": "settings.yaml",
+                         "contents": "contents.yaml",
+                         "secrets": "secrets.yaml"})
+here = os.path.dirname(os.path.abspath(__file__))
 data_read_in = []
 
-# Load files (settings, translations, secrets)
-for i in range(len(FILES)):
-    with open(os.path.join(HERE, FILES[i]), 'r', encoding='utf-8') as file:
+# read files
+for key in CFG_FILES.keys():
+    with open(os.path.join(here, CFG_FILES.get(key)), 'r',
+              encoding='utf-8') as file:
         data_read_in.append(yaml.safe_load(file))
-        LOGGER.debug(f"{FILES[i]} read in")
+        LOGGER.debug(f"{CFG_FILES.get(key)} read in")
 
 # define variables dynamically (settings first!)
 # settings
