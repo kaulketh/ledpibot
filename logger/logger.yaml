@@ -1,5 +1,5 @@
 LOGGER_NAME: "LedPiBot"
-DEBUG_LOG: true
+DEBUG_LOG: false
 DIRECTORY: "logs"
 
 DEBUG_FILE: "debug.log"

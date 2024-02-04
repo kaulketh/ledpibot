@@ -29,7 +29,7 @@ led_cut_off_night:
   value: 18
   comment: Hour to adjust to night brightness
 auto_reboot:
-  value: true
+  value: false
   comment: null
 auto_reboot_time:
   value: '01:00'
@@ -38,7 +38,7 @@ auto_reboot_msg:
   value: Auto reboot
   comment: null
 auto_start:
-  value: true
+  value: false
   comment: null
 auto_start_msg:
   value: Auto start
