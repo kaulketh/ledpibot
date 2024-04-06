@@ -86,9 +86,9 @@ class Colorant:
 
     def strobe(self):
         def __strobe():
-            self.run('on', 255)
+            self.run('WHITE', 255)
             time.sleep(uniform(0.005, 0.05))
-            self.run('off', 0)
+            self.run('OFF', 0)
             time.sleep(uniform(0.5, 3))
 
         self.__loop(__strobe)

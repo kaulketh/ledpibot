@@ -7,6 +7,7 @@ __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import codecs
+import datetime
 import signal
 import traceback
 
@@ -207,8 +208,15 @@ class TelepotBot:
             self.__send(a, m_started, reply_markup=self.__rm_kb)
         MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
 
+        # TODO: implement considering of translation of
+        #  stored command after language change
+        #  e.g. search key of value/stored string and gather
+        #  translations with this key, depending of set language
+        #  and execute/set command text
+
         # history check
-        try:
+        first_line = "new file"
+        try:  # file check
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
                 if lines:
@@ -216,38 +224,49 @@ class TelepotBot:
                 else:
                     raise ValueError("Empty file")
         except (FileNotFoundError, ValueError):
+            # new empty file
             with open(HISTORY, "w") as f:
-                f.write("new file\n")
+                f.write(f"{first_line}\n")
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
         line = lines[-1]
         self.__log.debug(line.strip())
-        # TODO: implement considering of translation of
-        #  stored command after language change
-        #  e.g. search key of value/stored string and gather
-        #  translations with this key, depending of set language
-        #  execute/set command text
         cmd = line.partition(" HISTORY ")[2].rstrip()
 
-        # auto start check and run stored function
+        # check autostart and run stored function
+        new_file = lines[0].startswith(first_line)
+        stop_stored = cmd == STOP
+        log = auto_start_msg
         if auto_start:
-            self.__log.info(auto_start_msg)
-            if not (cmd == STOP):
+            if stop_stored or new_file:
+                log += " ----"
+                kbm = self.__kbm if not auto_reboot else None
+                m = (f"{log}\n"
+                     f"{m_pls_select.replace(',', '').replace(' {0}', '')}")
+                open(HISTORY, "w").close()
+                self.__send(ID_CHAT_THK, m, reply_markup=kbm)
+            else:
+                log += f" {cmd}"
                 self.__func_thread = run_thread(cmd, ID_CHAT_THK, self)
                 for a in self.__admins:
-                    self.__send(a, f"{auto_start_msg}: {cmd}",
-                                reply_markup=self.kb_stop)
-            else:
-                open(HISTORY, "w").close()
-                self.__stop_function(ID_CHAT_THK, msg=None)
+                    self.__send(a, log, reply_markup=self.kb_stop)
+            self.__log.info(log)
 
         # auto reboot check and initializing
         if auto_reboot:
             self.__log.info(auto_reboot_msg)
             for a in self.__admins:
-                kb = self.kb_stop if auto_start else self.__rm_kb
-                self.__send(a, f"{auto_reboot_msg}: {auto_reboot_time} CET",
-                            reply_markup=kb)
+                if auto_start and stop_stored:
+                    m = self.__kbm
+                elif auto_start and not stop_stored:
+                    m = self.kb_stop
+                else:
+                    m = self.__rm_kb
+                self.__send(a, f"{auto_reboot_msg} "
+                               f"{auto_reboot_time}"
+                               f":{datetime.datetime.now().second:02d} "
+                               f"CET",
+                            reply_markup=m)
             AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
 
         # main loop

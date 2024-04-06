@@ -27,7 +27,6 @@ class AutoReboot(LightFunction):
         self.__ONE_MINUTE = 60  # check interval
         super(AutoReboot, self).__init__(None, None, name=self.name,
                                          bot=self.__bot)
-        AutoReboot.log.debug(f"Initialized {self.__class__.__name__} {self}")
 
     def __time_to_reboot(self):
         h = datetime.datetime.now().hour

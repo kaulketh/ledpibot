@@ -32,16 +32,16 @@ auto_reboot:
   value: false
   comment: null
 auto_reboot_time:
-  value: '00:30'
+  value: '01:00'
   comment: null
 auto_reboot_msg:
-  value: Auto-Reboot
+  value: Auto reboot
   comment: null
 auto_start:
   value: false
   comment: null
 auto_start_msg:
-  value: Autostart
+  value: Auto start
   comment: null
 language:
   value: English
