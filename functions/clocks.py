@@ -65,10 +65,10 @@ class Clock:
     def __hands(self):
         _div = 60 / self.__fairy_lights.numPixels()
         now = wreath_setup(self.__fairy_lights)[0]
-        second_value = int(now.second / _div)
-        minute_value = int(now.minute / _div)
-        hour_value = now.hour % 12 * 2
-        return hour_value, minute_value, second_value
+        seconds_led = int(now.second / _div)
+        minutes_led = int(now.minute / _div)
+        hours_led = now.hour % 12 * 2
+        return hours_led, minutes_led, seconds_led
 
     def __gic(self, red, green, blue, hand_range, intensity):
         """
@@ -119,7 +119,7 @@ class Clock:
         else:
             self.__fairy_lights.setPixelColor(self.__m_hand, minute_color)
 
-    def __show_strip_btwn_6nd12(self, hour_color, minute_color, hour_dimmed):
+    def __show_between_6_12(self, hour_color, minute_color, hour_dimmed):
         if 12 < self.__m_hand <= 23:
             self.__fairy_lights.setPixelColor(self.__h_hand, hour_color)
             self.__fairy_lights.setPixelColor(self.__h_hand + 1, hour_dimmed)
@@ -144,9 +144,9 @@ class Clock:
     def _two(self):
         next_minute = self.__m_hand + 1 if self.__m_hand <= 22 else 0
         while not self.__m_hand == next_minute:
-            self.__show_strip_btwn_6nd12(OwnColors.color.RED,
-                                         OwnColors.color.BLUE,
-                                         OwnColors.color.less_intense_red)
+            self.__show_between_6_12(OwnColors.color.RED,
+                                     OwnColors.color.BLUE,
+                                     OwnColors.color.less_intense_red)
             time.sleep(Clock.REFRESH)
             self.__m_hand = self.__hands[1]
         wipe_second(self.__fairy_lights, OwnColors.color.less_intense_blue,
@@ -237,9 +237,9 @@ class Clock:
             self.__fairy_lights.setPixelColor(
                 __pendulum[__p_left], OwnColors.color.YELLOW)
             __p_left += 1
-        self.__show_strip_btwn_6nd12(OwnColors.color.RED,
-                                     OwnColors.color.BLUE,
-                                     OwnColors.color.less_intense_red)
+        self.__show_between_6_12(OwnColors.color.RED,
+                                 OwnColors.color.BLUE,
+                                 OwnColors.color.less_intense_red)
         global __wait_ms
         time.sleep(__wait_ms)
 
