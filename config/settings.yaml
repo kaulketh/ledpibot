@@ -29,7 +29,7 @@ led_cut_off_night:
   value: 17
   comment: Hour to adjust to night brightness
 auto_reboot:
-  value: true
+  value: false
   comment: null
 auto_reboot_time:
   value: '07:00'
@@ -44,7 +44,7 @@ auto_start_msg:
   value: Auto start
   comment: null
 language:
-  value: English
+  value: German
   comment: 'language keys: German, English, French'
 running:
   value: Bot is running...
