@@ -125,10 +125,9 @@ class Effect:
         Wipes the color in exactly 1 second around the given position,
         whatever the length is and also only forward if desired.
         """
-        wait_ms = \
-            ((1_000.0 // self.__leds.numPixels()) // 2) / 1_000.0 \
-                if back_again \
-                else (1_000.0 // self.__leds.numPixels()) / 1_000.0
+        wait_ms_a = ((1_000.0 // self.__leds.numPixels()) // 2) / 1_000.0
+        wait_ms_b = (1_000.0 // self.__leds.numPixels()) / 1_000.0
+        wait_ms = wait_ms_a if back_again else wait_ms_b
         for i in range(pivot + 1, self.__leds.numPixels() + pivot):
             if i >= self.__leds.numPixels():
                 i -= self.__leds.numPixels()
