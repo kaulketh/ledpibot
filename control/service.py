@@ -11,8 +11,10 @@ import subprocess
 
 from logger import LOGGER
 
-GIT_API_URL = "https://api.github.com/repos/kaulketh/ledpibot"
+GITHUB_API_URL = "https://api.github.com/repos/kaulketh/ledpibot"
+GITHUB_REPO_URL = "https://github.com/kaulketh/ledpibot/commit/"
 NAME = "Service"
+SYSTEMD = "ledpibot.service"
 
 # [skip pep8] ignore=E501
 # noinspection LongLine
@@ -148,17 +150,17 @@ class Service:
 
     @staticmethod
     def __latest_commit():
-        commit = f"curl -s {GIT_API_URL}/commits/master --insecure "
+        commit = f"curl -s {GITHUB_API_URL}/commits/master --insecure "
         latest_com = f"{subprocess.check_output(commit, shell=True)[12:46]}" \
                      f"".replace("b'", "").replace("'", "").replace("\\n", "")
         commit_url_text = f"[{latest_com[0:7]}]" \
-                          f"(https://github.com/kaulketh/ledpibot/commit/" \
+                          f"({GITHUB_REPO_URL}" \
                           f"{latest_com})"
         return commit_url_text
 
     @staticmethod
     def __latest_release():
-        release = f"curl -s {GIT_API_URL}/releases/latest --insecure |" \
+        release = f"curl -s {GITHUB_API_URL}/releases/latest --insecure |" \
                   " grep -Po '\"tag_name\": \"\\K.*?(?=\")'"
         return f"{subprocess.check_output(release, shell=True)}" \
             .replace("b'", "").replace("'", "").replace("\\n", "")
@@ -169,8 +171,7 @@ def reboot_device(log_msg: str = None):
 
 
 def restart_service(log_msg: str = None):
-    Service("sudo systemctl restart ledpibot.service",
-            log_msg).execute_os_command()
+    Service(f"sudo systemctl restart {SYSTEMD}", log_msg).execute_os_command()
 
 
 def system_info():

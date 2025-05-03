@@ -44,7 +44,7 @@ auto_start_msg:
   value: Auto start
   comment: null
 language:
-  value: German
+  value: English
   comment: 'language keys: German, English, French'
 running:
   value: Bot is running...
