@@ -38,7 +38,7 @@ auto_reboot_msg:
   value: Auto reboot
   comment: null
 auto_start:
-  value: false
+  value: true
   comment: null
 auto_start_msg:
   value: Auto start
