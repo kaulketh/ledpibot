@@ -21,7 +21,7 @@ from config import auto_reboot, auto_reboot_time, ID_CHAT_THK, \
     running, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
     auto_start, auto_reboot_msg, auto_start_msg
-from control import run_thread, service, stop_threads
+from control import run_thread, service, stop_threads, peripheral_functions
 from control.reboot import AutoReboot
 from control.update import update_bot
 from functions import indices_of_functions, STOP, START
@@ -278,10 +278,13 @@ class TelepotBot:
                 signal.pause()
             except KeyboardInterrupt:
                 self.__log.warning('Program interrupted')
+                peripheral_functions.get(3)()
                 exit()
             except Exception as e:
                 self.__log.error(f"Polling error: {traceback.format_exc()}")
                 self.__log.exception(e)
+                peripheral_functions.get(3)()
+
                 # Apply exponential backoff
                 self.__log.error(f"Retrying in {backoff} seconds...")
                 time.sleep(backoff)  # cooldown
@@ -289,6 +292,8 @@ class TelepotBot:
                 # Increase backoff for next time
                 backoff = min(backoff * 2, max_backoff)
                 continue  # DO NOT EXIT
+
+
 
 
 def main():
