@@ -20,7 +20,6 @@ class LightFunction(Thread):
     log = LOGGER
     threads = []
     name = "LightFunction"
-    SECONDS_PER_DAY = 86_400
 
     def __init__(self, function, wreath, name=None, request_id=None, bot=None):
         super(LightFunction, self).__init__()

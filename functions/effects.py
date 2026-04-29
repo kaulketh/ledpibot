@@ -120,7 +120,7 @@ class Effect:
                 for i in range(0, self.__leds.numPixels(), 3):
                     self.__leds.setPixelColor(i + led, 0)
 
-    def wipe_second(self, color: Color, pivot=0, back_again=True):
+    def wipe_second(self, color, pivot=0, back_again=True):
         """
         Wipes the color in exactly 1 second around the given position,
         whatever the length is and also only forward if desired.
