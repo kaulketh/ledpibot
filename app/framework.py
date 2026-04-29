@@ -21,8 +21,7 @@ from config import auto_reboot, auto_reboot_time, ID_CHAT_THK, \
     running, TOKEN_TELEGRAM_BOT, commands, m_not_allowed, m_pls_select, \
     m_rebooted, m_restarted, m_started, m_stopped, m_updated, m_wrong_id, \
     auto_start, auto_reboot_msg, auto_start_msg
-from control import peripheral_functions, run_thread, service, \
-    stop_threads
+from control import run_thread, service, stop_threads
 from control.reboot import AutoReboot
 from control.update import update_bot
 from functions import indices_of_functions, STOP, START
@@ -62,7 +61,7 @@ class TelepotBot:
         self.__func_thread = None
 
     @property
-    def kb_stop(self) -> ReplyKeyboardMarkup:
+    def kb_stop(self):
         self.__log.debug("Init Stop keyboard")
         return ReplyKeyboardMarkup(keyboard=[[self.__btn(STOP, 0)]])
 
@@ -75,7 +74,7 @@ class TelepotBot:
             bot.__send(ch_id=chat_id, text=msg, reply_markup=reply_markup)
 
     # noinspection PyMethodMayBeStatic
-    def __btn(self, text, i) -> KeyboardButton:
+    def __btn(self, text, i):
         self.__log.debug(f"[{i:02d}] {text}")
         return KeyboardButton(text=text)
 
@@ -144,6 +143,7 @@ class TelepotBot:
         def request_selection():
             self.__send(chat_id, m_pls_select.format(self.__user(msg)[2]),
                         reply_markup=self.__kbm)
+            return None
 
         help_requested = (selection_ok(service.Service.c_help) or
                           selection_ok(service.Service.c_help.lower()))
@@ -200,6 +200,7 @@ class TelepotBot:
         else:
             # wrong type
             self.__reply_wrong_content(chat_id, content_type)
+        return None
 
     def start(self):
         # welcome and run
@@ -270,6 +271,8 @@ class TelepotBot:
             AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
 
         # main loop
+        backoff = 1  # start with 1 second
+        max_backoff = 60  # cap at 60 seconds
         while True:
             try:
                 signal.pause()
@@ -277,11 +280,15 @@ class TelepotBot:
                 self.__log.warning('Program interrupted')
                 exit()
             except Exception as e:
-                self.__log.error(f"Any error occurs: {traceback.format_exc()}")
+                self.__log.error(f"Polling error: {traceback.format_exc()}")
                 self.__log.exception(e)
-                exit()
-            finally:
-                peripheral_functions.get(3)()
+                # Apply exponential backoff
+                self.__log.error(f"Retrying in {backoff} seconds...")
+                time.sleep(backoff)  # cooldown
+
+                # Increase backoff for next time
+                backoff = min(backoff * 2, max_backoff)
+                continue  # DO NOT EXIT
 
 
 def main():
