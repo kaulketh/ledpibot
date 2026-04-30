@@ -8,7 +8,6 @@
 # taken over from NeoPixel library strandtest example
 # origin by Tony DiCola
 # -----------------------------------------------------------
-import inspect
 import time
 
 from rpi_ws281x import Adafruit_NeoPixel, Color
@@ -27,7 +26,6 @@ class Effect:
         wreath_setup(self.__leds)
         Effect.log.debug(
             f"Initialize instance of {self.__class__.__name__} {self}")
-        Effect.log.debug(str(inspect.stack()[1].code_context[0]).strip())
 
     @classmethod
     def __wheel(cls, pos):
