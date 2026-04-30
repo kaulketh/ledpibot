@@ -294,8 +294,6 @@ class TelepotBot:
                 continue  # DO NOT EXIT
 
 
-
-
 def main():
     TelepotBot(TOKEN_TELEGRAM_BOT, admins).start()
 

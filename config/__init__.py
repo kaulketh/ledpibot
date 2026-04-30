@@ -1,63 +1,158 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+from __future__ import annotations
+
 __author__ = "Thomas Kaulke"
 __email__ = "kaulketh@gmail.com"
 __maintainer__ = "Thomas Kaulke"
 __status__ = "Production"
 
 import os
+from dataclasses import dataclass
+from typing import Dict, Any, List
 
 import yaml
 
 from logger import LOGGER
 
 
-class _AttribDict(dict):
-    __slots__ = ()
-    __getattr__ = dict.__getitem__
-    __setattr__ = dict.__setitem__
+# ---------------------------------------------------------
+# Dataclasses
+# ---------------------------------------------------------
+@dataclass
+class SettingEntry:
+    value: Any
+    comment: str | None = None
 
 
-# load settings, UI contents and secrets
-CFG_FILES = _AttribDict({"settings": "settings.yaml",
-                         "contents": "contents.yaml",
-                         "secrets": "secrets.yaml"})
+@dataclass
+class Settings:
+    entries: Dict[str, SettingEntry]
+
+    @classmethod
+    def from_yaml(cls, data: dict):
+        return cls(entries={k: SettingEntry(**v) for k, v in data.items()})
+
+    def __getattr__(self, item):
+        if item in self.entries:
+            return self.entries[item].value
+        raise AttributeError(item)
+
+
+@dataclass
+class ContentEntry:
+    key: int
+    type: str
+    name: str
+    translations: Dict[str, str]
+
+    @classmethod
+    def from_yaml(cls, key: str, data: dict):
+        translations = {
+            k: v for k, v in data.items()
+            if k not in ("type", "name")
+        }
+        return cls(
+            key=int(key),
+            type=data["type"],
+            name=data["name"],
+            translations=translations
+        )
+
+
+@dataclass
+class Contents:
+    entries: List[ContentEntry]
+
+    @classmethod
+    def from_yaml(cls, data: dict):
+        return cls(
+            entries=[ContentEntry.from_yaml(k, v) for k, v in data.items()])
+
+
+@dataclass
+class Secrets:
+    telegram_chat_thk: str
+    telegram_bot_token: str
+
+    @classmethod
+    def from_yaml(cls, data: dict):
+        tg = data["telegram"]
+        return cls(
+            telegram_chat_thk=tg["chat_ids"]["thk"],
+            telegram_bot_token=tg["bot"]["token"]
+        )
+
+
+# ---------------------------------------------------------
+# Helper
+# ---------------------------------------------------------
+def load_yaml(path: str):
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+# ---------------------------------------------------------
+# Load YAML files
+# ---------------------------------------------------------
 here = os.path.dirname(os.path.abspath(__file__))
-data_read_in = []
 
-# read files
-for key in CFG_FILES.keys():
-    with open(os.path.join(here, CFG_FILES.get(key)), 'r',
-              encoding='utf-8') as file:
-        data_read_in.append(yaml.safe_load(file))
-        LOGGER.debug(f"{CFG_FILES.get(key)} read")
+CFG_FILES = {
+    "settings": "settings.yaml",
+    "contents": "contents.yaml",
+    "secrets": "secrets.yaml",
+}
 
-# define variables dynamically (settings first!)
-# settings
-for item in data_read_in[0].items():
-    _name = item[0]
-    _value = item[1].get("value")
-    _com = item[1].get("comment")
-    globals()[_name] = _value
-    LOGGER.debug(f"setting {_name} = {_value}")
-# texts
-commands = []
-for item in data_read_in[1].items():
-    _type = item[1].get('type')
-    _name = item[1].get('name')
-    # noinspection PyUnresolvedReferences
-    _value = item[1].get(language)
-    _n = int(item[0])
-    globals()[_name] = _value
-    _value_hr = _value.replace("\n", "")  # human readable
-    if _type == "btn_txt":
-        # commands
-        _n = len(commands)
-        _value_hr = globals().get(_name).title()
-        commands.append(_value_hr)
-    LOGGER.debug(f"{_type}[{_n:02d}] {_name} = {_value_hr}")
+raw_settings = load_yaml(os.path.join(here, CFG_FILES["settings"]))
+raw_contents = load_yaml(os.path.join(here, CFG_FILES["contents"]))
+raw_secrets = load_yaml(os.path.join(here, CFG_FILES["secrets"]))
 
-# secrets
-ID_CHAT_THK = data_read_in[2].get("telegram").get("chat_ids").get("thk")
-TOKEN_TELEGRAM_BOT = data_read_in[2].get("telegram").get("bot").get("token")
+LOGGER.debug("YAML files loaded")
+
+# ---------------------------------------------------------
+# Instantiate Dataclasses
+# ---------------------------------------------------------
+settings = Settings.from_yaml(raw_settings)
+contents = Contents.from_yaml(raw_contents)
+secrets = Secrets.from_yaml(raw_secrets)
+
+# ---------------------------------------------------------
+# Create dynamic global variables for settings (compat mode)
+# ---------------------------------------------------------
+for name, entry in settings.entries.items():
+    globals()[name] = entry.value
+    LOGGER.debug(f"setting {name} = {entry.value}")
+
+# language from settings
+language = settings.language
+
+# ---------------------------------------------------------
+# Create dynamic text variables + commands list
+# ---------------------------------------------------------
+texts: Dict[str, str] = {}
+commands: List[str] = []
+
+for entry in contents.entries:
+    text_value = entry.translations.get(language)
+
+    if not isinstance(text_value, str):
+        LOGGER.error(f"Missing translation for '{entry.name}' in '{language}'")
+        continue
+
+    # create global variables
+    globals()[entry.name] = text_value
+    texts[entry.name] = text_value
+
+    # commands list
+    if entry.type == "btn_txt":
+        commands.append(text_value.title())
+
+    LOGGER.debug(
+        f"{entry.type}[{entry.key:02d}] {entry.name} = {text_value.replace(chr(10), '')}")
+
+# ---------------------------------------------------------
+# Secrets
+# ---------------------------------------------------------
+ID_CHAT_THK = secrets.telegram_chat_thk
+TOKEN_TELEGRAM_BOT = secrets.telegram_bot_token

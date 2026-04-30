@@ -15,7 +15,7 @@ from logger import LOGGER
 GIT = "https://github.com/kaulketh/ledpibot.git"
 HOME_PI_BOT = "/home/pi/bot"
 PROJECT = "ledpibot"
-SECRET = config.CFG_FILES.secrets
+SECRET = config.CFG_FILES["secrets"]
 
 
 def ignored(f):
