@@ -31,7 +31,7 @@ for key in CFG_FILES.keys():
     with open(os.path.join(here, CFG_FILES.get(key)), 'r',
               encoding='utf-8') as file:
         data_read_in.append(yaml.safe_load(file))
-        LOGGER.debug(f"{CFG_FILES.get(key)} read in")
+        LOGGER.debug(f"{CFG_FILES.get(key)} read")
 
 # define variables dynamically (settings first!)
 # settings
