@@ -75,7 +75,7 @@ class TelepotBot:
 
     # noinspection PyMethodMayBeStatic
     def __btn(self, text, i):
-        self.__log.debug(f"[{i:02d}] {text}")
+        self.__log.debug(f"create button[{i:02d}] = {text}")
         return KeyboardButton(text=text)
 
     # noinspection PyMethodMayBeStatic
@@ -84,7 +84,7 @@ class TelepotBot:
         for i in choices:
             btn_list.append(self.__btn(commands[i], i))
             il.append(i)
-        self.__log.debug(f"{il} arranged")
+        self.__log.debug(f"button group {il} arranged")
         return btn_list
 
     def __send(self, ch_id, text, reply_markup, parse_mode='Markdown'):
@@ -231,7 +231,7 @@ class TelepotBot:
             with open(HISTORY, "r") as f:
                 lines = f.readlines()
         line = lines[-1]
-        self.__log.debug(line.strip())
+        self.__log.debug(f"History entry: {line.strip()}")
         cmd = line.partition(" HISTORY ")[2].rstrip()
 
         # check autostart and run stored function

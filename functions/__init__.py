@@ -50,7 +50,7 @@ def assigned():
         for i in range(len(commands)):
             f = funcs[i]
             dic[commands[i]] = f
-            LOGGER.debug(f"function[{i:02d}] {commands[i]}: {f}")
+            LOGGER.debug(f"setup animation/effect[{i:02d}] {commands[i]}: {f}")
         return dic, indices
     except Exception as ex:
         LOGGER.error(f"{ex}")

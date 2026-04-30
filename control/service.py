@@ -109,7 +109,7 @@ class Service:
                        f"{self.__new_line}"
                 m += line
                 self.__logger.debug(
-                    f"add {line.replace(self.__new_line, self.__empty)}")
+                    f"add command entry: {line.replace(self.__new_line, self.__empty)}")
             return m
         except Exception as e:
             self.__logger.error(f"{e}")

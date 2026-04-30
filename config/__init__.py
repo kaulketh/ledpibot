@@ -107,8 +107,7 @@ CFG_FILES = {
 raw_settings = load_yaml(os.path.join(here, CFG_FILES["settings"]))
 raw_contents = load_yaml(os.path.join(here, CFG_FILES["contents"]))
 raw_secrets = load_yaml(os.path.join(here, CFG_FILES["secrets"]))
-
-LOGGER.debug("YAML files loaded")
+LOGGER.debug("All configuration files have been loaded")
 
 # ---------------------------------------------------------
 # Instantiate Dataclasses
@@ -122,7 +121,7 @@ secrets = Secrets.from_yaml(raw_secrets)
 # ---------------------------------------------------------
 for name, entry in settings.entries.items():
     globals()[name] = entry.value
-    LOGGER.debug(f"setting {name} = {entry.value}")
+    LOGGER.debug(f"apply setting {name} = {entry.value}")
 
 # language from settings
 language = settings.language
@@ -149,7 +148,7 @@ for entry in contents.entries:
         commands.append(text_value.title())
 
     LOGGER.debug(
-        f"{entry.type}[{entry.key:02d}] {entry.name} = {text_value.replace(chr(10), '')}")
+        f"setup {entry.type}[{entry.key:02d}] {entry.name} = {text_value.replace(chr(10), '')}")
 
 # ---------------------------------------------------------
 # Secrets
