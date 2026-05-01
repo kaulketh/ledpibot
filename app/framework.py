@@ -202,19 +202,24 @@ class TelepotBot:
             self.__reply_wrong_content(chat_id, content_type)
         return None
 
-    def start(self):
-        # welcome and run
-        self.__log.debug(running)
-        for a in self.__admins:
-            self.__send(a, m_started, reply_markup=self.__rm_kb)
-        MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
+    def __autoreboot_control(self, stop_stored: bool):
+        if auto_reboot:
+            self.__log.info(auto_reboot_msg)
+            for a in self.__admins:
+                if auto_start and stop_stored:
+                    m = self.__kbm
+                elif auto_start and not stop_stored:
+                    m = self.kb_stop
+                else:
+                    m = self.__rm_kb
+                self.__send(a, f"{auto_reboot_msg} "
+                               f"{auto_reboot_time}"
+                               f":{datetime.datetime.now().second:02d} "
+                               f"CET",
+                            reply_markup=m)
+            AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
 
-        # TODO: implement considering of translation of
-        #  stored command after language change
-        #  e.g. search key of value/stored string and gather
-        #  translations with this key, depending of set language
-        #  and execute/set command text
-
+    def __history_control(self) -> bool:
         # history check
         first_line = "new file"
         try:  # file check
@@ -252,23 +257,26 @@ class TelepotBot:
                 for a in self.__admins:
                     self.__send(a, log, reply_markup=self.kb_stop)
             self.__log.info(log)
+        return stop_stored
+
+    def start(self):
+        # welcome and run
+        self.__log.debug(running)
+        for a in self.__admins:
+            self.__send(a, m_started, reply_markup=self.__rm_kb)
+        MessageLoop(self.__bot, {'chat': self.__handle}).run_as_thread()
+
+        # TODO: implement considering of translation of
+        #  stored command after language change
+        #  e.g. search key of value/stored string and gather
+        #  translations with this key, depending of set language
+        #  and execute/set command text
+
+        # autostart last stored function
+        stop_stored = self.__history_control()
 
         # auto reboot check and initializing
-        if auto_reboot:
-            self.__log.info(auto_reboot_msg)
-            for a in self.__admins:
-                if auto_start and stop_stored:
-                    m = self.__kbm
-                elif auto_start and not stop_stored:
-                    m = self.kb_stop
-                else:
-                    m = self.__rm_kb
-                self.__send(a, f"{auto_reboot_msg} "
-                               f"{auto_reboot_time}"
-                               f":{datetime.datetime.now().second:02d} "
-                               f"CET",
-                            reply_markup=m)
-            AutoReboot(reboot_time=auto_reboot_time, bot=self).start()
+        self.__autoreboot_control(stop_stored)
 
         # main loop
         backoff = 1  # start with 1 second
